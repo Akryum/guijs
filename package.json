@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "workspaces": [
+    "packages/@guijs/*"
+  ],
   "devDependencies": {
     "lerna": "^3.15.0"
   }

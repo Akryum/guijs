@@ -1,0 +1,17 @@
+{
+  "name": "@guijs/cli-installer",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/cli-installer"
+  },
+  "license": "MIT",
+  "author": "Guillaume Chau",
+  "engines": {
+    "node": ">=8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

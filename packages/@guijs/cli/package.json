@@ -1,0 +1,20 @@
+{
+  "name": "@guijs/cli",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/cli"
+  },
+  "license": "MIT",
+  "author": "Guillaume Chau",
+  "engines": {
+    "node": ">=8"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "guijs": "src/index.js"
+  }
+}
