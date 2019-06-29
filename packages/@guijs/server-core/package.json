@@ -1,23 +1,11 @@
 {
   "name": "@guijs/server-core",
   "version": "0.0.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/github.com/Akryum/guijs.git",
-    "directory": "packages/@guijs/server-core"
-  },
-  "license": "MIT",
   "author": "Guillaume Chau",
   "scripts": {
     "dev": "nodepack-service dev",
     "build": "nodepack-service build",
     "start": "node ./dist/app.js"
-  },
-  "engines": {
-    "node": ">=8"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
@@ -65,5 +53,17 @@
     "rimraf": "^2.6.2",
     "start-server-and-test": "^1.9.1",
     "xterm": "^3.13.2"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/server-core"
   }
 }

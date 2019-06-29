@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "id": "default-template@0.0.1",
+    "pluginId": "@nodepack/service",
+    "pluginVersion": "0.1.17",
+    "options": {}
+  }
+]
