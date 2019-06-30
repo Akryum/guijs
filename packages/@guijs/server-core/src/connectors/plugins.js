@@ -26,11 +26,13 @@ const {
   isPlugin,
   isOfficialPlugin,
   getPluginLink,
+  execa,
+} = require('@vue/cli-shared-utils')
+const {
   resolveModule,
   loadModule,
   clearModule,
-  execa,
-} = require('@vue/cli-shared-utils')
+} = require('@nodepack/module')
 const {
   installPackage,
   uninstallPackage,

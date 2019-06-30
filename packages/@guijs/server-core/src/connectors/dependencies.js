@@ -8,7 +8,8 @@ const logs = require('./logs')
 // Context
 // const getContext = require('../context')
 // Utils
-const { isPlugin, resolveModule } = require('@vue/cli-shared-utils')
+const { isPlugin } = require('@vue/cli-shared-utils')
+const { resolveModule } = require('@nodepack/module')
 const {
   getPackageVersionsInfo,
   getPackageMetadata,
