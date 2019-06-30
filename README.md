@@ -1,2 +1,3 @@
-# guijs
-Graphical User Interface for JS projects
+<p align="center">
+  <img src="./res/guijs-full-black.svg" alt="gui.js">
+</p>
