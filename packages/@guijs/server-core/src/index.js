@@ -1,2 +1,4 @@
 const run = require('./command')
-run()
+run({
+  headless: true,
+})
