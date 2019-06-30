@@ -4,7 +4,15 @@
   "workspaces": [
     "packages/@guijs/*"
   ],
+  "scripts": {
+    "lint": "eslint --fix packages/**/*.js packages/**/bin/*"
+  },
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-plugin-graphql": "^3.0.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-vue": "^5.2.2",
+    "eslint-plugin-vue-libs": "^3.0.0",
     "lerna": "^3.15.0"
   }
 }
