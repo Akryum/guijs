@@ -1,12 +1,12 @@
-export function defaultValue (provided, value) {
+exports.defaultValue = function (provided, value) {
   return provided == null ? value : provided
 }
 
-export function nullable (value) {
+exports.nullable = function (value) {
   return value == null ? {} : value
 }
 
-export function autoCall (fn, ...context) {
+exports.autoCall = function (fn, ...context) {
   if (typeof fn === 'function') {
     return fn(...context)
   }
