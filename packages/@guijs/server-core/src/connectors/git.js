@@ -14,9 +14,9 @@ async function getNewFiles (context) {
     'ls-files',
     '-o',
     '--exclude-standard',
-    '--full-name'
+    '--full-name',
   ], {
-    cwd: cwd.get()
+    cwd: cwd.get(),
   })
   if (stdout.trim()) {
     return stdout.split(/\r?\n/g)
@@ -31,20 +31,20 @@ async function getDiffs (context) {
 
   const newFiles = await getNewFiles(context)
   await execa('git', ['add', '-N', '*'], {
-    cwd: cwd.get()
+    cwd: cwd.get(),
   })
   const { stdout } = await execa('git', ['diff'], {
-    cwd: cwd.get()
+    cwd: cwd.get(),
   })
   await reset(context)
-  let list = parseDiff(stdout)
+  const list = parseDiff(stdout)
   for (const n in list) {
     const fileDiff = list[n]
     const isNew = newFiles.includes(fileDiff.to)
     let fromContent
     if (!isNew) {
       const result = await execa('git', ['show', `HEAD:${fileDiff.from}`], {
-        cwd: cwd.get()
+        cwd: cwd.get(),
       })
       fromContent = result.stdout
     }
@@ -69,7 +69,7 @@ async function getDiffs (context) {
     list[n] = {
       id: fileDiff.index.join(' '),
       ...fileDiff,
-      new: isNew
+      new: isNew,
     }
   }
 
@@ -80,10 +80,10 @@ async function commit (message, context) {
   if (!hasProjectGit(cwd.get())) return false
 
   await execa('git', ['add', '*'], {
-    cwd: cwd.get()
+    cwd: cwd.get(),
   })
   await execa('git', ['commit', '-m', message.replace(/"/, '\\"')], {
-    cwd: cwd.get()
+    cwd: cwd.get(),
   })
   return true
 }
@@ -92,7 +92,7 @@ async function reset (context) {
   if (!hasProjectGit(cwd.get())) return false
 
   await execa('git', ['reset'], {
-    cwd: cwd.get()
+    cwd: cwd.get(),
   })
   return true
 }
@@ -102,9 +102,9 @@ async function getRoot (context) {
 
   const { stdout } = await execa('git', [
     'rev-parse',
-    '--show-toplevel'
+    '--show-toplevel',
   ], {
-    cwd: cwd.get()
+    cwd: cwd.get(),
   })
   return stdout
 }
@@ -119,5 +119,5 @@ module.exports = {
   commit,
   reset,
   getRoot,
-  resolveFile
+  resolveFile,
 }

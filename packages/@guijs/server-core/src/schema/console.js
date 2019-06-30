@@ -38,16 +38,16 @@ enum ConsoleLogType {
 exports.resolvers = {
   Query: {
     consoleLogs: (root, args, context) => logs.list(context),
-    consoleLogLast: (root, args, context) => logs.last(context)
+    consoleLogLast: (root, args, context) => logs.last(context),
   },
 
   Mutation: {
-    consoleLogsClear: (root, args, context) => logs.clear(context)
+    consoleLogsClear: (root, args, context) => logs.clear(context),
   },
 
   Subscription: {
     consoleLogAdded: {
-      subscribe: (parent, args, context) => context.pubsub.asyncIterator(channels.CONSOLE_LOG_ADDED)
-    }
-  }
+      subscribe: (parent, args, context) => context.pubsub.asyncIterator(channels.CONSOLE_LOG_ADDED),
+    },
+  },
 }

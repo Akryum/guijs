@@ -24,5 +24,5 @@ module.exports = {
     try {
       process.chdir(value)
     } catch (err) {}
-  }
+  },
 }

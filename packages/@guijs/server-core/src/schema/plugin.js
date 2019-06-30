@@ -72,13 +72,13 @@ exports.resolvers = {
   Plugin: {
     version: (plugin, args, context) => dependencies.getVersion(plugin, context),
     description: (plugin, args, context) => dependencies.getDescription(plugin, context),
-    logo: (plugin, args, context) => plugins.getLogo(plugin, context)
+    logo: (plugin, args, context) => plugins.getLogo(plugin, context),
   },
 
   Query: {
     pluginInstallation: (root, args, context) => plugins.getInstallation(context),
     plugins: (root, args, context) => plugins.list(cwd.get(), context),
-    plugin: (root, { id }, context) => plugins.findOne({ id, file: cwd.get() }, context)
+    plugin: (root, { id }, context) => plugins.findOne({ id, file: cwd.get() }, context),
   },
 
   Mutation: {
@@ -90,15 +90,15 @@ exports.resolvers = {
     pluginUpdate: (root, { id, full }, context) => plugins.update({ id, full }, context),
     pluginActionCall: (root, args, context) => plugins.callAction(args, context),
     pluginsUpdate: (root, args, context) => plugins.updateAll(context),
-    pluginResetApi: (root, args, context) => plugins.resetPluginApi({ file: cwd.get() }, context)
+    pluginResetApi: (root, args, context) => plugins.resetPluginApi({ file: cwd.get() }, context),
   },
 
   Subscription: {
     pluginActionCalled: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PLUGIN_ACTION_CALLED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PLUGIN_ACTION_CALLED),
     },
     pluginActionResolved: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PLUGIN_ACTION_RESOLVED)
-    }
-  }
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PLUGIN_ACTION_RESOLVED),
+    },
+  },
 }

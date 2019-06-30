@@ -47,7 +47,7 @@ class PluginApi {
       taskRun: [],
       taskExit: [],
       taskOpen: [],
-      viewOpen: []
+      viewOpen: [],
     }
     // Data
     this.configurations = []
@@ -155,13 +155,13 @@ class PluginApi {
       validateConfiguration(options)
       this.configurations.push({
         ...options,
-        pluginId: this.pluginId
+        pluginId: this.pluginId,
       })
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'describeConfig' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'describeConfig' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -178,13 +178,13 @@ class PluginApi {
       validateDescribeTask(options)
       this.describedTasks.push({
         ...options,
-        pluginId: this.pluginId
+        pluginId: this.pluginId,
       })
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'describeTask' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'describeTask' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -213,13 +213,13 @@ class PluginApi {
       validateAddTask(options)
       this.addedTasks.push({
         ...options,
-        pluginId: this.pluginId
+        pluginId: this.pluginId,
       })
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'addTask' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'addTask' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -249,13 +249,13 @@ class PluginApi {
       }
       this.clientAddons.push({
         ...options,
-        pluginId: this.pluginId
+        pluginId: this.pluginId,
       })
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'addClientAddon' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'addClientAddon' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -274,13 +274,13 @@ class PluginApi {
       validateView(options)
       this.views.push({
         ...options,
-        pluginId: this.pluginId
+        pluginId: this.pluginId,
       })
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'addView' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'addView' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -302,7 +302,7 @@ class PluginApi {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'addViewBadge' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'addViewBadge' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -386,7 +386,7 @@ class PluginApi {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'notify' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'notify' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -416,13 +416,13 @@ class PluginApi {
       validateProgress(options)
       progress.set({
         ...options,
-        id: '__plugins__'
+        id: '__plugins__',
       }, this.context)
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'setProgress' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'setProgress' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -571,7 +571,7 @@ class PluginApi {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'addSuggestion' options are invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'addSuggestion' options are invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid options: ${e.message}`))
     }
@@ -597,13 +597,13 @@ class PluginApi {
       validateWidget(def)
       this.widgetDefs.push({
         ...def,
-        pluginId: this.pluginId
+        pluginId: this.pluginId,
       })
     } catch (e) {
       logs.add({
         type: 'error',
         tag: 'PluginApi',
-        message: `(${this.pluginId || 'unknown plugin'}) 'registerWidget' widget definition is invalid\n${e.message}`
+        message: `(${this.pluginId || 'unknown plugin'}) 'registerWidget' widget definition is invalid\n${e.message}`,
       }, this.context)
       console.error(new Error(`Invalid definition: ${e.message}`))
     }
@@ -714,7 +714,7 @@ class PluginApi {
       registerWidget: (def) => {
         def.id = namespace + def.id
         return this.registerWidget(def)
-      }
+      },
     }
   }
 }

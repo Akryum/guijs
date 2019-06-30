@@ -16,5 +16,5 @@ module.exports = {
   SUGGESTION_ADDED: 'suggestion_added',
   SUGGESTION_REMOVED: 'suggestion_removed',
   SUGGESTION_UPDATED: 'suggestion_updated',
-  ROUTE_REQUESTED: 'route_requested'
+  ROUTE_REQUESTED: 'route_requested',
 }

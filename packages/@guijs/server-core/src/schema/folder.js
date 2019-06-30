@@ -33,13 +33,13 @@ exports.resolvers = {
     children: (folder, args, context) => folders.list(folder.path, context),
     isPackage: (folder, args, context) => folders.isPackage(folder.path, context),
     isVueProject: (folder, args, context) => folders.isVueProject(folder.path, context),
-    favorite: (folder, args, context) => folders.isFavorite(folder.path, context)
+    favorite: (folder, args, context) => folders.isFavorite(folder.path, context),
   },
 
   Query: {
     folderCurrent: (root, args, context) => folders.getCurrent(args, context),
     foldersFavorite: (root, args, context) => folders.listFavorite(context),
-    folderExists: (root, { file }, context) => folders.isDirectory(file)
+    folderExists: (root, { file }, context) => folders.isDirectory(file),
   },
 
   Mutation: {
@@ -47,8 +47,8 @@ exports.resolvers = {
     folderOpenParent: (root, args, context) => folders.openParent(cwd.get(), context),
     folderSetFavorite: (root, args, context) => folders.setFavorite({
       file: args.path,
-      favorite: args.favorite
+      favorite: args.favorite,
     }, context),
-    folderCreate: (root, { name }, context) => folders.create(name, context)
-  }
+    folderCreate: (root, { name }, context) => folders.create(name, context),
+  },
 }

@@ -20,7 +20,7 @@ fs.ensureDirSync(rootFolder)
 
 /** @type {Map<string, Map<string, SharedData>>} */
 const sharedData = new Map()
-let watchers = new Map()
+const watchers = new Map()
 
 function get ({ id, projectId }, context) {
   const store = sharedData.get(projectId)
@@ -32,7 +32,7 @@ function get ({ id, projectId }, context) {
       data = {
         id,
         updated: new Date(),
-        disk: true
+        disk: true,
       }
     }
   }
@@ -65,13 +65,13 @@ async function set ({ id, projectId, value, disk = false }, context) {
     id,
     ...(disk ? {} : { value }),
     disk,
-    updated: new Date()
+    updated: new Date(),
   })
 
   const stat = stats.get(`shared-data_${projectId}`, id)
   stat.value = 0
   context.pubsub.publish(channels.SHARED_DATA_UPDATED, {
-    sharedDataUpdated: { id, projectId, value }
+    sharedDataUpdated: { id, projectId, value },
   })
 
   const watchers = notify({ id, projectId, value }, context)
@@ -98,7 +98,7 @@ async function remove ({ id, projectId }, context) {
   }
 
   context.pubsub.publish(channels.SHARED_DATA_UPDATED, {
-    sharedDataUpdated: { id, projectId, value: undefined }
+    sharedDataUpdated: { id, projectId, value: undefined },
   })
 
   notify({ id, projectId, value: undefined }, context)
@@ -151,5 +151,5 @@ module.exports = {
   remove,
   watch,
   unwatch,
-  unWatchAll
+  unWatchAll,
 }

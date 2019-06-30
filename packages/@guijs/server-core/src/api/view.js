@@ -5,7 +5,7 @@ const viewSchema = createSchema(joi => ({
   name: joi.string().required().description('route name (vue-router)'),
   icon: joi.string(),
   tooltip: joi.string().required(),
-  projectTypes: joi.array().items(joi.string())
+  projectTypes: joi.array().items(joi.string()),
 }))
 
 const badgeSchema = createSchema(joi => ({
@@ -13,7 +13,7 @@ const badgeSchema = createSchema(joi => ({
   type: joi.string(),
   label: joi.string().required(),
   priority: joi.number().integer(),
-  hidden: joi.boolean()
+  hidden: joi.boolean(),
 }))
 
 exports.validateView = (options) => {

@@ -4,7 +4,7 @@ const channels = require('../channels')
 // Utils
 const { resolveModuleRoot } = require('../util/resolve-path')
 
-let addons = []
+const addons = []
 
 let baseUrl = process.env.VUE_APP_CLI_UI_URL
 if (typeof baseUrl === 'undefined') {
@@ -22,7 +22,7 @@ function add (options, context) {
 
   addons.push(options)
   context.pubsub.publish(channels.CLIENT_ADDON_ADDED, {
-    clientAddonAdded: options
+    clientAddonAdded: options,
   })
 }
 
@@ -74,5 +74,5 @@ module.exports = {
   findOne,
   getUrl,
   serve,
-  clear
+  clear,
 }

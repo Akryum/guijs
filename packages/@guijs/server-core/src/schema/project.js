@@ -88,13 +88,13 @@ exports.resolvers = {
     type: (project, args, context) => projects.getType(project, context),
     plugins: (project, args, context) => plugins.list(project.path, context),
     tasks: (project, args, context) => tasks.list({ file: project.path }, context),
-    homepage: (project, args, context) => projects.getHomepage(project, context)
+    homepage: (project, args, context) => projects.getHomepage(project, context),
   },
 
   Query: {
     projects: (root, args, context) => projects.list(context),
     projectCurrent: (root, args, context) => projects.getCurrent(context),
-    projectCreation: (root, args, context) => projects.getCreation(context)
+    projectCreation: (root, args, context) => projects.getCreation(context),
   },
 
   Mutation: {
@@ -108,6 +108,6 @@ exports.resolvers = {
     projectSetFavorite: (root, args, context) => projects.setFavorite(args, context),
     projectRename: (root, args, context) => projects.rename(args, context),
     presetApply: (root, { id }, context) => projects.applyPreset(id, context),
-    featureSetEnabled: (root, args, context) => projects.setFeatureEnabled(args, context)
-  }
+    featureSetEnabled: (root, args, context) => projects.setFeatureEnabled(args, context),
+  },
 }

@@ -74,12 +74,12 @@ exports.resolvers = {
   Task: {
     prompts: (task, args, context) => tasks.getPrompts(task.id, context),
     plugin: (task, args, context) => plugins.findOne({ id: task.pluginId, file: task.path }, context),
-    project: (task, args, context) => projects.findByPath(task.path, context)
+    project: (task, args, context) => projects.findByPath(task.path, context),
   },
 
   Query: {
     tasks: (root, args, context) => tasks.list(undefined, context),
-    task: (root, { id }, context) => tasks.findOne(id, context)
+    task: (root, { id }, context) => tasks.findOne(id, context),
   },
 
   Mutation: {
@@ -88,18 +88,18 @@ exports.resolvers = {
     taskLogsClear: (root, { id }, context) => tasks.clearLogs(id, context),
     taskOpen: (root, { id }, context) => tasks.open(id, context),
     taskSaveParameters: (root, { id }, context) => tasks.saveParameters({ id }, context),
-    taskRestoreParameters: (root, { id }, context) => tasks.restoreParameters({ id }, context)
+    taskRestoreParameters: (root, { id }, context) => tasks.restoreParameters({ id }, context),
   },
 
   Subscription: {
     taskChanged: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.TASK_CHANGED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.TASK_CHANGED),
     },
     taskLogAdded: {
       subscribe: withFilter(
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.TASK_LOG_ADDED),
         (payload, vars) => payload.taskLogAdded.taskId === vars.id
-      )
-    }
-  }
+      ),
+    },
+  },
 }

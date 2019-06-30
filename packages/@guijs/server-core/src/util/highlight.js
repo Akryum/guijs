@@ -18,7 +18,7 @@ const languages = [
   { test: /\.rb$/, lang: 'ruby' },
   { test: /\.styl$/, lang: 'stylus' },
   { test: /\.ts$/, lang: 'typescript' },
-  { test: /\.yml$/, lang: 'yaml' }
+  { test: /\.yml$/, lang: 'yaml' },
 ]
 
 export function highlightCode (filename, content, lang = null) {

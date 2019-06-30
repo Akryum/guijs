@@ -10,9 +10,9 @@ db.defaults({
   projects: [],
   foldersFavorite: [],
   tasks: [],
-  config: {}
+  config: {},
 }).write()
 
 module.exports = {
-  db
+  db,
 }

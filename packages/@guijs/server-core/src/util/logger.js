@@ -11,7 +11,7 @@ exports.log = (...args) => {
 const simpleTypes = [
   'string',
   'number',
-  'boolean'
+  'boolean',
 ]
 
 exports.dumpObject = (obj) => {

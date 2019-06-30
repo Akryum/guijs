@@ -49,22 +49,22 @@ enum ViewBadgeType {
 
 exports.resolvers = {
   Query: {
-    views: (root, args, context) => views.list(context)
+    views: (root, args, context) => views.list(context),
   },
 
   Mutation: {
-    viewOpen: (root, { id }, context) => views.open(id, context)
+    viewOpen: (root, { id }, context) => views.open(id, context),
   },
 
   Subscription: {
     viewAdded: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VIEW_ADDED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VIEW_ADDED),
     },
     viewChanged: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VIEW_CHANGED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VIEW_CHANGED),
     },
     viewRemoved: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VIEW_REMOVED)
-    }
-  }
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.VIEW_REMOVED),
+    },
+  },
 }

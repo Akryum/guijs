@@ -8,7 +8,7 @@ const isPlatformWindows = process.platform.indexOf('win') === 0
 
 const pkgCache = new LRU({
   max: 500,
-  maxAge: 1000 * 5
+  maxAge: 1000 * 5,
 })
 
 const cwd = require('./cwd')
@@ -37,7 +37,7 @@ async function list (base, context) {
       return {
         path: folderPath,
         name: file,
-        hidden: isHidden(folderPath)
+        hidden: isHidden(folderPath),
       }
     }
   ).filter(
@@ -50,7 +50,7 @@ function isHidden (file) {
     const prefixed = path.basename(file).charAt(0) === hiddenPrefix
     const result = {
       unix: prefixed,
-      windows: false
+      windows: false,
     }
 
     if (isPlatformWindows) {
@@ -70,7 +70,7 @@ function isHidden (file) {
 function generateFolder (file, context) {
   return {
     name: path.basename(file),
-    path: file
+    path: file,
   }
 }
 
@@ -116,7 +116,7 @@ function readPackage (file, context, force = false) {
 
 function writePackage ({ file, data }, context) {
   fs.outputJsonSync(path.join(file, 'package.json'), data, {
-    spaces: 2
+    spaces: 2,
   })
   invalidatePackage(file, context)
   return true
@@ -186,5 +186,5 @@ module.exports = {
   listFavorite,
   setFavorite,
   delete: deleteFolder,
-  create: createFolder
+  create: createFolder,
 }

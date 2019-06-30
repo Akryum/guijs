@@ -9,7 +9,7 @@ const schema = createSchema(joi => ({
   importance: joi.string(),
   message: joi.string(),
   link: joi.string(),
-  image: joi.string()
+  image: joi.string(),
 }))
 
 exports.validateSuggestion = (options) => {

@@ -20,12 +20,12 @@ async function openInEditor (input, context) {
   }
   logs.add({
     message: `Opening file '${query}' in code editor...`,
-    type: 'info'
+    type: 'info',
   }, context)
   launch(query)
   return true
 }
 
 module.exports = {
-  openInEditor
+  openInEditor,
 }

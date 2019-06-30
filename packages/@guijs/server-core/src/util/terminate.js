@@ -4,7 +4,7 @@ const path = require('path')
 const {
   isWindows,
   isLinux,
-  isMacintosh
+  isMacintosh,
 } = require('@vue/cli-shared-utils')
 
 const execFile = util.promisify(cp.execFile)
@@ -13,8 +13,8 @@ const spawn = util.promisify(cp.spawn)
 exports.terminate = async function (childProcess, cwd) {
   if (isWindows) {
     try {
-      let options = {
-        stdio: ['pipe', 'pipe', 'ignore']
+      const options = {
+        stdio: ['pipe', 'pipe', 'ignore'],
       }
       if (cwd) {
         options.cwd = cwd
@@ -25,9 +25,9 @@ exports.terminate = async function (childProcess, cwd) {
     }
   } else if (isLinux || isMacintosh) {
     try {
-      let cmd = path.resolve(__dirname, './terminate.sh')
-      let result = await spawn(cmd, [childProcess.pid.toString()], {
-        cwd
+      const cmd = path.resolve(__dirname, './terminate.sh')
+      const result = await spawn(cmd, [childProcess.pid.toString()], {
+        cwd,
       })
       if (result.error) {
         return { success: false, error: result.error }

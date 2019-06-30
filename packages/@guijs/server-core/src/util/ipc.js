@@ -16,7 +16,7 @@ ipc.serve(() => {
         data,
         emit: data => {
           ipc.server.emit(socket, 'message', data)
-        }
+        },
       })
     }
   })
@@ -49,5 +49,5 @@ function send (data) {
 module.exports = {
   on,
   off,
-  send
+  send,
 }

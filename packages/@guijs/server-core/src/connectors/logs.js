@@ -30,11 +30,11 @@ exports.add = function (log, context) {
     id: shortId.generate(),
     date: new Date().toISOString(),
     tag: null,
-    ...log
+    ...log,
   }
   logs.push(item)
   context.pubsub.publish(channels.CONSOLE_LOG_ADDED, {
-    consoleLogAdded: item
+    consoleLogAdded: item,
   })
   return item
 }
@@ -65,6 +65,6 @@ exports.clear = function (context) {
   exports.add({
     type: 'info',
     tag: null,
-    message: generateTitle(true)
+    message: generateTitle(true),
   }, context)
 }

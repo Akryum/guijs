@@ -25,11 +25,11 @@ const resolvers = [{
   DescribedEntity: {
     __resolveType (obj, context, info) {
       return null
-    }
+    },
   },
 
   ClientAddon: {
-    url: (addon, args, context) => clientAddons.getUrl(addon, context)
+    url: (addon, args, context) => clientAddons.getUrl(addon, context),
   },
 
   Query: {
@@ -37,17 +37,17 @@ const resolvers = [{
     progress: (root, { id }, context) => progress.get(id, context),
     clientAddons: (root, args, context) => clientAddons.list(context),
     sharedData: (root, args, context) => sharedData.get(args, context),
-    locales: (root, args, context) => locales.list(context)
+    locales: (root, args, context) => locales.list(context),
   },
 
   Mutation: {
     fileOpenInEditor: (root, { input }, context) => files.openInEditor(input, context),
-    sharedDataUpdate: (root, args, context) => sharedData.set(args, context)
+    sharedDataUpdate: (root, args, context) => sharedData.set(args, context),
   },
 
   Subscription: {
     cwdChanged: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.CWD_CHANGED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.CWD_CHANGED),
     },
     progressChanged: {
       subscribe: withFilter(
@@ -55,7 +55,7 @@ const resolvers = [{
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_CHANGED),
         // Filter
         (payload, vars) => payload.progressChanged.id === vars.id
-      )
+      ),
     },
     progressRemoved: {
       subscribe: withFilter(
@@ -63,10 +63,10 @@ const resolvers = [{
         (parent, args, { pubsub }) => pubsub.asyncIterator(channels.PROGRESS_REMOVED),
         // Filter
         (payload, vars) => payload.progressRemoved === vars.id
-      )
+      ),
     },
     clientAddonAdded: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.CLIENT_ADDON_ADDED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.CLIENT_ADDON_ADDED),
     },
     sharedDataUpdated: {
       subscribe: withFilter(
@@ -78,15 +78,15 @@ const resolvers = [{
           }
           return result
         }
-      )
+      ),
     },
     localeAdded: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.LOCALE_ADDED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.LOCALE_ADDED),
     },
     routeRequested: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.ROUTE_REQUESTED)
-    }
-  }
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.ROUTE_REQUESTED),
+    },
+  },
 }]
 
 // Load resolvers in './schema'

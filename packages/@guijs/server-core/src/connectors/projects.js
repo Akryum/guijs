@@ -49,7 +49,7 @@ function findByPath (file, context) {
 }
 
 function autoClean (projects, context) {
-  let result = []
+  const result = []
   for (const project of projects) {
     if (fs.existsSync(project.path)) {
       result.push(project)
@@ -86,7 +86,7 @@ function generateProjectCreation (creator) {
   return {
     presets,
     features,
-    prompts: prompts.list()
+    prompts: prompts.list(),
   }
 }
 
@@ -120,7 +120,7 @@ async function initCreator (context) {
     name: 'org.vue.views.project-create.tabs.presets.manual.name',
     description: 'org.vue.views.project-create.tabs.presets.manual.description',
     link: null,
-    features: []
+    features: [],
   }
   const presetsData = creator.getPresets()
   presets = [
@@ -135,13 +135,13 @@ async function initCreator (context) {
           name: key === 'default' ? 'org.vue.views.project-create.tabs.presets.default-preset' : key,
           features,
           link: null,
-          raw: preset
+          raw: preset,
         }
         info.description = generatePresetDescription(info)
         return info
       }
     ),
-    manualPreset
+    manualPreset,
   ]
 
   // Features
@@ -154,7 +154,7 @@ async function initCreator (context) {
         description: data.description || null,
         link: data.link || null,
         plugins: data.plugins || null,
-        enabled: !!data.checked
+        enabled: !!data.checked,
       })
     ),
     {
@@ -163,8 +163,8 @@ async function initCreator (context) {
       description: 'org.vue.views.project-create.tabs.features.userConfigFiles.description',
       link: null,
       plugins: null,
-      enabled: false
-    }
+      enabled: false,
+    },
   ]
 
   manualPreset.features = features.filter(
@@ -254,7 +254,7 @@ async function applyPreset (id, context) {
 async function create (input, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
-      status: 'creating'
+      status: 'creating',
     })
 
     const targetDir = path.join(cwd.get(), input.folder)
@@ -284,7 +284,7 @@ async function create (input, context) {
     }
 
     setProgress({
-      info: 'Resolving preset...'
+      info: 'Resolving preset...',
     })
     let preset
     if (input.preset === '__remote__' && input.remote) {
@@ -297,12 +297,12 @@ async function create (input, context) {
       preset = await creator.promptAndResolvePreset(answers)
     }
     setProgress({
-      info: null
+      info: null,
     })
 
     // Create
     const args = [
-      '--skipGetStarted'
+      '--skipGetStarted',
     ]
     if (input.packageManager) args.push('--packageManager', input.packageManager)
     if (input.bar) args.push('--bare')
@@ -321,21 +321,21 @@ async function create (input, context) {
     const child = execa('vue', [
       'create',
       name,
-      ...args
+      ...args,
     ], {
       cwd: cwd.get(),
-      stdio: ['inherit', 'pipe', 'inherit']
+      stdio: ['inherit', 'pipe', 'inherit'],
     })
 
     const onData = buffer => {
       const text = buffer.toString().trim()
       if (text) {
         setProgress({
-          info: text
+          info: text,
         })
         logs.add({
           type: 'info',
-          message: text
+          message: text,
         }, context)
       }
     }
@@ -349,11 +349,11 @@ async function create (input, context) {
     notify({
       title: `Project created`,
       message: `Project ${cwd.get()} created`,
-      icon: 'done'
+      icon: 'done',
     })
 
     return importProject({
-      path: targetDir
+      path: targetDir,
     }, context)
   })
 }
@@ -367,7 +367,7 @@ async function importProject (input, context) {
     id: shortId.generate(),
     path: input.path,
     favorite: 0,
-    type: folders.isVueProject(input.path) ? 'vue' : 'unknown'
+    type: folders.isVueProject(input.path) ? 'vue' : 'unknown',
   }
   const packageData = folders.readPackage(project.path, context)
   project.name = packageData.name
@@ -398,7 +398,7 @@ async function open (id, context) {
 
   // Date
   context.db.get('projects').find({ id }).assign({
-    openDate: Date.now()
+    openDate: Date.now(),
   }).write()
 
   // Save for next time
@@ -492,5 +492,5 @@ module.exports = {
   initCreator,
   removeCreator,
   getType,
-  getHomepage
+  getHomepage,
 }

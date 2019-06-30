@@ -14,34 +14,34 @@ function createViewsSet () {
       id: 'vue-project-dashboard',
       name: 'project-dashboard',
       icon: 'dashboard',
-      tooltip: 'org.vue.components.project-nav.tooltips.dashboard'
+      tooltip: 'org.vue.components.project-nav.tooltips.dashboard',
     },
     {
       id: 'vue-project-plugins',
       name: 'project-plugins',
       icon: 'extension',
-      tooltip: 'org.vue.components.project-nav.tooltips.plugins'
+      tooltip: 'org.vue.components.project-nav.tooltips.plugins',
     },
     {
       id: 'vue-project-dependencies',
       name: 'project-dependencies',
       icon: 'collections_bookmark',
       tooltip: 'org.vue.components.project-nav.tooltips.dependencies',
-      projectTypes: ['vue', 'unknown']
+      projectTypes: ['vue', 'unknown'],
     },
     {
       id: 'vue-project-configurations',
       name: 'project-configurations',
       icon: 'settings_applications',
-      tooltip: 'org.vue.components.project-nav.tooltips.configuration'
+      tooltip: 'org.vue.components.project-nav.tooltips.configuration',
     },
     {
       id: 'vue-project-tasks',
       name: 'project-tasks',
       icon: 'assignment',
       tooltip: 'org.vue.components.project-nav.tooltips.tasks',
-      projectTypes: ['vue', 'unknown']
-    }
+      projectTypes: ['vue', 'unknown'],
+    },
   ]
 }
 
@@ -80,7 +80,7 @@ async function add ({ view, project }, context) {
   const views = getViews()
   views.push(view)
   context.pubsub.publish(channels.VIEW_ADDED, {
-    viewAdded: view
+    viewAdded: view,
   })
   log('View added', view.id)
 }
@@ -92,7 +92,7 @@ function remove (id, context) {
     const view = views[index]
     views.splice(index, 1)
     context.pubsub.publish(channels.VIEW_REMOVED, {
-      viewRemoved: view
+      viewRemoved: view,
     })
   }
 }
@@ -102,7 +102,7 @@ function update (view, context) {
   if (existingView) {
     Object.assign(existingView, view)
     context.pubsub.publish(channels.VIEW_CHANGED, {
-      viewChanged: existingView
+      viewChanged: existingView,
     })
   }
 }
@@ -114,7 +114,7 @@ function addBadge ({ viewId, badge }, context) {
     const existingBadge = view.badges.find(b => b.id === badge.id)
     if (existingBadge) {
       Object.assign(existingBadge, badge, {
-        count: existingBadge.count + 1
+        count: existingBadge.count + 1,
       })
     } else {
       view.badges.push({
@@ -122,7 +122,7 @@ function addBadge ({ viewId, badge }, context) {
         count: 1,
         priority: 0,
         hidden: false,
-        ...badge
+        ...badge,
       })
     }
     update(view, context)
@@ -152,9 +152,9 @@ function open (id, context) {
     id: 'viewOpen',
     args: [{
       view,
-      cwd: cwd.get()
+      cwd: cwd.get(),
     }],
-    file: cwd.get()
+    file: cwd.get(),
   }, context)
   return true
 }
@@ -168,5 +168,5 @@ module.exports = {
   addBadge,
   removeBadge,
   open,
-  getCurrent: () => currentView
+  getCurrent: () => currentView,
 }

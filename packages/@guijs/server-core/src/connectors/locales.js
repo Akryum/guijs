@@ -24,7 +24,7 @@ function add (locale, context) {
     locales.push(locale)
   }
   context.pubsub.publish(channels.LOCALE_ADDED, {
-    localeAdded: locale
+    localeAdded: locale,
   })
 }
 
@@ -65,5 +65,5 @@ module.exports = {
   list,
   add,
   reset,
-  loadFolder
+  loadFolder,
 }

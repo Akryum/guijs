@@ -18,8 +18,8 @@ module.exports = app => {
   app.use('/_addon/:id/*', clientAddons.serve)
   app.use(fallback(path.join(distPath, 'index.html'), {
     headers: {
-      'Cache-Control': CACHE_CONTROL
-    }
+      'Cache-Control': CACHE_CONTROL,
+    },
   }))
 }
 

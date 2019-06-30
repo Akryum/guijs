@@ -29,13 +29,13 @@ const {
   resolveModule,
   loadModule,
   clearModule,
-  execa
+  execa,
 } = require('@vue/cli-shared-utils')
 const {
   progress: installProgress,
   installPackage,
   uninstallPackage,
-  updatePackage
+  updatePackage,
 } = require('@vue/cli/lib/util/installDeps')
 const { getCommand } = require('../util/command')
 const ipc = require('../util/ipc')
@@ -48,16 +48,16 @@ const VUEDESK_BUILD_BUNDLE = 'vuedesk-build-bundle'
 
 // Caches
 const logoCache = new LRU({
-  max: 50
+  max: 50,
 })
 
 // Local
 let currentPluginId
 let eventsInstalled = false
 let installationStep
-let pluginsStore = new Map()
-let pluginApiInstances = new Map()
-let pkgStore = new Map()
+const pluginsStore = new Map()
+const pluginApiInstances = new Map()
+const pkgStore = new Map()
 
 async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
   let pkg = folders.readPackage(file, context)
@@ -80,7 +80,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
       official: true,
       installed: true,
       website: null,
-      baseDir: file
+      baseDir: file,
     })
 
     plugins = plugins.concat(pkg.vuedesk.plugins.map(id => ({
@@ -90,7 +90,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
       installed: true,
       website: null,
       baseDir: file,
-      hidden: true
+      hidden: true,
     })))
   }
 
@@ -136,7 +136,7 @@ function findPlugins (deps, file) {
       official: isOfficialPlugin(id) || id === CLI_SERVICE,
       installed: fs.existsSync(dependencies.getPath({ id, file })),
       website: getLink(id),
-      baseDir: file
+      baseDir: file,
     })
   )
 }
@@ -195,7 +195,7 @@ function resetPluginApi ({ file, lightApi }, context) {
         plugins,
         file,
         project,
-        lightMode: lightApi
+        lightMode: lightApi,
       }, context)
       pluginApiInstances.set(file, pluginApi)
 
@@ -235,13 +235,13 @@ function resetPluginApi ({ file, lightApi }, context) {
         callHook({
           id: 'projectOpen',
           args: [project, projects.getLast(context)],
-          file
+          file,
         }, context)
       } else {
         callHook({
           id: 'pluginReload',
           args: [project],
-          file
+          file,
         }, context)
 
         // View open hook
@@ -273,7 +273,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
       log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
       logs.add({
         type: 'error',
-        message: `An error occured while loading ${name}: no function exported`
+        message: `An error occured while loading ${name}: no function exported`,
       })
     } else {
       pluginApi.pluginId = id
@@ -284,7 +284,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
         log(`${chalk.red('ERROR')} while loading plugin API for ${name}:`, e)
         logs.add({
           type: 'error',
-          message: `An error occured while loading ${name}: ${e.message}`
+          message: `An error occured while loading ${name}: ${e.message}`,
         })
       }
       pluginApi.pluginId = null
@@ -353,7 +353,7 @@ function getInstallation (context) {
     id: 'plugin-install',
     pluginId: currentPluginId,
     step: installationStep,
-    prompts: prompts.list()
+    prompts: prompts.list(),
   }
 }
 
@@ -361,7 +361,7 @@ function install (id, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'plugin-install',
-      args: [id]
+      args: [id],
     })
     currentPluginId = id
     installationStep = 'install'
@@ -376,7 +376,7 @@ function install (id, context) {
     notify({
       title: `Plugin installed`,
       message: `Plugin ${id} installed, next step is configuration`,
-      icon: 'done'
+      icon: 'done',
     })
 
     return getInstallation(context)
@@ -401,7 +401,7 @@ function installLocal (context) {
 
     setProgress({
       status: 'plugin-install',
-      args: [id]
+      args: [id],
     })
     currentPluginId = id
     installationStep = 'install'
@@ -413,7 +413,7 @@ function installLocal (context) {
       if (!pkg.devDependencies) pkg.devDependencies = {}
       pkg.devDependencies[id] = `file:${folder}`
       await fs.writeJson(pkgFile, pkg, {
-        spaces: 2
+        spaces: 2,
       })
     }
 
@@ -428,7 +428,7 @@ function installLocal (context) {
     notify({
       title: `Plugin installed`,
       message: `Plugin ${id} installed, next step is configuration`,
-      icon: 'done'
+      icon: 'done',
     })
 
     return getInstallation(context)
@@ -439,7 +439,7 @@ function uninstall (id, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'plugin-uninstall',
-      args: [id]
+      args: [id],
     })
     installationStep = 'uninstall'
     currentPluginId = id
@@ -454,7 +454,7 @@ function uninstall (id, context) {
     notify({
       title: `Plugin uninstalled`,
       message: `Plugin ${id} uninstalled`,
-      icon: 'done'
+      icon: 'done',
     })
 
     return getInstallation(context)
@@ -472,7 +472,7 @@ function runInvoke (id, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'plugin-invoke',
-      args: [id]
+      args: [id],
     })
 
     clearModule('@vue/cli-service/webpack.config.js', cwd.get())
@@ -484,21 +484,21 @@ function runInvoke (id, context) {
         'invoke',
         id,
         '--$inlineOptions',
-        JSON.stringify(prompts.getAnswers())
+        JSON.stringify(prompts.getAnswers()),
       ], {
         cwd: cwd.get(),
-        stdio: ['inherit', 'pipe', 'inherit']
+        stdio: ['inherit', 'pipe', 'inherit'],
       })
 
       const onData = buffer => {
         const text = buffer.toString().trim()
         if (text) {
           setProgress({
-            info: text
+            info: text,
           })
           logs.add({
             type: 'info',
-            message: text
+            message: text,
           }, context)
         }
       }
@@ -514,7 +514,7 @@ function runInvoke (id, context) {
     notify({
       title: `Plugin invoked successfully`,
       message: `Plugin ${id} invoked successfully`,
-      icon: 'done'
+      icon: 'done',
     })
 
     return getInstallation(context)
@@ -545,7 +545,7 @@ function update ({ id, full }, context) {
   return progress.wrap('plugin-update', context, async setProgress => {
     setProgress({
       status: 'plugin-update',
-      args: [id]
+      args: [id],
     })
     currentPluginId = id
     const plugin = findOne({ id, file: cwd.get() }, context)
@@ -559,13 +559,13 @@ function update ({ id, full }, context) {
 
     logs.add({
       message: `Plugin ${id} updated from ${current} to ${wanted}`,
-      type: 'info'
+      type: 'info',
     }, context)
 
     notify({
       title: `Plugin updated`,
       message: `Plugin ${id} was successfully updated`,
-      icon: 'done'
+      icon: 'done',
     })
 
     await resetPluginApi({ file: cwd.get() }, context)
@@ -587,14 +587,14 @@ async function updateLocalPackage ({ id, cwd, localPath, full = true }, context)
     filterRegEx = /(\.git|node_modules)/
   }
   await fs.copy(from, to, {
-    filter: (file) => !file.match(filterRegEx)
+    filter: (file) => !file.match(filterRegEx),
   })
 }
 
 async function updateAll (context) {
   return progress.wrap('plugins-update', context, async setProgress => {
     const plugins = await list(cwd.get(), context, { resetApi: false })
-    let updatedPlugins = []
+    const updatedPlugins = []
     for (const plugin of plugins) {
       const version = await dependencies.getVersion(plugin, context)
       if (version.current !== version.wanted) {
@@ -607,14 +607,14 @@ async function updateAll (context) {
       notify({
         title: `No updates available`,
         message: `No plugin to update in the version ranges declared in package.json`,
-        icon: 'done'
+        icon: 'done',
       })
       return []
     }
 
     setProgress({
       status: 'plugins-update',
-      args: [updatedPlugins.length]
+      args: [updatedPlugins.length],
     })
 
     await updatePackage(cwd.get(), getCommand(cwd.get()), null, updatedPlugins.map(
@@ -624,7 +624,7 @@ async function updateAll (context) {
     notify({
       title: `Plugins updated`,
       message: `${updatedPlugins.length} plugin(s) were successfully updated`,
-      icon: 'done'
+      icon: 'done',
     })
 
     await resetPluginApi({ file: cwd.get() }, context)
@@ -637,7 +637,7 @@ async function callAction ({ id, params, file = cwd.get() }, context) {
   const pluginApi = getApi(file)
 
   context.pubsub.publish(channels.PLUGIN_ACTION_CALLED, {
-    pluginActionCalled: { id, params }
+    pluginActionCalled: { id, params },
   })
   log('PluginAction called', id, params)
   const results = []
@@ -657,7 +657,7 @@ async function callAction ({ id, params, file = cwd.get() }, context) {
     }
   }
   context.pubsub.publish(channels.PLUGIN_ACTION_RESOLVED, {
-    pluginActionResolved: { id, params, results, errors }
+    pluginActionResolved: { id, params, results, errors },
   })
   log('PluginAction resolved', id, params, 'results:', results, 'errors:', errors)
   return { id, params, results, errors }
@@ -715,5 +715,5 @@ module.exports = {
   callAction,
   callHook,
   serve,
-  serveLogo
+  serveLogo,
 }

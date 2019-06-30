@@ -57,6 +57,6 @@ enum PromptType {
 
 exports.resolvers = {
   Mutation: {
-    promptAnswer: (root, { input }, context) => prompts.answerPrompt(input, context)
-  }
+    promptAnswer: (root, { input }, context) => prompts.answerPrompt(input, context),
+  },
 }

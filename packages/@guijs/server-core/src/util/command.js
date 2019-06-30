@@ -2,7 +2,7 @@ const {
   hasYarn,
   hasProjectYarn,
   hasPnpm3OrLater,
-  hasProjectPnpm
+  hasProjectPnpm,
 } = require('@vue/cli-shared-utils')
 const { loadOptions } = require('@vue/cli/lib/options')
 

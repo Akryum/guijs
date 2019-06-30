@@ -49,18 +49,18 @@ input DependencyUpdate {
 exports.resolvers = {
   Dependency: {
     version: (dependency, args, context) => dependencies.getVersion(dependency, context),
-    description: (dependency, args, context) => dependencies.getDescription(dependency, context)
+    description: (dependency, args, context) => dependencies.getDescription(dependency, context),
   },
 
   Query: {
     dependencies: (root, args, context) => dependencies.list(cwd.get(), context),
-    dependency: (root, { id }, context) => dependencies.findOne(id, context)
+    dependency: (root, { id }, context) => dependencies.findOne(id, context),
   },
 
   Mutation: {
     dependencyInstall: (root, { input }, context) => dependencies.install(input, context),
     dependencyUninstall: (root, { input }, context) => dependencies.uninstall(input, context),
     dependencyUpdate: (root, { input }, context) => dependencies.update(input, context),
-    dependenciesUpdate: (root, args, context) => dependencies.updateAll(context)
-  }
+    dependenciesUpdate: (root, args, context) => dependencies.updateAll(context),
+  },
 }

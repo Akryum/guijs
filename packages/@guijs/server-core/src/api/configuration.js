@@ -10,10 +10,10 @@ const schema = createSchema(joi => ({
     json: joi.array().items(joi.string()),
     js: joi.array().items(joi.string()),
     yaml: joi.array().items(joi.string()),
-    package: joi.string()
+    package: joi.string(),
   })),
   onRead: joi.func().required(),
-  onWrite: joi.func().required()
+  onWrite: joi.func().required(),
 }))
 
 exports.validateConfiguration = (options) => {

@@ -56,7 +56,7 @@ function getDefaultFile (fileDescriptor, context) {
         const file = fileDescriptor[key][0]
         return {
           type: key,
-          path: path.resolve(cwd.get(), file)
+          path: path.resolve(cwd.get(), file),
         }
       }
     }
@@ -83,7 +83,7 @@ function readFile (config, fileDescriptor, context) {
   }
   return {
     file,
-    fileData
+    fileData,
   }
 }
 
@@ -123,7 +123,7 @@ function writeFile (config, fileId, data, changedFields, context) {
     } else if (file.type === 'yaml') {
       rawContent = yaml.safeDump(data)
     } else if (file.type === 'js') {
-      let source = fs.readFileSync(file.path, { encoding: 'utf8' })
+      const source = fs.readFileSync(file.path, { encoding: 'utf8' })
       if (!source.trim()) {
         rawContent = `module.exports = ${stringifyJS(data, null, 2)}`
       } else {
@@ -151,13 +151,13 @@ async function getPromptTabs (id, context) {
     log('Config read', config.id, data)
     current = {
       config,
-      data
+      data,
     }
 
     // API
     const onReadData = await config.onRead({
       cwd: cwd.get(),
-      data
+      data,
     })
 
     let tabs = onReadData.tabs
@@ -166,15 +166,15 @@ async function getPromptTabs (id, context) {
         {
           id: '__default',
           label: 'Default',
-          prompts: onReadData.prompts
-        }
+          prompts: onReadData.prompts,
+        },
       ]
     }
     await prompts.reset()
     for (const tab of tabs) {
       tab.prompts = tab.prompts.map(data => prompts.add({
         ...data,
-        tabId: tab.id
+        tabId: tab.id,
       }))
     }
     if (onReadData.answers) {
@@ -189,9 +189,9 @@ async function getPromptTabs (id, context) {
         data,
         onReadData,
         tabs,
-        cwd: cwd.get()
+        cwd: cwd.get(),
       }],
-      file: cwd.get()
+      file: cwd.get(),
     }, context)
 
     return tabs
@@ -204,7 +204,7 @@ async function save (id, context) {
   if (config) {
     if (current.config === config) {
       const answers = prompts.getAnswers()
-      let data = clone(current.data)
+      const data = clone(current.data)
       const changedFields = {}
       const getChangedFields = fileId => changedFields[fileId] || (changedFields[fileId] = [])
 
@@ -249,8 +249,8 @@ async function save (id, context) {
                 return value
               }
             }
-          }
-        }
+          },
+        },
       })
 
       writeData({ config, data, changedFields }, context)
@@ -261,9 +261,9 @@ async function save (id, context) {
           config,
           data,
           changedFields,
-          cwd: cwd.get()
+          cwd: cwd.get(),
         }],
-        file: cwd.get()
+        file: cwd.get(),
       }, context)
 
       current = {}
@@ -285,5 +285,5 @@ module.exports = {
   findOne,
   getPromptTabs,
   save,
-  cancel
+  cancel,
 }

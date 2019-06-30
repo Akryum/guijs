@@ -1,7 +1,7 @@
 // Subs
 const channels = require('../channels')
 
-let map = new Map()
+const map = new Map()
 
 function get (id, context) {
   return map.get(id)
@@ -17,7 +17,7 @@ function set (data, context) {
       error: null,
       info: null,
       args: null,
-      progress: -1
+      progress: -1,
     }, progress))
   } else {
     Object.assign(progress, data)
@@ -53,5 +53,5 @@ module.exports = {
   get,
   set,
   remove,
-  wrap
+  wrap,
 }

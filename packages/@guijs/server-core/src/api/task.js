@@ -9,23 +9,23 @@ const schema = joi => ({
     id: joi.string().required(),
     label: joi.string().required(),
     icon: joi.string(),
-    component: joi.string().required()
+    component: joi.string().required(),
   })),
   defaultView: joi.string(),
   onBeforeRun: joi.func(),
   onRun: joi.func(),
-  onExit: joi.func()
+  onExit: joi.func(),
 })
 
 const describeSchema = createSchema(joi => ({
   match: joi.alternatives().try(joi.object().type(RegExp), joi.func()).required().description('Match a npm script command'),
-  ...schema(joi)
+  ...schema(joi),
 }))
 
 const addSchema = createSchema(joi => ({
   name: joi.string().required(),
   command: joi.string().required(),
-  ...schema(joi)
+  ...schema(joi),
 }))
 
 exports.validateDescribeTask = (options) => {

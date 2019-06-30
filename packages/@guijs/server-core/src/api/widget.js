@@ -30,7 +30,7 @@ const schema = createSchema(joi => ({
   onAdded: joi.func(),
   onRemoved: joi.func(),
   onConfigOpen: joi.func(),
-  onConfigChanged: joi.func()
+  onConfigChanged: joi.func(),
 }))
 
 exports.validateWidget = (options) => {

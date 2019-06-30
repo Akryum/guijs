@@ -15,7 +15,7 @@ function getDefaultWidgets () {
       width: 3,
       height: 4,
       configured: true,
-      config: null
+      config: null,
     },
     {
       id: shortid(),
@@ -25,8 +25,8 @@ function getDefaultWidgets () {
       width: 2,
       height: 1,
       configured: true,
-      config: null
-    }
+      config: null,
+    },
   ]
 }
 
@@ -110,7 +110,7 @@ function save (context) {
   const projects = require('./projects')
   const id = projects.getCurrent(context).id
   context.db.get('projects').find({ id }).assign({
-    widgets
+    widgets,
   }).write()
 }
 
@@ -134,13 +134,13 @@ function add ({ definitionId }, context) {
     width,
     height,
     config: null,
-    configured: !definition.needsUserConfig
+    configured: !definition.needsUserConfig,
   }
 
   // Default config
   if (definition.defaultConfig) {
     widget.config = definition.defaultConfig({
-      definition
+      definition,
     })
   }
 
@@ -204,7 +204,7 @@ function findValidPosition (definition, currentWidget = null) {
     x,
     y,
     width,
-    height
+    height,
   }
 }
 
@@ -285,7 +285,7 @@ async function openConfig ({ id }, context) {
     const result = await definition.onConfigOpen({
       widget,
       definition,
-      context
+      context,
     })
     await prompts.reset(widget.config || {})
     result.prompts.forEach(prompts.add)
@@ -330,5 +330,5 @@ module.exports = {
   openConfig,
   getConfigPrompts,
   saveConfig,
-  resetConfig
+  resetConfig,
 }

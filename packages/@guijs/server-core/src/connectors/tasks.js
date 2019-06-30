@@ -61,7 +61,7 @@ async function list ({ file = null, api = true } = {}, context) {
           prompts: [],
           views: [],
           path: file,
-          ...moreData
+          ...moreData,
         }
       }
     )
@@ -78,7 +78,7 @@ async function list ({ file = null, api = true } = {}, context) {
             views: [],
             path: file,
             uiOnly: true,
-            ...task
+            ...task,
           }
         }
       ))
@@ -110,7 +110,7 @@ async function list ({ file = null, api = true } = {}, context) {
         ...task,
         status: 'idle',
         child: null,
-        logs: []
+        logs: [],
       })
     )
 
@@ -145,7 +145,7 @@ function findOne (id, context) {
 
 function getSavedData (id, context) {
   let data = context.db.get('tasks').find({
-    id
+    id,
   }).value()
   // Clone
   if (data != null) data = JSON.parse(JSON.stringify(data))
@@ -170,13 +170,13 @@ function updateOne (data, context) {
     if (task.status !== data.status) {
       updateViewBadges({
         task,
-        data
+        data,
       }, context)
     }
 
     Object.assign(task, data)
     context.pubsub.publish(channels.TASK_CHANGED, {
-      taskChanged: task
+      taskChanged: task,
     })
   }
   return task
@@ -194,8 +194,8 @@ function updateViewBadges ({ task, data }, context) {
           id: 'vue-task-error',
           type: 'error',
           label: 'org.vue.components.view-badge.labels.tasks.error',
-          priority: 3
-        }
+          priority: 3,
+        },
       }, context)
     } else if (data.status === 'running') {
       views.addBadge({
@@ -204,8 +204,8 @@ function updateViewBadges ({ task, data }, context) {
           id: 'vue-task-running',
           type: 'info',
           label: 'org.vue.components.view-badge.labels.tasks.running',
-          priority: 2
-        }
+          priority: 2,
+        },
       }, context)
     } else if (data.status === 'done') {
       views.addBadge({
@@ -215,8 +215,8 @@ function updateViewBadges ({ task, data }, context) {
           type: 'success',
           label: 'org.vue.components.view-badge.labels.tasks.done',
           priority: 1,
-          hidden: true
-        }
+          hidden: true,
+        },
       }, context)
     }
   }
@@ -255,7 +255,7 @@ async function run (id, context) {
       }
       await task.onBeforeRun({
         answers,
-        args
+        args,
       })
     }
 
@@ -286,17 +286,17 @@ async function run (id, context) {
 
     updateOne({
       id: task.id,
-      status: 'running'
+      status: 'running',
     }, context)
     logs.add({
       message: `Task ${task.id} started`,
-      type: 'info'
+      type: 'info',
     }, context)
 
     addLog({
       taskId: task.id,
       type: 'stdout',
-      text: chalk.grey(`$ ${command} ${args.join(' ')}`)
+      text: chalk.grey(`$ ${command} ${args.join(' ')}`),
     }, context)
 
     task.time = Date.now()
@@ -310,7 +310,7 @@ async function run (id, context) {
     const child = execa(command, args, {
       cwd: cwd.get(),
       stdio: ['inherit', 'pipe', 'pipe'],
-      shell: true
+      shell: true,
     })
 
     if (typeof nodeEnv !== 'undefined') {
@@ -323,7 +323,7 @@ async function run (id, context) {
       addLog({
         taskId: task.id,
         type: 'stdout',
-        text: queue
+        text: queue,
       }, context)
     })
     child.stdout.on('data', buffer => {
@@ -334,7 +334,7 @@ async function run (id, context) {
       addLog({
         taskId: task.id,
         type: 'stderr',
-        text: queue
+        text: queue,
       }, context)
     })
     child.stderr.on('data', buffer => {
@@ -352,7 +352,7 @@ async function run (id, context) {
       addLog({
         taskId: task.id,
         type: 'stdout',
-        text: chalk.grey(`Total task duration: ${seconds}s`)
+        text: chalk.grey(`Total task duration: ${seconds}s`),
       }, context)
 
       // Plugin API
@@ -362,46 +362,46 @@ async function run (id, context) {
           child,
           cwd: cwd.get(),
           code,
-          signal
+          signal,
         })
       }
 
       if (code === null || task._terminating) {
         updateOne({
           id: task.id,
-          status: 'terminated'
+          status: 'terminated',
         }, context)
         logs.add({
           message: `Task ${task.id} was terminated`,
-          type: 'info'
+          type: 'info',
         }, context)
       } else if (code !== 0) {
         updateOne({
           id: task.id,
-          status: 'error'
+          status: 'error',
         }, context)
         logs.add({
           message: `Task ${task.id} ended with error code ${code}`,
-          type: 'error'
+          type: 'error',
         }, context)
         notify({
           title: `Task error`,
           message: `Task ${task.id} ended with error code ${code}`,
-          icon: 'error'
+          icon: 'error',
         })
       } else {
         updateOne({
           id: task.id,
-          status: 'done'
+          status: 'done',
         }, context)
         logs.add({
           message: `Task ${task.id} completed`,
-          type: 'done'
+          type: 'done',
         }, context)
         notify({
           title: `Task completed`,
           message: `Task ${task.id} completed in ${seconds}s.`,
-          icon: 'done'
+          icon: 'done',
         })
       }
 
@@ -413,9 +413,9 @@ async function run (id, context) {
           child,
           cwd: cwd.get(),
           signal,
-          code
+          code,
         }],
-        file: cwd.get()
+        file: cwd.get(),
       }, context)
     }
 
@@ -429,21 +429,21 @@ async function run (id, context) {
       }
       updateOne({
         id: task.id,
-        status: 'error'
+        status: 'error',
       }, context)
       logs.add({
         message: `Error while running task ${task.id} with message'${error.message}'`,
-        type: 'error'
+        type: 'error',
       }, context)
       notify({
         title: `Task error`,
         message: `Error while running task ${task.id} with message'${error.message}'`,
-        icon: 'error'
+        icon: 'error',
       })
       addLog({
         taskId: task.id,
         type: 'stdout',
-        text: chalk.red(`Error while running task ${task.id} with message '${error.message}'`)
+        text: chalk.red(`Error while running task ${task.id} with message '${error.message}'`),
       }, context)
       console.error(error)
     })
@@ -453,7 +453,7 @@ async function run (id, context) {
       await task.onRun({
         args,
         child,
-        cwd: cwd.get()
+        cwd: cwd.get(),
       })
     }
 
@@ -463,9 +463,9 @@ async function run (id, context) {
         task,
         args,
         child,
-        cwd: cwd.get()
+        cwd: cwd.get(),
       }],
-      file: cwd.get()
+      file: cwd.get(),
     }, context)
   }
   return task
@@ -480,7 +480,7 @@ async function stop (id, context) {
       if (success) {
         updateOne({
           id: task.id,
-          status: 'terminated'
+          status: 'terminated',
         }, context)
       } else if (error) {
         throw error
@@ -503,7 +503,7 @@ function addLog (log, context) {
     }
     task.logs.push(log)
     context.pubsub.publish(channels.TASK_LOG_ADDED, {
-      taskLogAdded: log
+      taskLogAdded: log,
     })
   }
 }
@@ -522,9 +522,9 @@ function open (id, context) {
     id: 'taskOpen',
     args: [{
       task,
-      cwd: cwd.get()
+      cwd: cwd.get(),
     }],
-    file: cwd.get()
+    file: cwd.get(),
   }, context)
   return true
 }
@@ -560,7 +560,7 @@ function logPipe (action) {
 
   return {
     add,
-    flush
+    flush,
   }
 }
 
@@ -571,7 +571,7 @@ function saveParameters ({ id }, context) {
   // Save parameters
   updateSavedData({
     id,
-    answers
+    answers,
   }, context)
 
   return prompts.list()
@@ -587,7 +587,7 @@ async function restoreParameters ({ id }, context) {
         type: 'confirm',
         default: false,
         message: 'org.vue.views.project-task-details.override-args.message',
-        description: 'org.vue.views.project-task-details.override-args.description'
+        description: 'org.vue.views.project-task-details.override-args.description',
       })
     }
     task.prompts.forEach(prompts.add)
@@ -611,5 +611,5 @@ module.exports = {
   clearLogs,
   open,
   saveParameters,
-  restoreParameters
+  restoreParameters,
 }

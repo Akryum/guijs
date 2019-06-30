@@ -24,7 +24,7 @@ function add (suggestion, context) {
   suggestions.push(suggestion)
 
   context.pubsub.publish(channels.SUGGESTION_ADDED, {
-    suggestionAdded: suggestion
+    suggestionAdded: suggestion,
   })
 
   log('Suggestion added', suggestion.id)
@@ -39,7 +39,7 @@ function remove (id, context) {
   suggestions.splice(index, 1)
 
   context.pubsub.publish(channels.SUGGESTION_REMOVED, {
-    suggestionRemoved: suggestion
+    suggestionRemoved: suggestion,
   })
 
   log('Suggestion removed', suggestion.id)
@@ -59,7 +59,7 @@ function update (data, context) {
   Object.assign(suggestion, data)
 
   context.pubsub.publish(channels.SUGGESTION_UPDATED, {
-    suggestionUpdated: suggestion
+    suggestionUpdated: suggestion,
   })
 
   log('Suggestion updated', suggestion.id)
@@ -73,7 +73,7 @@ async function activate ({ id }, context) {
 
   update({
     id: suggestion.id,
-    busy: true
+    busy: true,
   }, context)
 
   let result, error
@@ -87,7 +87,7 @@ async function activate ({ id }, context) {
 
   update({
     id: suggestion.id,
-    busy: false
+    busy: false,
   }, context)
 
   if (!error && (!result || !result.keep)) {
@@ -102,5 +102,5 @@ module.exports = {
   add,
   remove,
   clear,
-  activate
+  activate,
 }

@@ -47,10 +47,10 @@ enum FileDiffChangeType {
 
 exports.resolvers = {
   Query: {
-    fileDiffs: (root, args, context) => git.getDiffs(context)
+    fileDiffs: (root, args, context) => git.getDiffs(context),
   },
 
   Mutation: {
-    gitCommit: (root, { message }, context) => git.commit(message, context)
-  }
+    gitCommit: (root, { message }, context) => git.commit(message, context),
+  },
 }

@@ -18,7 +18,7 @@ const {
   progress: installProgress,
   installPackage,
   uninstallPackage,
-  updatePackage
+  updatePackage,
 } = require('@vue/cli/lib/util/installDeps')
 const { getCommand } = require('../util/command')
 const { resolveModuleRoot } = require('../util/resolve-path')
@@ -31,7 +31,7 @@ const CLI_SERVICE = '@vue/cli-service'
 // Caches
 const metadataCache = new LRU({
   max: 200,
-  maxAge: 1000 * 60 * 30 // 30 min.
+  maxAge: 1000 * 60 * 30, // 30 min.
 })
 
 // Local
@@ -65,7 +65,7 @@ function findDependencies (deps, type, file, context) {
       installed: isInstalled({ id, file }),
       website: getLink({ id, file }, context),
       type,
-      baseFir: file
+      baseFir: file,
     })
   )
 }
@@ -103,7 +103,7 @@ async function getMetadata (id, context) {
   if (hasYarn()) {
     try {
       const { stdout } = await execa('yarn', ['info', id, '--json'], {
-        cwd: cwd.get()
+        cwd: cwd.get(),
       })
       metadata = JSON.parse(stdout).data
     } catch (e) {
@@ -138,7 +138,7 @@ async function getVersion ({ id, installed, versionRange, baseDir }, context) {
       latest: null, // @TODO
       wanted: pkg.vuedesk.version,
       range: pkg.vuedesk.version,
-      localPath: null
+      localPath: null,
     }
   }
 
@@ -173,7 +173,7 @@ async function getVersion ({ id, installed, versionRange, baseDir }, context) {
     latest,
     wanted,
     range: versionRange,
-    localPath
+    localPath,
   }
 }
 
@@ -212,7 +212,7 @@ function install ({ id, type, range }, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'dependency-install',
-      args: [id]
+      args: [id],
     })
 
     let arg
@@ -226,13 +226,13 @@ function install ({ id, type, range }, context) {
 
     logs.add({
       message: `Dependency ${id} installed`,
-      type: 'info'
+      type: 'info',
     }, context)
 
     notify({
       title: `Dependency installed`,
       message: `Dependency ${id} successfully installed`,
-      icon: 'done'
+      icon: 'done',
     })
 
     list(cwd.get(), context)
@@ -245,7 +245,7 @@ function uninstall ({ id }, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'dependency-uninstall',
-      args: [id]
+      args: [id],
     })
 
     const dep = findOne(id, context)
@@ -254,13 +254,13 @@ function uninstall ({ id }, context) {
 
     logs.add({
       message: `Dependency ${id} uninstalled`,
-      type: 'info'
+      type: 'info',
     }, context)
 
     notify({
       title: `Dependency uninstalled`,
       message: `Dependency ${id} successfully uninstalled`,
-      icon: 'done'
+      icon: 'done',
     })
 
     return dep
@@ -271,7 +271,7 @@ function update ({ id }, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'dependency-update',
-      args: [id]
+      args: [id],
     })
 
     const dep = findOne(id, context)
@@ -280,13 +280,13 @@ function update ({ id }, context) {
 
     logs.add({
       message: `Dependency ${id} updated from ${current} to ${wanted}`,
-      type: 'info'
+      type: 'info',
     }, context)
 
     notify({
       title: `Dependency updated`,
       message: `Dependency ${id} was successfully updated`,
-      icon: 'done'
+      icon: 'done',
     })
 
     invalidatePackage({ id }, context)
@@ -298,7 +298,7 @@ function update ({ id }, context) {
 function updateAll (context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     const deps = list(cwd.get(), context)
-    let updatedDeps = []
+    const updatedDeps = []
     for (const dep of deps) {
       const version = await getVersion(dep, context)
       if (version.current !== version.wanted) {
@@ -311,14 +311,14 @@ function updateAll (context) {
       notify({
         title: `No updates available`,
         message: `No dependency to update in the version ranges declared in package.json`,
-        icon: 'done'
+        icon: 'done',
       })
       return []
     }
 
     setProgress({
       status: 'dependencies-update',
-      args: [updatedDeps.length]
+      args: [updatedDeps.length],
     })
 
     await updatePackage(cwd.get(), getCommand(cwd.get()), null, updatedDeps.map(
@@ -328,7 +328,7 @@ function updateAll (context) {
     notify({
       title: `Dependencies updated`,
       message: `${updatedDeps.length} dependencies were successfully updated`,
-      icon: 'done'
+      icon: 'done',
     })
 
     return updatedDeps
@@ -363,5 +363,5 @@ module.exports = {
   uninstall,
   update,
   updateAll,
-  invalidatePackage
+  invalidatePackage,
 }

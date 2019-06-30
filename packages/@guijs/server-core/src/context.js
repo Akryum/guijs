@@ -8,6 +8,6 @@ module.exports = ({ req } = {}) => {
   return {
     db,
     pubsub,
-    cwd: cwd.get()
+    cwd: cwd.get(),
   }
 }

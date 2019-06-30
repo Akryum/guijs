@@ -5,7 +5,7 @@
     "packages/@guijs/*"
   ],
   "scripts": {
-    "lint": "eslint --fix packages/**/*.js packages/**/bin/*"
+    "lint": "eslint --fix packages/**/*.js"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

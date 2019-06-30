@@ -5,5 +5,5 @@ function requestRoute (route, context) {
 }
 
 module.exports = {
-  requestRoute
+  requestRoute,
 }

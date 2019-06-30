@@ -49,22 +49,22 @@ input SuggestionActivate {
 
 exports.resolvers = {
   Query: {
-    suggestions: (root, args, context) => suggestions.list(context)
+    suggestions: (root, args, context) => suggestions.list(context),
   },
 
   Mutation: {
-    suggestionActivate: (root, { input }, context) => suggestions.activate(input, context)
+    suggestionActivate: (root, { input }, context) => suggestions.activate(input, context),
   },
 
   Subscription: {
     suggestionAdded: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SUGGESTION_ADDED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SUGGESTION_ADDED),
     },
     suggestionUpdated: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SUGGESTION_UPDATED)
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SUGGESTION_UPDATED),
     },
     suggestionRemoved: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SUGGESTION_REMOVED)
-    }
-  }
+      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator(channels.SUGGESTION_REMOVED),
+    },
+  },
 }

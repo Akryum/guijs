@@ -13,7 +13,7 @@ function generatePromptError (value) {
     message = 'Invalid input'
   }
   return {
-    message
+    message,
   }
 }
 
@@ -59,7 +59,7 @@ function generatePromptChoice (prompt, data, defaultValue) {
     name: data.name,
     checked: data.checked,
     disabled: data.disabled,
-    isDefault: data.value === defaultValue
+    isDefault: data.value === defaultValue,
   }
 }
 
@@ -108,7 +108,7 @@ function generatePrompt (data) {
     valueChanged: false,
     error: null,
     tabId: data.tabId || null,
-    raw: data
+    raw: data,
   }
 }
 
@@ -124,7 +124,7 @@ async function updatePrompts () {
       prompt.valueChanged = false
     } else if (prompt.visible && !prompt.valueChanged) {
       let value
-      let answer = getAnswer(prompt.id)
+      const answer = getAnswer(prompt.id)
       if (typeof answer !== 'undefined') {
         value = await getTransformedValue(prompt, answer)
       } else if (typeof prompt.raw.value !== 'undefined') {
@@ -254,5 +254,5 @@ module.exports = {
   setValue,
   findOne,
   getDefaultValue,
-  answerPrompt
+  answerPrompt,
 }

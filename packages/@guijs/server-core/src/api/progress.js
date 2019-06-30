@@ -5,7 +5,7 @@ const schema = createSchema(joi => ({
   error: joi.string(),
   info: joi.string(),
   progress: joi.number(),
-  args: joi.array()
+  args: joi.array(),
 }))
 
 exports.validateProgress = (options) => {

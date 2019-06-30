@@ -16,7 +16,7 @@ module.exports = function (input) {
     file = {
       chunks: [],
       deletions: 0,
-      additions: 0
+      additions: 0,
     }
     files.push(file)
 
@@ -77,7 +77,7 @@ module.exports = function (input) {
       oldStart,
       oldLines,
       newStart,
-      newLines
+      newLines,
     }
     file.chunks.push(current)
   }
@@ -101,7 +101,7 @@ module.exports = function (input) {
       normal: true,
       ln1: lnDel++,
       ln2: lnAdd++,
-      content: line
+      content: line,
     })
   }
 
@@ -114,7 +114,7 @@ module.exports = function (input) {
       ln1: recentChange.ln1,
       ln2: recentChange.ln2,
       ln: recentChange.ln,
-      content: line
+      content: line,
     })
   }
 
@@ -131,11 +131,11 @@ module.exports = function (input) {
     [/^@@\s+-(\d+),?(\d+)?\s+\+(\d+),?(\d+)?\s@@/, chunk],
     [/^-/, del],
     [/^\+/, add],
-    [/^\\ No newline at end of file$/, eof]
+    [/^\\ No newline at end of file$/, eof],
   ]
 
   const parse = function (line) {
-    for (let p of schema) {
+    for (const p of schema) {
       const m = line.match(p[0])
       if (m) {
         p[1](line, m)
@@ -145,7 +145,7 @@ module.exports = function (input) {
     return false
   }
 
-  for (let line of lines) {
+  for (const line of lines) {
     parse(line)
   }
 
