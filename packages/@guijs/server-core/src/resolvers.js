@@ -1,6 +1,4 @@
 const { withFilter } = require('graphql-subscriptions')
-const path = require('path')
-const globby = require('globby')
 const merge = require('lodash.merge')
 const { GraphQLJSON } = require('graphql-type-json')
 // Channels for subscriptions
@@ -90,10 +88,10 @@ const resolvers = [{
 }]
 
 // Load resolvers in './schema'
-const paths = globby.sync([path.join(__dirname, './schema/*.js')])
-paths.forEach(file => {
-  const { resolvers: r } = require(file)
+const resolverFiles = require.context('./schema', false, /\.js$/)
+for (const key of resolverFiles.keys()) {
+  const { resolvers: r } = resolverFiles(key)
   r && resolvers.push(r)
-})
+}
 
 module.exports = merge.apply(null, resolvers)

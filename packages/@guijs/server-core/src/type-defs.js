@@ -1,6 +1,4 @@
 const gql = require('graphql-tag')
-const path = require('path')
-const globby = require('globby')
 
 const typeDefs = [gql`
 scalar JSON
@@ -86,10 +84,10 @@ type Subscription {
 `]
 
 // Load types in './schema'
-const paths = globby.sync([path.join(__dirname, './schema/*.js')])
-paths.forEach(file => {
-  const { types } = require(file)
+const schemaFiles = require.context('./schema', false, /\.js$/)
+for (const key of schemaFiles.keys()) {
+  const { types } = schemaFiles(key)
   types && typeDefs.push(types)
-})
+}
 
 module.exports = typeDefs

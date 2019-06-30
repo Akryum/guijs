@@ -36,6 +36,7 @@ function reset (context) {
 }
 
 function _loadFolder (root, context) {
+  // @TODO move to assets
   const paths = globby.sync([path.join(root, './locales/*.json')])
   paths.forEach(file => {
     const basename = path.basename(file)
