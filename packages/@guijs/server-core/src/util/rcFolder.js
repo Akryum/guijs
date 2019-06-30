@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-const { getRcPath } = require('@vue/cli/lib/util/rcPath')
+const { getRcPath } = require('@nodepack/utils')
 
 let folder
 
@@ -15,7 +15,7 @@ if (process.env.VUE_CLI_UI_TEST) {
   folder =
     (process.env.VUE_CLI_UI_DB_PATH &&
       path.resolve(__dirname, process.env.VUE_CLI_UI_DB_PATH)) ||
-    getRcPath('.vue-cli-ui')
+    getRcPath('.vue-cli-ui', { xdgFolder: 'vue' })
 }
 
 fs.ensureDirSync(path.resolve(__dirname, folder))

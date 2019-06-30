@@ -1,25 +1,21 @@
 const fs = require('fs')
 const path = require('path')
-const LRU = require('lru-cache')
-const semver = require('semver')
-const execa = require('execa')
-const chalk = require('chalk')
 // Connectors
 const cwd = require('./cwd')
 const folders = require('./folders')
 const progress = require('./progress')
 const logs = require('./logs')
 // Context
-const getContext = require('../context')
+// const getContext = require('../context')
 // Utils
-const { isPlugin, hasYarn, resolveModule } = require('@vue/cli-shared-utils')
-const getPackageVersion = require('@vue/cli/lib/util/getPackageVersion')
+const { isPlugin, resolveModule } = require('@vue/cli-shared-utils')
 const {
-  progress: installProgress,
+  getPackageVersionsInfo,
+  getPackageMetadata,
   installPackage,
   uninstallPackage,
   updatePackage,
-} = require('@vue/cli/lib/util/installDeps')
+} = require('@nodepack/utils')
 const { getCommand } = require('../util/command')
 const { resolveModuleRoot } = require('../util/resolve-path')
 const { notify } = require('../util/notification')
@@ -27,12 +23,6 @@ const { log } = require('../util/logger')
 
 const PROGRESS_ID = 'dependency-installation'
 const CLI_SERVICE = '@vue/cli-service'
-
-// Caches
-const metadataCache = new LRU({
-  max: 200,
-  maxAge: 1000 * 60 * 30, // 30 min.
-})
 
 // Local
 let dependencies
@@ -94,42 +84,6 @@ function invalidatePackage ({ id, file }, context) {
   return folders.invalidatePackage(getPath({ id, file }), context)
 }
 
-async function getMetadata (id, context) {
-  let metadata = metadataCache.get(id)
-  if (metadata) {
-    return metadata
-  }
-
-  if (hasYarn()) {
-    try {
-      const { stdout } = await execa('yarn', ['info', id, '--json'], {
-        cwd: cwd.get(),
-      })
-      metadata = JSON.parse(stdout).data
-    } catch (e) {
-      // yarn info failed
-    }
-  }
-
-  if (!metadata) {
-    try {
-      const res = await getPackageVersion(id)
-      if (res.statusCode === 200) {
-        metadata = res.body
-      }
-    } catch (e) {
-      // No connection?
-    }
-  }
-
-  if (metadata) {
-    metadataCache.set(id, metadata)
-    return metadata
-  } else {
-    log('Dpendencies', chalk.yellow(`Can't load metadata`), id)
-  }
-}
-
 async function getVersion ({ id, installed, versionRange, baseDir }, context) {
   if (id === 'vuedesk-build-bundle') {
     const pkg = folders.readPackage(baseDir, context)
@@ -143,26 +97,25 @@ async function getVersion ({ id, installed, versionRange, baseDir }, context) {
   }
 
   let current
+  let latest
+  let wanted
 
   // Is local dep
   const localPath = getLocalPath(id, context)
+
+  try {
+    const versionInfo = await getPackageVersionsInfo(baseDir, id, versionRange)
+    current = versionInfo.current
+    latest = versionInfo.latest
+    wanted = versionInfo.wanted
+  } catch (e) {
+    log(e.message)
+  }
 
   // Read module package.json
   if (installed) {
     const pkg = readPackage({ id, file: baseDir }, context)
     current = pkg.version
-  } else {
-    current = null
-  }
-
-  // Metadata
-  let latest, wanted
-  const metadata = await getMetadata(id, context)
-  if (metadata) {
-    latest = metadata['dist-tags'].latest
-
-    const versions = Array.isArray(metadata.versions) ? metadata.versions : Object.keys(metadata.versions)
-    wanted = semver.maxSatisfying(versions, versionRange)
   }
 
   if (!latest) latest = current
@@ -194,7 +147,7 @@ function getLocalPath (id, context) {
 }
 
 async function getDescription ({ id }, context) {
-  const metadata = await getMetadata(id, context)
+  const metadata = await getPackageMetadata(id)
   if (metadata) {
     return metadata.description
   }
@@ -215,14 +168,14 @@ function install ({ id, type, range }, context) {
       args: [id],
     })
 
-    let arg
+    let packageName
     if (range) {
-      arg = `${id}@${range}`
+      packageName = `${id}@${range}`
     } else {
-      arg = id
+      packageName = id
     }
 
-    await installPackage(cwd.get(), getCommand(cwd.get()), null, arg, type === 'devDependencies')
+    await installPackage(cwd.get(), getCommand(cwd.get()), null, packageName, type === 'devDependencies')
 
     logs.add({
       message: `Dependency ${id} installed`,
@@ -335,27 +288,28 @@ function updateAll (context) {
   })
 }
 
-function setup (context) {
-  // Package installation progress events
-  installProgress.on('progress', value => {
-    if (progress.get(PROGRESS_ID)) {
-      progress.set({ id: PROGRESS_ID, progress: value }, context)
-    }
-  })
-  installProgress.on('log', message => {
-    if (progress.get(PROGRESS_ID)) {
-      progress.set({ id: PROGRESS_ID, info: message }, context)
-    }
-  })
-}
+// @TODO
+// function setup (context) {
+//   // Package installation progress events
+//   installProgress.on('progress', value => {
+//     if (progress.get(PROGRESS_ID)) {
+//       progress.set({ id: PROGRESS_ID, progress: value }, context)
+//     }
+//   })
+//   installProgress.on('log', message => {
+//     if (progress.get(PROGRESS_ID)) {
+//       progress.set({ id: PROGRESS_ID, info: message }, context)
+//     }
+//   })
+// }
 
-setup(getContext())
+// setup(getContext())
 
 module.exports = {
   list,
   findOne,
   getPath,
-  getMetadata,
+  getMetadata: (id, context) => getPackageMetadata(id),
   getLink,
   getDescription,
   getVersion,

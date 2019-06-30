@@ -32,11 +32,10 @@ const {
   execa,
 } = require('@vue/cli-shared-utils')
 const {
-  progress: installProgress,
   installPackage,
   uninstallPackage,
   updatePackage,
-} = require('@vue/cli/lib/util/installDeps')
+} = require('@nodepack/utils')
 const { getCommand } = require('../util/command')
 const ipc = require('../util/ipc')
 const { log } = require('../util/logger')
@@ -336,17 +335,18 @@ function getInstallation (context) {
   if (!eventsInstalled) {
     eventsInstalled = true
 
+    // @TODO
     // Package installation progress events
-    installProgress.on('progress', value => {
-      if (progress.get(PROGRESS_ID)) {
-        progress.set({ id: PROGRESS_ID, progress: value }, context)
-      }
-    })
-    installProgress.on('log', message => {
-      if (progress.get(PROGRESS_ID)) {
-        progress.set({ id: PROGRESS_ID, info: message }, context)
-      }
-    })
+    // installProgress.on('progress', value => {
+    //   if (progress.get(PROGRESS_ID)) {
+    //     progress.set({ id: PROGRESS_ID, progress: value }, context)
+    //   }
+    // })
+    // installProgress.on('log', message => {
+    //   if (progress.get(PROGRESS_ID)) {
+    //     progress.set({ id: PROGRESS_ID, info: message }, context)
+    //   }
+    // })
   }
 
   return {

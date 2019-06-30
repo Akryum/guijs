@@ -11,7 +11,7 @@ const prompts = require('./prompts')
 // Utils
 const { get, set, unset, loadModule } = require('@vue/cli-shared-utils')
 const { log } = require('../util/logger')
-const extendJSConfig = require('@vue/cli/lib/util/extendJSConfig')
+const extendJSConfig = require('@nodepack/config-transformer/src/lib/extendJSConfig')
 
 const fileTypes = ['js', 'json', 'yaml']
 let current = {}

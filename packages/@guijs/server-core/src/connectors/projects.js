@@ -1,12 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 const shortId = require('shortid')
+// @TODO extract into separate plugin package
 const Creator = require('@vue/cli/lib/Creator')
 const { getPromptModules } = require('@vue/cli/lib/util/createTools')
 const { getFeatures } = require('@vue/cli/lib/util/features')
 const { defaults } = require('@vue/cli/lib/options')
 const { toShortPluginId, execa } = require('@vue/cli-shared-utils')
-const { progress: installProgress } = require('@vue/cli/lib/util/installDeps')
 const parseGitConfig = require('parse-git-config')
 // Connectors
 const progress = require('./progress')
@@ -31,8 +31,9 @@ let creator = null
 let presets = []
 let features = []
 let onCreationEvent = null
-let onInstallProgress = null
-let onInstallLog = null
+// @TODO
+// let onInstallProgress = null
+// const onInstallLog = null
 
 function list (context) {
   let projects = context.db.get('projects').value()
@@ -99,20 +100,22 @@ async function initCreator (context) {
     progress.set({ id: PROGRESS_ID, status: event, info: null }, context)
   }
   creator.on('creation', onCreationEvent)
-  // Progress bar
-  onInstallProgress = value => {
-    if (progress.get(PROGRESS_ID)) {
-      progress.set({ id: PROGRESS_ID, progress: value }, context)
-    }
-  }
-  installProgress.on('progress', onInstallProgress)
-  // Package manager steps
-  onInstallLog = message => {
-    if (progress.get(PROGRESS_ID)) {
-      progress.set({ id: PROGRESS_ID, info: message }, context)
-    }
-  }
-  installProgress.on('log', onInstallLog)
+
+  // @TODO
+  // // Progress bar
+  // onInstallProgress = value => {
+  //   if (progress.get(PROGRESS_ID)) {
+  //     progress.set({ id: PROGRESS_ID, progress: value }, context)
+  //   }
+  // }
+  // installProgress.on('progress', onInstallProgress)
+  // // Package manager steps
+  // onInstallLog = message => {
+  //   if (progress.get(PROGRESS_ID)) {
+  //     progress.set({ id: PROGRESS_ID, info: message }, context)
+  //   }
+  // }
+  // installProgress.on('log', onInstallLog)
 
   // Presets
   const manualPreset = {
@@ -185,8 +188,9 @@ async function initCreator (context) {
 function removeCreator (context) {
   if (creator) {
     creator.removeListener('creation', onCreationEvent)
-    installProgress.removeListener('progress', onInstallProgress)
-    installProgress.removeListener('log', onInstallLog)
+    // @TODO
+    // installProgress.removeListener('progress', onInstallProgress)
+    // installProgress.removeListener('log', onInstallLog)
     creator = null
   }
   return true

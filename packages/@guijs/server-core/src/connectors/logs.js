@@ -11,7 +11,6 @@
 
 const shortId = require('shortid')
 const { events } = require('@vue/cli-shared-utils/lib/logger')
-const { generateTitle } = require('@vue/cli/lib/util/clearConsole')
 // Subs
 const channels = require('../channels')
 // Context
@@ -62,9 +61,11 @@ exports.clear = function (context) {
     exports.add(log, context)
   })
 
-  exports.add({
-    type: 'info',
-    tag: null,
-    message: generateTitle(true),
-  }, context)
+  // @TODO
+  // Display underlying cli version
+  // exports.add({
+  //   type: 'info',
+  //   tag: null,
+  //   message: generateTitle(true),
+  // }, context)
 }
