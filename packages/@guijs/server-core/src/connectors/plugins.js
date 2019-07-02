@@ -201,7 +201,13 @@ function resetPluginApi ({ file, lightApi }, context) {
       pluginApiInstances.set(file, pluginApi)
 
       // Run Plugin API
-      runPluginApi(path.resolve(__dirname, '../../'), pluginApi, context, 'ui-defaults')
+      let serverCoreDir = __dirname
+      const dotNodepackIndex = serverCoreDir.indexOf('.nodepack')
+      if (dotNodepackIndex !== -1) {
+        serverCoreDir = serverCoreDir.substr(0, dotNodepackIndex)
+      }
+      serverCoreDir = serverCoreDir.substr(0, serverCoreDir.indexOf('server-core'))
+      runPluginApi(path.resolve(serverCoreDir, 'server-core'), pluginApi, context, 'ui-defaults')
       plugins.forEach(plugin => runPluginApi(plugin.id, pluginApi, context))
       // Project package.json data
       const { pkg, pkgContext } = pkgStore.get(file)
@@ -269,6 +275,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
       console.error(e)
     }
   }
+  console.log(name, module)
   if (module) {
     if (typeof module !== 'function') {
       log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
