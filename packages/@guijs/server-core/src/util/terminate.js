@@ -1,6 +1,7 @@
 const util = require('util')
 const cp = require('child_process')
 const path = require('path')
+const fs = require('fs-extra')
 const {
   isWindows,
   isLinux,
@@ -26,6 +27,7 @@ exports.terminate = async function (childProcess, cwd) {
   } else if (isLinux || isMacintosh) {
     try {
       const cmd = path.resolve(__dirname, './terminate.sh')
+      await fs.chmod(cmd, 0o777)
       const result = await spawn(cmd, [childProcess.pid.toString()], {
         cwd,
       })
