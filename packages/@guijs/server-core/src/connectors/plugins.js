@@ -275,7 +275,6 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
       console.error(e)
     }
   }
-  console.log(name, module)
   if (module) {
     if (typeof module !== 'function') {
       log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
