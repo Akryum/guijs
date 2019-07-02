@@ -16,7 +16,7 @@ async function run (options = {}, context = process.cwd()) {
 
   // Dev mode
   if (options.dev) {
-    process.env.VUE_APP_CLI_UI_DEBUG = true
+    process.env.GUIJS_DEBUG = true
   }
 
   if (!process.env.VUE_CLI_IPC) {
