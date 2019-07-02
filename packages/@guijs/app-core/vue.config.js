@@ -1,4 +1,3 @@
-const merge = require('deepmerge')
 const path = require('path')
 
 module.exports = {
@@ -15,19 +14,13 @@ module.exports = {
     }
   },
 
-  chainWebpack: config => {
-    config.module.rule('stylus').oneOf('vue').use('postcss-loader')
-      .tap(options =>
-        merge(options, {
-          config: {
-            path: path.resolve(__dirname, '.postcssrc')
-          }
-        })
-      )
-  },
-
   css: {
     loaderOptions: {
+      postcss: {
+        config: {
+          path: path.resolve(__dirname, 'postcss.config.js')
+        }
+      },
       stylus: {
         import: ['~@/style/imports']
       }
