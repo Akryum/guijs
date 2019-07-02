@@ -1712,13 +1712,13 @@
     js-yaml "^3.13.1"
     recast "^0.16.2"
 
-"@nodepack/config-transformer@^0.1.18":
-  version "0.1.18"
-  resolved "https://registry.yarnpkg.com/@nodepack/config-transformer/-/config-transformer-0.1.18.tgz#5dc63d5ec2c8d427749d78c8837b0c97a33c4641"
-  integrity sha512-KATBWi4gjP2pFVOSiSH0URyOuQqt9oyUIS5dVmZJ+dP9YLQw6dc6dyytclBOnVkA8SfbhCHvFS3INaC58lNrPA==
+"@nodepack/config-transformer@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@nodepack/config-transformer/-/config-transformer-0.1.19.tgz#984316e5a94fe178acb725c9efe799abcda4ccd3"
+  integrity sha512-6HDne+pA/Nl+L9Xpgn+vdUZKn7dEKTsL1bbfQTUijjZ43VCn0a4P5iNj9+XiNpE5woHDc4Vjmbp3MIrsliNzhg==
   dependencies:
     "@nodepack/module" "^0.1.2"
-    "@nodepack/utils" "^0.1.18"
+    "@nodepack/utils" "^0.1.19"
     deepmerge "^3.2.0"
     javascript-stringify "^1.6.0"
     js-yaml "^3.13.1"
@@ -1809,10 +1809,10 @@
     slash "^2.0.0"
     string.prototype.padstart "^3.0.0"
 
-"@nodepack/utils@^0.1.18":
-  version "0.1.18"
-  resolved "https://registry.yarnpkg.com/@nodepack/utils/-/utils-0.1.18.tgz#499be0ec022e0f5407440e17f8235844554132b0"
-  integrity sha512-/faFO9cLMwLehQ8JNGyQZLpjS5nt4+5eCAtcA7D0uH5VkQo4NSgNj9Twpl7gP7zGtkTjVngZ5ttuJ6gfPJXgrA==
+"@nodepack/utils@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@nodepack/utils/-/utils-0.1.19.tgz#a567294dded47708634896126d4fe1a0fc3143cf"
+  integrity sha512-G7zpLjankSLD4zAD+9iYDcyRr2eGGgI0h84R39D3mJTgk0dK52tFCWnPotFMhkbYwETDpxXfrUD9JuShVXsQFA==
   dependencies:
     "@nodepack/module" "^0.1.2"
     chalk "^2.4.2"

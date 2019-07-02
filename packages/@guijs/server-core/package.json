@@ -10,9 +10,9 @@
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
     "@guijs/utils": "^0.0.0",
-    "@nodepack/config-transformer": "^0.1.18",
+    "@nodepack/config-transformer": "^0.1.19",
     "@nodepack/module": "^0.1.2",
-    "@nodepack/utils": "^0.1.18",
+    "@nodepack/utils": "^0.1.19",
     "@vue/cli": "^4.0.0-alpha.1",
     "@vue/cli-shared-utils": "^4.0.0-alpha.1",
     "apollo-server-express": "^2.6.7",
