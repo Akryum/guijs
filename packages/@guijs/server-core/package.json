@@ -10,9 +10,9 @@
   "dependencies": {
     "@akryum/winattr": "^3.0.0",
     "@guijs/utils": "^0.0.0",
-    "@nodepack/config-transformer": "^0.1.19",
-    "@nodepack/module": "^0.1.2",
-    "@nodepack/utils": "^0.1.19",
+    "@nodepack/config-transformer": "^0.1.20",
+    "@nodepack/module": "^0.1.20",
+    "@nodepack/utils": "^0.1.20",
     "@vue/cli": "^4.0.0-alpha.1",
     "@vue/cli-shared-utils": "^4.0.0-alpha.1",
     "apollo-server-express": "^2.6.7",
@@ -48,7 +48,7 @@
     "watch": "^1.0.2"
   },
   "devDependencies": {
-    "@nodepack/service": "^0.1.17",
+    "@nodepack/service": "^0.1.20",
     "ansi_up": "^3.0.0",
     "apollo-client": "^2.6.0",
     "core-js": "^3.1.2",

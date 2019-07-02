@@ -1680,14 +1680,14 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@nodepack/app-migrator@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@nodepack/app-migrator/-/app-migrator-0.1.17.tgz#9c63fb1fdebc98d5bc8ea7d8b384ec851e1d7c89"
-  integrity sha512-ZrCVosmmP2aab/oAqm9ans7LuudOAq2oRY37GCAOs0cMhlg/6v9vfnbhXqbzQWNWbUXQsAqNf90i3PxnbwgXHg==
+"@nodepack/app-migrator@^0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@nodepack/app-migrator/-/app-migrator-0.1.20.tgz#6a5f0223748cef7938b4f27c518da7ee2b11aecb"
+  integrity sha512-Tooyrbdj0EdyQ876VW8AKvlvhv/ySmWEbaE5ev+x9ryMSduAvLa+nivxqipKTpe972whU3LO84aIRqzylrB7zA==
   dependencies:
-    "@nodepack/config-transformer" "^0.1.17"
-    "@nodepack/module" "^0.1.2"
-    "@nodepack/utils" "^0.1.17"
+    "@nodepack/config-transformer" "^0.1.20"
+    "@nodepack/module" "^0.1.20"
+    "@nodepack/utils" "^0.1.20"
     "@types/inquirer" "^0.0.43"
     deepmerge "^3.2.0"
     ejs "^2.6.1"
@@ -1700,25 +1700,13 @@
     slash "^2.0.0"
     yaml-front-matter "^4.0.0"
 
-"@nodepack/config-transformer@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@nodepack/config-transformer/-/config-transformer-0.1.17.tgz#c88621d09983459c595cdc22b1501f901d4f94e8"
-  integrity sha512-NlYSy+xJFtB6xpNT4EG854fN5iVRorcPwY3SgsXXoEayQ1yl3OlLzUwZDXp2Sy3R/suOJ8IAYxQ/y9/BwkIrmA==
+"@nodepack/config-transformer@^0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@nodepack/config-transformer/-/config-transformer-0.1.20.tgz#b6acdceb2e9f35aa721d24f68691e39fc69bcf72"
+  integrity sha512-pihoBaS0f+vp7S+w0/PfAgs6FfWYv0LBD3+FxwhnP0E3QU5QOPv9sn/+JyF4zl6KjyVlip9Q0fe3e1Fz1vmvbg==
   dependencies:
-    "@nodepack/module" "^0.1.2"
-    "@nodepack/utils" "^0.1.17"
-    deepmerge "^3.2.0"
-    javascript-stringify "^1.6.0"
-    js-yaml "^3.13.1"
-    recast "^0.16.2"
-
-"@nodepack/config-transformer@^0.1.19":
-  version "0.1.19"
-  resolved "https://registry.yarnpkg.com/@nodepack/config-transformer/-/config-transformer-0.1.19.tgz#984316e5a94fe178acb725c9efe799abcda4ccd3"
-  integrity sha512-6HDne+pA/Nl+L9Xpgn+vdUZKn7dEKTsL1bbfQTUijjZ43VCn0a4P5iNj9+XiNpE5woHDc4Vjmbp3MIrsliNzhg==
-  dependencies:
-    "@nodepack/module" "^0.1.2"
-    "@nodepack/utils" "^0.1.19"
+    "@nodepack/module" "^0.1.20"
+    "@nodepack/utils" "^0.1.20"
     deepmerge "^3.2.0"
     javascript-stringify "^1.6.0"
     js-yaml "^3.13.1"
@@ -1735,34 +1723,34 @@
     semver "^5.6.0"
     systeminformation "^4.5.1"
 
-"@nodepack/maintenance@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@nodepack/maintenance/-/maintenance-0.1.17.tgz#e8c6cc9d476d93769bf472120e7b55830197e4e0"
-  integrity sha512-OJPr7PQwA1+kzsGXKxCuRZWiMEZ/7dfmYjRO7ak9qyWr+9/SAXrJ33v+4c5LUfAcTLf1aowz9BYrSPrsUza/TA==
+"@nodepack/maintenance@^0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@nodepack/maintenance/-/maintenance-0.1.20.tgz#74b43b89b5e18493d84e0230c1a15a1f0936a84a"
+  integrity sha512-SH8kgiXtcgRST2ygprAUAcRuVEGWJwRGdf1KivZeT5R2aYTnpTXh8uEgnPx0tvzhB+QB8LS0Mk6Z3/Hn6NCgcQ==
   dependencies:
-    "@nodepack/app-migrator" "^0.1.17"
-    "@nodepack/utils" "^0.1.17"
+    "@nodepack/app-migrator" "^0.1.20"
+    "@nodepack/utils" "^0.1.20"
     "@types/inquirer" "^0.0.43"
     fs-extra "^7.0.1"
     inquirer "^6.3.1"
 
-"@nodepack/module@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@nodepack/module/-/module-0.1.2.tgz#73f0ada474853c583a0cda03d0d860b9b3f37788"
-  integrity sha512-a5PrMoWXVTt+pnRskd/X1tfGdQkOMWcE+gicZJpiIWproLps4BnYkh3TIpGPMt3aH3XhnB7PjfKQmMjvkMy5xw==
+"@nodepack/module@^0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@nodepack/module/-/module-0.1.20.tgz#e6636b96b3a85e23986354024a1b0e6d157c2841"
+  integrity sha512-RLLd2Y0hoSVk0U6SETv9hPnz+ARfS3/CImTxYsfSyd6owAqaIElZedjwnVkSqLKi7jQTMwWf/OLgbuq3HsLDfg==
   dependencies:
     semver "^5.6.0"
 
-"@nodepack/service@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@nodepack/service/-/service-0.1.17.tgz#0c5aa83339a3285181213874cec7dfc5566796a1"
-  integrity sha512-7vcAalmW2xQvHvqWKKJClPbziKQ5ZMedlYWHNm9xhjX50Cm0Hl5MAq/ILG8PY20IzM15rL24S7XSzteefmvdpg==
+"@nodepack/service@^0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@nodepack/service/-/service-0.1.20.tgz#784b03856e6702a3bd5097a8c6d8170b44af1043"
+  integrity sha512-hntf/V+PfAMtbBKsyP9QreaLLAbU1tJ39ObHTdYEcuWdkJS+8l4NqrkwMuwgl4C2un8CMWLkl0fgzcz6npoTrg==
   dependencies:
-    "@nodepack/app-migrator" "^0.1.17"
+    "@nodepack/app-migrator" "^0.1.20"
     "@nodepack/env-check" "^0.1.17"
-    "@nodepack/maintenance" "^0.1.17"
-    "@nodepack/module" "^0.1.2"
-    "@nodepack/utils" "^0.1.17"
+    "@nodepack/maintenance" "^0.1.20"
+    "@nodepack/module" "^0.1.20"
+    "@nodepack/utils" "^0.1.20"
     "@types/webpack-env" "^1.13.8"
     "@zeit/webpack-asset-relocator-loader" "^0.1.12"
     cache-loader "^2.0.1"
@@ -1787,34 +1775,12 @@
     webpack-chain "^5.2.4"
     webpack-node-externals "^1.7.2"
 
-"@nodepack/utils@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@nodepack/utils/-/utils-0.1.17.tgz#14f8c39fa174fb1bcca9cc4b8efa18167c1efb8d"
-  integrity sha512-5YuUrth2mG/JIvu3fmh1kCl26x49xkXZiu/XSwAJuJy5OZZ+iPFA7fM1nQ2RHl0uHRnCTrJGmK0S2/RVQdG/Ng==
+"@nodepack/utils@^0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@nodepack/utils/-/utils-0.1.20.tgz#a6adab0b8eabbea80e4e1b912e2dc9be2f193703"
+  integrity sha512-HcxvqmWx4uMJGD4dM5CQLOr+xmP+ui62Z/mQXP4SokqN2vjO64sLUujlbi5HtA9VI29ilZzXIk0fRA5ORO1VXQ==
   dependencies:
-    "@nodepack/module" "^0.1.2"
-    chalk "^2.4.2"
-    execa "^1.0.0"
-    find-up "^3.0.0"
-    fs-extra "^7.0.1"
-    inquirer "^6.3.1"
-    joi "^14.3.1"
-    lodash.clonedeep "^4.5.0"
-    lru-cache "^5.1.1"
-    opn "^5.4.0"
-    ora "^3.4.0"
-    request "^2.88.0"
-    request-promise-native "^1.0.7"
-    semver "^5.6.0"
-    slash "^2.0.0"
-    string.prototype.padstart "^3.0.0"
-
-"@nodepack/utils@^0.1.19":
-  version "0.1.19"
-  resolved "https://registry.yarnpkg.com/@nodepack/utils/-/utils-0.1.19.tgz#a567294dded47708634896126d4fe1a0fc3143cf"
-  integrity sha512-G7zpLjankSLD4zAD+9iYDcyRr2eGGgI0h84R39D3mJTgk0dK52tFCWnPotFMhkbYwETDpxXfrUD9JuShVXsQFA==
-  dependencies:
-    "@nodepack/module" "^0.1.2"
+    "@nodepack/module" "^0.1.20"
     chalk "^2.4.2"
     execa "^1.0.0"
     find-up "^3.0.0"
