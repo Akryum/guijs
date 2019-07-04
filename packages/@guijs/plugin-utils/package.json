@@ -1,0 +1,13 @@
+{
+  "name": "@guijs/plugin-utils",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/plugin-utils"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

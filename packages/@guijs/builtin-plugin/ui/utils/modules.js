@@ -14,7 +14,7 @@ exports.buildSortedModules = function (modules, sizeField) {
       return {
         id: module.id,
         identifier: module.identifier,
-        size,
+        size
       }
     })
     list = list.sort((a, b) => b.size - a.size)
@@ -39,7 +39,7 @@ exports.buildDepModules = function (modules) {
       if (!dep) {
         dep = {
           name,
-          size: 0,
+          size: 0
         }
         deps.set(name, dep)
       }
@@ -106,9 +106,9 @@ exports.buildModulesTrees = function (modules, sizeType) {
           size: {
             stats: 0,
             parsed: 0,
-            gzip: 0,
+            gzip: 0
           },
-          children: {},
+          children: {}
         }
       }
       const fullPath = []
@@ -122,10 +122,10 @@ exports.buildModulesTrees = function (modules, sizeType) {
             size: {
               stats: 0,
               parsed: 0,
-              gzip: 0,
+              gzip: 0
             },
             fullPath: fullPath.join('/'),
-            children: {},
+            children: {}
           }
         }
         child.size.stats += module.size.stats
@@ -157,7 +157,7 @@ function walkTreeToSortChildren (tree, sizeType) {
   const size = {
     stats: 0,
     parsed: 0,
-    gzip: 0,
+    gzip: 0
   }
   tree.children = Object.keys(tree.children).map(
     key => tree.children[key]
@@ -168,7 +168,7 @@ function walkTreeToSortChildren (tree, sizeType) {
     child.previousSize = {
       stats: size.stats,
       parsed: size.parsed,
-      gzip: size.gzip,
+      gzip: size.gzip
     }
     size.stats += child.size.stats
     size.parsed += child.size.parsed

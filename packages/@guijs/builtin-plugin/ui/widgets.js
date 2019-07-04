@@ -1,18 +1,6 @@
 module.exports = api => {
   const { registerWidget, onAction, setSharedData } = api.namespace('org.vue.widgets.')
 
-  if (process.env.VUE_APP_CLI_UI_DEV) {
-    api.addClientAddon({
-      id: 'org.vue.widgets.client-addon.dev',
-      url: 'http://localhost:8097/index.js',
-    })
-  } else {
-    api.addClientAddon({
-      id: 'org.vue.widgets.client-addon',
-      path: '@vue/cli-ui-addon-widgets/dist',
-    })
-  }
-
   // Welcome widget
 
   registerWidget({
@@ -25,7 +13,7 @@ module.exports = api => {
     minHeight: 4,
     maxWidth: 3,
     maxHeight: 4,
-    maxCount: 1,
+    maxCount: 1
   })
 
   // Kill port widget
@@ -40,7 +28,7 @@ module.exports = api => {
     minHeight: 1,
     maxWidth: 2,
     maxHeight: 1,
-    maxCount: 1,
+    maxCount: 1
   })
 
   setSharedData('kill-port.status', 'idle')
@@ -60,7 +48,7 @@ module.exports = api => {
 
   setSharedData('plugin-updates.status', {
     status: 'ok',
-    lastUpdate: Date.now(),
+    lastUpdate: Date.now()
   })
   registerWidget({
     id: 'plugin-updates',
@@ -72,14 +60,14 @@ module.exports = api => {
     minHeight: 1,
     maxWidth: 2,
     maxHeight: 1,
-    maxCount: 1,
+    maxCount: 1
   })
 
   // Depdency updates
 
   setSharedData('dependency-updates.status', {
     status: 'loading',
-    lastUpdate: null,
+    lastUpdate: null
   })
   registerWidget({
     id: 'dependency-updates',
@@ -91,7 +79,7 @@ module.exports = api => {
     minHeight: 1,
     maxWidth: 2,
     maxHeight: 1,
-    maxCount: 1,
+    maxCount: 1
   })
 
   // Vulnerability check
@@ -101,11 +89,11 @@ module.exports = api => {
     status: 'loading',
     lastUpdate: lastAudit,
     count: 0,
-    message: null,
+    message: null
   })
   setSharedData('vulnerability.details', {
     vulnerabilities: [],
-    summary: {},
+    summary: {}
   })
   registerWidget({
     id: 'vulnerability',
@@ -118,14 +106,14 @@ module.exports = api => {
     minHeight: 1,
     maxWidth: 2,
     maxHeight: 1,
-    maxCount: 1,
+    maxCount: 1
   })
   async function checkVulnerability (params) {
     setSharedData('vulnerability.status', {
       status: 'loading',
       lastUpdate: lastAudit,
       count: 0,
-      message: null,
+      message: null
     })
 
     const { auditProject } = require('./utils/audit')
@@ -162,12 +150,12 @@ module.exports = api => {
             message: 'org.vue.widgets.run-task.prompts.task',
             choices: (await tasks.list(undefined, context)).map(task => ({
               name: task.name,
-              value: task.id,
-            })),
-          },
-        ],
+              value: task.id
+            }))
+          }
+        ]
       }
-    },
+    }
   })
 
   // News
@@ -187,7 +175,7 @@ module.exports = api => {
     defaultHeight: 3,
     openDetailsButton: true,
     defaultConfig: () => ({
-      url: 'https://vuenews.fireside.fm/rss',
+      url: 'https://vuenews.fireside.fm/rss'
     }),
     onConfigOpen: async ({ context }) => {
       return {
@@ -196,11 +184,11 @@ module.exports = api => {
             name: 'url',
             type: 'input',
             message: 'org.vue.widgets.news.prompts.url',
-            validate: input => !!input,
-          },
-        ],
+            validate: input => !!input
+          }
+        ]
       }
-    },
+    }
   })
 
   const newsCache = global['org.vue.newsCache'] = global['org.vue.newsCache'] || {}
