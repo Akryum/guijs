@@ -11,16 +11,6 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint src"
   },
-  "files": [
-    "apollo-server",
-    "dist",
-    "locales",
-    "src",
-    "ui-defaults",
-    "ui-public",
-    "index.js",
-    "server.js"
-  ],
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.0.0-alpha.1",
     "@vue/cli-plugin-e2e-cypress": "^4.0.0-alpha.1",
