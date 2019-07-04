@@ -1,8 +1,3 @@
-# Webpack dashboard
+# @guijs/builtin-plugin
 
-> Dashboard & analyzer components for @vue/cli-ui
-
-```
-yarn serve
-yarn build
-```
+Built-in plugin adding features using the guijs Plugin API.
