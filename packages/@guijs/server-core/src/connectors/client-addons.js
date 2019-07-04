@@ -1,7 +1,10 @@
 const path = require('path')
+// Connectors
+const cwd = require('./cwd')
 // Subs
 const channels = require('../channels')
 // Utils
+const { resolveModule } = require('@nodepack/module')
 const { resolveModuleRoot } = require('../util/resolve-path')
 
 const addons = []
@@ -53,7 +56,7 @@ function serve (req, res) {
   const { id, 0: file } = req.params
   const addon = findOne(decodeURIComponent(id))
   if (addon && addon.path) {
-    const resolvedPath = require.resolve(addon.path)
+    const resolvedPath = resolveModule(addon.path, addon.path.includes('@guijs/builtin-plugin') ? __dirname : cwd.get())
     const basePath = resolveModuleRoot(resolvedPath)
     if (basePath) {
       res.sendFile(path.join(basePath, file), { maxAge: 0 })
