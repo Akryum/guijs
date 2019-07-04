@@ -32,7 +32,7 @@ const options = {
   resolvers: clientStateResolvers,
   onCacheInit: cache => {
     cache.writeData({ data: clientStateDefaults() })
-  }
+  },
 }
 
 // Create apollo client
@@ -44,15 +44,15 @@ export const apolloProvider = new VueApollo({
   defaultOptions: {
     $query: {
       fetchPolicy: 'cache-and-network',
-      errorPolicy: 'all'
-    }
+      errorPolicy: 'all',
+    },
   },
   watchLoading (state, mod) {
     apolloClient.mutate({
       mutation: LOADING_CHANGE,
       variables: {
-        mod
-      }
+        mod,
+      },
     })
   },
   errorHandler (error) {
@@ -64,7 +64,7 @@ export const apolloProvider = new VueApollo({
     if (error.networkError) {
       console.log(error.networkError)
     }
-  }
+  },
 })
 
 export async function resetApollo () {
@@ -72,7 +72,7 @@ export async function resetApollo () {
 
   const { data: { projectCurrent } } = await apolloClient.query({
     query: PROJECT_CURRENT,
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'network-only',
   })
   const projectId = projectCurrent.id
 
@@ -85,8 +85,8 @@ export async function resetApollo () {
   await apolloClient.mutate({
     mutation: CURRENT_PROJECT_ID_SET,
     variables: {
-      projectId
-    }
+      projectId,
+    },
   })
 
   loadDarkMode()
@@ -98,8 +98,8 @@ function setConnected (value) {
   apolloClient.mutate({
     mutation: CONNECTED_SET,
     variables: {
-      value
-    }
+      value,
+    },
   })
 }
 
@@ -125,8 +125,8 @@ function loadDarkMode () {
   apolloClient.mutate({
     mutation: DARK_MODE_SET,
     variables: {
-      enabled
-    }
+      enabled,
+    },
   })
 }
 

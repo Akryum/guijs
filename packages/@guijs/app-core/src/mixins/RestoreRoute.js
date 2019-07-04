@@ -3,27 +3,27 @@ import { isSameRoute } from '../util/route'
 import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
 
 export default function ({
-  baseRoute = null
+  baseRoute = null,
 } = {}) {
   let lastRoute
 
   // @vue/component
   return {
     apollo: {
-      projectCurrent: PROJECT_CURRENT
+      projectCurrent: PROJECT_CURRENT,
     },
 
     watch: {
       projectCurrent (value) {
         if (!this.$_restoreRouteReady) return
         this.replaceBaseRoute()
-      }
+      },
     },
 
     bus: {
       quickOpenProject (project) {
         this.replaceBaseRoute()
-      }
+      },
     },
 
     beforeRouteEnter (to, from, next) {
@@ -56,7 +56,7 @@ export default function ({
         if (baseRoute && !isSameRoute(this.$route, baseRoute, false)) {
           this.$router.replace(baseRoute)
         }
-      }
-    }
+      },
+    },
   }
 }

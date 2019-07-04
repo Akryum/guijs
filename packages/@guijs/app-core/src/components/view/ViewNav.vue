@@ -41,7 +41,7 @@ import VIEW_OPEN from '@/graphql/view/viewOpen.gql'
 export default {
   data () {
     return {
-      views: []
+      views: [],
     }
   },
 
@@ -57,17 +57,17 @@ export default {
             const view = subscriptionData.data.viewAdded
             if (!previousResult.views) {
               return {
-                views: [ view ]
+                views: [ view ],
               }
             }
             if (previousResult.views.find(r => r.id === view.id)) return previousResult
             return {
               views: [
                 ...previousResult.views,
-                view
-              ]
+                view,
+              ],
             }
-          }
+          },
         },
         {
           document: VIEW_REMOVED,
@@ -78,9 +78,9 @@ export default {
             const views = previousResult.views.slice()
             views.splice(index, 1)
             return {
-              views
+              views,
             }
-          }
+          },
         },
         {
           document: VIEW_CHANGED,
@@ -88,7 +88,7 @@ export default {
             const view = subscriptionData.data.viewChanged
             if (!previousResult.views) {
               return {
-                views: [view]
+                views: [view],
               }
             }
             const index = previousResult.views.findIndex(r => r.id === view.id)
@@ -96,12 +96,12 @@ export default {
             const views = previousResult.views.slice()
             views.splice(index, 1, view)
             return {
-              views
+              views,
             }
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   },
 
   computed: {
@@ -121,8 +121,8 @@ export default {
         if (!isSameRoute(this.$route, this.$router.resolve({ name }).route)) {
           this.$router.push({ name })
         }
-      }
-    }
+      },
+    },
   },
 
   watch: {
@@ -135,17 +135,17 @@ export default {
         this.$apollo.mutate({
           mutation: VIEW_OPEN,
           variables: {
-            id: value.id
-          }
+            id: value.id,
+          },
         })
       },
-      immediate: true
+      immediate: true,
     },
 
     projectCurrent: {
       handler: 'checkProjectType',
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -163,8 +163,8 @@ export default {
           this.currentViewName = view.name
         }
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

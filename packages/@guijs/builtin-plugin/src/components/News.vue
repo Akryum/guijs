@@ -70,24 +70,24 @@ import NewsItemDetails from './NewsItemDetails.vue'
 
 const ERRORS = {
   'fetch': {
-    icon: 'error'
+    icon: 'error',
   },
   'offline': {
-    icon: 'cloud_off'
+    icon: 'cloud_off',
   },
   'empty': {
-    icon: 'cake'
-  }
+    icon: 'cake',
+  },
 }
 
 export default {
   components: {
     NewsItem,
-    NewsItemDetails
+    NewsItemDetails,
   },
 
   inject: [
-    'widget'
+    'widget',
   ],
 
   data () {
@@ -95,7 +95,7 @@ export default {
       loading: false,
       feed: null,
       error: null,
-      selectedItem: null
+      selectedItem: null,
     }
   },
 
@@ -109,7 +109,7 @@ export default {
 
     small () {
       return !this.widget.isDetails && this.widget.data.width < 5
-    }
+    },
   },
 
   watch: {
@@ -117,8 +117,8 @@ export default {
       handler () {
         this.fetchFeed()
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   created () {
@@ -129,7 +129,7 @@ export default {
       disabled: () => this.loading,
       onCalled: () => {
         this.fetchFeed(true)
-      }
+      },
     })
   },
 
@@ -149,7 +149,7 @@ export default {
       try {
         const { results, errors } = await this.$callPluginAction('org.vue.widgets.actions.fetch-news', {
           url: this.widget.data.config.url,
-          force
+          force,
         })
         if (errors.length && errors[0]) throw new Error(errors[0])
 
@@ -165,8 +165,8 @@ export default {
         console.error(e)
       }
       this.loading = false
-    }
-  }
+    },
+  },
 }
 </script>
 

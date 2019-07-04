@@ -28,14 +28,14 @@ import FILE_OPEN_IN_EDITOR from '@/graphql/file/fileOpenInEditor.gql'
 
 export default {
   inject: [
-    'FileDiffInjection'
+    'FileDiffInjection',
   ],
 
   props: {
     change: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -53,7 +53,7 @@ export default {
       } else if (this.change.type === 'add') {
         return this.change.ln
       }
-    }
+    },
   },
 
   methods: {
@@ -66,12 +66,12 @@ export default {
           input: {
             file: this.FileDiffInjection.data.to,
             line: this.ln2,
-            gitPath: true
-          }
-        }
+            gitPath: true,
+          },
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

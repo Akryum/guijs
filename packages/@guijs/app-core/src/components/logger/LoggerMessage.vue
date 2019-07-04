@@ -22,14 +22,14 @@ export default {
   props: {
     message: {
       type: Object,
-      required: true
+      required: true,
     },
 
     pre: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 }
 </script>
 

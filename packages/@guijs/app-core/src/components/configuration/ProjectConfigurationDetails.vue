@@ -80,22 +80,22 @@ import CONFIGURATION_CANCEL from '@/graphql/configuration/configurationCancel.gq
 export default {
   metaInfo () {
     return {
-      title: this.configuration && `${this.configuration.name} - ${this.$t('org.vue.views.project-configurations.title')}`
+      title: this.configuration && `${this.configuration.name} - ${this.$t('org.vue.views.project-configurations.title')}`,
     }
   },
 
   props: {
     id: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
       configuration: null,
       currentTab: '__default',
-      tabsHaveChanges: {}
+      tabsHaveChanges: {},
     }
   },
 
@@ -104,7 +104,7 @@ export default {
       query: CONFIGURATION,
       variables () {
         return {
-          id: this.id
+          id: this.id,
         }
       },
       async result ({ data, loading }) {
@@ -117,8 +117,8 @@ export default {
           await this.$nextTick()
           this.currentTab = data.configuration.tabs[0].id
         }
-      }
-    }
+      },
+    },
   },
 
   computed: {
@@ -127,11 +127,11 @@ export default {
         if (this.tabsHaveChanges[key]) return true
       }
       return false
-    }
+    },
   },
 
   watch: {
-    id: 'init'
+    id: 'init',
   },
 
   created () {
@@ -149,8 +149,8 @@ export default {
       await this.$apollo.mutate({
         mutation: CONFIGURATION_CANCEL,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
 
       this.refetch()
@@ -160,8 +160,8 @@ export default {
       await this.$apollo.mutate({
         mutation: CONFIGURATION_SAVE,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
 
       this.refetch()
@@ -169,8 +169,8 @@ export default {
 
     refetch () {
       this.$apollo.queries.configuration.refetch()
-    }
-  }
+    },
+  },
 }
 </script>
 

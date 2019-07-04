@@ -68,18 +68,18 @@ export default {
   props: {
     tasks: {
       type: Array,
-      required: true
+      required: true,
     },
 
     tooltip: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data () {
     return {
-      loading: false
+      loading: false,
     }
   },
 
@@ -88,9 +88,9 @@ export default {
 
     $subscribe: {
       taskChanged: {
-        query: TASK_CHANGED
-      }
-    }
+        query: TASK_CHANGED,
+      },
+    },
   },
 
   computed: {
@@ -111,7 +111,7 @@ export default {
         return 'running'
       }
       return 'idle'
-    }
+    },
   },
 
   methods: {
@@ -122,22 +122,22 @@ export default {
         await this.$apollo.mutate({
           mutation: PROJECT_OPEN,
           variables: {
-            id: task.project.id
-          }
+            id: task.project.id,
+          },
         })
       }
 
       this.$router.push({
         name: 'project-tasks',
-        query: { id: task.id }
+        query: { id: task.id },
       })
 
       if (run) {
         await this.$apollo.mutate({
           mutation: TASK_RUN,
           variables: {
-            id: task.id
-          }
+            id: task.id,
+          },
         })
       }
     },
@@ -146,11 +146,11 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_STOP,
         variables: {
-          id: task.id
-        }
+          id: task.id,
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

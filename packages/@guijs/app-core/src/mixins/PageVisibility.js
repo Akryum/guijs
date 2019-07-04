@@ -3,8 +3,8 @@ import Vue from 'vue'
 const vm = new Vue({
   data: {
     documentVisible: !document.hidden,
-    documentFocus: document.hasFocus()
-  }
+    documentFocus: document.hasFocus(),
+  },
 })
 
 document.addEventListener('visibilitychange', () => {
@@ -28,6 +28,6 @@ export default {
 
     documentFocus () {
       return vm.documentFocus
-    }
-  }
+    },
+  },
 }

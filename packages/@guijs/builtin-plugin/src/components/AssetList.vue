@@ -40,15 +40,15 @@ import AssetListItem from './AssetListItem'
 
 export default {
   components: {
-    AssetListItem
+    AssetListItem,
   },
 
   computed: {
     ...mapGetters([
       'assetsSorted',
-      'sizeField'
-    ])
-  }
+      'sizeField',
+    ]),
+  },
 }
 </script>
 

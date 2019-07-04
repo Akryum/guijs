@@ -80,24 +80,24 @@ export default {
   props: {
     suggestion: {
       type: Object,
-      required: true
+      required: true,
     },
 
     index: {
       type: Number,
-      default: -1
+      default: -1,
     },
 
     ping: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
     image () {
       return getImageUrl(this.suggestion.image)
-    }
+    },
   },
 
   methods: {
@@ -119,13 +119,13 @@ export default {
           mutation: SUGGESTION_ACTIVATE,
           variables: {
             input: {
-              id: suggestion.id
-            }
-          }
+              id: suggestion.id,
+            },
+          },
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

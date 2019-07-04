@@ -114,7 +114,7 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.project-select.title')
+      title: this.$t('org.vue.views.project-select.title'),
     }
   },
 
@@ -124,13 +124,13 @@ export default {
       tab: undefined,
       hideTabs: !!this.$route.query.hideTabs,
       showNoModulesModal: false,
-      busy: false
+      busy: false,
     }
   },
 
   apollo: {
     folderCurrent: FOLDER_CURRENT,
-    projectCurrent: PROJECT_CURRENT
+    projectCurrent: PROJECT_CURRENT,
   },
 
   mounted () {
@@ -143,7 +143,7 @@ export default {
   methods: {
     async createProject () {
       await this.$apollo.mutate({
-        mutation: PROJECT_INIT_CREATION
+        mutation: PROJECT_INIT_CREATION,
       })
 
       this.$router.push({ name: 'project-create' })
@@ -159,9 +159,9 @@ export default {
           variables: {
             input: {
               path: this.folderCurrent.path,
-              force
-            }
-          }
+              force,
+            },
+          },
         })
 
         this.$router.push({ name: 'project-home' })
@@ -171,8 +171,8 @@ export default {
         }
         this.busy = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

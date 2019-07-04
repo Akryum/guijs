@@ -15,12 +15,12 @@ exports.processStats = function (stats) {
     modulesPerSizeType[sizeType] = {
       modulesTotalSize,
       depModules,
-      depModulesTotalSize
+      depModulesTotalSize,
     }
 
     const modulesTrees = ModulesUtils.buildModulesTrees(rawModules, sizeType)
     analyzer[sizeType] = {
-      modulesTrees
+      modulesTrees,
     }
   }
 
@@ -30,20 +30,20 @@ exports.processStats = function (stats) {
       warnings: stats.data.warnings,
       assets: stats.data.assets.map(a => ({
         name: a.name,
-        size: a.size
+        size: a.size,
       })),
       chunks: stats.data.chunks.map(c => ({
         id: c.id,
-        names: c.names
-      }))
+        names: c.names,
+      })),
     },
     computed: {
-      modulesPerSizeType
-    }
+      modulesPerSizeType,
+    },
   }
 
   return {
     stats,
-    analyzer
+    analyzer,
   }
 }

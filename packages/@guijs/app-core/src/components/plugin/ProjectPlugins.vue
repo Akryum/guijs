@@ -78,18 +78,18 @@ export default {
 
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.project-plugins.title')
+      title: this.$t('org.vue.views.project-plugins.title'),
     }
   },
 
   data () {
     return {
-      search: ''
+      search: '',
     }
   },
 
   apollo: {
-    projectCurrent: PROJECT_CURRENT
+    projectCurrent: PROJECT_CURRENT,
   },
 
   bus: {
@@ -97,19 +97,19 @@ export default {
       this.$apollo.getClient().writeQuery({
         query: PLUGINS,
         data: {
-          plugins: null
-        }
+          plugins: null,
+        },
       })
-    }
+    },
   },
 
   methods: {
     updateAll () {
       return this.$apollo.mutate({
-        mutation: PLUGINS_UPDATE
+        mutation: PLUGINS_UPDATE,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

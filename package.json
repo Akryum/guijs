@@ -5,7 +5,7 @@
     "packages/@guijs/*"
   ],
   "scripts": {
-    "lint": "eslint --fix packages/**/*.js"
+    "lint": "eslint --fix packages/**/*.{js,vue}"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

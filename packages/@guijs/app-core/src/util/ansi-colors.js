@@ -7,5 +7,5 @@ ansiUp.escape_for_html = false
 export default {
   install (Vue) {
     Vue.prototype.ansiColors = text => ansiUp.ansi_to_html(text)
-  }
+  },
 }

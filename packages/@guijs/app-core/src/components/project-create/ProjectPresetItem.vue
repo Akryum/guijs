@@ -31,19 +31,19 @@ export default {
   props: {
     preset: {
       type: Object,
-      required: true
+      required: true,
     },
 
     selected: {
       type: Boolean,
-      required: true
+      required: true,
     },
 
     description: {
       type: String,
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 }
 </script>
 

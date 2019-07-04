@@ -75,8 +75,8 @@ export default {
       return {
         consoleLogs: [
           ...previousResult.consoleLogs,
-          subscriptionData.data.consoleLogAdded
-        ]
+          subscriptionData.data.consoleLogAdded,
+        ],
       }
     },
 
@@ -92,21 +92,21 @@ export default {
         update: store => {
           store.writeQuery({
             query: CONSOLE_LOGS,
-            data: { consoleLogs: [] }
+            data: { consoleLogs: [] },
           })
           store.writeQuery({
             query: CONSOLE_LOG_LAST,
-            data: { consoleLogLast: null }
+            data: { consoleLogLast: null },
           })
-        }
+        },
       })
       this.close()
     },
 
     close () {
       this.$emit('close')
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,13 +1,13 @@
 export default function movable ({
   gridSize,
   field,
-  zoom
+  zoom,
 }) {
   // @vue/component
   return {
     data () {
       return {
-        moveState: null
+        moveState: null,
       }
     },
 
@@ -34,14 +34,14 @@ export default function movable ({
           pxX,
           pxY,
           x,
-          y
+          y,
         }
       },
 
       onMoveStart (e) {
         this.$_initalMousePosition = {
           x: e.clientX,
-          y: e.clientY
+          y: e.clientY,
         }
         this.updateMoveState(e)
         window.addEventListener('mousemove', this.onMoveUpdate)
@@ -57,7 +57,7 @@ export default function movable ({
         this.removeMoveListeners()
         if (this.onMoved) await this.onMoved()
         this.moveState = null
-      }
-    }
+      },
+    },
   }
 }

@@ -71,17 +71,17 @@ const PADDING = 8
 export default {
   provide () {
     return {
-      dashboard: this.injected
+      dashboard: this.injected,
     }
   },
 
   mixins: [
-    OnWindowResize()
+    OnWindowResize(),
   ],
 
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.project-dashboard.title')
+      title: this.$t('org.vue.views.project-dashboard.title'),
     }
   },
 
@@ -93,8 +93,8 @@ export default {
         height: 0,
         left: 0,
         top: 0,
-        isWidgetDetailsShown: false
-      }
+        isWidgetDetailsShown: false,
+      },
     }
   },
 
@@ -107,8 +107,8 @@ export default {
       this.injected.height = bounds.height - PADDING * 2
       this.injected.left = bounds.left
       this.injected.top = bounds.top
-    }
-  }
+    },
+  },
 }
 </script>
 

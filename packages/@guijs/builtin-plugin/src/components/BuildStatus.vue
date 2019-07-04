@@ -73,7 +73,7 @@ import { size, round } from '../filters'
 export default {
   filters: {
     size,
-    round
+    round,
   },
 
   computed: {
@@ -84,7 +84,7 @@ export default {
       'warnings',
       'assetsTotalSize',
       'modulesTotalSize',
-      'depModulesTotalSize'
+      'depModulesTotalSize',
     ]),
 
     depSizeRatio () {
@@ -93,14 +93,14 @@ export default {
       } else {
         return 0
       }
-    }
+    },
   },
 
   sharedData () {
     return {
-      status: `org.vue.webpack.${this.mode}-status`
+      status: `org.vue.webpack.${this.mode}-status`,
     }
-  }
+  },
 }
 </script>
 

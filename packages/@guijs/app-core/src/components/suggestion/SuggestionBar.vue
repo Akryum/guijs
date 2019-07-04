@@ -49,7 +49,7 @@
 export default {
   data () {
     return {
-      forceDevtoolsSuggestion: false
+      forceDevtoolsSuggestion: false,
     }
   },
   methods: {
@@ -76,15 +76,15 @@ export default {
               message: 'org.vue.cli-service.suggestions.vue-devtools.message',
               link: 'https://github.com/vuejs/vue-devtools',
               image: 'https://raw.githubusercontent.com/vuejs/vue-devtools/master/media/screenshot.png',
-              actionLink: devtoolsLink
-            }
+              actionLink: devtoolsLink,
+            },
           ]
         }
       }
 
       return list
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -17,26 +17,26 @@
 <script>
 export default {
   inject: [
-    'dashboard'
+    'dashboard',
   ],
 
   props: {
     widget: {
       type: Object,
-      required: true
+      required: true,
     },
 
     shellOrigin: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   methods: {
     close () {
       this.$emit('close')
-    }
-  }
+    },
+  },
 }
 </script>
 

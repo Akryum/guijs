@@ -12,16 +12,16 @@ const store = new Vuex.Store({
       showModernBuild: true,
       serve: {
         stats: null,
-        analyzer: {}
+        analyzer: {},
       },
       build: {
         stats: null,
-        analyzer: {}
+        analyzer: {},
       },
       'build-modern': {
         stats: null,
-        analyzer: {}
-      }
+        analyzer: {},
+      },
     }
   },
 
@@ -45,7 +45,7 @@ const store = new Vuex.Store({
     modulesTrees: (state, getters) => (getters.analyzer && getters.analyzer.modulesTrees) || [],
     depModules: (state, getters) => getters.modules.depModules || [],
     depModulesTotalSize: (state, getters) => getters.modules.depModulesTotalSize || 0,
-    chunks: (state, getters) => (getters.stats && getters.stats.data.chunks) || []
+    chunks: (state, getters) => (getters.stats && getters.stats.data.chunks) || [],
   },
 
   mutations: {
@@ -69,8 +69,8 @@ const store = new Vuex.Store({
     analyzer (state, { mode, value }) {
       console.log(value)
       state[mode].analyzer = Object.freeze(value)
-    }
-  }
+    },
+  },
 })
 
 export default store

@@ -30,18 +30,18 @@ import SpeedStatsItem from './SpeedStatsItem.vue'
 
 export default {
   components: {
-    SpeedStatsItem
+    SpeedStatsItem,
   },
 
   computed: {
     ...mapGetters([
-      'assetsTotalSize'
+      'assetsTotalSize',
     ]),
 
     speeds () {
       return getSpeeds(this.assetsTotalSize)
-    }
-  }
+    },
+  },
 }
 </script>
 

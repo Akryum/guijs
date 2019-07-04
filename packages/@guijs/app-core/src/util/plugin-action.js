@@ -13,8 +13,8 @@ export default {
             mutation: PLUGIN_ACTION_CALL,
             variables: {
               id,
-              params
-            }
+              params,
+            },
           })
           return result.data.pluginActionCall
         },
@@ -22,17 +22,17 @@ export default {
         $onPluginActionCalled (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-called-${uid++}`, {
             query: PLUGIN_ACTION_CALLED,
-            result: ({ data }) => cb(data.pluginActionCalled)
+            result: ({ data }) => cb(data.pluginActionCalled),
           })
         },
 
         $onPluginActionResolved (cb) {
           return this.$apollo.addSmartSubscription(`plugin-action-resolved-${uid++}`, {
             query: PLUGIN_ACTION_RESOLVED,
-            result: ({ data }) => cb(data.pluginActionResolved)
+            result: ({ data }) => cb(data.pluginActionResolved),
           })
-        }
-      }
+        },
+      },
     })
-  }
+  },
 }

@@ -41,7 +41,7 @@ import TASK_CHANGED from '@vue/cli-ui/src/graphql/task/taskChanged.gql'
 
 export default {
   inject: [
-    'widget'
+    'widget',
   ],
 
   apollo: {
@@ -49,22 +49,22 @@ export default {
       query: TASK,
       variables () {
         return {
-          id: this.taskId
+          id: this.taskId,
         }
-      }
+      },
     },
 
     $subscribe: {
       taskChanged: {
-        query: TASK_CHANGED
-      }
-    }
+        query: TASK_CHANGED,
+      },
+    },
   },
 
   computed: {
     taskId () {
       return this.widget.data.config.task
-    }
+    },
   },
 
   methods: {
@@ -72,8 +72,8 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_RUN,
         variables: {
-          id: this.taskId
-        }
+          id: this.taskId,
+        },
       })
     },
 
@@ -81,11 +81,11 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_STOP,
         variables: {
-          id: this.taskId
-        }
+          id: this.taskId,
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

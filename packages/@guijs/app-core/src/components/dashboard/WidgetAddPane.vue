@@ -57,7 +57,7 @@
 export default {
   data () {
     return {
-      search: ''
+      search: '',
     }
   },
 
@@ -73,8 +73,8 @@ export default {
       return def.title.match(reg) ||
         (def.description && def.description.match(reg)) ||
         (def.longDescription && def.longDescription.match(reg))
-    }
-  }
+    },
+  },
 }
 </script>
 

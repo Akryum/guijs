@@ -35,7 +35,7 @@ export default {
   computed: {
     checkboxValue () {
       return this.value(this.prompt.value)
-    }
+    },
   },
 
   methods: {
@@ -53,8 +53,8 @@ export default {
         if (index !== -1) list.splice(index, 1)
       }
       this.answer(list)
-    }
-  }
+    },
+  },
 }
 </script>
 

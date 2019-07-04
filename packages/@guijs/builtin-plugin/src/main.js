@@ -13,14 +13,14 @@ import RunTask from './components/RunTask.vue'
 import News from './components/News.vue'
 
 Vue.use(VueProgress, {
-  defaultShape: 'circle'
+  defaultShape: 'circle',
 })
 
 ClientAddonApi.component('org.vue.webpack.components.dashboard', WebpackDashboard)
 ClientAddonApi.component('org.vue.webpack.components.analyzer', WebpackAnalyzer)
 
 ClientAddonApi.addRoutes('org.vue.webpack', [
-  { path: '', name: 'org.vue.webpack.routes.test', component: TestView }
+  { path: '', name: 'org.vue.webpack.routes.test', component: TestView },
 ])
 
 // Locales

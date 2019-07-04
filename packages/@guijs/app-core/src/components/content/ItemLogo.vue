@@ -41,29 +41,29 @@ export default {
   props: {
     image: {
       type: String,
-      default: 'widgets'
+      default: 'widgets',
     },
 
     fallbackIcon: {
       type: String,
-      default: 'image'
+      default: 'image',
     },
 
     selected: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     colorBullet: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data () {
     return {
       loaded: false,
-      error: false
+      error: false,
     }
   },
 
@@ -78,20 +78,20 @@ export default {
 
     imageUrl () {
       return getImageUrl(this.image)
-    }
+    },
   },
 
   watch: {
     image: 'reset',
-    selected: 'reset'
+    selected: 'reset',
   },
 
   methods: {
     reset () {
       this.loaded = false
       this.error = false
-    }
-  }
+    },
+  },
 }
 </script>
 

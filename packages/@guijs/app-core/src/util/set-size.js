@@ -8,5 +8,5 @@ export default {
       el.style.width = `${bounds.width}px`
       el.style.height = `${bounds.height}px`
     })
-  }
+  },
 }

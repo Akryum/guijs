@@ -58,28 +58,28 @@ import TASKS from '@/graphql/task/tasks.gql'
 export default {
   mixins: [
     RestoreRoute({
-      baseRoute: { name: 'project-tasks' }
-    })
+      baseRoute: { name: 'project-tasks' },
+    }),
   ],
 
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.project-tasks.title')
+      title: this.$t('org.vue.views.project-tasks.title'),
     }
   },
 
   data () {
     return {
-      search: ''
+      search: '',
     }
   },
 
   apollo: {
     $subscribe: {
       taskChanged: {
-        query: TASK_CHANGED
-      }
-    }
+        query: TASK_CHANGED,
+      },
+    },
   },
 
   bus: {
@@ -87,10 +87,10 @@ export default {
       this.$apollo.getClient().writeQuery({
         query: TASKS,
         data: {
-          tasks: null
-        }
+          tasks: null,
+        },
       })
-    }
+    },
   },
 
   methods: {
@@ -103,18 +103,18 @@ export default {
           route: {
             name: 'project-task-details',
             params: {
-              id: task.id
-            }
+              id: task.id,
+            },
           },
-          task
+          task,
         })
       )
     },
 
     refresh () {
       this.$refs.tasks.$apollo.queries.query.refetch()
-    }
-  }
+    },
+  },
 }
 </script>
 

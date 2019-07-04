@@ -18,21 +18,21 @@ import { round } from '../filters'
 
 export default {
   filters: {
-    round
+    round,
   },
 
   props: {
     stats: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
     tooltip () {
       return `${this.stats.mbps}Mbps + ${this.stats.rtt}ms RTT`
-    }
-  }
+    },
+  },
 }
 </script>
 

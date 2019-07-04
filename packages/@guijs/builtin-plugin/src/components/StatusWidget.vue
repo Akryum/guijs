@@ -52,40 +52,40 @@
 <script>
 export default {
   inject: [
-    'widget'
+    'widget',
   ],
 
   props: {
     icon: {
       type: String,
-      required: true
+      required: true,
     },
 
     iconClass: {
       type: [String, Array, Object],
-      default: undefined
+      default: undefined,
     },
 
     title: {
       type: String,
-      required: true
+      required: true,
     },
 
     status: {
       type: Object,
-      required: true
+      required: true,
     },
 
     message: {
       type: String,
-      default: null
+      default: null,
     },
 
     // TODO remove
     implemented: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   created () {
@@ -108,7 +108,7 @@ export default {
     //     this.widget.openDetails()
     //   }
     // })
-  }
+  },
 }
 </script>
 

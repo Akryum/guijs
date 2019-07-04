@@ -25,22 +25,22 @@ export default {
   props: {
     name: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data () {
     return {
       component: null,
-      timeout: false
+      timeout: false,
     }
   },
 
   watch: {
     name: {
       handler: 'updateComponent',
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -51,8 +51,8 @@ export default {
         }
       }, 5000)
       this.component = await ClientAddonApi.awaitComponent(this.name)
-    }
-  }
+    },
+  },
 }
 </script>
 

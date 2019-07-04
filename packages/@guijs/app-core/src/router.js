@@ -33,28 +33,28 @@ const router = new Router({
       path: '/',
       component: ProjectHome,
       meta: {
-        needProject: true
+        needProject: true,
       },
       children: [
         {
           path: '',
           name: 'project-home',
-          redirect: { name: 'project-dashboard' }
+          redirect: { name: 'project-dashboard' },
         },
         {
           path: 'dashboard',
           name: 'project-dashboard',
-          component: ProjectDashboard
+          component: ProjectDashboard,
         },
         {
           path: 'plugins',
           name: 'project-plugins',
-          component: ProjectPlugins
+          component: ProjectPlugins,
         },
         {
           path: 'plugins/add',
           name: 'project-plugins-add',
-          component: ProjectPluginsAdd
+          component: ProjectPluginsAdd,
         },
         {
           path: 'configuration',
@@ -65,9 +65,9 @@ const router = new Router({
               path: ':id',
               name: 'project-configuration-details',
               component: ProjectConfigurationDetails,
-              props: true
-            }
-          ]
+              props: true,
+            },
+          ],
         },
         {
           path: 'tasks',
@@ -78,55 +78,55 @@ const router = new Router({
               path: ':id',
               name: 'project-task-details',
               component: ProjectTaskDetails,
-              props: true
-            }
-          ]
+              props: true,
+            },
+          ],
         },
         {
           path: 'dependencies',
           name: 'project-dependencies',
-          component: ProjectDependencies
-        }
-      ]
+          component: ProjectDependencies,
+        },
+      ],
     },
     {
       path: '/project/select',
       name: 'project-select',
-      component: ProjectSelect
+      component: ProjectSelect,
     },
     {
       path: '/project/create',
       name: 'project-create',
-      component: ProjectCreate
+      component: ProjectCreate,
     },
     {
       path: '/file-diff',
       name: 'file-diff',
-      component: FileDiffView
+      component: FileDiffView,
     },
     {
       path: '/about',
       name: 'about',
-      component: About
+      component: About,
     },
     {
       path: '/home',
       name: 'home',
-      redirect: { name: 'project-home' }
+      redirect: { name: 'project-home' },
     },
     {
       path: '*',
       name: 'not-found',
-      component: NotFound
-    }
-  ]
+      component: NotFound,
+    },
+  ],
 })
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(m => m.meta.needProject)) {
     const result = await apolloClient.query({
       query: PROJECT_CURRENT,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
     })
     if (!result.data.projectCurrent) {
       next({ name: 'project-select' })
@@ -135,8 +135,8 @@ router.beforeEach(async (to, from, next) => {
       await apolloClient.mutate({
         mutation: CURRENT_PROJECT_ID_SET,
         variables: {
-          projectId: result.data.projectCurrent.id
-        }
+          projectId: result.data.projectCurrent.id,
+        },
       })
     }
   }

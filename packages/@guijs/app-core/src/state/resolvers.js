@@ -4,7 +4,7 @@ export default {
   Mutation: {
     connectedSet: (root, { value }, { cache }) => {
       const data = {
-        connected: value
+        connected: value,
       }
       cache.writeData({ data })
       return null
@@ -13,7 +13,7 @@ export default {
     loadingChange: (root, { mod }, { cache }) => {
       const { loading } = cache.readQuery({ query: LOADING })
       const data = {
-        loading: loading + mod
+        loading: loading + mod,
       }
       cache.writeData({ data })
       return null
@@ -21,7 +21,7 @@ export default {
 
     darkModeSet: (root, { enabled }, { cache }) => {
       const data = {
-        darkMode: enabled
+        darkMode: enabled,
       }
       cache.writeData({ data })
       const el = document.getElementsByTagName('html')[0]
@@ -35,10 +35,10 @@ export default {
 
     currentProjectIdSet: (root, { projectId }, { cache }) => {
       const data = {
-        currentProjectId: projectId
+        currentProjectId: projectId,
       }
       cache.writeData({ data })
       return null
-    }
-  }
+    },
+  },
 }

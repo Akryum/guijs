@@ -6,11 +6,11 @@ exports.clientAddonConfig = function ({ id, port = 8042 }) {
     configureWebpack: {
       output: {
         // Important
-        filename: 'index.js'
-      }
+        filename: 'index.js',
+      },
     },
     css: {
-      extract: false
+      extract: false,
     },
     chainWebpack: config => {
       config.plugins.delete('preload')
@@ -28,9 +28,9 @@ exports.clientAddonConfig = function ({ id, port = 8042 }) {
     },
     devServer: {
       headers: {
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
       },
-      port
-    }
+      port,
+    },
   }
 }

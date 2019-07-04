@@ -85,28 +85,28 @@ export default {
   props: {
     selectedId: {
       type: String,
-      default: null
+      default: null,
     },
 
     filters: {
       type: String,
-      default: null
+      default: null,
     },
 
     pageSize: {
       type: Number,
-      default: 20
+      default: 20,
     },
 
     loadMetadata: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data () {
     return {
-      internalSelectedId: this.selectedId
+      internalSelectedId: this.selectedId,
     }
   },
 
@@ -116,8 +116,8 @@ export default {
       set (value) {
         this.internalSelectedId = value
         this.$emit('update:selectedId', value)
-      }
-    }
+      },
+    },
   },
 
   watch: {
@@ -125,7 +125,7 @@ export default {
       if (value !== this.internalSelectedId) {
         this.internalSelectedId = value
       }
-    }
+    },
   },
 
   mounted () {
@@ -146,8 +146,8 @@ export default {
     scrollResultsToTop () {
       const el = this.$refs.resultsBox
       if (el) el.scrollTop = 0
-    }
-  }
+    },
+  },
 }
 </script>
 

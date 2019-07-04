@@ -59,18 +59,18 @@ import Progress from '@/mixins/Progress'
 export default {
   mixins: [
     DisableScroll,
-    Progress
+    Progress,
   ],
 
   props: {
-    debug: String
+    debug: String,
   },
 
   methods: {
     close () {
       this.progress = null
-    }
-  }
+    },
+  },
 }
 </script>
 

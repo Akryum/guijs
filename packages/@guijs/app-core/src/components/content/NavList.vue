@@ -26,8 +26,8 @@ export default {
   props: {
     items: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -43,9 +43,9 @@ export default {
         if (!isSameRoute(this.$route, route)) {
           this.$router.push(route)
         }
-      }
-    }
-  }
+      },
+    },
+  },
 }
 </script>
 

@@ -30,15 +30,15 @@ import { size, round } from '../filters'
 export default {
   filters: {
     size,
-    round
+    round,
   },
 
   props: {
     asset: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>
 

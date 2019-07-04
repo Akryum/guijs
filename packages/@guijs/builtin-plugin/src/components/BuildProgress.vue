@@ -85,20 +85,20 @@ export default {
     return mapSharedData('org.vue.webpack.', {
       status: `${this.mode}-status`,
       rawProgress: `${this.mode}-progress`,
-      operations: `${this.mode}-operations`
+      operations: `${this.mode}-operations`,
     })
   },
 
   computed: {
     ...mapGetters([
-      'mode'
+      'mode',
     ]),
 
     progress () {
       const raw = this.rawProgress
       return raw && Object.keys(raw).length ? raw : { [this.mode]: 0 }
-    }
-  }
+    },
+  },
 }
 </script>
 

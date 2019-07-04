@@ -29,13 +29,13 @@ import ModuleListItem from './ModuleListItem'
 
 export default {
   components: {
-    ModuleListItem
+    ModuleListItem,
   },
 
   computed: {
     ...mapGetters([
-      'depModules'
-    ])
-  }
+      'depModules',
+    ]),
+  },
 }
 </script>

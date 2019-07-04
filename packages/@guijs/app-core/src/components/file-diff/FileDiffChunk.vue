@@ -15,9 +15,9 @@ export default {
   props: {
     chunk: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>
 

@@ -26,16 +26,16 @@ export default {
 
   data () {
     return {
-      ready: false
+      ready: false,
     }
   },
 
   async created () {
     await this.$apollo.mutate({
-      mutation: PROJECT_CWD_RESET
+      mutation: PROJECT_CWD_RESET,
     })
     this.ready = true
-  }
+  },
 }
 </script>
 

@@ -5,7 +5,7 @@ export default function ({
   query,
   variables = null,
   updateQuery = null,
-  update = null
+  update = null,
 }) {
   // @vue/component
   return {
@@ -32,7 +32,7 @@ export default function ({
         return this[field].prompts.filter(
           p => p.visible
         )
-      }
+      },
     },
 
     watch: {
@@ -40,8 +40,8 @@ export default function ({
         handler (value) {
           this.$emit('has-changes', value)
         },
-        immediate: true
-      }
+        immediate: true,
+      },
     },
 
     methods: {
@@ -51,8 +51,8 @@ export default function ({
           variables: {
             input: {
               id: prompt.id,
-              value: JSON.stringify(value)
-            }
+              value: JSON.stringify(value),
+            },
           },
           update: (store, { data: { promptAnswer } }) => {
             if (update) {
@@ -70,9 +70,9 @@ export default function ({
               data[field].prompts = promptAnswer
             }
             store.writeQuery({ query, variables: vars, data })
-          }
+          },
         })
-      }
-    }
+      },
+    },
   }
 }

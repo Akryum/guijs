@@ -29,15 +29,15 @@
 <script>
 const types = {
   rawlist: 'list',
-  password: 'input'
+  password: 'input',
 }
 
 export default {
   props: {
     prompts: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -49,14 +49,14 @@ export default {
         if (!group) {
           group = groupMap[prompt.group] = {
             id: prompt.group,
-            prompts: []
+            prompts: [],
           }
           groups.push(group)
         }
         group.prompts.push(prompt)
       })
       return groups
-    }
+    },
   },
 
   methods: {
@@ -67,8 +67,8 @@ export default {
       }
       type = type.charAt(0).toUpperCase() + type.substr(1)
       return require(`./Prompt${type}.vue`).default
-    }
-  }
+    },
+  },
 }
 </script>
 

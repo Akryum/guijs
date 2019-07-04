@@ -42,14 +42,14 @@ export default {
   props: {
     project: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
       newName: this.project.name,
-      loading: false
+      loading: false,
     }
   },
 
@@ -68,12 +68,12 @@ export default {
         `,
         variables: {
           id: this.project.id,
-          name: this.newName
-        }
+          name: this.newName,
+        },
       })
 
       this.$emit('close')
-    }
-  }
+    },
+  },
 }
 </script>

@@ -51,19 +51,19 @@ import CONFIGS from '@/graphql/configuration/configurations.gql'
 export default {
   mixins: [
     RestoreRoute({
-      baseRoute: { name: 'project-configurations' }
-    })
+      baseRoute: { name: 'project-configurations' },
+    }),
   ],
 
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.project-configurations.title')
+      title: this.$t('org.vue.views.project-configurations.title'),
     }
   },
 
   data () {
     return {
-      search: ''
+      search: '',
     }
   },
 
@@ -72,10 +72,10 @@ export default {
       this.$apollo.getClient().writeQuery({
         query: CONFIGS,
         data: {
-          configurations: null
-        }
+          configurations: null,
+        },
       })
-    }
+    },
   },
 
   methods: {
@@ -90,14 +90,14 @@ export default {
           route: {
             name: 'project-configuration-details',
             params: {
-              id: configuration.id
-            }
+              id: configuration.id,
+            },
           },
-          configuration
+          configuration,
         })
       )
-    }
-  }
+    },
+  },
 }
 </script>
 

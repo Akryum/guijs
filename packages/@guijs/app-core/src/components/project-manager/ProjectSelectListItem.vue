@@ -77,19 +77,19 @@ import ProjectRename from './ProjectRename.vue'
 
 export default {
   components: {
-    ProjectRename
+    ProjectRename,
   },
 
   props: {
     project: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
-      showRename: false
+      showRename: false,
     }
   },
 
@@ -99,12 +99,12 @@ export default {
         mutation: OPEN_IN_EDITOR,
         variables: {
           input: {
-            file: this.project.path
-          }
-        }
+            file: this.project.path,
+          },
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

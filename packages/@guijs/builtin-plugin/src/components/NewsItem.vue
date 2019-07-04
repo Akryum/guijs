@@ -23,8 +23,8 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -34,8 +34,8 @@ export default {
         return text.substr(0, 197) + '...'
       }
       return text
-    }
-  }
+    },
+  },
 }
 </script>
 

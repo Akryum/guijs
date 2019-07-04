@@ -44,10 +44,10 @@ export default class ClientAddonApi {
         component: ProjectHome,
         meta: {
           needProject: true,
-          restore: true
+          restore: true,
         },
-        children: routes
-      }
+        children: routes,
+      },
     ])
     // eslint-disable-next-line no-console
     console.log(`[ClientAddonApi] Registered new routes under the /addon/${id} route`)

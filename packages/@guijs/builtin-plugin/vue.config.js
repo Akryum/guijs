@@ -4,19 +4,19 @@ const path = require('path')
 module.exports = {
   ...clientAddonConfig({
     id: 'org.vue.webpack.client-addon',
-    port: 8096
+    port: 8096,
   }, {
     css: {
       loaderOptions: {
         postcss: {
           config: {
-            path: path.resolve(__dirname, 'postcss.config.js')
-          }
+            path: path.resolve(__dirname, 'postcss.config.js'),
+          },
         },
         stylus: {
-          import: ['~@guijs/app-core/src/style/imports']
-        }
-      }
-    }
-  })
+          import: ['~@guijs/app-core/src/style/imports'],
+        },
+      },
+    },
+  }),
 }

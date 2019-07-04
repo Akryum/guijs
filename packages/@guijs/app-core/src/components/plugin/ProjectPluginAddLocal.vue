@@ -20,11 +20,11 @@ export default {
   methods: {
     async addPlugin () {
       await this.$apollo.mutate({
-        mutation: PLUGIN_INSTALL_LOCAL
+        mutation: PLUGIN_INSTALL_LOCAL,
       })
       this.$emit('installed')
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -6,7 +6,7 @@ export default {
       '#78CDA7',
       '#93D7B9',
       '#AEE1CB',
-      '#C9EBDD'
+      '#C9EBDD',
     ],
     [
       '#A96FDA',
@@ -14,7 +14,7 @@ export default {
       '#C399E4',
       '#D0AEE9',
       '#DDC3EE',
-      '#EAD8F3'
+      '#EAD8F3',
     ],
     [
       '#03C2E6',
@@ -22,7 +22,7 @@ export default {
       '#4BD4EE',
       '#6FDDF2',
       '#93E6F6',
-      '#B7EFFA'
+      '#B7EFFA',
     ],
     [
       '#778F9B',
@@ -30,8 +30,8 @@ export default {
       '#9FAFB7',
       '#B3BFC5',
       '#C7CFD3',
-      '#DBDFE1'
-    ]
+      '#DBDFE1',
+    ],
   ],
   dark: [
     [
@@ -40,7 +40,7 @@ export default {
       '#37986C',
       '#318760',
       '#2A7654',
-      '#246548'
+      '#246548',
     ],
     [
       '#A96FDA',
@@ -48,7 +48,7 @@ export default {
       '#8B5BB3',
       '#7B519F',
       '#6C478B',
-      '#5D3D77'
+      '#5D3D77',
     ],
     [
       '#03C2E6',
@@ -56,7 +56,7 @@ export default {
       '#039FBD',
       '#038EA8',
       '#027C93',
-      '#026A7E'
+      '#026A7E',
     ],
     [
       '#778F9B',
@@ -64,7 +64,7 @@ export default {
       '#62767F',
       '#576971',
       '#4C5C63',
-      '#414E55'
-    ]
-  ]
+      '#414E55',
+    ],
+  ],
 }

@@ -37,20 +37,20 @@ const icons = {
   running: { icon: 'more_horiz', class: 'info' },
   done: { icon: 'check_circle', class: 'success' },
   error: { icon: 'error', class: 'danger' },
-  terminated: { icon: 'error', class: '' }
+  terminated: { icon: 'error', class: '' },
 }
 
 export default {
   props: {
     task: {
       type: Object,
-      required: true
+      required: true,
     },
 
     selected: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
@@ -68,7 +68,7 @@ export default {
 
     description () {
       return (this.task.status === 'idle' && this.$t(this.task.description)) || this.status
-    }
+    },
   },
 
   methods: {
@@ -77,11 +77,11 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_RUN,
         variables: {
-          id: this.task.id
-        }
+          id: this.task.id,
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -16,8 +16,8 @@ export default {
   apollo: {
     loading: {
       query: LOADING,
-      fetchPolicy: 'cache-only'
-    }
-  }
+      fetchPolicy: 'cache-only',
+    },
+  },
 }
 </script>

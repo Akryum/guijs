@@ -11,7 +11,7 @@ module.exports = api => {
     name: 'org.vue.webpack.routes.test',
     // icon: 'pets',
     icon: '/public/webpack-logo.png',
-    tooltip: 'Test view from webpack addon'
+    tooltip: 'Test view from webpack addon',
   })
 
   // Shared data example to store a value (for example a setting)

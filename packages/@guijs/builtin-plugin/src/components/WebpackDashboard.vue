@@ -67,7 +67,7 @@ import ModuleList from './ModuleList'
 
 export default {
   mixins: [
-    Dashboard
+    Dashboard,
   ],
 
   components: {
@@ -75,8 +75,8 @@ export default {
     BuildProgress,
     SpeedStats,
     AssetList,
-    ModuleList
-  }
+    ModuleList,
+  },
 }
 </script>
 

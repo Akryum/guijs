@@ -22,7 +22,7 @@ const app = new Vue({
   router,
   apolloProvider,
   i18n,
-  ...App
+  ...App,
 })
 
 app.$mount('#app')

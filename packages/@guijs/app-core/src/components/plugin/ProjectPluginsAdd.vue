@@ -144,13 +144,13 @@ export default {
   mixins: [
     Prompts({
       field: 'pluginInstallation',
-      query: PLUGIN_INSTALLATION
-    })
+      query: PLUGIN_INSTALLATION,
+    }),
   ],
 
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.project-plugins-add.title')
+      title: this.$t('org.vue.views.project-plugins-add.title'),
     }
   },
 
@@ -159,7 +159,7 @@ export default {
       tabId: 'search',
       showCancelInstall: false,
       pluginInstallation: null,
-      showLocalAdd: false
+      showLocalAdd: false,
     }
   },
 
@@ -169,14 +169,14 @@ export default {
       fetchPolicy: 'network-only',
       result () {
         this.checkTab()
-      }
-    }
+      },
+    },
   },
 
   computed: {
     pluginId () {
       return this.pluginInstallation && this.pluginInstallation.pluginId
-    }
+    },
   },
 
   mounted () {
@@ -220,8 +220,8 @@ export default {
         await this.$apollo.mutate({
           mutation: PLUGIN_INSTALL,
           variables: {
-            id
-          }
+            id,
+          },
         })
         this.tabId = 'config'
       } catch (e) {
@@ -243,7 +243,7 @@ export default {
     async closeLocalAdd () {
       this.showLocalAdd = false
       await this.$apollo.mutate({
-        mutation: PROJECT_CWD_RESET
+        mutation: PROJECT_CWD_RESET,
       })
     },
 
@@ -253,8 +253,8 @@ export default {
         await this.$apollo.mutate({
           mutation: PLUGIN_UNINSTALL,
           variables: {
-            id: this.pluginId
-          }
+            id: this.pluginId,
+          },
         })
         this.cancelInstall()
       } catch (e) {
@@ -268,8 +268,8 @@ export default {
         await this.$apollo.mutate({
           mutation: PLUGIN_INVOKE,
           variables: {
-            id: this.pluginId
-          }
+            id: this.pluginId,
+          },
         })
         this.tabId = 'diff'
       } catch (e) {
@@ -281,15 +281,15 @@ export default {
     async finishInstall () {
       try {
         await this.$apollo.mutate({
-          mutation: PLUGIN_FINISH_INSTALL
+          mutation: PLUGIN_FINISH_INSTALL,
         })
         this.close()
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

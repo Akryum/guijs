@@ -31,9 +31,9 @@ export default {
   props: {
     folder: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>
 

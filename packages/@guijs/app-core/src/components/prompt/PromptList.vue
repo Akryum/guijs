@@ -42,7 +42,7 @@ export default {
         label += ` (${this.$t('org.vue.components.prompt-list.default')})`
       }
       return label
-    }
-  }
+    },
+  },
 }
 </script>

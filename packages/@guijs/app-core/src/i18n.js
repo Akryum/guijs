@@ -7,7 +7,7 @@ Vue.use(VueI18n)
 
 Vue.use(VueTimeago, {
   name: 'VueTimeago',
-  locale: 'en'
+  locale: 'en',
 })
 
 function detectLanguage () {
@@ -54,8 +54,8 @@ async function autoDetect () {
       name: 'VueTimeago',
       locale: i18n.locale,
       locales: {
-        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}/index.js`)
-      }
+        [i18n.locale]: require(`date-fns/locale/${dateFnsLocale}/index.js`),
+      },
     }))
   }
 }
@@ -75,9 +75,9 @@ const i18n = new VueI18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages: {
-    en: {}
+    en: {},
   },
-  silentTranslationWarn: process.env.NODE_ENV !== 'production'
+  silentTranslationWarn: process.env.NODE_ENV !== 'production',
 })
 
 autoDetect()

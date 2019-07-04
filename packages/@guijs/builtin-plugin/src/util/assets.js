@@ -20,7 +20,7 @@ export function getSpeedData (datapoint, size) {
   return {
     totalDownloadTime,
     isDownloadTimeOverThreshold,
-    timeDifferenceToThreshold
+    timeDifferenceToThreshold,
   }
 }
 
@@ -28,7 +28,7 @@ export function getSpeeds (size) {
   return Object.keys(speedsData).reduce((obj, key) => {
     obj[key] = {
       ...getSpeedData(speedsData[key], size),
-      ...speedsData[key]
+      ...speedsData[key],
     }
     return obj
   }, {})
@@ -46,7 +46,7 @@ export function buildSortedAssets (assets, sizeField) {
         big: size > 250000,
         ratio: size / max,
         secondary: /\.map$/.test(asset.name),
-        speeds: getSpeeds(size)
+        speeds: getSpeeds(size),
       }
     })
     list = list.sort((a, b) => {

@@ -4,26 +4,26 @@ module.exports = {
   pluginOptions: {
     apollo: {
       enableMocks: false,
-      enableEngine: false
-    }
+      enableEngine: false,
+    },
   },
 
   configureWebpack: {
     resolve: {
-      symlinks: false
-    }
+      symlinks: false,
+    },
   },
 
   css: {
     loaderOptions: {
       postcss: {
         config: {
-          path: path.resolve(__dirname, 'postcss.config.js')
-        }
+          path: path.resolve(__dirname, 'postcss.config.js'),
+        },
       },
       stylus: {
-        import: ['~@/style/imports']
-      }
-    }
-  }
+        import: ['~@/style/imports'],
+      },
+    },
+  },
 }

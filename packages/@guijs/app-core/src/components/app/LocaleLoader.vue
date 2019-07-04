@@ -12,7 +12,7 @@ export default {
       manual: true,
       result ({ data: { locales } }) {
         locales.forEach(this.loadLocale)
-      }
+      },
     },
 
     $subscribe: {
@@ -20,9 +20,9 @@ export default {
         query: LOCALE_ADDED,
         result ({ data }) {
           this.loadLocale(data.localeAdded)
-        }
-      }
-    }
+        },
+      },
+    },
   },
 
   methods: {
@@ -30,11 +30,11 @@ export default {
       // eslint-disable-next-line no-console
       console.log(`[UI] Locale ${locale.lang} updated with new strings`)
       mergeLocale(locale.lang, locale.strings)
-    }
+    },
   },
 
   render () {
     return null
-  }
+  },
 }
 </script>

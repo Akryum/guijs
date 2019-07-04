@@ -77,12 +77,12 @@ import PROJECT_SET_FAVORITE from '@/graphql/project/projectSetFavorite.gql'
 export default {
   data () {
     return {
-      search: ''
+      search: '',
     }
   },
 
   apollo: {
-    projectCurrent: PROJECT_CURRENT
+    projectCurrent: PROJECT_CURRENT,
   },
 
   methods: {
@@ -91,8 +91,8 @@ export default {
         await this.$apollo.mutate({
           mutation: PROJECT_OPEN,
           variables: {
-            id: project.id
-          }
+            id: project.id,
+          },
         })
       }
 
@@ -103,21 +103,21 @@ export default {
       await this.$apollo.mutate({
         mutation: PROJECT_REMOVE,
         variables: {
-          id: project.id
+          id: project.id,
         },
         update: store => {
           let data = store.readQuery({ query: PROJECTS })
           // TODO this is a workaround
           // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
           data = {
-            projects: [...data.projects]
+            projects: [...data.projects],
           }
           const index = data.projects.findIndex(
             p => p.id === project.id
           )
           if (index !== -1) data.projects.splice(index, 1)
           store.writeQuery({ query: PROJECTS, data })
-        }
+        },
       })
     },
 
@@ -126,8 +126,8 @@ export default {
         mutation: PROJECT_SET_FAVORITE,
         variables: {
           id: project.id,
-          favorite: project.favorite ? 0 : 1
-        }
+          favorite: project.favorite ? 0 : 1,
+        },
       })
     },
 
@@ -143,8 +143,8 @@ export default {
         )
       }
       return projects
-    }
-  }
+    },
+  },
 }
 </script>
 

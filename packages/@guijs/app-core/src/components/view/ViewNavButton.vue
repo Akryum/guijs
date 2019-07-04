@@ -57,8 +57,8 @@ export default {
   props: {
     view: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -82,8 +82,8 @@ export default {
 
     defaultPluginIcon () {
       return this.imageIcon && this.view.icon.includes('/_plugin-logo/')
-    }
-  }
+    },
+  },
 }
 </script>
 

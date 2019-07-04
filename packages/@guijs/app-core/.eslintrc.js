@@ -20,6 +20,7 @@ module.exports = {
     'vue/no-use-v-if-with-v-for': 'warn',
     'vue/no-unused-vars': 'warn',
     'vue/return-in-computed-property': 'warn',
+    'comma-dangle': ['error', 'always-multiline'],
   },
 
   parserOptions: {

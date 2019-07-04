@@ -8,21 +8,21 @@ function genQuery (id, projectId) {
     query: SHARED_DATA,
     variables: {
       id,
-      projectId
+      projectId,
     },
     update: ({ sharedData }) => (sharedData && sharedData.value) || undefined,
     subscribeToMore: {
       document: SHARED_DATA_UPDATED,
       variables: {
         id,
-        projectId
+        projectId,
       },
       updateQuery: (previousResult, { subscriptionData }) => {
         return {
-          sharedData: subscriptionData.data.sharedDataUpdated
+          sharedData: subscriptionData.data.sharedDataUpdated,
         }
-      }
-    }
+      },
+    },
   }
 }
 
@@ -31,7 +31,7 @@ export default {
     Vue.mixin({
       data () {
         return {
-          $sharedData: {}
+          $sharedData: {},
         }
       },
 
@@ -39,7 +39,7 @@ export default {
         Object.defineProperty(this, '$sharedData', {
           get: () => this.$data.$sharedData,
           enumerable: true,
-          configurable: true
+          configurable: true,
         })
       },
 
@@ -54,7 +54,7 @@ export default {
               }
               smartQueries = await this.$syncSharedData(result)
             }, {
-              immediate: true
+              immediate: true,
             })
           } else {
             await this.$syncSharedData(options)
@@ -72,7 +72,7 @@ export default {
           return new Promise((resolve) => {
             const client = this.$apollo.getClient()
             const observable = client.watchQuery({
-              query: CURRENT_PROJECT_ID
+              query: CURRENT_PROJECT_ID,
             })
             const sub = observable.subscribe({
               next ({ data }) {
@@ -80,7 +80,7 @@ export default {
                   sub.unsubscribe()
                   resolve(data.currentProjectId)
                 }
-              }
+              },
             })
           })
         },
@@ -91,8 +91,8 @@ export default {
             query: SHARED_DATA,
             variables: {
               id,
-              projectId
-            }
+              projectId,
+            },
           })
           return result.sharedData.value
         },
@@ -104,7 +104,7 @@ export default {
             manual: true,
             result: ({ data }) => {
               data && data.sharedData && cb(data.sharedData.value)
-            }
+            },
           })
         },
 
@@ -115,8 +115,8 @@ export default {
             variables: {
               id,
               value,
-              projectId
-            }
+              projectId,
+            },
           })
         },
 
@@ -132,7 +132,7 @@ export default {
                 this.$setSharedData(id, value)
               },
               enumerable: true,
-              configurable: true
+              configurable: true,
             })
           }
           const projectId = await this.$getProjectId()
@@ -149,13 +149,13 @@ export default {
                   const value = (sharedData && sharedData.value) || undefined
                   this.$set(this.$data.$sharedData, key, value)
                 }
-              }
+              },
             })
             smartQueries.push(smartQuery)
           }
           return smartQueries
-        }
-      }
+        },
+      },
     })
 
     window.mapSharedData = (namespace, options) => {
@@ -165,5 +165,5 @@ export default {
       }
       return result
     }
-  }
+  },
 }

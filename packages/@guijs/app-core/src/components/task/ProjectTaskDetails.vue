@@ -154,36 +154,36 @@ export default {
 
   provide () {
     return {
-      TaskDetails: this
+      TaskDetails: this,
     }
   },
 
   mixins: [
     Prompts({
       field: 'task',
-      query: TASK
+      query: TASK,
     }),
-    Defer()
+    Defer(),
   ],
 
   metaInfo () {
     return {
-      title: this.task && `${this.task.name} - ${this.$t('org.vue.views.project-tasks.title')}`
+      title: this.task && `${this.task.name} - ${this.$t('org.vue.views.project-tasks.title')}`,
     }
   },
 
   props: {
     id: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
       task: null,
       showParameters: false,
-      currentView: '_output'
+      currentView: '_output',
     }
   },
 
@@ -192,7 +192,7 @@ export default {
       query: TASK,
       variables () {
         return {
-          id: this.id
+          id: this.id,
         }
       },
       async result ({ data, loading }) {
@@ -204,14 +204,14 @@ export default {
       },
       skip () {
         return !this.defer(2)
-      }
+      },
     },
 
     taskLogs: {
       query: TASK_LOGS,
       variables () {
         return {
-          id: this.id
+          id: this.id,
         }
       },
       fetchPolicy: 'network-only',
@@ -227,7 +227,7 @@ export default {
       },
       skip () {
         return !this.defer(3)
-      }
+      },
     },
 
     $subscribe: {
@@ -235,7 +235,7 @@ export default {
         query: TASK_LOG_ADDED,
         variables () {
           return {
-            id: this.id
+            id: this.id,
           }
         },
         async result ({ data }) {
@@ -247,9 +247,9 @@ export default {
         },
         skip () {
           return !this.defer(3)
-        }
-      }
-    }
+        },
+      },
+    },
   },
 
   computed: {
@@ -264,7 +264,7 @@ export default {
         }
       }
       return null
-    }
+    },
   },
 
   watch: {
@@ -274,7 +274,7 @@ export default {
       this.$_init = false
       this.open()
       this.runDisplayPriority()
-    }
+    },
   },
 
   mounted () {
@@ -286,8 +286,8 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_OPEN,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
     },
 
@@ -295,8 +295,8 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_RUN,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
     },
 
@@ -304,8 +304,8 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_STOP,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
     },
 
@@ -313,8 +313,8 @@ export default {
       this.$apollo.mutate({
         mutation: TASK_LOGS_CLEAR,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
     },
 
@@ -322,8 +322,8 @@ export default {
       await this.$apollo.mutate({
         mutation: TASK_SAVE_PARAMETERS,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
       this.showParameters = false
     },
@@ -332,12 +332,12 @@ export default {
       await this.$apollo.mutate({
         mutation: TASK_RESTORE_PARAMETERS,
         variables: {
-          id: this.id
-        }
+          id: this.id,
+        },
       })
       this.showParameters = false
-    }
-  }
+    },
+  },
 }
 </script>
 

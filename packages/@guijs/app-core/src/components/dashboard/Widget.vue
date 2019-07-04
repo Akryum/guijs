@@ -192,19 +192,19 @@ const ZOOM = 0.7
 
 const state = new Vue({
   data: {
-    selectedWidgetId: null
-  }
+    selectedWidgetId: null,
+  },
 })
 
 export default {
   provide () {
     return {
-      widget: this.injected
+      widget: this.injected,
     }
   },
 
   inject: [
-    'dashboard'
+    'dashboard',
   ],
 
   mixins: [
@@ -216,50 +216,50 @@ export default {
           fragmentName: 'widget',
           id: this.widget.id,
           data: {
-            prompts
-          }
+            prompts,
+          },
         })
-      }
+      },
     }),
 
     OnGrid({
       field: 'widget',
-      gridSize: GRID_SIZE
+      gridSize: GRID_SIZE,
     }),
 
     Movable({
       field: 'widget',
       gridSize: GRID_SIZE,
-      zoom: ZOOM
+      zoom: ZOOM,
     }),
 
     Resizable({
       field: 'widget',
       gridSize: GRID_SIZE,
-      zoom: ZOOM
-    })
+      zoom: ZOOM,
+    }),
   ],
 
   props: {
     widget: {
       type: Object,
-      required: true
+      required: true,
     },
 
     customizeMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     details: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     shellStyle: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
 
   data () {
@@ -279,10 +279,10 @@ export default {
         removeHeaderAction: this.removeHeaderAction,
         remove: this.remove,
         // Custom
-        customTitle: null
+        customTitle: null,
       },
       shellOrigin: null,
-      headerActions: []
+      headerActions: [],
     }
   },
 
@@ -296,14 +296,14 @@ export default {
         return this.widget.definition.detailsComponent
       }
       return this.widget.definition.component
-    }
+    },
   },
 
   watch: {
     widget: {
       handler (value) {
         this.injected.data = value
-      }
+      },
     },
 
     customizeMode (value) {
@@ -319,7 +319,7 @@ export default {
     'widget.x': 'updateShellOrigin',
     'widget.y': 'updateShellOrigin',
     'widget.width': 'updateShellOrigin',
-    'widget.height': 'updateShellOrigin'
+    'widget.height': 'updateShellOrigin',
   },
 
   mounted () {
@@ -336,8 +336,8 @@ export default {
       await this.$apollo.mutate({
         mutation: WIDGET_CONFIG_OPEN,
         variables: {
-          id: this.widget.id
-        }
+          id: this.widget.id,
+        },
       })
       this.loadingConfig = false
     },
@@ -348,8 +348,8 @@ export default {
       await this.$apollo.mutate({
         mutation: WIDGET_CONFIG_SAVE,
         variables: {
-          id: this.widget.id
-        }
+          id: this.widget.id,
+        },
       })
     },
 
@@ -369,22 +369,22 @@ export default {
       this.$apollo.mutate({
         mutation: WIDGET_REMOVE,
         variables: {
-          id: this.widget.id
+          id: this.widget.id,
         },
         update: (store, { data: { widgetRemove } }) => {
           let data = store.readQuery({ query: WIDGETS })
           // TODO this is a workaround
           // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
           data = {
-            widgets: data.widgets.filter(w => w.id !== this.widget.id)
+            widgets: data.widgets.filter(w => w.id !== this.widget.id),
           }
           store.writeQuery({ query: WIDGETS, data })
           store.writeFragment({
             fragment: WIDGET_DEFINITION_FRAGMENT,
             id: widgetRemove.definition.id,
-            data: widgetRemove.definition
+            data: widgetRemove.definition,
           })
-        }
+        },
       })
     },
 
@@ -401,9 +401,9 @@ export default {
             x: this.moveState.x,
             y: this.moveState.y,
             width: this.widget.width,
-            height: this.widget.height
-          }
-        }
+            height: this.widget.height,
+          },
+        },
       })
     },
 
@@ -416,9 +416,9 @@ export default {
             x: this.resizeState.x,
             y: this.resizeState.y,
             width: this.resizeState.width,
-            height: this.resizeState.height
-          }
-        }
+            height: this.resizeState.height,
+          },
+        },
       })
     },
 
@@ -428,7 +428,7 @@ export default {
       const bounds = el.getBoundingClientRect()
       this.shellOrigin = {
         x: bounds.left + bounds.width / 2 - this.dashboard.left,
-        y: bounds.top + bounds.height / 2 - this.dashboard.top
+        y: bounds.top + bounds.height / 2 - this.dashboard.top,
       }
     },
 
@@ -448,8 +448,8 @@ export default {
     removeHeaderAction (id) {
       const index = this.headerActions.findIndex(a => a.id === id)
       if (index !== -1) this.headerActions.splice(index, 1)
-    }
-  }
+    },
+  },
 }
 
 function transformToGetter (obj, field) {
@@ -459,7 +459,7 @@ function transformToGetter (obj, field) {
     Object.defineProperty(obj, field, {
       get: value,
       enumerable: true,
-      configurable: true
+      configurable: true,
     })
   }
 }

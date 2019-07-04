@@ -31,8 +31,8 @@ Vue.use(Responsive, {
     },
     wide () {
       return this.width >= 1300
-    }
-  }
+    },
+  },
 })
 Vue.use(VueUi)
 Vue.use(PortalVue)

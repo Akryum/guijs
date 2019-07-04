@@ -34,13 +34,13 @@
 export default {
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.about.title')
+      title: this.$t('org.vue.views.about.title'),
     }
   },
 
   data () {
     return {
-      previousRoute: { name: 'home' }
+      previousRoute: { name: 'home' },
     }
   },
 
@@ -48,7 +48,7 @@ export default {
     next(vm => {
       if (from) vm.previousRoute = from.fullPath
     })
-  }
+  },
 }
 </script>
 

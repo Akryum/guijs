@@ -5,5 +5,5 @@ export default {
       if (input) el = input
       el.focus()
     })
-  }
+  },
 }

@@ -19,7 +19,7 @@ export default {
       query: CONFIGURATION,
       variables () {
         return {
-          id: this.configuration.id
+          id: this.configuration.id,
         }
       },
       updateQuery (data, prompts) {
@@ -31,20 +31,20 @@ export default {
         for (const tabId in result) {
           data.configuration.tabs.find(t => t.id === tabId).prompts = result[tabId]
         }
-      }
-    })
+      },
+    }),
   ],
 
   props: {
     configuration: {
       type: Object,
-      required: true
+      required: true,
     },
 
     tab: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>

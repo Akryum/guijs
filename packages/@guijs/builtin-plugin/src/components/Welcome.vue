@@ -39,16 +39,16 @@
 <script>
 export default {
   inject: [
-    'widget'
+    'widget',
   ],
 
   created () {
     this.tipIcons = [
       'dashboard',
       'arrow_back',
-      'home'
+      'home',
     ]
-  }
+  },
 }
 </script>
 

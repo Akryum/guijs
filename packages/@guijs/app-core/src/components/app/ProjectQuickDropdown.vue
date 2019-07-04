@@ -108,17 +108,17 @@ import ProjectRename from '../project-manager/ProjectRename.vue'
 
 export default {
   components: {
-    ProjectRename
+    ProjectRename,
   },
 
   apollo: {
     projectCurrent: PROJECT_CURRENT,
-    projects: PROJECTS
+    projects: PROJECTS,
   },
 
   data () {
     return {
-      showRename: false
+      showRename: false,
     }
   },
 
@@ -135,7 +135,7 @@ export default {
       return this.projects.filter(
         p => !p.favorite && (!this.projectCurrent || this.projectCurrent.id !== p.id)
       ).sort((a, b) => b.openDate - a.openDate).slice(0, 3)
-    }
+    },
   },
 
   methods: {
@@ -145,8 +145,8 @@ export default {
       await this.$apollo.mutate({
         mutation: PROJECT_OPEN,
         variables: {
-          id: project.id
-        }
+          id: project.id,
+        },
       })
 
       await resetApollo()
@@ -158,8 +158,8 @@ export default {
           mutation: PROJECT_SET_FAVORITE,
           variables: {
             id: this.projectCurrent.id,
-            favorite: this.projectCurrent.favorite ? 0 : 1
-          }
+            favorite: this.projectCurrent.favorite ? 0 : 1,
+          },
         })
       }
     },
@@ -169,12 +169,12 @@ export default {
         mutation: OPEN_IN_EDITOR,
         variables: {
           input: {
-            file: project.path
-          }
-        }
+            file: project.path,
+          },
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

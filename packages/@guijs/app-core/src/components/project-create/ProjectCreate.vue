@@ -484,9 +484,9 @@ function formDataFactory () {
     selectedPreset: null,
     remotePreset: {
       url: '',
-      clone: false
+      clone: false,
     },
-    save: ''
+    save: '',
   }
 }
 
@@ -498,13 +498,13 @@ export default {
   mixins: [
     Prompts({
       field: 'projectCreation',
-      query: PROJECT_CREATION
-    })
+      query: PROJECT_CREATION,
+    }),
   ],
 
   metaInfo () {
     return {
-      title: this.$t('org.vue.views.project-create.title')
+      title: this.$t('org.vue.views.project-create.title'),
     }
   },
 
@@ -517,20 +517,20 @@ export default {
       showRemotePreset: false,
       showSavePreset: false,
       remotePresetValid: false,
-      debug: ''
+      debug: '',
     }
   },
 
   apollo: {
     cwd: {
       query: CWD,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
     },
 
     projectCreation: {
       query: PROJECT_CREATION,
-      fetchPolicy: 'network-only'
-    }
+      fetchPolicy: 'network-only',
+    },
   },
 
   computed: {
@@ -553,14 +553,14 @@ export default {
     remotePresetInfo () {
       return {
         name: 'org.vue.views.project-create.tabs.presets.remote.name',
-        description: 'org.vue.views.project-create.tabs.presets.remote.description'
+        description: 'org.vue.views.project-create.tabs.presets.remote.description',
       }
     },
 
     remoteNotGithub () {
       const { url } = this.formData.remotePreset
       return url && /^(gitlab|bitbucket):/.test(url)
-    }
+    },
   },
 
   watch: {
@@ -583,7 +583,7 @@ export default {
       if (!value) {
         this.checkRemotePreset()
       }
-    }
+    },
   },
 
   created () {
@@ -606,11 +606,11 @@ export default {
       await this.$apollo.mutate({
         mutation: PRESET_APPLY,
         variables: {
-          id
+          id,
         },
         update: (store, { data: { presetApply } }) => {
           store.writeQuery({ query: PROJECT_CREATION, data: { projectCreation: presetApply } })
-        }
+        },
       })
     },
 
@@ -619,8 +619,8 @@ export default {
         mutation: FEATURE_SET_ENABLED,
         variables: {
           id: feature.id,
-          enabled: !feature.enabled
-        }
+          enabled: !feature.enabled,
+        },
       })
 
       this.$apollo.queries.projectCreation.refetch()
@@ -648,9 +648,9 @@ export default {
               preset: this.formData.selectedPreset,
               remote: this.formData.remotePreset.url,
               clone: this.formData.remotePreset.clone,
-              save: this.formData.save
-            }
-          }
+              save: this.formData.save,
+            },
+          },
         })
         this.$router.push({ name: 'project-home' })
         await this.$nextTick()
@@ -664,7 +664,7 @@ export default {
     async cancel () {
       formData = formDataFactory()
       await this.$apollo.mutate({
-        mutation: PROJECT_CANCEL_CREATION
+        mutation: PROJECT_CANCEL_CREATION,
       })
     },
 
@@ -695,8 +695,8 @@ export default {
         const response = await fetch(url)
         this.remotePresetValid = response.ok
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

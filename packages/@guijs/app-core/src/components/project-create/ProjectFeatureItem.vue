@@ -25,9 +25,9 @@ export default {
   props: {
     feature: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>
 

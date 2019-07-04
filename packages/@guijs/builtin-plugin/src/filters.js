@@ -1,11 +1,11 @@
 export function size (size, unit = '', precision = 1) {
   const kb = {
     label: 'k',
-    value: 1024
+    value: 1024,
   }
   const mb = {
     label: 'M',
-    value: 1024 * 1024
+    value: 1024 * 1024,
   }
   let denominator
 

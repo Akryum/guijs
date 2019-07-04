@@ -8,6 +8,6 @@ export default function () {
 
     beforeDestroy () {
       window.removeEventListener('resize', this.onWindowResize)
-    }
+    },
   }
 }

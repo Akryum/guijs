@@ -35,13 +35,13 @@ export default {
   props: {
     hideTabs: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     title: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
 
   methods: {
@@ -52,8 +52,8 @@ export default {
     previous () {
       const tabs = this.$refs.tabs
       tabs.activateChild(tabs.activeChildIndex - 1)
-    }
-  }
+    },
+  },
 }
 </script>
 

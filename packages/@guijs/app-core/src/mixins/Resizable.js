@@ -1,13 +1,13 @@
 export default function ({
   gridSize,
   field,
-  zoom
+  zoom,
 }) {
   // @vue/component
   return {
     data () {
       return {
-        resizeState: null
+        resizeState: null,
       }
     },
 
@@ -21,7 +21,7 @@ export default function ({
         const { definition } = this[field]
         return definition.minWidth !== definition.maxWidth ||
           definition.minHeight !== definition.maxHeight
-      }
+      },
     },
 
     created () {
@@ -33,7 +33,7 @@ export default function ({
         'bottom-right',
         'bottom',
         'bottom-left',
-        'left'
+        'left',
       ]
     },
 
@@ -100,14 +100,14 @@ export default function ({
           pxX: target.x * gridSize + dX,
           pxY: target.y * gridSize + dY,
           pxWidth: target.width * gridSize + dWidth,
-          pxHeight: target.height * gridSize + dHeight
+          pxHeight: target.height * gridSize + dHeight,
         }
       },
 
       onResizeStart (e, handle) {
         this.$_initalMousePosition = {
           x: e.clientX,
-          y: e.clientY
+          y: e.clientY,
         }
         this.$_resizeHandle = handle
         this.updateResizeState(e)
@@ -124,7 +124,7 @@ export default function ({
         this.removeResizeListeners()
         if (this.onResized) await this.onResized()
         this.resizeState = null
-      }
-    }
+      },
+    },
   }
 }

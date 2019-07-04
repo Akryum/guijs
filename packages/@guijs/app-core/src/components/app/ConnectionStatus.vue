@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  clientState: true
+  clientState: true,
 }
 </script>
 

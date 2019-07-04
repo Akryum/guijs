@@ -9,5 +9,8 @@ module.exports = {
     mapSharedData: false,
     Vue: false,
     name: 'off'
+  },
+  rules: {
+    'comma-dangle': ['error', 'always-multiline'],
   }
 }

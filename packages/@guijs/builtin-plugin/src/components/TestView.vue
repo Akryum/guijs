@@ -17,7 +17,7 @@
 <script>
 export default {
   sharedData: {
-    testData: 'test-data'
+    testData: 'test-data',
   },
 
   created () {
@@ -34,10 +34,10 @@ export default {
   methods: {
     testPluginAction () {
       this.$callPluginAction('test-action', {
-        meow: 'meow'
+        meow: 'meow',
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

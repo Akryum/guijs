@@ -78,39 +78,39 @@ export default {
   props: {
     pkg: {
       type: Object,
-      required: true
+      required: true,
     },
 
     selected: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     loadMetadata: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data () {
     return {
       logoUrl: null,
       hasGenerator: false,
-      hasUiIntegration: false
+      hasUiIntegration: false,
     }
   },
 
   computed: {
     official () {
       return this.pkg.owner.name === 'vuejs'
-    }
+    },
   },
 
   watch: {
     'pkg.name': {
       handler: 'updateMetadata',
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -141,8 +141,8 @@ export default {
           this.hasGenerator = response.ok
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -36,7 +36,7 @@ export default {
             bus.$off(listener.event, listener.handler)
           }
         }
-      }
+      },
     })
 
     Vue.config.optionMergeStrategies.bus = (parent, child, vm) => {
@@ -57,5 +57,5 @@ export default {
       }
       return child
     }
-  }
+  },
 }

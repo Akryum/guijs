@@ -25,14 +25,14 @@ export default {
 
   data () {
     return {
-      addonRouteTimout: false
+      addonRouteTimout: false,
     }
   },
 
   computed: {
     isAddonRoute () {
       return this.$route.path.includes('/addon/')
-    }
+    },
   },
 
   mounted () {
@@ -41,7 +41,7 @@ export default {
         this.addonRouteTimout = true
       }, 5000)
     }
-  }
+  },
 }
 </script>
 

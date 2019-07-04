@@ -58,21 +58,21 @@ export default {
     const vm = this
     return {
       FileDiffInjection: {
-        get data () { return vm.fileDiff }
-      }
+        get data () { return vm.fileDiff },
+      },
     }
   },
 
   props: {
     fileDiff: {
       type: Object,
-      required: true
+      required: true,
     },
 
     collapsed: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
@@ -83,7 +83,7 @@ export default {
         return 'delete'
       }
       return 'insert_drive_file'
-    }
+    },
   },
 
   methods: {
@@ -93,12 +93,12 @@ export default {
         variables: {
           input: {
             file: this.fileDiff.to,
-            gitPath: true
-          }
-        }
+            gitPath: true,
+          },
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -122,20 +122,20 @@ export default {
   clientState: true,
 
   mixins: [
-    Dashboard
+    Dashboard,
   ],
 
   filters: {
-    size
+    size,
   },
 
   components: {
-    DonutModule
+    DonutModule,
   },
 
   provide () {
     return {
-      WebpackAnalyzer: this.injection
+      WebpackAnalyzer: this.injection,
     }
   },
 
@@ -143,22 +143,22 @@ export default {
     return {
       selectedChunk: null,
       injection: {
-        hoverModule: null
+        hoverModule: null,
       },
       currentTree: null,
-      currentParent: null
+      currentParent: null,
     }
   },
 
   computed: {
     ...mapGetters([
       'modulesTrees',
-      'chunks'
+      'chunks',
     ]),
 
     hoverModule: {
       get () { return this.injection.hoverModule },
-      set (value) { this.injection.hoverModule = value }
+      set (value) { this.injection.hoverModule = value },
     },
 
     describedModule () {
@@ -178,7 +178,7 @@ export default {
 
     rootTree () {
       return this.modulesTrees && this.modulesTrees[this.selectedChunk]
-    }
+    },
   },
 
   watch: {
@@ -201,13 +201,13 @@ export default {
         this.currentTree = null
         this.selectedChunk = null
       },
-      immediate: true
+      immediate: true,
     },
 
     selectedChunk: {
       handler: 'goToHome',
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -216,7 +216,7 @@ export default {
       this.$watchSharedData(`org.vue.webpack.${mode}-stats-analyzer`, value => {
         this.$store.commit('analyzer', {
           mode,
-          value
+          value,
         })
       })
     },
@@ -326,8 +326,8 @@ export default {
     goToHome () {
       this.currentTree = this.rootTree
       this.currentParent = null
-    }
-  }
+    },
+  },
 }
 </script>
 

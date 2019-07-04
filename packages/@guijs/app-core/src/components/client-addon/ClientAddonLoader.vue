@@ -13,7 +13,7 @@ export default {
           clientAddons.forEach(this.loadAddon)
           this.$_lastRead = Date.now()
         }
-      }
+      },
     },
 
     $subscribe: {
@@ -23,9 +23,9 @@ export default {
           if (this.$_lastRead && Date.now() - this.$_lastRead > 1000) {
             this.loadAddon(data.clientAddonAdded)
           }
-        }
-      }
-    }
+        },
+      },
+    },
   },
 
   created () {
@@ -39,11 +39,11 @@ export default {
       const script = document.createElement('script')
       script.setAttribute('src', addon.url)
       document.body.appendChild(script)
-    }
+    },
   },
 
   render () {
     return null
-  }
+  },
 }
 </script>

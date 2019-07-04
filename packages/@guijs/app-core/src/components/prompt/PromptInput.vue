@@ -29,6 +29,6 @@ import Prompt from './Prompt'
 export default {
   extends: Prompt,
 
-  buffer: true
+  buffer: true,
 }
 </script>

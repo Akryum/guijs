@@ -3,19 +3,19 @@ import ListItemInfo from '@/components/content/ListItemInfo.vue'
 
 export default {
   components: {
-    ListItemInfo
+    ListItemInfo,
   },
 
   props: {
     prompt: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
-      modifiedValue: undefined
+      modifiedValue: undefined,
     }
   },
 
@@ -28,8 +28,8 @@ export default {
     answer (value) {
       this.modifiedValue = value
       this.$emit('answer', value)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -26,12 +26,12 @@ import StatusWidget from './StatusWidget.vue'
 
 export default {
   components: {
-    StatusWidget
+    StatusWidget,
   },
 
   sharedData () {
     return mapSharedData('org.vue.widgets.dependency-updates.', {
-      status: 'status'
+      status: 'status',
     })
   },
 
@@ -43,7 +43,7 @@ export default {
   methods: {
     checkForUpdates () {
       // TODO
-    }
-  }
+    },
+  },
 }
 </script>

@@ -48,45 +48,45 @@ export default {
   name: 'DonutModule',
 
   inject: [
-    'WebpackAnalyzer'
+    'WebpackAnalyzer',
   ],
 
   props: {
     module: {
       type: Object,
-      required: true
+      required: true,
     },
 
     parentModule: {
       type: Object,
-      default: undefined
+      default: undefined,
     },
 
     depth: {
       type: Number,
-      required: true
+      required: true,
     },
 
     parentRatio: {
       type: Number,
-      required: true
+      required: true,
     },
 
     colors: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
-      dasharray: 0
+      dasharray: 0,
     }
   },
 
   computed: {
     ...mapGetters([
-      'sizeField'
+      'sizeField',
     ]),
 
     finalDasharray () {
@@ -125,7 +125,7 @@ export default {
 
     hover () {
       return this.WebpackAnalyzer.hoverModule === this.module
-    }
+    },
   },
 
   mounted () {
@@ -141,8 +141,8 @@ export default {
 
     isVisible (ratio) {
       return ratio > 0.0025
-    }
-  }
+    },
+  },
 }
 </script>
 

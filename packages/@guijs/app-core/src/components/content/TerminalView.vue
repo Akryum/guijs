@@ -65,7 +65,7 @@ const defaultTheme = {
   blue: '#03c2e6',
   white: '#d0d0d0',
   brightBlack: '#808080',
-  brightWhite: '#ffffff'
+  brightWhite: '#ffffff',
 }
 
 const darkTheme = {
@@ -75,7 +75,7 @@ const darkTheme = {
   cursor: 'rgba(255, 255, 255, .4)',
   selection: 'rgba(255, 255, 255, 0.3)',
   magenta: '#e83030',
-  brightMagenta: '#e83030'
+  brightMagenta: '#e83030',
 }
 
 export default {
@@ -84,43 +84,43 @@ export default {
   props: {
     cols: {
       type: Number,
-      required: true
+      required: true,
     },
 
     rows: {
       type: Number,
-      required: true
+      required: true,
     },
 
     content: {
       type: String,
-      default: undefined
+      default: undefined,
     },
 
     autoSize: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     options: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
 
     toolbar: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     title: {
       type: String,
-      default: null
+      default: null,
     },
 
     openLinks: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
@@ -130,7 +130,7 @@ export default {
       } else {
         return defaultTheme
       }
-    }
+    },
   },
 
   watch: {
@@ -150,7 +150,7 @@ export default {
       } else if (this.$_terminal) {
         this.$_terminal.setOption('theme', this.theme)
       }
-    }
+    },
   },
 
   beforeDestroy () {
@@ -163,7 +163,7 @@ export default {
         cols: this.cols,
         rows: this.rows,
         theme: this.theme,
-        ...this.options
+        ...this.options,
       })
       webLinks.webLinksInit(term, this.handleLink)
       term.open(this.$refs.render)
@@ -249,8 +249,8 @@ export default {
 
     blur () {
       this.$_terminal.blur()
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -134,12 +134,12 @@ import GIT_COMMIT from '@/graphql/git/gitCommit.gql'
 const defaultCollapsed = [
   'yarn.lock',
   'pnpm-lock.yaml',
-  'package-lock.json'
+  'package-lock.json',
 ]
 
 export default {
   mixins: [
-    PageVisibility
+    PageVisibility,
   ],
 
   data () {
@@ -150,7 +150,7 @@ export default {
       loading: 0,
       commitMessage: '',
       showCommitModal: false,
-      error: null
+      error: null,
     }
   },
 
@@ -178,8 +178,8 @@ export default {
             this.$set(this.collapsed, fileDiff.id, true)
           }
         })
-      }
-    }
+      },
+    },
   },
 
   computed: {
@@ -201,7 +201,7 @@ export default {
       } else {
         return this.fileDiffs
       }
-    }
+    },
   },
 
   watch: {
@@ -209,7 +209,7 @@ export default {
       if (value) {
         this.refresh()
       }
-    }
+    },
   },
 
   methods: {
@@ -234,8 +234,8 @@ export default {
         await this.$apollo.mutate({
           mutation: GIT_COMMIT,
           variables: {
-            message: this.commitMessage
-          }
+            message: this.commitMessage,
+          },
         })
         this.refresh()
         this.$emit('continue')
@@ -248,8 +248,8 @@ export default {
 
     skip () {
       this.$emit('continue')
-    }
-  }
+    },
+  },
 }
 </script>
 

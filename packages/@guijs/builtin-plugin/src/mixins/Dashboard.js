@@ -5,32 +5,32 @@ export default {
   store,
 
   inject: [
-    'TaskDetails'
+    'TaskDetails',
   ],
 
   data () {
     return {
-      mode: null
+      mode: null,
     }
   },
 
   sharedData () {
     return {
       serveUrl: `org.vue.webpack.serve-url`,
-      modernMode: `org.vue.webpack.modern-mode`
+      modernMode: `org.vue.webpack.modern-mode`,
     }
   },
 
   computed: {
     sizeField: {
       get () { return this.$store.getters.sizeField },
-      set (value) { this.$store.commit('sizeField', value) }
+      set (value) { this.$store.commit('sizeField', value) },
     },
 
     showModernBuild: {
       get () { return this.$store.state.showModernBuild },
-      set (value) { this.$store.commit('showModernBuild', value) }
-    }
+      set (value) { this.$store.commit('showModernBuild', value) },
+    },
   },
 
   watch: {
@@ -38,8 +38,8 @@ export default {
       handler (value) {
         this.showModernBuild = value
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   created () {
@@ -56,9 +56,9 @@ export default {
       this.$watchSharedData(`org.vue.webpack.${mode}-stats`, value => {
         this.$store.commit('stats', {
           mode,
-          value
+          value,
         })
       })
-    }
-  }
+    },
+  },
 }

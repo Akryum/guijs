@@ -45,10 +45,10 @@ export default {
   extends: Prompt,
 
   components: {
-    ColorPicker: Sketch
+    ColorPicker: Sketch,
   },
 
-  buffer: true
+  buffer: true,
 }
 </script>
 

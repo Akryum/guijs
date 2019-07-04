@@ -113,7 +113,7 @@ export default {
     return {
       showLogs: false,
       consoleLogLast: null,
-      enableDarkModeButton: getForcedTheme() == null
+      enableDarkModeButton: getForcedTheme() == null,
     }
   },
 
@@ -126,9 +126,9 @@ export default {
         query: CONSOLE_LOG_ADDED,
         result ({ data }) {
           this.consoleLogLast = data.consoleLogAdded
-        }
-      }
-    }
+        },
+      },
+    },
   },
 
   methods: {
@@ -177,8 +177,8 @@ export default {
       await this.$apollo.mutate({
         mutation: DARK_MODE_SET,
         variables: {
-          enabled
-        }
+          enabled,
+        },
       })
     },
 
@@ -188,12 +188,12 @@ export default {
 
     async resetPluginApi () {
       await this.$apollo.mutate({
-        mutation: PLUGIN_RESET_API
+        mutation: PLUGIN_RESET_API,
       })
 
       await resetApollo()
-    }
-  }
+    },
+  },
 }
 </script>
 

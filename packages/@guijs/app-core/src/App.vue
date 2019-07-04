@@ -19,13 +19,13 @@ import ROUTE_REQUESTED from '@/graphql/app/routeRequested.gql'
 
 export default {
   metaInfo: {
-    titleTemplate: chunk => chunk ? `[Beta] ${chunk} - Vue CLI` : '[Beta] Vue CLI'
+    titleTemplate: chunk => chunk ? `[Beta] ${chunk} - Vue CLI` : '[Beta] Vue CLI',
   },
 
   computed: {
     ready () {
       return Object.keys(i18n.getLocaleMessage('en')).length
-    }
+    },
   },
 
   apollo: {
@@ -34,10 +34,10 @@ export default {
         query: ROUTE_REQUESTED,
         result ({ data }) {
           this.$router.push(data.routeRequested)
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 }
 </script>
 

@@ -20,12 +20,12 @@ module.exports = api => {
     operations: null,
     sizes: null,
     problems: null,
-    url: null
+    url: null,
   }
 
   // Common fields for all mode
   const commonFields = {
-    'modern-mode': false
+    'modern-mode': false,
   }
 
   // Init data
@@ -85,7 +85,7 @@ module.exports = api => {
         } else if (data.type === 'progress') {
           if (type === 'serve' || !modernMode) {
             setSharedData(id, {
-              [type]: data.value
+              [type]: data.value,
             })
           } else {
             // Display two progress bars
@@ -94,7 +94,7 @@ module.exports = api => {
             for (const t of ['build', 'build-modern']) {
               setSharedData(`${t}-${data.type}`, {
                 build: progress.build || 0,
-                'build-modern': progress['build-modern'] || 0
+                'build-modern': progress['build-modern'] || 0,
               })
             }
           }
@@ -116,7 +116,7 @@ module.exports = api => {
               api.notify({
                 title: 'Build failed',
                 message: 'The build has errors.',
-                icon: 'error'
+                icon: 'error',
               })
               hadFailed = true
             } else if (data.value === 'Success') {
@@ -124,14 +124,14 @@ module.exports = api => {
                 api.notify({
                   title: 'Build fixed',
                   message: 'The build succeeded.',
-                  icon: 'done'
+                  icon: 'done',
                 })
                 hadFailed = false
               } else if (firstRun) {
                 api.notify({
                   title: 'App ready',
                   message: 'The build succeeded.',
-                  icon: 'done'
+                  icon: 'done',
                 })
                 firstRun = false
               }
@@ -149,16 +149,16 @@ module.exports = api => {
         id: 'org.vue.webpack.views.dashboard',
         label: 'org.vue.vue-webpack.dashboard.title',
         icon: 'dashboard',
-        component: 'org.vue.webpack.components.dashboard'
+        component: 'org.vue.webpack.components.dashboard',
       },
       {
         id: 'org.vue.webpack.views.analyzer',
         label: 'org.vue.vue-webpack.analyzer.title',
         icon: 'donut_large',
-        component: 'org.vue.webpack.components.analyzer'
-      }
+        component: 'org.vue.webpack.components.analyzer',
+      },
     ],
-    defaultView: 'org.vue.webpack.views.dashboard'
+    defaultView: 'org.vue.webpack.views.dashboard',
   }
   api.describeTask({
     match: /vue-cli-service serve(\s+--\S+(\s+\S+)?)*$/,
@@ -170,7 +170,7 @@ module.exports = api => {
         name: 'open',
         type: 'confirm',
         default: false,
-        description: 'org.vue.vue-webpack.tasks.serve.open'
+        description: 'org.vue.vue-webpack.tasks.serve.open',
       },
       {
         name: 'mode',
@@ -179,41 +179,41 @@ module.exports = api => {
         choices: [
           {
             name: 'development',
-            value: 'development'
+            value: 'development',
           },
           {
             name: 'production',
-            value: 'production'
+            value: 'production',
           },
           {
             name: 'test',
-            value: 'test'
+            value: 'test',
           },
           {
             name: '(unset)',
-            value: ''
-          }
+            value: '',
+          },
         ],
-        description: 'org.vue.vue-webpack.tasks.serve.mode'
+        description: 'org.vue.vue-webpack.tasks.serve.mode',
       },
       {
         name: 'host',
         type: 'input',
         default: '',
-        description: 'org.vue.vue-webpack.tasks.serve.host'
+        description: 'org.vue.vue-webpack.tasks.serve.host',
       },
       {
         name: 'port',
         type: 'input',
         default: undefined,
-        description: 'org.vue.vue-webpack.tasks.serve.port'
+        description: 'org.vue.vue-webpack.tasks.serve.port',
       },
       {
         name: 'https',
         type: 'confirm',
         default: false,
-        description: 'org.vue.vue-webpack.tasks.serve.https'
-      }
+        description: 'org.vue.vue-webpack.tasks.serve.https',
+      },
     ],
     onBeforeRun: ({ answers, args }) => {
       // Args
@@ -236,7 +236,7 @@ module.exports = api => {
       api.ipcOff(onWebpackMessage)
       removeSharedData('serve-url')
     },
-    ...views
+    ...views,
   })
   api.describeTask({
     match: /vue-cli-service build(\s+--\S+(\s+\S+)?)*$/,
@@ -250,7 +250,7 @@ module.exports = api => {
         default: false,
         message: 'org.vue.vue-webpack.tasks.build.modern.label',
         description: 'org.vue.vue-webpack.tasks.build.modern.description',
-        link: 'https://cli.vuejs.org/guide/browser-compatibility.html#modern-mode'
+        link: 'https://cli.vuejs.org/guide/browser-compatibility.html#modern-mode',
       },
       {
         name: 'mode',
@@ -259,28 +259,28 @@ module.exports = api => {
         choices: [
           {
             name: 'development',
-            value: 'development'
+            value: 'development',
           },
           {
             name: 'production',
-            value: 'production'
+            value: 'production',
           },
           {
             name: 'test',
-            value: 'test'
+            value: 'test',
           },
           {
             name: '(unset)',
-            value: ''
-          }
+            value: '',
+          },
         ],
-        description: 'org.vue.vue-webpack.tasks.build.mode'
+        description: 'org.vue.vue-webpack.tasks.build.mode',
       },
       {
         name: 'dest',
         type: 'input',
         default: 'dist',
-        description: 'org.vue.vue-webpack.tasks.build.dest'
+        description: 'org.vue.vue-webpack.tasks.build.dest',
       },
       {
         name: 'target',
@@ -289,35 +289,35 @@ module.exports = api => {
         choices: [
           {
             name: 'org.vue.vue-webpack.tasks.build.target.app',
-            value: 'app'
+            value: 'app',
           },
           {
             name: 'org.vue.vue-webpack.tasks.build.target.lib',
-            value: 'lib'
+            value: 'lib',
           },
           {
             name: 'org.vue.vue-webpack.tasks.build.target.wc',
-            value: 'wc'
+            value: 'wc',
           },
           {
             name: 'org.vue.vue-webpack.tasks.build.target.wc-async',
-            value: 'wc-async'
-          }
+            value: 'wc-async',
+          },
         ],
-        description: 'org.vue.vue-webpack.tasks.build.target.description'
+        description: 'org.vue.vue-webpack.tasks.build.target.description',
       },
       {
         name: 'name',
         type: 'input',
         default: '',
-        description: 'org.vue.vue-webpack.tasks.build.name'
+        description: 'org.vue.vue-webpack.tasks.build.name',
       },
       {
         name: 'watch',
         type: 'confirm',
         default: false,
-        description: 'org.vue.vue-webpack.tasks.build.watch'
-      }
+        description: 'org.vue.vue-webpack.tasks.build.watch',
+      },
     ],
     onBeforeRun: ({ answers, args }) => {
       // Args
@@ -340,7 +340,7 @@ module.exports = api => {
     onExit: () => {
       api.ipcOff(onWebpackMessage)
     },
-    ...views
+    ...views,
   })
   // vue inspect
   api.addTask({
@@ -357,34 +357,34 @@ module.exports = api => {
         choices: [
           {
             name: 'development',
-            value: 'development'
+            value: 'development',
           },
           {
             name: 'production',
-            value: 'production'
+            value: 'production',
           },
           {
             name: 'test',
-            value: 'test'
+            value: 'test',
           },
           {
             name: '(unset)',
-            value: ''
-          }
+            value: '',
+          },
         ],
-        description: 'org.vue.vue-webpack.tasks.inspect.mode'
+        description: 'org.vue.vue-webpack.tasks.inspect.mode',
       },
       {
         name: 'verbose',
         type: 'confirm',
         default: false,
-        description: 'org.vue.vue-webpack.tasks.inspect.verbose'
-      }
+        description: 'org.vue.vue-webpack.tasks.inspect.verbose',
+      },
     ],
     onBeforeRun: ({ answers, args }) => {
       if (answers.mode) args.push('--mode', answers.mode)
       if (answers.verbose) args.push('--verbose')
-    }
+    },
   })
 
   // Open app button

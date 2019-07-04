@@ -219,7 +219,7 @@ export default {
       foldersFavorite: [],
       showHidden: localStorage.getItem(SHOW_HIDDEN) === 'true',
       showNewFolder: false,
-      newFolderName: ''
+      newFolderName: '',
     }
   },
 
@@ -231,16 +231,16 @@ export default {
       async result () {
         await this.$nextTick()
         this.$refs.folders.scrollTop = 0
-      }
+      },
     },
 
-    foldersFavorite: FOLDERS_FAVORITE
+    foldersFavorite: FOLDERS_FAVORITE,
   },
 
   computed: {
     newFolderValid () {
       return isValidMultiName(this.newFolderName)
-    }
+    },
   },
 
   watch: {
@@ -250,7 +250,7 @@ export default {
       } else {
         localStorage.removeItem(SHOW_HIDDEN)
       }
-    }
+    },
   },
 
   beforeRouteLeave (to, from, next) {
@@ -269,11 +269,11 @@ export default {
         await this.$apollo.mutate({
           mutation: FOLDER_OPEN,
           variables: {
-            path
+            path,
           },
           update: (store, { data: { folderOpen } }) => {
             store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderOpen } })
-          }
+          },
         })
       } catch (e) {
         this.error = e
@@ -290,7 +290,7 @@ export default {
           mutation: FOLDER_OPEN_PARENT,
           update: (store, { data: { folderOpenParent } }) => {
             store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderOpenParent } })
-          }
+          },
         })
       } catch (e) {
         this.error = e
@@ -303,7 +303,7 @@ export default {
         mutation: FOLDER_SET_FAVORITE,
         variables: {
           path: this.folderCurrent.path,
-          favorite: !this.folderCurrent.favorite
+          favorite: !this.folderCurrent.favorite,
         },
         update: (store, { data: { folderSetFavorite } }) => {
           store.writeQuery({ query: FOLDER_CURRENT, data: { folderCurrent: folderSetFavorite } })
@@ -312,7 +312,7 @@ export default {
           // TODO this is a workaround
           // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
           data = {
-            foldersFavorite: data.foldersFavorite.slice()
+            foldersFavorite: data.foldersFavorite.slice(),
           }
           if (folderSetFavorite.favorite) {
             data.foldersFavorite.push(folderSetFavorite)
@@ -323,13 +323,13 @@ export default {
             index !== -1 && data.foldersFavorite.splice(index, 1)
           }
           store.writeQuery({ query: FOLDERS_FAVORITE, data })
-        }
+        },
       })
     },
 
     cwdChangedUpdate (previousResult, { subscriptionData }) {
       return {
-        cwd: subscriptionData.data.cwd
+        cwd: subscriptionData.data.cwd,
       }
     },
 
@@ -350,7 +350,7 @@ export default {
 
     resetProjectCwd () {
       this.$apollo.mutate({
-        mutation: PROJECT_CWD_RESET
+        mutation: PROJECT_CWD_RESET,
       })
     },
 
@@ -370,7 +370,7 @@ export default {
         const slice = path.substring(0, index + 1)
         parts.push({
           name: folder,
-          path: slice
+          path: slice,
         })
       }
 
@@ -390,16 +390,16 @@ export default {
       const result = await this.$apollo.mutate({
         mutation: FOLDER_CREATE,
         variables: {
-          name: this.newFolderName
-        }
+          name: this.newFolderName,
+        },
       })
 
       this.openFolder(result.data.folderCreate.path)
 
       this.newFolderName = ''
       this.showNewFolder = false
-    }
-  }
+    },
+  },
 }
 </script>
 

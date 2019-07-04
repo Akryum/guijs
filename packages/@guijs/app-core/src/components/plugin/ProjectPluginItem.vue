@@ -95,8 +95,8 @@ export default {
   props: {
     plugin: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
@@ -104,7 +104,7 @@ export default {
       pluginDetails: null,
       pluginLogo: null,
       updating: false,
-      visible: false
+      visible: false,
     }
   },
 
@@ -113,28 +113,28 @@ export default {
       query: PLUGIN_DETAILS,
       variables () {
         return {
-          id: this.plugin.id
+          id: this.plugin.id,
         }
       },
       skip () {
         return !this.visible
-      }
+      },
     },
 
     pluginLogo: {
       query: PLUGIN_LOGO,
       variables () {
         return {
-          id: this.plugin.id
+          id: this.plugin.id,
         }
-      }
-    }
+      },
+    },
   },
 
   computed: {
     isLocal () {
       return this.pluginDetails && this.pluginDetails.version.localPath
-    }
+    },
   },
 
   methods: {
@@ -145,8 +145,8 @@ export default {
           mutation: PLUGIN_UPDATE,
           variables: {
             id: this.plugin.id,
-            full
-          }
+            full,
+          },
         })
       } catch (e) {
         // eslint-disable-next-line no-console
@@ -159,8 +159,8 @@ export default {
       if (!this.visible) {
         this.visible = isVisible
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

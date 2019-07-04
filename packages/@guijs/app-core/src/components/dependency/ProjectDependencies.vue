@@ -149,14 +149,14 @@ export default {
       installType: 'dependencies',
       selectedId: null,
       showUninstallModal: false,
-      search: ''
+      search: '',
     }
   },
 
   methods: {
     async updateAll () {
       await this.$apollo.mutate({
-        mutation: DEPENDENCIES_UPDATE
+        mutation: DEPENDENCIES_UPDATE,
       })
     },
 
@@ -166,18 +166,18 @@ export default {
         variables: {
           input: {
             id,
-            type: this.installType
-          }
+            type: this.installType,
+          },
         },
         update: (store, { data: { dependencyInstall } }) => {
           let data = store.readQuery({ query: DEPENDENCIES })
           // TODO this is a workaround
           // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
           data = {
-            dependencies: [...data.dependencies, dependencyInstall]
+            dependencies: [...data.dependencies, dependencyInstall],
           }
           store.writeQuery({ query: DEPENDENCIES, data })
-        }
+        },
       })
 
       this.showInstallModal = false
@@ -195,8 +195,8 @@ export default {
         mutation: DEPENDENCY_UNINSTALL,
         variables: {
           input: {
-            id
-          }
+            id,
+          },
         },
         update: (store, { data: { dependencyUninstall } }) => {
           let data = store.readQuery({ query: DEPENDENCIES })
@@ -205,15 +205,15 @@ export default {
             // TODO this is a workaround
             // See: https://github.com/apollographql/apollo-client/issues/4031#issuecomment-433668473
             data = {
-              dependencies: data.dependencies.slice()
+              dependencies: data.dependencies.slice(),
             }
             data.dependencies.splice(index, 1)
             store.writeQuery({ query: DEPENDENCIES, data })
           }
-        }
+        },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

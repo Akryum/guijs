@@ -23,14 +23,14 @@ import { Component } from 'vue-instantsearch'
 
 export default {
   mixins: [
-    Component
+    Component,
   ],
 
   props: {
     placeholder: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
 
   computed: {
@@ -48,8 +48,8 @@ export default {
           this.searchStore.start()
           this.searchStore.refresh()
         })
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -67,8 +67,8 @@ export default {
 
     focus () {
       this.$refs.input.focus()
-    }
-  }
+    },
+  },
 }
 </script>
 

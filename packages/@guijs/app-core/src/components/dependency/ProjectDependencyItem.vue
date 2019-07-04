@@ -83,15 +83,15 @@ export default {
   props: {
     dependency: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
       updating: false,
       visible: false,
-      image: null
+      image: null,
     }
   },
 
@@ -100,13 +100,13 @@ export default {
       query: DEPENDENCY_DETAILS,
       variables () {
         return {
-          id: this.dependency.id
+          id: this.dependency.id,
         }
       },
       skip () {
         return !this.visible
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -117,9 +117,9 @@ export default {
           mutation: DEPENDENCY_UPDATE,
           variables: {
             input: {
-              id: this.dependency.id
-            }
-          }
+              id: this.dependency.id,
+            },
+          },
         })
       } catch (e) {
         // eslint-disable-next-line no-console
@@ -133,8 +133,8 @@ export default {
         this.image = `https://avatars.dicebear.com/v2/identicon/${this.dependency.id.replace(/\//g, '-')}.svg`
         this.visible = isVisible
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

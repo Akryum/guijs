@@ -44,19 +44,19 @@
 const ICONS = {
   idle: 'flash_on',
   killed: 'check_circle',
-  error: 'error'
+  error: 'error',
 }
 
 export default {
   sharedData () {
     return mapSharedData('org.vue.widgets.kill-port.', {
-      status: 'status'
+      status: 'status',
     })
   },
 
   data () {
     return {
-      port: ''
+      port: '',
     }
   },
 
@@ -67,7 +67,7 @@ export default {
 
     inputValid () {
       return /\d+/.test(this.port)
-    }
+    },
   },
 
   watch: {
@@ -80,17 +80,17 @@ export default {
           this.status = 'idle'
         }, 3000)
       }
-    }
+    },
   },
 
   methods: {
     kill () {
       clearTimeout(this.$_statusTimer)
       this.$callPluginAction('org.vue.widgets.actions.kill-port', {
-        port: this.port
+        port: this.port,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

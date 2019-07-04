@@ -13,7 +13,7 @@ module.exports = (on, config) => {
     requestTimeout: 1000000,
     responseTimeout: 1000000,
     env: {
-      cwd: path.resolve(__dirname, '../../../../../test')
-    }
+      cwd: path.resolve(__dirname, '../../../../../test'),
+    },
   })
 }

@@ -15,15 +15,15 @@ import { size } from '../filters'
 
 export default {
   filters: {
-    size
+    size,
   },
 
   props: {
     module: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>
 

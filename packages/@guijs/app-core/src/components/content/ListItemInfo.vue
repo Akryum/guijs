@@ -33,29 +33,29 @@ export default {
   props: {
     description: {
       type: String,
-      default: ''
+      default: '',
     },
 
     link: {
       type: String,
-      default: null
+      default: null,
     },
 
     name: {
       type: String,
-      default: null
+      default: null,
     },
 
     selected: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     showDescription: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 }
 </script>
 

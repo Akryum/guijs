@@ -50,7 +50,7 @@
 import { Pagination } from 'vue-instantsearch'
 
 export default {
-  extends: Pagination
+  extends: Pagination,
 }
 </script>
 

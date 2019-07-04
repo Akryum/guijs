@@ -7,13 +7,13 @@ export default {
   props: {
     progressId: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data () {
     return {
-      progress: null
+      progress: null,
     }
   },
 
@@ -22,7 +22,7 @@ export default {
       query: PROGRESS,
       variables () {
         return {
-          id: this.progressId
+          id: this.progressId,
         }
       },
       fetchPolicy: 'network-only',
@@ -31,30 +31,30 @@ export default {
           document: PROGRESS_CHANGED,
           variables () {
             return {
-              id: this.progressId
+              id: this.progressId,
             }
           },
           updateQuery: (previousResult, { subscriptionData }) => {
             return {
-              progress: subscriptionData.data.progressChanged
+              progress: subscriptionData.data.progressChanged,
             }
-          }
+          },
         },
         {
           document: PROGRESS_REMOVED,
           variables () {
             return {
-              id: this.progressId
+              id: this.progressId,
             }
           },
           updateQuery: () => {
             return {
-              progress: null
+              progress: null,
             }
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   },
 
   computed: {
@@ -83,6 +83,6 @@ export default {
         }
       }
       return message || status || ''
-    }
-  }
+    },
+  },
 }
