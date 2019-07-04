@@ -6,7 +6,8 @@ const { resolveModule } = require('@nodepack/module')
 const clientAddons = require('./connectors/client-addons')
 const plugins = require('./connectors/plugins')
 
-const distPath = path.resolve(__dirname, '../dist')
+let distPath = resolveModule('@guijs/builtin-plugin/package.json', __dirname)
+distPath = path.join(distPath.substr(0, distPath.indexOf('/package.json')), 'dist')
 
 let publicPath = resolveModule('@guijs/builtin-plugin/package.json', __dirname)
 publicPath = path.join(publicPath.substr(0, publicPath.indexOf('/package.json')), 'ui-public')
