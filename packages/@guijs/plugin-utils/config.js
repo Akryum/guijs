@@ -1,5 +1,6 @@
-exports.clientAddonConfig = function ({ id, port = 8042 }) {
-  return {
+exports.clientAddonConfig = function ({ id, port = 8042 }, moreOptions = {}) {
+  const merge = require('deepmerge')
+  return merge({
     publicPath: process.env.NODE_ENV === 'production'
       ? `/_addon/${id}`
       : `http://localhost:${port}/`,
@@ -32,5 +33,5 @@ exports.clientAddonConfig = function ({ id, port = 8042 }) {
       },
       port,
     },
-  }
+  }, moreOptions)
 }

@@ -1,6 +1,9 @@
 {
   "name": "@guijs/plugin-utils",
   "version": "0.0.0",
+  "dependencies": {
+    "deepmerge": "^3.3.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/github.com/Akryum/guijs.git",
