@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { mapSharedData } from '@guijs/plugin-utils'
+
 const ICONS = {
   idle: 'flash_on',
   killed: 'check_circle',

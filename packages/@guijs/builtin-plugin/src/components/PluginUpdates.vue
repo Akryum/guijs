@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mapSharedData } from '@guijs/plugin-utils'
+
 import { UPDATES_ICONS, UPDATES_ICON_CLASSES } from '../util/consts'
 
 import StatusWidget from './StatusWidget.vue'

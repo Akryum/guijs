@@ -5,9 +5,6 @@ module.exports = {
     '@vue/standard'
   ],
   globals: {
-    ClientAddonApi: false,
-    mapSharedData: false,
-    Vue: false,
     name: 'off'
   },
   rules: {

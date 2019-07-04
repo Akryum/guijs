@@ -26,6 +26,14 @@ function genQuery (id, projectId) {
   }
 }
 
+export function mapSharedData (namespace, options) {
+  const result = {}
+  for (const key in options) {
+    result[key] = namespace + options[key]
+  }
+  return result
+}
+
 export default {
   install (Vue) {
     Vue.mixin({
@@ -158,12 +166,6 @@ export default {
       },
     })
 
-    window.mapSharedData = (namespace, options) => {
-      const result = {}
-      for (const key in options) {
-        result[key] = namespace + options[key]
-      }
-      return result
-    }
+    window.mapSharedData = mapSharedData
   },
 }

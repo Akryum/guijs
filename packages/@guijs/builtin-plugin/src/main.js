@@ -1,3 +1,5 @@
+import { Vue, ClientAddonApi } from '@guijs/plugin-utils'
+// Tasks
 import VueProgress from 'vue-progress-path'
 import WebpackDashboard from './components/WebpackDashboard.vue'
 import WebpackAnalyzer from './components/WebpackAnalyzer.vue'

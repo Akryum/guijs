@@ -1,3 +1,4 @@
+import { Vue } from '@guijs/plugin-utils'
 import Vuex from 'vuex'
 
 import { buildSortedAssets } from '../util/assets'

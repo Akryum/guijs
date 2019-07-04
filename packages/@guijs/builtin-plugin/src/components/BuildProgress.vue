@@ -79,6 +79,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapSharedData } from '@guijs/plugin-utils'
 
 export default {
   sharedData () {
