@@ -1,12 +1,15 @@
 const path = require('path')
 const express = require('express')
 const fallback = require('express-history-api-fallback')
+const { resolveModule } = require('@nodepack/module')
 // Connectors
 const clientAddons = require('./connectors/client-addons')
 const plugins = require('./connectors/plugins')
 
 const distPath = path.resolve(__dirname, '../dist')
-const publicPath = path.resolve(__dirname, '../ui-public')
+
+let publicPath = resolveModule('@guijs/builtin-plugin/package.json', __dirname)
+publicPath = path.join(publicPath.substr(0, publicPath.indexOf('/package.json')), 'ui-public')
 
 const CACHE_CONTROL = 'no-store, no-cache, must-revalidate, private'
 

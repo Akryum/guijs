@@ -1,23 +1,24 @@
-const { hasProjectYarn, hasProjectPnpm, execa } = require('@vue/cli-shared-utils')
+const { useYarn, usePnpm } = require('@nodepack/utils')
+const execa = require('execa')
 
 const severity = {
   critical: 0,
   high: 1,
   moderate: 2,
-  low: 3
+  low: 3,
 }
 
 exports.auditProject = async function (cwd) {
   try {
-    if (hasProjectYarn(cwd)) {
+    if (useYarn(cwd)) {
       const child = await execa('yarn', [
         'audit',
         '--json',
         '--non-interactive',
-        '--no-progress'
+        '--no-progress',
       ], {
         cwd,
-        reject: false
+        reject: false,
       })
 
       if (child.stderr) {
@@ -50,14 +51,14 @@ exports.auditProject = async function (cwd) {
           critical: 0,
           high: 0,
           moderate: 0,
-          low: 0
-        }
+          low: 0,
+        },
       }
 
       auditAdvisories = auditAdvisories.sort((a, b) => severity[a.data.advisory.severity] - severity[b.data.advisory.severity])
 
       let id = 0
-      for (const { data: { advisory } } of auditAdvisories) {
+      for (const { data: { advisory }} of auditAdvisories) {
         for (const finding of advisory.findings) {
           // const [finding] = advisory.findings
           const detail = {
@@ -68,7 +69,7 @@ exports.auditProject = async function (cwd) {
               (a, b) => a.length - b.length
             ).map(
               parents => parents.split('>').slice(0, parents.length - 2).map(p => ({
-                name: p
+                name: p,
               }))
             ),
             moreInfo: advisory.url,
@@ -77,9 +78,9 @@ exports.auditProject = async function (cwd) {
             message: advisory.overview,
             versions: {
               vulnerable: advisory.vulnerable_versions,
-              patched: advisory.patched_versions
+              patched: advisory.patched_versions,
             },
-            recommendation: advisory.recommendation
+            recommendation: advisory.recommendation,
           }
           details.vulnerabilities.push(detail)
           details.summary[advisory.severity]++
@@ -89,7 +90,7 @@ exports.auditProject = async function (cwd) {
       const status = {
         status: 'ok',
         count: details.vulnerabilities.length,
-        message: null
+        message: null,
       }
 
       if (status.count) {
@@ -105,34 +106,34 @@ exports.auditProject = async function (cwd) {
 
       return {
         status,
-        details
+        details,
       }
-    } else if (hasProjectPnpm(cwd)) {
+    } else if (usePnpm(cwd)) {
       // TODO pnpm audit
       return {
         status: {
           status: 'error',
-          message: 'Not implemented for PNPM projects yet'
+          message: 'Not implemented for PNPM projects yet',
         },
-        details: null
+        details: null,
       }
     } else {
       // TODO NPM audit
       return {
         status: {
           status: 'error',
-          message: 'Not implemented for NPM projects yet'
+          message: 'Not implemented for NPM projects yet',
         },
-        details: null
+        details: null,
       }
     }
   } catch (e) {
     return {
       status: {
         status: 'error',
-        message: e.message
+        message: e.message,
       },
-      details: null
+      details: null,
     }
   }
 }

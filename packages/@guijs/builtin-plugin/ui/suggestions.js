@@ -1,4 +1,4 @@
-const { loadModule } = require('@vue/cli-shared-utils')
+const { loadModule } = require('@nodepack/module')
 const invoke = require('@vue/cli/lib/invoke')
 
 const ROUTER = 'org.vue.vue-router-add'
@@ -17,7 +17,7 @@ module.exports = api => {
           link: 'https://router.vuejs.org/',
           async handler () {
             await install(api, 'vue-router')
-          }
+          },
         })
       }
 
@@ -30,7 +30,7 @@ module.exports = api => {
           link: 'https://vuex.vuejs.org/',
           async handler () {
             await install(api, 'vuex')
-          }
+          },
         })
       }
     } else {
@@ -52,12 +52,12 @@ module.exports = api => {
           handler () {
             const file = config.foundFiles.vue.path
             console.log('open', file)
-            const { launch } = require('@vue/cli-shared-utils')
-            launch(file)
+            const { openInEditor } = require('@nodepack/utils')
+            openInEditor(file)
             return {
-              keep: true
+              keep: true,
             }
-          }
+          },
         })
         return
       }
@@ -70,7 +70,7 @@ async function install (api, id) {
   api.setProgress({
     status: 'org.vue.cli-service.suggestions.progress',
     args: [id],
-    progress: -1
+    progress: -1,
   })
 
   const name = id === 'vue-router' ? 'router' : id
@@ -81,7 +81,7 @@ async function install (api, id) {
   try {
     await invoke.runGenerator(context, {
       id: `core:${name}`,
-      apply: loadModule(`@vue/cli-service/generator/${name}`, context)
+      apply: loadModule(`@vue/cli-service/generator/${name}`, context),
     })
   } catch (e) {
     error = e

@@ -1,0 +1,21 @@
+{
+  "name": "@guijs/builtin-plugin",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/builtin-plugin"
+  },
+  "dependencies": {
+    "@nodepack/module": "^0.1.20",
+    "@nodepack/utils": "^0.1.20",
+    "@vue/cli": "^3.9.1",
+    "execa": "^2.0.2",
+    "fkill": "^6.2.0",
+    "fs-extra": "^8.1.0",
+    "rss-parser": "^3.7.2"
+  },
+  "peerDependencies": {
+    "@guijs/server-core": "^0.0.0"
+  }
+}

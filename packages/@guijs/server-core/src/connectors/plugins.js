@@ -201,14 +201,8 @@ function resetPluginApi ({ file, lightApi }, context) {
       pluginApiInstances.set(file, pluginApi)
 
       // Run Plugin API
-      let serverCoreDir = __dirname
-      const dotNodepackIndex = serverCoreDir.indexOf('.nodepack')
-      if (dotNodepackIndex !== -1) {
-        serverCoreDir = serverCoreDir.substr(0, dotNodepackIndex)
-      }
-      serverCoreDir = serverCoreDir.substr(0, serverCoreDir.indexOf('server-core'))
-      runPluginApi(path.resolve(serverCoreDir, 'server-core'), pluginApi, context, 'ui-defaults')
-      plugins.forEach(plugin => runPluginApi(plugin.id, pluginApi, context))
+      runPluginApi('@guijs/builtin-plugin', '@guijs/builtin-plugin/ui', pluginApi, __dirname, context)
+      plugins.forEach(plugin => runPluginApi(plugin.id, `${plugin.id}/ui`, pluginApi, pluginApi.cwd, context))
       // Project package.json data
       const { pkg, pkgContext } = pkgStore.get(file)
       // Local plugins
@@ -216,7 +210,7 @@ function resetPluginApi ({ file, lightApi }, context) {
         const files = pkg.vuePlugins.ui
         if (Array.isArray(files)) {
           for (const file of files) {
-            runPluginApi(pkgContext, pluginApi, context, file)
+            runPluginApi(pkgContext, `${pkgContext}/ui`, pluginApi, pluginApi.cwd, context, file)
           }
         }
       }
@@ -264,12 +258,10 @@ function resetPluginApi ({ file, lightApi }, context) {
   })
 }
 
-function runPluginApi (id, pluginApi, context, filename = 'ui') {
-  const name = filename !== 'ui' ? `${id}/${filename}` : id
-
+function runPluginApi (id, file, pluginApi, cwd, context) {
   let module
   try {
-    module = loadModule(`${id}/${filename}`, pluginApi.cwd, true)
+    module = loadModule(file, cwd, true)
   } catch (e) {
     if (process.env.VUE_CLI_DEBUG) {
       console.error(e)
@@ -277,21 +269,21 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
   }
   if (module) {
     if (typeof module !== 'function') {
-      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, name, chalk.grey(pluginApi.cwd))
+      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, file, chalk.grey(cwd))
       logs.add({
         type: 'error',
-        message: `An error occured while loading ${name}: no function exported`,
+        message: `An error occured while loading ${file}: no function exported`,
       })
     } else {
       pluginApi.pluginId = id
       try {
         module(pluginApi)
-        log('Plugin API loaded for', name, chalk.grey(pluginApi.cwd))
+        log('Plugin API loaded for', file, chalk.grey(cwd))
       } catch (e) {
-        log(`${chalk.red('ERROR')} while loading plugin API for ${name}:`, e)
+        log(`${chalk.red('ERROR')} while loading plugin API for ${file}:`, e)
         logs.add({
           type: 'error',
-          message: `An error occured while loading ${name}: ${e.message}`,
+          message: `An error occured while loading ${file}: ${e.message}`,
         })
       }
       pluginApi.pluginId = null
@@ -300,7 +292,7 @@ function runPluginApi (id, pluginApi, context, filename = 'ui') {
 
   // Locales
   try {
-    const folder = fs.existsSync(id) ? id : dependencies.getPath({ id, file: pluginApi.cwd })
+    const folder = fs.existsSync(id) ? id : dependencies.getPath({ id, file: cwd })
     locales.loadFolder(folder, context)
   } catch (e) {}
 }
@@ -516,7 +508,8 @@ function runInvoke (id, context) {
       await child
     }
     // Run plugin api
-    runPluginApi(id, getApi(cwd.get()), context)
+    const pluginApi = getApi(cwd.get())
+    runPluginApi(id, `${id}/ui`, pluginApi, pluginApi.cwd, context)
     installationStep = 'diff'
 
     notify({

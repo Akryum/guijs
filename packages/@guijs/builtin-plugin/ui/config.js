@@ -6,8 +6,8 @@ module.exports = api => {
     link: 'https://cli.vuejs.org/config/',
     files: {
       vue: {
-        js: ['vue.config.js']
-      }
+        js: ['vue.config.js'],
+      },
     },
     icon: '/public/vue-cli.png',
     onRead: ({ data }) => ({
@@ -20,7 +20,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.publicPath.label',
           description: 'org.vue.vue-webpack.config.vue-cli.publicPath.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#publicPath'
+          link: 'https://cli.vuejs.org/config/#publicPath',
         },
         {
           name: 'outputDir',
@@ -31,7 +31,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.outputDir.label',
           description: 'org.vue.vue-webpack.config.vue-cli.outputDir.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#outputdir'
+          link: 'https://cli.vuejs.org/config/#outputdir',
         },
         {
           name: 'assetsDir',
@@ -41,7 +41,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.assetsDir.label',
           description: 'org.vue.vue-webpack.config.vue-cli.assetsDir.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#assetsdir'
+          link: 'https://cli.vuejs.org/config/#assetsdir',
         },
         {
           name: 'runtimeCompiler',
@@ -51,7 +51,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.runtimeCompiler.label',
           description: 'org.vue.vue-webpack.config.vue-cli.runtimeCompiler.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#runtimecompiler'
+          link: 'https://cli.vuejs.org/config/#runtimecompiler',
         },
         {
           name: 'productionSourceMap',
@@ -61,7 +61,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.productionSourceMap.label',
           description: 'org.vue.vue-webpack.config.vue-cli.productionSourceMap.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#productionsourcemap'
+          link: 'https://cli.vuejs.org/config/#productionsourcemap',
         },
         {
           name: 'parallel',
@@ -71,7 +71,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.parallel.label',
           description: 'org.vue.vue-webpack.config.vue-cli.parallel.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.general',
-          link: 'https://cli.vuejs.org/config/#parallel'
+          link: 'https://cli.vuejs.org/config/#parallel',
         },
         {
           name: 'css.modules',
@@ -81,7 +81,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.css.modules.label',
           description: 'org.vue.vue-webpack.config.vue-cli.css.modules.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.css',
-          link: 'https://cli.vuejs.org/config/#css-modules'
+          link: 'https://cli.vuejs.org/config/#css-modules',
         },
         {
           name: 'css.extract',
@@ -91,7 +91,7 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.css.extract.label',
           description: 'org.vue.vue-webpack.config.vue-cli.css.extract.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.css',
-          link: 'https://cli.vuejs.org/config/#css-extract'
+          link: 'https://cli.vuejs.org/config/#css-extract',
         },
         {
           name: 'css.sourceMap',
@@ -101,9 +101,9 @@ module.exports = api => {
           message: 'org.vue.vue-webpack.config.vue-cli.css.sourceMap.label',
           description: 'org.vue.vue-webpack.config.vue-cli.css.sourceMap.description',
           group: 'org.vue.vue-webpack.config.vue-cli.groups.css',
-          link: 'https://cli.vuejs.org/config/#css-sourcemap'
-        }
-      ]
+          link: 'https://cli.vuejs.org/config/#css-sourcemap',
+        },
+      ],
     }),
     onWrite: async ({ api, prompts }) => {
       const vueData = {}
@@ -111,6 +111,6 @@ module.exports = api => {
         vueData[prompt.id] = await api.getAnswer(prompt.id)
       }
       api.setData('vue', vueData)
-    }
+    },
   })
 }

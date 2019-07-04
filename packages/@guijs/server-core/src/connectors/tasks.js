@@ -238,6 +238,7 @@ async function run (id, context) {
 
     // Answers
     const answers = prompts.getAnswers()
+    // eslint-disable-next-line prefer-const
     let [command, ...args] = parseArgs(task.command)
 
     // Output colors
