@@ -28,13 +28,6 @@
 
       <div class="actions">
         <VueButton
-          icon-left="open_in_browser"
-          @click.stop="openInEditor()"
-        >
-          {{ $t('org.vue.components.project-select-list-item.tooltips.open-in-editor') }}
-        </VueButton>
-
-        <VueButton
           v-if="project.homepage"
           :href="project.homepage"
           target="_blank"
@@ -42,6 +35,13 @@
           icon-left="open_in_new"
           v-tooltip="$t('org.vue.components.top-bar.homepage')"
           @click.stop
+        />
+
+        <VueButton
+          icon-left="open_in_browser"
+          class="icon-button"
+          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.open-in-editor')"
+          @click.stop="openInEditor()"
         />
 
         <VueButton
