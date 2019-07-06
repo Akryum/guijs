@@ -1,12 +1,17 @@
 const path = require('path')
 const fs = require('fs')
 const shortId = require('shortid')
+const execa = require('execa')
 // @TODO extract into separate plugin package
-const Creator = require('@vue/cli/lib/Creator')
-const { getPromptModules } = require('@vue/cli/lib/util/createTools')
-const { getFeatures } = require('@vue/cli/lib/util/features')
-const { defaults } = require('@vue/cli/lib/options')
-const { toShortPluginId, execa } = require('@vue/cli-shared-utils')
+const { getPromptModules } = require('@vue/cli-utils/lib/util/createTools')
+const { getFeatures } = require('@vue/cli-utils/lib/util/features')
+const { defaults } = require('@vue/cli-utils/lib/options')
+const { getPresets } = require('@vue/cli-utils/lib/util/getPresets')
+const { resolvePreset } = require('@vue/cli-utils/lib/util/resolvePreset')
+const { getPresetFromAnswers } = require('@vue/cli-utils/lib/util/getPresetFromAnswers')
+const PromptModuleAPI = require('@vue/cli-utils/lib/PromptModuleAPI')
+const { toShortPluginId } = require('@vue/cli-shared-utils')
+// -- end
 const parseGitConfig = require('parse-git-config')
 // Connectors
 const progress = require('./progress')
@@ -27,10 +32,9 @@ const PROGRESS_ID = 'project-create'
 
 let lastProject = null
 let currentProject = null
-let creator = null
 let presets = []
 let features = []
-let onCreationEvent = null
+let promptCompleteCbs = []
 // @TODO
 // let onInstallProgress = null
 // const onInstallLog = null
@@ -83,7 +87,7 @@ function generatePresetDescription (preset) {
   return description
 }
 
-function generateProjectCreation (creator) {
+function generateProjectCreation () {
   return {
     presets,
     features,
@@ -92,14 +96,12 @@ function generateProjectCreation (creator) {
 }
 
 async function initCreator (context) {
-  const creator = new Creator('', cwd.get(), getPromptModules())
+  const promptModules = getPromptModules()
+  const promptAPI = new PromptModuleAPI()
+  promptModules.forEach(m => m(promptAPI))
+  promptCompleteCbs = promptAPI.promptCompleteCbs
 
   /* Event listeners */
-  // Creator emits creation events (the project creation steps)
-  onCreationEvent = ({ event }) => {
-    progress.set({ id: PROGRESS_ID, status: event, info: null }, context)
-  }
-  creator.on('creation', onCreationEvent)
 
   // @TODO
   // // Progress bar
@@ -125,7 +127,7 @@ async function initCreator (context) {
     link: null,
     features: [],
   }
-  const presetsData = creator.getPresets()
+  const presetsData = getPresets()
   presets = [
     ...Object.keys(presetsData).map(
       key => {
@@ -148,9 +150,8 @@ async function initCreator (context) {
   ]
 
   // Features
-  const featuresData = creator.featurePrompt.choices
   features = [
-    ...featuresData.map(
+    ...promptAPI.features.map(
       data => ({
         id: data.value,
         name: data.name,
@@ -178,29 +179,20 @@ async function initCreator (context) {
 
   // Prompts
   await prompts.reset()
-  creator.injectedPrompts.forEach(prompts.add)
+  promptAPI.injectedPrompts.forEach(prompts.add)
   await updatePromptsFeatures()
   await prompts.start()
-
-  return creator
 }
 
 function removeCreator (context) {
-  if (creator) {
-    creator.removeListener('creation', onCreationEvent)
-    // @TODO
-    // installProgress.removeListener('progress', onInstallProgress)
-    // installProgress.removeListener('log', onInstallLog)
-    creator = null
-  }
+  // @TODO
+  // installProgress.removeListener('progress', onInstallProgress)
+  // installProgress.removeListener('log', onInstallLog)
   return true
 }
 
 async function getCreation (context) {
-  if (!creator) {
-    creator = await initCreator(context)
-  }
-  return generateProjectCreation(creator)
+  return generateProjectCreation()
 }
 
 async function updatePromptsFeatures () {
@@ -252,7 +244,7 @@ async function applyPreset (id, context) {
     console.warn(`Preset '${id}' not found`)
   }
 
-  return generateProjectCreation(creator)
+  return generateProjectCreation()
 }
 
 async function create (input, context) {
@@ -264,10 +256,9 @@ async function create (input, context) {
     const targetDir = path.join(cwd.get(), input.folder)
 
     cwd.set(targetDir, context)
-    creator.context = targetDir
 
     const inCurrent = input.folder === '.'
-    const name = creator.name = (inCurrent ? path.relative('../', process.cwd()) : input.folder).toLowerCase()
+    const name = (inCurrent ? path.relative('../', process.cwd()) : input.folder).toLowerCase()
 
     // Answers
     const answers = prompts.getAnswers()
@@ -293,12 +284,12 @@ async function create (input, context) {
     let preset
     if (input.preset === '__remote__' && input.remote) {
       // vue create foo --preset bar
-      preset = await creator.resolvePreset(input.remote, input.clone)
+      preset = await resolvePreset(input.remote, input.clone)
     } else if (input.preset === 'default') {
       // vue create foo --default
       preset = defaults.presets.default
     } else {
-      preset = await creator.promptAndResolvePreset(answers)
+      preset = await getPresetFromAnswers(answers, promptCompleteCbs)
     }
     setProgress({
       info: null,
