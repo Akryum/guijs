@@ -17,6 +17,13 @@ function createViewsSet () {
       tooltip: 'org.vue.components.project-nav.tooltips.dashboard',
     },
     {
+      id: 'vue-project-tasks',
+      name: 'project-tasks',
+      icon: 'assignment',
+      tooltip: 'org.vue.components.project-nav.tooltips.tasks',
+      projectTypes: ['vue', 'unknown'],
+    },
+    {
       id: 'vue-project-plugins',
       name: 'project-plugins',
       icon: 'extension',
@@ -34,13 +41,6 @@ function createViewsSet () {
       name: 'project-configurations',
       icon: 'settings_applications',
       tooltip: 'org.vue.components.project-nav.tooltips.configuration',
-    },
-    {
-      id: 'vue-project-tasks',
-      name: 'project-tasks',
-      icon: 'assignment',
-      tooltip: 'org.vue.components.project-nav.tooltips.tasks',
-      projectTypes: ['vue', 'unknown'],
     },
   ]
 }
