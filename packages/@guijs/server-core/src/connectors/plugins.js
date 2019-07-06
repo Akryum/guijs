@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const LRU = require('lru-cache')
 const chalk = require('chalk')
-const shallowEqualArrays = require('shallow-equal/arrays')
+const deepEqual = require('fast-deep-equal')
 // Context
 const getContext = require('../context')
 // Subs
@@ -104,7 +104,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
   }
 
   const oldPlugins = getPlugins(file)
-  if (oldPlugins && shallowEqualArrays(plugins, oldPlugins)) {
+  if (oldPlugins && deepEqual(plugins, oldPlugins)) {
     return oldPlugins
   }
 
