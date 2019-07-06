@@ -20,6 +20,7 @@
         :label="$t('org.vue.views.project-select.tabs.create')"
         icon="add_box"
         class="create"
+        lazy
       >
         <div class="content">
           <FolderExplorer/>
@@ -40,6 +41,7 @@
         :label="$t('org.vue.views.project-select.tabs.import')"
         icon="unarchive"
         class="import"
+        lazy
       >
         <div class="content">
           <FolderExplorer/>

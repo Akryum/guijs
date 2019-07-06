@@ -20,7 +20,7 @@
 
             <ProjectTasksDropdown
               class="bullet-menu"
-              :tasks="project.tasks"
+              :project="project"
             />
           </div>
         </ListItemInfo>

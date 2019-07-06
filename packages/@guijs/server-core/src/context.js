@@ -1,4 +1,5 @@
 const { db } = require('./util/db')
+const { memdb } = require('./util/memdb')
 const pubsub = require('./pubsub')
 const cwd = require('./connectors/cwd')
 
@@ -7,6 +8,7 @@ const cwd = require('./connectors/cwd')
 module.exports = ({ req } = {}) => {
   return {
     db,
+    memdb,
     pubsub,
     cwd: cwd.get(),
   }

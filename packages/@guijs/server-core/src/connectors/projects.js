@@ -35,6 +35,7 @@ let currentProject = null
 let presets = []
 let features = []
 let promptCompleteCbs = []
+
 // @TODO
 // let onInstallProgress = null
 // const onInstallLog = null
@@ -379,6 +380,13 @@ async function open (id, context) {
     return null
   }
 
+  const openProjects = context.memdb.get('openProjects')
+  if (!openProjects.find({ id }).value()) {
+    openProjects.push({
+      id,
+    }).write()
+  }
+
   lastProject = currentProject
   currentProject = project
   cwd.set(project.path, context)
@@ -405,6 +413,7 @@ async function remove (id, context) {
     currentProject = null
   }
   context.db.get('projects').remove({ id }).write()
+  context.memdb.get('openProjects').remove({ id }).write()
   if (context.db.get('config.lastOpenProject').value() === id) {
     context.db.set('config.lastOpenProject', undefined).write()
   }
@@ -449,6 +458,11 @@ function getHomepage (project, context) {
   return pkg.homepage
 }
 
+function isOpen ({ id }, context) {
+  console.log('isOpen', id, context.memdb.get('openProjects').find({ id }).value())
+  return !!context.memdb.get('openProjects').find({ id }).value()
+}
+
 // Open last project
 async function autoOpenLastProject () {
   const context = getContext()
@@ -484,4 +498,5 @@ module.exports = {
   removeCreator,
   getType,
   getHomepage,
+  isOpen,
 }

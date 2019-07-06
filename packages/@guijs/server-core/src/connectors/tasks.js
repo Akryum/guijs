@@ -131,6 +131,8 @@ async function list ({ file = null, api = true } = {}, context) {
     }
     list = list.sort((a, b) => getSortScore(a) - getSortScore(b))
 
+    log('Tasks found:', list.length, chalk.grey(file))
+
     tasks.set(file, list)
   }
   return list

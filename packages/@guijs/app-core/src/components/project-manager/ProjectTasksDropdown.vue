@@ -2,7 +2,9 @@
   <VueDropdown
     class="project-tasks-dropdown"
     placement="right"
+    handle-resize
     @click.native.prevent.stop
+    @show="enabled = true"
   >
     <div
       slot="trigger"
@@ -49,7 +51,7 @@
         </TaskItem>
 
         <VueLoadingIndicator
-          v-if="loading"
+          v-if="loading || $apollo.loading"
           class="overlay"
         />
       </div>
@@ -61,13 +63,15 @@
 import TASK_CHANGED from '@/graphql/task/taskChanged.gql'
 import TASK_RUN from '@/graphql/task/taskRun.gql'
 import TASK_STOP from '@/graphql/task/taskStop.gql'
+import TASK_FRAGMENT from '@/graphql/task/taskFragment.gql'
 import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
 import PROJECT_OPEN from '@/graphql/project/projectOpen.gql'
+import gql from 'graphql-tag'
 
 export default {
   props: {
-    tasks: {
-      type: Array,
+    project: {
+      type: Object,
       required: true,
     },
 
@@ -80,6 +84,8 @@ export default {
   data () {
     return {
       loading: false,
+      tasks: [],
+      enabled: this.project.hasRunningTasks,
     }
   },
 
@@ -89,6 +95,29 @@ export default {
     $subscribe: {
       taskChanged: {
         query: TASK_CHANGED,
+      },
+    },
+
+    tasks: {
+      query: gql`
+        query projectTasks ($id: ID!) {
+          project (id: $id) {
+            id
+            tasks {
+              ...task
+            }
+          }
+        }
+        ${TASK_FRAGMENT}
+      `,
+      variables () {
+        return {
+          id: this.project.id,
+        }
+      },
+      update: data => data.project.tasks,
+      skip () {
+        return !this.enabled
       },
     },
   },
@@ -107,7 +136,7 @@ export default {
     },
 
     bulletClass () {
-      if (this.countPerStatus.running) {
+      if (this.project.hasRunningTasks) {
         return 'running'
       }
       return 'idle'
@@ -182,6 +211,7 @@ bullet-color($color)
 
 .tasks
   width 400px
+  min-height 42px
   max-height 400px
   overflow-y auto
 </style>

@@ -7,6 +7,7 @@ const tasks = require('../connectors/tasks')
 exports.types = gql`
 extend type Query {
   projects: [Project]
+  project (id: ID!): Project
   projectCurrent: Project
   projectCreation: ProjectCreation
 }
@@ -33,6 +34,7 @@ type Project {
   favorite: Int
   plugins: [Plugin]
   tasks: [Task]
+  hasRunningTasks: Boolean!
   homepage: String
   openDate: JSON
 }
@@ -89,10 +91,13 @@ exports.resolvers = {
     plugins: (project, args, context) => plugins.list(project.path, context),
     tasks: (project, args, context) => tasks.list({ file: project.path }, context),
     homepage: (project, args, context) => projects.getHomepage(project, context),
+    hasRunningTasks: async (project, args, context) => projects.isOpen({ id: project.id }, context) &&
+      (await tasks.list({ file: project.path }, context)).some(t => t.status === 'running'),
   },
 
   Query: {
     projects: (root, args, context) => projects.list(context),
+    project: (root, { id }, context) => projects.findOne(id, context),
     projectCurrent: (root, args, context) => projects.getCurrent(context),
     projectCreation: (root, args, context) => projects.getCreation(context),
   },
