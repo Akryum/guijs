@@ -87,14 +87,6 @@ function generatePresetDescription (preset) {
   return description
 }
 
-function generateProjectCreation () {
-  return {
-    presets,
-    features,
-    prompts: prompts.list(),
-  }
-}
-
 async function initCreator (context) {
   const promptModules = getPromptModules()
   const promptAPI = new PromptModuleAPI()
@@ -192,7 +184,11 @@ function removeCreator (context) {
 }
 
 async function getCreation (context) {
-  return generateProjectCreation()
+  return {
+    presets,
+    features,
+    prompts: prompts.list(),
+  }
 }
 
 async function updatePromptsFeatures () {
@@ -244,7 +240,7 @@ async function applyPreset (id, context) {
     console.warn(`Preset '${id}' not found`)
   }
 
-  return generateProjectCreation()
+  return getCreation(context)
 }
 
 async function create (input, context) {
