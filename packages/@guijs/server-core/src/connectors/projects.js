@@ -459,7 +459,6 @@ function getHomepage (project, context) {
 }
 
 function isOpen ({ id }, context) {
-  console.log('isOpen', id, context.memdb.get('openProjects').find({ id }).value())
   return !!context.memdb.get('openProjects').find({ id }).value()
 }
 
