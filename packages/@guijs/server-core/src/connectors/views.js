@@ -21,7 +21,6 @@ function createViewsSet () {
       name: 'project-tasks',
       icon: 'assignment',
       tooltip: 'org.vue.components.project-nav.tooltips.tasks',
-      projectTypes: ['vue', 'unknown'],
     },
     {
       id: 'vue-project-plugins',
@@ -34,7 +33,6 @@ function createViewsSet () {
       name: 'project-dependencies',
       icon: 'collections_bookmark',
       tooltip: 'org.vue.components.project-nav.tooltips.dependencies',
-      projectTypes: ['vue', 'unknown'],
     },
     {
       id: 'vue-project-configurations',

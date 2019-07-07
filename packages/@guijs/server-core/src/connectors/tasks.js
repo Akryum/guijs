@@ -39,9 +39,7 @@ async function list ({ file = null, api = true } = {}, context) {
   if (pkg.scripts) {
     const existing = new Map()
 
-    if (projects.getType(file, context) === 'vue') {
-      await plugins.list(file, context, { resetApi: false, lightApi: true })
-    }
+    await plugins.list(file, context, { resetApi: false, lightApi: true })
 
     const pluginApi = api && plugins.getApi(file)
 

@@ -17,7 +17,6 @@
       >
         <ViewNavButton
           v-for="view of views"
-          v-if="hasProjectType(view)"
           :key="view.id"
           :view="view"
         />
@@ -131,7 +130,6 @@ export default {
         if (!value) return
         if (oldValue && value.id === oldValue.id) return
 
-        this.checkProjectType()
         this.$apollo.mutate({
           mutation: VIEW_OPEN,
           variables: {
@@ -140,29 +138,6 @@ export default {
         })
       },
       immediate: true,
-    },
-
-    projectCurrent: {
-      handler: 'checkProjectType',
-      immediate: true,
-    },
-  },
-
-  methods: {
-    hasProjectType (view) {
-      return (!view.projectTypes && this.projectCurrent.type === 'vue') ||
-        (view.projectTypes && view.projectTypes.includes(this.projectCurrent.type))
-    },
-
-    checkProjectType () {
-      if (!this.currentView) return
-
-      if (!this.hasProjectType(this.currentView)) {
-        const view = this.views.find(v => this.hasProjectType(v))
-        if (view) {
-          this.currentViewName = view.name
-        }
-      }
     },
   },
 }

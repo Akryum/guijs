@@ -11,5 +11,4 @@ fragment view on View {
     priority
     hidden
   }
-  projectTypes
 }

@@ -104,7 +104,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
   }
 
   const oldPlugins = getPlugins(file)
-  if (oldPlugins && deepEqual(plugins, oldPlugins)) {
+  if (oldPlugins && deepEqual(plugins, oldPlugins) && pluginApiInstances.has(file)) {
     return oldPlugins
   }
 
@@ -186,11 +186,6 @@ function resetPluginApi ({ file, lightApi }, context) {
       }
 
       const plugins = getPlugins(file)
-
-      if (project && projects.getType(project, context) !== 'vue') {
-        resolve(false)
-        return
-      }
 
       pluginApi = new PluginApi({
         plugins,
