@@ -42,10 +42,14 @@ const { getCommand } = require('../util/command')
 const ipc = require('../util/ipc')
 const { log } = require('../util/logger')
 const { notify } = require('../util/notification')
+const { rcFolder } = require('../util/rcFolder')
 
 const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
 const VUEDESK_BUILD_BUNDLE = 'vuedesk-build-bundle'
+
+const GLOBAL_PLUGINS_FOLDER = path.join(rcFolder, 'global-plugins')
+const GLOBAL_PLUGINS_PKG_FILE = path.join(GLOBAL_PLUGINS_FOLDER, 'package.json')
 
 // Caches
 const logoCache = new LRU({
@@ -59,6 +63,36 @@ let installationStep
 const pluginsStore = new Map()
 const pluginApiInstances = new Map()
 const pkgStore = new Map()
+let globalPlugins = []
+let globalPluginsPkg = null
+
+function setupGlobalPlugins () {
+  fs.ensureDirSync(GLOBAL_PLUGINS_FOLDER)
+  if (!fs.existsSync(GLOBAL_PLUGINS_PKG_FILE)) {
+    globalPluginsPkg = {
+      name: 'guisj-global-plugins',
+      version: '0.0.0',
+      private: true,
+    }
+    fs.writeJSONSync(GLOBAL_PLUGINS_PKG_FILE, globalPluginsPkg, {
+      spaces: 2,
+    })
+  } else {
+    globalPluginsPkg = fs.readJSONSync(GLOBAL_PLUGINS_PKG_FILE)
+  }
+
+  loadGlobalPlugins()
+}
+
+setupGlobalPlugins()
+
+async function loadGlobalPlugins () {
+  const deps = globalPluginsPkg.dependencies || {}
+  globalPlugins = Object.keys(deps).map(
+    id => mapPlugin(deps, GLOBAL_PLUGINS_FOLDER, id, true)
+  )
+  log('Global plugins found:', globalPlugins.length)
+}
 
 async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
   let pkg = folders.readPackage(file, context)
@@ -82,6 +116,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
       installed: true,
       website: null,
       baseDir: file,
+      isGlobal: false,
     })
 
     plugins = plugins.concat(pkg.vuedesk.plugins.map(id => ({
@@ -91,9 +126,12 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
       installed: true,
       website: null,
       baseDir: file,
+      isGlobal: false,
       hidden: true,
     })))
   }
+
+  plugins = plugins.concat(globalPlugins)
 
   // Put cli service at the top
   const index = plugins.findIndex(p => [CLI_SERVICE, VUEDESK_BUILD_BUNDLE].includes(p.id))
@@ -110,7 +148,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
 
   pluginsStore.set(file, plugins)
 
-  log('Plugins found:', plugins.length, chalk.grey(file))
+  log('Total plugins found:', plugins.length, chalk.grey(file))
 
   if (resetApi || (autoLoadApi && !pluginApiInstances.has(file))) {
     await resetPluginApi({ file, lightApi }, context)
@@ -131,15 +169,20 @@ function findPlugins (deps, file) {
   return Object.keys(deps).filter(
     id => isPlugin(id) || id === CLI_SERVICE
   ).map(
-    id => ({
-      id,
-      versionRange: deps[id],
-      official: isOfficialPlugin(id) || id === CLI_SERVICE,
-      installed: fs.existsSync(dependencies.getPath({ id, file })),
-      website: getLink(id),
-      baseDir: file,
-    })
+    id => mapPlugin(deps, file, id)
   )
+}
+
+function mapPlugin (deps, file, id, isGlobal = false) {
+  return {
+    id,
+    versionRange: deps[id],
+    official: isOfficialPlugin(id) || id === CLI_SERVICE,
+    installed: fs.existsSync(dependencies.getPath({ id, file })),
+    website: getLink(id),
+    baseDir: file,
+    isGlobal,
+  }
 }
 
 function getLink (id) {
@@ -197,7 +240,9 @@ function resetPluginApi ({ file, lightApi }, context) {
 
       // Run Plugin API
       runPluginApi('@guijs/builtin-plugin', '@guijs/builtin-plugin/ui', pluginApi, __dirname, context)
-      plugins.forEach(plugin => runPluginApi(plugin.id, `${plugin.id}/ui`, pluginApi, pluginApi.cwd, context))
+      // Global plugins first
+      plugins.slice().sort(sortPluginRun)
+        .forEach(plugin => runPluginApi(plugin.id, `${plugin.id}${plugin.isGlobal ? '' : '/ui'}`, pluginApi, plugin.baseDir, context))
       // Project package.json data
       const { pkg, pkgContext } = pkgStore.get(file)
       // Local plugins
@@ -253,12 +298,23 @@ function resetPluginApi ({ file, lightApi }, context) {
   })
 }
 
+function sortPluginRun (a, b) {
+  if (a.isGlobal === b.isGlobal) {
+    return 0
+  } else if (a.isGlobal) {
+    return -1
+  } else {
+    return 1
+  }
+}
+
 function runPluginApi (id, file, pluginApi, cwd, context) {
+  debugger
   let module
   try {
     module = loadModule(file, cwd, true)
   } catch (e) {
-    if (process.env.VUE_CLI_DEBUG) {
+    if (process.env.GUIJS_DEBUG) {
       console.error(e)
     }
   }
@@ -360,7 +416,7 @@ function install (id, context) {
     })
     currentPluginId = id
     installationStep = 'install'
-    if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
+    if (process.env.GUIJS_DEBUG && isOfficialPlugin(id)) {
       mockInstall(id, context)
     } else {
       await installPackage(cwd.get(), getCommand(cwd.get()), null, id)
@@ -438,7 +494,7 @@ function uninstall (id, context) {
     })
     installationStep = 'uninstall'
     currentPluginId = id
-    if (process.env.VUE_CLI_DEBUG && isOfficialPlugin(id)) {
+    if (process.env.GUIJS_DEBUG && isOfficialPlugin(id)) {
       mockUninstall(id, context)
     } else {
       await uninstallPackage(cwd.get(), getCommand(cwd.get()), null, id)
@@ -670,6 +726,11 @@ function serveFile ({ pluginId, projectId = null, file }, res) {
   }
 
   if (pluginId) {
+    const globalPlugin = globalPlugins.find(p => p.id === pluginId)
+    if (globalPlugin) {
+      baseFile = globalPlugin.baseDir
+    }
+
     const basePath = pluginId === '.' ? baseFile : dependencies.getPath({ id: decodeURIComponent(pluginId), file: baseFile })
     if (basePath) {
       res.sendFile(path.join(basePath, file))

@@ -1,3 +1,5 @@
+/** @type {import('../util/project-type').ProjectType} ProjectType */
+
 const path = require('path')
 // Connectors
 const logs = require('../connectors/logs')
@@ -7,6 +9,8 @@ const suggestions = require('../connectors/suggestions')
 const folders = require('../connectors/folders')
 const progress = require('../connectors/progress')
 const app = require('../connectors/app')
+// Secondary APIs
+const ProjectTypeApi = require('./ProjectTypeApi')
 // Utils
 const ipc = require('../util/ipc')
 const { notify } = require('../util/notification')
@@ -58,12 +62,25 @@ class PluginApi {
     this.actions = new Map()
     this.ipcHandlers = []
     this.widgetDefs = []
+    /** @type {ProjectType[]} */
+    this.projectTypes = []
+  }
+
+  addProjectType (id, callback) {
+    /** @type {ProjectType} */
+    const projectType = {
+      id,
+      filter: () => false,
+    }
+    this.projectTypes.push(projectType)
+    const api = new ProjectTypeApi(projectType)
+    callback(api)
   }
 
   /**
    * Register an handler called when the project is open (only if this plugin is loaded).
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onProjectOpen (cb) {
     if (this.lightMode) return
@@ -77,7 +94,7 @@ class PluginApi {
   /**
    * Register an handler called when the plugin is reloaded.
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onPluginReload (cb) {
     if (this.lightMode) return
@@ -87,7 +104,7 @@ class PluginApi {
   /**
    * Register an handler called when a config is red.
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onConfigRead (cb) {
     if (this.lightMode) return
@@ -97,7 +114,7 @@ class PluginApi {
   /**
    * Register an handler called when a config is written.
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onConfigWrite (cb) {
     if (this.lightMode) return
@@ -107,7 +124,7 @@ class PluginApi {
   /**
    * Register an handler called when a task is run.
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onTaskRun (cb) {
     if (this.lightMode) return
@@ -117,7 +134,7 @@ class PluginApi {
   /**
    * Register an handler called when a task has exited.
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onTaskExit (cb) {
     if (this.lightMode) return
@@ -127,7 +144,7 @@ class PluginApi {
   /**
    * Register an handler called when the user opens one task details.
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onTaskOpen (cb) {
     if (this.lightMode) return
@@ -137,7 +154,7 @@ class PluginApi {
   /**
    * Register an handler called when a view is open.
    *
-   * @param {function} cb Handler
+   * @param {Function} cb Handler
    */
   onViewOpen (cb) {
     if (this.lightMode) return
@@ -325,7 +342,7 @@ class PluginApi {
   /**
    * Add a listener to the IPC messages.
    *
-   * @param {function} cb Callback with 'data' param
+   * @param {Function} cb Callback with 'data' param
    */
   ipcOn (cb) {
     const handler = cb._handler = ({ data, emit }) => {
@@ -493,7 +510,7 @@ class PluginApi {
    * Watch for a value change of a shared data
    *
    * @param {string} id Id of the Shared data
-   * @param {function} handler Callback
+   * @param {Function} handler Callback
    */
   watchSharedData (id, handler) {
     sharedData.watch({ id, projectId: this.project.id }, handler)
@@ -503,7 +520,7 @@ class PluginApi {
    * Delete the watcher of a shared data.
    *
    * @param {string} id Id of the Shared data
-   * @param {function} handler Callback
+   * @param {Function} handler Callback
    */
   unwatchSharedData (id, handler) {
     sharedData.unwatch({ id, projectId: this.project.id }, handler)
@@ -652,14 +669,14 @@ class PluginApi {
        * Watch for a value change of a shared data
        *
        * @param {string} id Id of the Shared data
-       * @param {function} handler Callback
+       * @param {Function} handler Callback
        */
       watchSharedData: (id, handler) => this.watchSharedData(namespace + id, handler),
       /**
        * Delete the watcher of a shared data.
        *
        * @param {string} id Id of the Shared data
-       * @param {function} handler Callback
+       * @param {Function} handler Callback
        */
       unwatchSharedData: (id, handler) => this.unwatchSharedData(namespace + id, handler),
       /**

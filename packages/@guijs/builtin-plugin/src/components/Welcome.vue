@@ -2,8 +2,8 @@
   <div class="welcome">
     <div class="logo-wrapper">
       <ItemLogo
-        image="/public/vue-logo.png"
-        class="logo vuejs"
+        image="star"
+        class="logo"
       />
     </div>
     <div class="title">
@@ -64,6 +64,9 @@ export default {
   .logo
     width 100px
     height @width
+    >>> .vue-ui-icon
+      width 42px
+      height @width
 
 .title
   font-size 32px

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "author": "Guillaume Chau",
   "scripts": {
-    "dev": "nodepack-service dev",
+    "dev": "NODEPACK_NO_MAINTENANCE=true nodepack-service dev",
     "build": "nodepack-service build",
     "start": "node ./dist/app.js"
   },
