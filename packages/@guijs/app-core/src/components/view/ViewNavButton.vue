@@ -1,12 +1,9 @@
 <template>
   <div class="project-nav-button">
-    <v-popover
-      trigger="hover"
+    <VTooltip
       handle-resize
-      popover-class="force-tooltip"
       placement="right"
       offset="4"
-      :delay="{ show: 300, hide: 0 }"
     >
       <VueGroupButton
         class="flat big"
@@ -27,7 +24,7 @@
         <span v-if="$responsive.wide" class="label">{{ $t(view.tooltip) }}</span>
       </VueGroupButton>
 
-      <template slot="popover">
+      <template #popper>
         <div class="title">{{ $t(view.tooltip) }}</div>
 
         <div v-if="badges" class="badges">
@@ -38,7 +35,7 @@
           />
         </div>
       </template>
-    </v-popover>
+    </VTooltip>
 
     <div
       v-if="firstNotHiddenBadge"
