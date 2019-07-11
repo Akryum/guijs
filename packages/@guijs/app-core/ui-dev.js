@@ -1,6 +1,6 @@
 // This file will be loaded when the project is opened
 module.exports = api => {
-  if (!process.env.VUE_APP_CLI_UI_DEV) return
+  if (!process.env.GUIJS_DEV) return
 
   console.log('has(eslint)', api.hasPlugin('eslint'))
   console.log('has(typescript)', api.hasPlugin('typescript'))

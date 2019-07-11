@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const globby = require('globby')
 const deepmerge = require('deepmerge')
+const { resolveModule } = require('@nodepack/module')
 // Subs
 const channels = require('../channels')
 // Context
@@ -31,7 +32,7 @@ function add (locale, context) {
 function reset (context) {
   locales = []
   // Load builtin locales
-  const folder = path.resolve(__dirname, '../../')
+  const folder = path.dirname(resolveModule('@guijs/server-core/package.json', __dirname))
   loadFolder(folder, context)
 }
 
@@ -48,7 +49,7 @@ function _loadFolder (root, context) {
 
 function loadFolder (root, context) {
   const folder = path.join(root, './locales')
-  if (process.env.VUE_APP_CLI_UI_DEV && !watchedTrees.get(root) && fs.existsSync(folder)) {
+  if (process.env.GUIJS_DEV && !watchedTrees.get(root) && fs.existsSync(folder)) {
     watchedTrees.set(root, true)
     const watch = require('watch')
     watch.watchTree(folder, () => {
