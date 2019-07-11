@@ -1,5 +1,10 @@
 <template>
-  <div class="project-select-list-item list-item">
+  <div
+    class="project-select-list-item list-item"
+    :class="{
+      opening,
+    }"
+  >
     <div
       ref="content"
       class="content"
@@ -7,8 +12,10 @@
     >
       <div class="project-type pointer-events-none">
         <ItemLogo
+          ref="itemLogo"
           :image="project.type.logo"
           fallback-icon="folder"
+          :style="itemLogoStyle"
         />
       </div>
 
@@ -106,14 +113,29 @@ export default {
   data () {
     return {
       showRename: false,
+      opening: false,
+      itemLogoStyle: {
+        left: null,
+        top: null,
+      },
     }
   },
 
   methods: {
     onContentClick (e) {
       if (e.target === this.$refs.content) {
-        this.$emit('open')
+        this.open()
       }
+    },
+
+    async open () {
+      const itemLogo = this.$refs.itemLogo.$el
+      const bounds = itemLogo.getBoundingClientRect()
+      this.itemLogoStyle.left = `${bounds.left}px`
+      this.itemLogoStyle.top = `${bounds.top}px`
+      this.opening = true
+      await this.$nextTick()
+      this.$emit('open')
     },
 
     async openInEditor () {
@@ -138,18 +160,28 @@ export default {
   grid-template-rows auto
   grid-template-areas "icon info actions"
 
+.project-type,
+.info,
+.actions
+  h-box()
+  align-items center
+
 .project-type
   grid-area icon
-  h-box()
-  box-center()
+  // Prevent size from changing during opening animation
+  width 66px
+  height 50px
+
+  >>> .item-logo
+    border transparent 2px solid
+    border-radius 50%
+    padding 2px
 
 .info
   grid-area info
 
 .actions
   grid-area actions
-  h-box()
-  align-items center
 
   >>> > *
     space-between-x($padding-item)
@@ -163,7 +195,21 @@ export default {
   pointer-events all
 
 .project-select-list-item
+  &:active
+    background $vue-ui-primary-100
+
   &.open
-    &:not(:hover)
-      background rgba($vue-ui-color-primary, .05)
+    .project-type
+      >>> .item-logo
+        border-color $vue-ui-primary-200
+
+  &.opening
+    // Open animation on project type logo
+    .project-type
+      >>> .item-logo
+        transition transform .3s, opacity .3s
+        transform-origin center
+        transform scale(4)
+        opacity 0
+        position fixed
 </style>
