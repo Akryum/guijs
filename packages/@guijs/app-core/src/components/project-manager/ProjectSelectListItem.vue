@@ -28,6 +28,14 @@
       </div>
 
       <div class="actions">
+        <VueButton
+          class="icon-button flat"
+          :icon-left="project.favorite ? 'star' : 'star_border'"
+          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.favorite')"
+          data-testid="favorite-button"
+          @click.stop="$emit('favorite')"
+        />
+
         <VueDropdown>
           <template #trigger>
             <VueButton
@@ -51,14 +59,6 @@
             @click.stop
           >
             {{ $t('org.vue.components.top-bar.homepage') }}
-          </VueDropdownButton>
-
-          <VueDropdownButton
-            :icon-left="project.favorite ? 'star' : 'star_border'"
-            data-testid="favorite-button"
-            @click.stop="$emit('favorite')"
-          >
-            {{ $t('org.vue.components.project-select-list-item.tooltips.favorite') }}
           </VueDropdownButton>
 
           <VueDropdownButton
@@ -138,7 +138,6 @@ export default {
   grid-template-columns auto 1fr auto
   grid-template-rows auto
   grid-template-areas "icon info actions"
-  grid-gap $padding-item
 
 .project-type
   grid-area icon
@@ -152,6 +151,9 @@ export default {
   grid-area actions
   h-box()
   align-items center
+
+  >>> > *
+    space-between-x($padding-item)
 
 .name
   h-box()
