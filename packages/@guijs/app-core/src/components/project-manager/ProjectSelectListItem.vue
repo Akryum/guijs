@@ -12,7 +12,7 @@
         />
       </div>
 
-      <div class="info">
+      <div class="info pointer-events-none">
         <ListItemInfo
           :description="project.path"
         >
@@ -33,7 +33,7 @@
           :icon-left="project.favorite ? 'star' : 'star_border'"
           v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.favorite')"
           data-testid="favorite-button"
-          @click.stop="$emit('favorite')"
+          @click="$emit('favorite')"
         />
 
         <VueDropdown>
@@ -46,7 +46,7 @@
 
           <VueDropdownButton
             icon-left="open_in_browser"
-            @click.stop="openInEditor()"
+            @click="openInEditor()"
           >
             {{ $t('org.vue.components.project-select-list-item.tooltips.open-in-editor') }}
           </VueDropdownButton>
@@ -56,14 +56,13 @@
             :href="project.homepage"
             target="_blank"
             icon-left="open_in_new"
-            @click.stop
           >
             {{ $t('org.vue.components.top-bar.homepage') }}
           </VueDropdownButton>
 
           <VueDropdownButton
             icon-left="edit"
-            @click.stop="showRename = true"
+            @click="showRename = true"
           >
             {{ $t('org.vue.components.project-rename.title') }}
           </VueDropdownButton>
@@ -71,7 +70,7 @@
           <VueDropdownButton
             icon-left="close"
             data-testid="delete-button"
-            @click.stop="$emit('remove')"
+            @click="$emit('remove')"
           >
             {{ $t('org.vue.components.project-select-list-item.tooltips.delete') }}
           </VueDropdownButton>
@@ -161,6 +160,7 @@ export default {
 
 .bullet-menu
   margin-left 6px
+  pointer-events all
 
 .project-select-list-item
   &.open
