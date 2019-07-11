@@ -2261,6 +2261,10 @@
     "@vue/babel-plugin-transform-vue-jsx" "^1.0.0"
     camelcase "^5.0.0"
 
+"@vue/cli-global-utils@link:vue-cli/packages/@vue/cli-global-utils":
+  version "0.0.0"
+  uid ""
+
 "@vue/cli-overlay@^4.0.0-alpha.3":
   version "4.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-4.0.0-alpha.3.tgz#29600010c43acfda19a42373bf5f7aba31cdcd98"
@@ -2512,13 +2516,13 @@
   resolved "https://registry.yarnpkg.com/@vue/preload-webpack-plugin/-/preload-webpack-plugin-1.1.0.tgz#d768dba004261c029b53a77c5ea2d5f9ee4f3cce"
   integrity sha512-rcn2KhSHESBFMPj5vc5X2pI9bcBNQQixvJXhD5gZ4rN2iym/uH2qfDSQfUS5+qwiz0a85TCkeUs6w6jxFDudbw==
 
-"@vue/ui@^0.9.2":
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.9.2.tgz#d0db33f5133f93cb71e44bcd1ed71caa405ded25"
-  integrity sha512-fb4ZO7elVD74nUG0Vtmz5ptmPZJ+shupv2kMxf3dkzmzqCO486InkPm9GjBveGy73zRImO5Pm4EHsWVTaSdcBA==
+"@vue/ui@^0.10.5":
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.10.5.tgz#e20e71e42ad83e4632c34d51473d71b5b6cfa15e"
+  integrity sha512-MfVCDKttQKcpIp1ibf41esIU7NqDGB1K+998rbrj9Mef61dGHdBww1K7UiH9nFcVzV/ej55p6s3Kic+MuSBYgA==
   dependencies:
     focus-visible "^4.1.5"
-    v-tooltip "^2.0.1"
+    v-tooltip "^3.0.0-alpha.10"
     vue-resize "^0.4.5"
 
 "@vue/web-component-wrapper@^1.2.0":
@@ -13138,12 +13142,11 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
-v-tooltip@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-2.0.2.tgz#8610d9eece2cc44fd66c12ef2f12eec6435cab9b"
-  integrity sha512-xQ+qzOFfywkLdjHknRPgMMupQNS8yJtf9Utd5Dxiu/0n4HtrxqsgDtN2MLZ0LKbburtSAQgyypuE/snM8bBZhw==
+v-tooltip@^3.0.0-alpha.10:
+  version "3.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-3.0.0-alpha.10.tgz#d710ec5801dca4f501da8af833600542d4c80e94"
+  integrity sha512-4EZkRXvpmLHUMUUMYr/xNXyahG7/85s5BEqxC0Kx/waFMrjGsdEQMnD7elx7s30xlrPzhcc8WWf5KPu5t9HL2A==
   dependencies:
-    lodash "^4.17.11"
     popper.js "^1.15.0"
     vue-resize "^0.4.5"
 
