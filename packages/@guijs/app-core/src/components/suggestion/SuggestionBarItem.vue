@@ -55,13 +55,13 @@
             <VueButton
               :label="$t('org.vue.components.suggestion-bar.modal.cancel')"
               icon-left="close"
-              v-close-popover
+              v-close-popper
             />
             <VueButton
               class="primary"
               :label="$t('org.vue.components.suggestion-bar.modal.continue')"
               icon-left="done"
-              v-close-popover
+              v-close-popper
               @click="activate(suggestion)"
             />
           </div>

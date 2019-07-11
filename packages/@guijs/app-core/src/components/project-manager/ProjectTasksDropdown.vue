@@ -23,7 +23,7 @@
           class="icon-button flat"
           icon-left="close"
           v-tooltip="$t('org.vue.components.logger-view.buttons.close')"
-          v-close-popover
+          v-close-popper
         />
       </div>
 
