@@ -21,6 +21,7 @@ const folders = require('./folders')
 const plugins = require('./plugins')
 const locales = require('./locales')
 const logs = require('./logs')
+const projectTypes = require('./project-types')
 // Context
 const getContext = require('../context')
 // Utils
@@ -437,11 +438,7 @@ function rename ({ id, name }, context) {
 }
 
 function getType (project, context) {
-  if (typeof project === 'string') {
-    project = findByPath(project, context)
-  }
-  if (!project) return 'unknown'
-  return !project.type ? 'vue' : project.type
+  return projectTypes.getType(project.type, context)
 }
 
 function getHomepage (project, context) {

@@ -1,13 +1,14 @@
 <template>
   <div class="project-select-list-item list-item">
-    <div class="content">
-      <div class="favorite">
-        <VueButton
-          class="icon-button"
-          :icon-left="project.favorite ? 'star' : 'star_border'"
-          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.favorite')"
-          data-testid="favorite-button"
-          @click.stop="$emit('favorite')"
+    <div
+      ref="content"
+      class="content"
+      @click="onContentClick"
+    >
+      <div class="project-type pointer-events-none">
+        <ItemLogo
+          :image="project.type.logo"
+          fallback-icon="folder"
         />
       </div>
 
@@ -27,37 +28,54 @@
       </div>
 
       <div class="actions">
-        <VueButton
-          v-if="project.homepage"
-          :href="project.homepage"
-          target="_blank"
-          class="icon-button"
-          icon-left="open_in_new"
-          v-tooltip="$t('org.vue.components.top-bar.homepage')"
-          @click.stop
-        />
+        <VueDropdown>
+          <template #trigger>
+            <VueButton
+              icon-left="more_vert"
+              class="icon-button flat"
+            />
+          </template>
 
-        <VueButton
-          icon-left="open_in_browser"
-          class="icon-button"
-          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.open-in-editor')"
-          @click.stop="openInEditor()"
-        />
+          <VueDropdownButton
+            icon-left="open_in_browser"
+            @click.stop="openInEditor()"
+          >
+            {{ $t('org.vue.components.project-select-list-item.tooltips.open-in-editor') }}
+          </VueDropdownButton>
 
-        <VueButton
-          class="icon-button"
-          icon-left="edit"
-          v-tooltip="$t('org.vue.components.project-rename.title')"
-          @click.stop="showRename = true"
-        />
+          <VueDropdownButton
+            v-if="project.homepage"
+            :href="project.homepage"
+            target="_blank"
+            icon-left="open_in_new"
+            @click.stop
+          >
+            {{ $t('org.vue.components.top-bar.homepage') }}
+          </VueDropdownButton>
 
-        <VueButton
-          class="icon-button"
-          icon-left="close"
-          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.delete')"
-          data-testid="delete-button"
-          @click.stop="$emit('remove')"
-        />
+          <VueDropdownButton
+            :icon-left="project.favorite ? 'star' : 'star_border'"
+            data-testid="favorite-button"
+            @click.stop="$emit('favorite')"
+          >
+            {{ $t('org.vue.components.project-select-list-item.tooltips.favorite') }}
+          </VueDropdownButton>
+
+          <VueDropdownButton
+            icon-left="edit"
+            @click.stop="showRename = true"
+          >
+            {{ $t('org.vue.components.project-rename.title') }}
+          </VueDropdownButton>
+
+          <VueDropdownButton
+            icon-left="close"
+            data-testid="delete-button"
+            @click.stop="$emit('remove')"
+          >
+            {{ $t('org.vue.components.project-select-list-item.tooltips.delete') }}
+          </VueDropdownButton>
+        </VueDropdown>
       </div>
     </div>
 
@@ -65,7 +83,6 @@
       v-if="showRename"
       :project="project"
       @close="showRename = false"
-      @click.native.stop
     />
   </div>
 </template>
@@ -94,6 +111,12 @@ export default {
   },
 
   methods: {
+    onContentClick (e) {
+      if (e.target === this.$refs.content) {
+        this.$emit('open')
+      }
+    },
+
     async openInEditor () {
       await this.$apollo.mutate({
         mutation: OPEN_IN_EDITOR,
@@ -117,7 +140,7 @@ export default {
   grid-template-areas "icon info actions"
   grid-gap $padding-item
 
-.favorite
+.project-type
   grid-area icon
   h-box()
   box-center()
@@ -129,9 +152,6 @@ export default {
   grid-area actions
   h-box()
   align-items center
-
-  >>> > *
-    space-between-x($padding-item)
 
 .name
   h-box()

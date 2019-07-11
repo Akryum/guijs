@@ -41,7 +41,7 @@
                       :class="{
                         open: projectCurrent && projectCurrent.id === project.id
                       }"
-                      @click.native="openProject(project)"
+                      @open="openProject(project)"
                       @remove="removeProject(project)"
                       @favorite="toggleFavorite(project)"
                     />

@@ -29,7 +29,7 @@ extend type Mutation {
 type Project {
   id: ID!
   name: String!
-  type: ProjectType
+  type: ProjectType!
   path: String!
   favorite: Int
   plugins: [Plugin]
@@ -37,11 +37,6 @@ type Project {
   hasRunningTasks: Boolean!
   homepage: String
   openDate: JSON
-}
-
-enum ProjectType {
-  vue
-  unknown
 }
 
 input ProjectCreateInput {
@@ -82,6 +77,11 @@ type Feature implements DescribedEntity {
   description: String
   link: String
   enabled: Boolean!
+}
+
+type ProjectType {
+  id: ID!
+  logo: String
 }
 `
 

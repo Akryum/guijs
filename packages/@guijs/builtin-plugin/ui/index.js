@@ -1,4 +1,6 @@
 module.exports = api => {
+  require('./project-types')(api)
+
   if (process.env.GUIJS_DEBUG) {
     api.addClientAddon({
       id: 'org.vue.webpack.client-addon.dev',

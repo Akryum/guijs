@@ -8,6 +8,14 @@ class ProjectTypeApi {
     this.projectType = projectType
   }
 
+  get logo () {
+    return this.projectType.logo
+  }
+
+  set logo (value) {
+    this.projectType.logo = value
+  }
+
   filterProject (callback) {
     this.projectType.filter = callback
   }

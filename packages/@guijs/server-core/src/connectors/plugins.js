@@ -19,6 +19,7 @@ const locales = require('./locales')
 const sharedData = require('./shared-data')
 const suggestions = require('./suggestions')
 const dependencies = require('./dependencies')
+const projectTypes = require('./project-types')
 // Api
 const PluginApi = require('../api/PluginApi')
 // Utils
@@ -254,6 +255,9 @@ function resetPluginApi ({ file, lightApi }, context) {
           }
         }
       }
+
+      // Add project types
+      projectTypes.setTypes(pluginApi.projectTypes, context)
       // Add client addons
       pluginApi.clientAddons.forEach(options => {
         clientAddons.add(options, context)

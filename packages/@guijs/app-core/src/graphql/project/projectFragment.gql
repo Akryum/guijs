@@ -1,7 +1,10 @@
 fragment project on Project {
   id
   name
-  type
+  type {
+    id
+    logo
+  }
   path
   favorite
   homepage
