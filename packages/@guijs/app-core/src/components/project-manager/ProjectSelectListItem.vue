@@ -201,7 +201,7 @@ export default {
   &.open
     .project-type
       >>> .item-logo
-        border-color $vue-ui-primary-200
+        border-color $vue-ui-primary-500
 
   &.opening
     // Open animation on project type logo
