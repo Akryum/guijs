@@ -360,8 +360,9 @@ async function importProject (input, context) {
     id: shortId.generate(),
     path: input.path,
     favorite: 0,
-    type: folders.isVueProject(input.path) ? 'vue' : 'unknown',
+    type: await projectTypes.detectType({ file: input.path }, context),
   }
+
   const packageData = folders.readPackage(project.path, context)
   project.name = packageData.name
   context.db.get('projects').push(project).write()
