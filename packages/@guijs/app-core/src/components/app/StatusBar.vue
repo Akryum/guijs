@@ -214,11 +214,6 @@ export default {
     color $vue-ui-color-light
     >>> .vue-ui-icon svg
       fill @color
-    .vue-ui-dark-mode &
-      background $vue-ui-color-primary
-      color $vue-ui-color-dark
-      >>> .vue-ui-icon svg
-        fill @color
 
   .section
     h-box()
@@ -229,16 +224,12 @@ export default {
 
     &:hover
       background lighten($vue-ui-color-darker, 10%)
-      .vue-ui-dark-mode &
-        background darken($vue-ui-color-primary, 10%)
 
     > .vue-ui-icon + *
       margin-left 4px
 
     .label
       color lighten($vue-ui-color-dark, 20%)
-      .vue-ui-dark-mode &
-        color lighten($vue-ui-color-dark-neutral, 20%)
 
     &.action
       user-select none
@@ -268,8 +259,6 @@ export default {
     .last-message >>> .message
       > span
         color $vue-ui-color-light
-        .vue-ui-dark-mode &
-          color $vue-ui-color-dark
 
     .no-log
       padding 2px
