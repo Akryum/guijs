@@ -2,11 +2,28 @@
   <div class="project-quick-dropdown">
     <VueDropdown
       v-if="$responsive.wide"
-      :label="projectCurrent ? projectCurrent.name : $t('org.vue.components.status-bar.project.empty')"
       class="current-project"
-      icon-right="arrow_drop_down"
-      button-class="round"
     >
+      <template #trigger>
+        <VueButton
+          icon-right="arrow_drop_down"
+          class="project-label flat"
+        >
+          <img
+            v-if="projectTypeLogo"
+            :src="projectTypeLogo"
+            :key="projectTypeLogo"
+            class="project-type-logo"
+          >
+          <div
+            v-tooltip.right="projectLabelText.length > 16 ? projectLabelText : false"
+            class="project-label-text"
+          >
+            {{ projectLabelText }}
+          </div>
+        </VueButton>
+      </template>
+
       <!-- Current project options -->
 
       <template v-if="projectCurrent">
@@ -97,6 +114,7 @@
 
 <script>
 import { resetApollo } from '@/vue-apollo'
+import { getImageUrl } from '@/util/image'
 
 import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
 import PROJECTS from '@/graphql/project/projects.gql'
@@ -135,6 +153,17 @@ export default {
       return this.projects.filter(
         p => !p.favorite && (!this.projectCurrent || this.projectCurrent.id !== p.id)
       ).sort((a, b) => b.openDate - a.openDate).slice(0, 3)
+    },
+
+    projectTypeLogo () {
+      if (this.projectCurrent && this.projectCurrent.type) {
+        return getImageUrl(this.projectCurrent.type.logo)
+      }
+      return null
+    },
+
+    projectLabelText () {
+      return this.projectCurrent ? this.projectCurrent.name : this.$t('org.vue.components.status-bar.project.empty')
     },
   },
 
@@ -187,6 +216,41 @@ export default {
         width 20px
         height @width
 
+  &.v-popper--open
+    .project-label
+      background $vue-ui-primary-100
+
 .vue-ui-empty
   padding 6px
+
+.project-label
+  padding $padding-item
+  height 64px
+
+  >>> .default-slot
+    display flex
+    align-items center
+    flex 1
+
+.project-label-text
+  flex 100% 1 1
+  width 0
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+  font-size 16px
+  padding 2px 0
+
+.project-type-logo
+  flex auto 0 0
+  width 24px
+  height @width
+  border-radius 50%
+  margin-right 6px
+  position relative
+  left -2px
+  background $vue-ui-gray-100
+
+.vue-ui-switch
+  font-size 14px
 </style>

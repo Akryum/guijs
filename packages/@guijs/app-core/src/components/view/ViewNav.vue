@@ -154,7 +154,6 @@ export default {
     background $vue-ui-color-darker
 
   .header
-    padding $padding-item
     display flex
     .project-quick-dropdown
       flex 1
