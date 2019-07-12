@@ -51,6 +51,9 @@ export default {
   &:hover
     background rgba($vue-ui-color-primary, .1)
 
+    .project-icon
+      opacity 1
+
   &.hidden
     opacity .5
 
@@ -72,6 +75,7 @@ export default {
     top 3px
     margin-left ($padding-item / 2)
     border-radius 50%
+    opacity .3
 
   .favorite-icon
     >>> svg
