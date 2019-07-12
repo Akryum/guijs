@@ -29,7 +29,7 @@ extend type Mutation {
 type Project {
   id: ID!
   name: String!
-  type: ProjectType!
+  type: ProjectType
   path: String!
   favorite: Int
   plugins: [Plugin]
@@ -106,7 +106,7 @@ exports.resolvers = {
     projectInitCreation: (root, args, context) => projects.initCreator(context),
     projectCancelCreation: (root, args, context) => projects.removeCreator(context),
     projectCreate: (root, { input }, context) => projects.create(input, context),
-    projectImport: (root, { input }, context) => projects.import(input, context),
+    projectImport: (root, { input }, context) => projects.importProject(input, context),
     projectOpen: (root, { id }, context) => projects.open(id, context),
     projectRemove: (root, { id }, context) => projects.remove(id, context),
     projectCwdReset: (root, args, context) => projects.resetCwd(context),
