@@ -1,49 +1,51 @@
-const path = require('path')
-const fs = require('fs-extra')
-const LRU = require('lru-cache')
-const chalk = require('chalk')
-const deepEqual = require('fast-deep-equal')
+import path from 'path'
+import fs from 'fs-extra'
+import LRU from 'lru-cache'
+import chalk from 'chalk'
+import deepEqual from 'fast-deep-equal'
 // Context
-const getContext = require('../context')
+import getContext from '../context'
 // Subs
-const channels = require('../channels')
+import channels from '../channels'
 // Connectors
-const cwd = require('./cwd')
-const folders = require('./folders')
-const prompts = require('./prompts')
-const progress = require('./progress')
-const logs = require('./logs')
-const clientAddons = require('./client-addons')
-const views = require('./views')
-const locales = require('./locales')
-const sharedData = require('./shared-data')
-const suggestions = require('./suggestions')
-const dependencies = require('./dependencies')
-const projectTypes = require('./project-types')
+import cwd from './cwd'
+import folders from './folders'
+import prompts from './prompts'
+import progress from './progress'
+import logs from './logs'
+import clientAddons from './client-addons'
+import views from './views'
+import locales from './locales'
+import sharedData from './shared-data'
+import suggestions from './suggestions'
+import dependencies from './dependencies'
+import * as projectTypes from './project-types'
+import widgets from './widgets'
+import * as projects from './projects'
 // Api
-const PluginApi = require('../api/PluginApi')
+import PluginApi from '../api/PluginApi'
 // Utils
-const {
+import {
   isPlugin,
   isOfficialPlugin,
   getPluginLink,
   execa,
-} = require('@vue/cli-shared-utils')
-const {
+} from '@vue/cli-shared-utils'
+import {
   resolveModule,
   loadModule,
   clearModule,
-} = require('@nodepack/module')
-const {
+} from '@nodepack/module'
+import {
   installPackage,
   uninstallPackage,
   updatePackage,
-} = require('@nodepack/utils')
-const { getCommand } = require('../util/command')
-const ipc = require('../util/ipc')
-const { log } = require('../util/logger')
-const { notify } = require('../util/notification')
-const { rcFolder } = require('../util/rcFolder')
+} from '@nodepack/utils'
+import { getCommand } from '../util/command'
+import ipc from '../util/ipc'
+import { log } from '../util/logger'
+import { notify } from '../util/notification'
+import { rcFolder } from '../util/rcFolder'
 
 const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
@@ -197,109 +199,99 @@ function getPlugins (file) {
   return plugins
 }
 
-function resetPluginApi ({ file, lightApi }, context) {
-  return new Promise((resolve, reject) => {
-    log('Plugin API reloading...', chalk.grey(file))
+async function resetPluginApi ({ file, lightApi }, context) {
+  log('Plugin API reloading...', chalk.grey(file))
 
-    const widgets = require('./widgets')
+  let pluginApi = pluginApiInstances.get(file)
+  let projectId
 
-    let pluginApi = pluginApiInstances.get(file)
-    let projectId
+  // Clean up
+  if (pluginApi) {
+    projectId = pluginApi.project.id
+    pluginApi.views.forEach(r => views.remove(r.id, context))
+    pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
+  }
+  if (!lightApi) {
+    if (projectId) sharedData.unWatchAll({ projectId }, context)
+    clientAddons.clear(context)
+    suggestions.clear(context)
+    widgets.reset(context)
+  }
 
-    // Clean up
-    if (pluginApi) {
-      projectId = pluginApi.project.id
-      pluginApi.views.forEach(r => views.remove(r.id, context))
-      pluginApi.ipcHandlers.forEach(fn => ipc.off(fn))
+  const project = projects.findByPath(file, context)
+
+  if (!project) {
+    return false
+  }
+
+  const plugins = getPlugins(file)
+
+  pluginApi = new PluginApi({
+    plugins,
+    file,
+    project,
+    lightMode: lightApi,
+  }, context)
+  pluginApiInstances.set(file, pluginApi)
+
+  // Run Plugin API
+  runPluginApi('@guijs/builtin-plugin', '@guijs/builtin-plugin/ui', pluginApi, __dirname, context)
+  // Global plugins first
+  plugins.slice().sort(sortPluginRun)
+    .forEach(plugin => runPluginApi(plugin.id, `${plugin.id}${plugin.isGlobal ? '' : '/ui'}`, pluginApi, plugin.baseDir, context))
+  // Project package.json data
+  const { pkg, pkgContext } = pkgStore.get(file)
+  // Local plugins
+  if (pkg.vuePlugins && pkg.vuePlugins.ui) {
+    const files = pkg.vuePlugins.ui
+    if (Array.isArray(files)) {
+      for (const file of files) {
+        runPluginApi(pkgContext, `${pkgContext}/ui`, pluginApi, pluginApi.cwd, context, file)
+      }
     }
-    if (!lightApi) {
-      if (projectId) sharedData.unWatchAll({ projectId }, context)
-      clientAddons.clear(context)
-      suggestions.clear(context)
-      widgets.reset(context)
-    }
+  }
 
-    // Cyclic dependency with projects connector
-    setTimeout(async () => {
-      const projects = require('./projects')
-      const project = projects.findByPath(file, context)
-
-      if (!project) {
-        resolve(false)
-        return
-      }
-
-      const plugins = getPlugins(file)
-
-      pluginApi = new PluginApi({
-        plugins,
-        file,
-        project,
-        lightMode: lightApi,
-      }, context)
-      pluginApiInstances.set(file, pluginApi)
-
-      // Run Plugin API
-      runPluginApi('@guijs/builtin-plugin', '@guijs/builtin-plugin/ui', pluginApi, __dirname, context)
-      // Global plugins first
-      plugins.slice().sort(sortPluginRun)
-        .forEach(plugin => runPluginApi(plugin.id, `${plugin.id}${plugin.isGlobal ? '' : '/ui'}`, pluginApi, plugin.baseDir, context))
-      // Project package.json data
-      const { pkg, pkgContext } = pkgStore.get(file)
-      // Local plugins
-      if (pkg.vuePlugins && pkg.vuePlugins.ui) {
-        const files = pkg.vuePlugins.ui
-        if (Array.isArray(files)) {
-          for (const file of files) {
-            runPluginApi(pkgContext, `${pkgContext}/ui`, pluginApi, pluginApi.cwd, context, file)
-          }
-        }
-      }
-
-      // Add project types
-      projectTypes.setTypes(pluginApi.projectTypes, context)
-      // Add client addons
-      pluginApi.clientAddons.forEach(options => {
-        clientAddons.add(options, context)
-      })
-      // Add views
-      for (const view of pluginApi.views) {
-        await views.add({ view, project }, context)
-      }
-      // Register widgets
-      for (const definition of pluginApi.widgetDefs) {
-        await widgets.registerDefinition({ definition, project }, context)
-      }
-
-      if (lightApi) {
-        resolve(true)
-        return
-      }
-
-      if (projectId !== project.id) {
-        callHook({
-          id: 'projectOpen',
-          args: [project, projects.getLast(context)],
-          file,
-        }, context)
-      } else {
-        callHook({
-          id: 'pluginReload',
-          args: [project],
-          file,
-        }, context)
-
-        // View open hook
-        const currentView = views.getCurrent()
-        if (currentView) views.open(currentView.id)
-      }
-
-      // Load widgets for current project
-      widgets.load(context)
-
-      resolve(true)
-    })
+  // Add project types
+  projectTypes.setTypes(pluginApi.projectTypes, context)
+  // Add client addons
+  pluginApi.clientAddons.forEach(options => {
+    clientAddons.add(options, context)
   })
+  // Add views
+  for (const view of pluginApi.views) {
+    await views.add({ view, project }, context)
+  }
+  // Register widgets
+  for (const definition of pluginApi.widgetDefs) {
+    await widgets.registerDefinition({ definition, project }, context)
+  }
+
+  if (lightApi) {
+    return true
+  }
+
+  if (projectId !== project.id) {
+    callHook({
+      id: 'projectOpen',
+      args: [project, projects.getLast(context)],
+      file,
+    }, context)
+  } else {
+    callHook({
+      id: 'pluginReload',
+      args: [project],
+      file,
+    }, context)
+
+    // View open hook
+    const currentView = views.getCurrent()
+    if (currentView) views.open(currentView.id)
+  }
+
+  // Load widgets for current project
+  widgets.load(context)
+
+  return true
 }
 
 function sortPluginRun (a, b) {
@@ -445,7 +437,6 @@ function mockInstall (id, context) {
 }
 
 function installLocal (context) {
-  const projects = require('./projects')
   const folder = cwd.get()
   cwd.set(projects.getCurrent(context).path, context)
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
@@ -585,7 +576,7 @@ function finishInstall (context) {
 async function initPrompts (id, context) {
   await prompts.reset()
   try {
-    let data = require(path.join(dependencies.getPath({ id, file: cwd.get() }), 'prompts'))
+    let data = loadModule(path.join(dependencies.getPath({ id, file: cwd.get() }), 'prompts'))
     if (typeof data === 'function') {
       data = await data()
     }
@@ -721,7 +712,6 @@ async function callAction ({ id, params, file = cwd.get() }, context) {
 function serveFile ({ pluginId, projectId = null, file }, res) {
   let baseFile = cwd.get()
   if (projectId) {
-    const projects = require('./projects')
     const project = projects.findOne(projectId, getContext())
     if (project) {
       baseFile = project.path
@@ -758,7 +748,7 @@ function serveLogo (req, res) {
   serveFile({ pluginId, projectId, file: 'logo.png' }, res)
 }
 
-module.exports = {
+export {
   list,
   findOne,
   getLogo,

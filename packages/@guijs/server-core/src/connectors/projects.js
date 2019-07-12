@@ -1,33 +1,33 @@
-const path = require('path')
-const fs = require('fs')
-const shortId = require('shortid')
-const execa = require('execa')
+import path from 'path'
+import fs from 'fs'
+import shortId from 'shortid'
+import execa from 'execa'
 // @TODO extract into separate plugin package
-const { getPromptModules } = require('@vue/cli-global-utils/lib/util/createTools')
-const { getFeatures } = require('@vue/cli-global-utils/lib/util/features')
-const { defaults } = require('@vue/cli-global-utils/lib/options')
-const { getPresets } = require('@vue/cli-global-utils/lib/util/getPresets')
-const { resolvePreset } = require('@vue/cli-global-utils/lib/util/resolvePreset')
-const { getPresetFromAnswers } = require('@vue/cli-global-utils/lib/util/getPresetFromAnswers')
-const PromptModuleAPI = require('@vue/cli-global-utils/lib/PromptModuleAPI')
-const { toShortPluginId } = require('@vue/cli-shared-utils')
+import { getPromptModules } from '@vue/cli-global-utils/lib/util/createTools'
+import { getFeatures } from '@vue/cli-global-utils/lib/util/features'
+import { defaults } from '@vue/cli-global-utils/lib/options'
+import { getPresets } from '@vue/cli-global-utils/lib/util/getPresets'
+import { resolvePreset } from '@vue/cli-global-utils/lib/util/resolvePreset'
+import { getPresetFromAnswers } from '@vue/cli-global-utils/lib/util/getPresetFromAnswers'
+import PromptModuleAPI from '@vue/cli-global-utils/lib/PromptModuleAPI'
+import { toShortPluginId } from '@vue/cli-shared-utils'
 // -- end
-const parseGitConfig = require('parse-git-config')
+import parseGitConfig from 'parse-git-config'
 // Connectors
-const progress = require('./progress')
-const cwd = require('./cwd')
-const prompts = require('./prompts')
-const folders = require('./folders')
-const plugins = require('./plugins')
-const locales = require('./locales')
-const logs = require('./logs')
-const projectTypes = require('./project-types')
+import progress from './progress'
+import cwd from './cwd'
+import prompts from './prompts'
+import folders from './folders'
+import * as plugins from './plugins'
+import locales from './locales'
+import logs from './logs'
+import * as projectTypes from './project-types'
 // Context
-const getContext = require('../context')
+import getContext from '../context'
 // Utils
-const { log } = require('../util/logger')
-const { notify } = require('../util/notification')
-const { getHttpsGitURL } = require('../util/strings')
+import { log } from '../util/logger'
+import { notify } from '../util/notification'
+import { getHttpsGitURL } from '../util/strings'
 
 const PROGRESS_ID = 'project-create'
 
@@ -394,8 +394,10 @@ async function open (id, context) {
   cwd.set(project.path, context)
   // Reset locales
   locales.reset(context)
+
   // Load plugins
-  await plugins.list(project.path, context)
+  // Delayed (cyclic dependency)
+  await Promise.resolve().then(() => plugins.list(project.path, context))
 
   // Date
   context.db.get('projects').find({ id }).assign({
@@ -469,13 +471,16 @@ async function autoOpenLastProject () {
       await open(id, context)
     } catch (e) {
       log(`Project can't be auto-opened`, id)
+      if (process.env.GUIJS_DEBUG) {
+        console.error(e)
+      }
     }
   }
 }
 
 autoOpenLastProject()
 
-module.exports = {
+export {
   list,
   findOne,
   findByPath,
@@ -485,7 +490,7 @@ module.exports = {
   applyPreset,
   setFeatureEnabled,
   create,
-  import: importProject,
+  importProject,
   open,
   remove,
   resetCwd,
