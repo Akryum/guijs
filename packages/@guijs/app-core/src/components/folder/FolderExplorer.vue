@@ -56,6 +56,12 @@
                 @click="openFolder(slice.path)"
               >
                 {{ slice.name }}
+
+                <img
+                  v-if="index === slicePath(data.cwd).length - 1 && projectTypeLogo"
+                  :src="projectTypeLogo"
+                  class="project-type-logo"
+                >
               </VueButton>
             </div>
           </div>
@@ -197,6 +203,7 @@
 
 <script>
 import { isValidMultiName } from '@/util/folders'
+import { getImageUrl } from '@/util/image'
 
 import FOLDER_CURRENT from '@/graphql/folder/folderCurrent.gql'
 import FOLDERS_FAVORITE from '@/graphql/folder/foldersFavorite.gql'
@@ -240,6 +247,13 @@ export default {
   computed: {
     newFolderValid () {
       return isValidMultiName(this.newFolderName)
+    },
+
+    projectTypeLogo () {
+      if (this.folderCurrent.projectType) {
+        return getImageUrl(this.folderCurrent.projectType.logo)
+      }
+      return null
     },
   },
 
@@ -433,6 +447,10 @@ export default {
       .vue-ui-dark-mode &
         border-left-color $vue-ui-color-darker
 
+    >>> .default-slot
+      display flex
+      align-items center
+
   .path-folder
     padding 0 9px
 
@@ -460,4 +478,10 @@ export default {
     overflow-x hidden
     overflow-y auto
     position relative
+
+.project-type-logo
+  width 18px
+  height @width
+  border-radius 50%
+  margin-left ($padding-item / 2)
 </style>
