@@ -92,7 +92,7 @@ async function loadGlobalPlugins () {
   globalPlugins = Object.keys(deps).map(
     id => mapPlugin(deps, GLOBAL_PLUGINS_FOLDER, id, true)
   )
-  log('Global plugins found:', globalPlugins.length)
+  log('Global plugins found:', globalPlugins.length, GLOBAL_PLUGINS_FOLDER)
 }
 
 async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
@@ -313,7 +313,6 @@ function sortPluginRun (a, b) {
 }
 
 function runPluginApi (id, file, pluginApi, cwd, context) {
-  debugger
   let module
   try {
     module = loadModule(file, cwd, true)
