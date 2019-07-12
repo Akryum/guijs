@@ -3,12 +3,18 @@ fragment folderCurrent on Folder {
   path
   favorite
   isPackage
-  isVueProject
+  projectType {
+    id
+    logo
+  }
   children {
     name
     path
     isPackage
-    isVueProject
+    projectType {
+      id
+      logo
+    }
     hidden
     favorite
   }

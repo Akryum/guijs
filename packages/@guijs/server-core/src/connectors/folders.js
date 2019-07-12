@@ -127,20 +127,6 @@ function invalidatePackage (file, context) {
   return true
 }
 
-function isVueProject (file, context) {
-  if (!isPackage(file)) return false
-
-  try {
-    const pkg = readPackage(file, context)
-    return !!pkg.vuedesk || Object.keys(pkg.devDependencies || {}).includes('@vue/cli-service')
-  } catch (e) {
-    if (process.env.GUIJS_DEBUG) {
-      console.log(e)
-    }
-  }
-  return false
-}
-
 function listFavorite (context) {
   return context.db.get('foldersFavorite').value().map(
     file => generateFolder(file.id, context)
@@ -181,7 +167,6 @@ module.exports = {
   readPackage,
   writePackage,
   invalidatePackage,
-  isVueProject,
   isFavorite,
   listFavorite,
   setFavorite,

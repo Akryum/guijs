@@ -1,38 +1,40 @@
-<template functional>
-  <div
-    class="folder-explorer-item"
-    :class="{
-      hidden: props.folder.hidden
-    }"
-    @click="listeners.select()"
-  >
-    <VueIcon
-      :icon="props.folder.isPackage ? 'folder' : 'folder_open'"
-      class="folder-icon big"
-    />
-    <div class="folder-name">
-      {{ props.folder.name }}
-      <img
-        v-if="props.folder.isVueProject"
-        class="vue-ui-project-icon"
-        src="~@/assets/logo.png"
-      >
-    </div>
-    <VueIcon
-      v-if="props.folder.favorite"
-      icon="star"
-      class="favorite-icon"
-    />
-  </div>
-</template>
-
 <script>
+import { getImageUrl } from '@/util/image'
+
 export default {
+  functional: true,
+
   props: {
     folder: {
       type: Object,
       required: true,
     },
+  },
+
+  render (h, { props, listeners }) {
+    return <div
+      staticClass="folder-explorer-item"
+      class={{
+        hidden: props.folder.hidden,
+      }}
+      onClick={() => listeners.select()}
+    >
+      <VueIcon
+        icon={props.folder.isPackage ? 'folder' : 'folder_open'}
+        class="folder-icon big"
+      />
+      <div class="folder-name">
+        { props.folder.name }
+        { props.folder.projectType ? <img
+          src={getImageUrl(props.folder.projectType.logo)}
+          class="project-icon"
+        /> : null }
+      </div>
+      { props.folder.favorite ? <VueIcon
+        icon="star"
+        class="favorite-icon"
+      /> : null }
+    </div>
   },
 }
 </script>
@@ -62,12 +64,14 @@ export default {
     margin-left $padding-item
     ellipsis()
 
-  .vue-ui-project-icon
-    width 14px
+  .project-icon
+    width 18px
     height @width
     vertical-align top
     position relative
-    top 5px
+    top 3px
+    margin-left ($padding-item / 2)
+    border-radius 50%
 
   .favorite-icon
     >>> svg
