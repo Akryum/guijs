@@ -140,15 +140,14 @@ module.exports = api => {
     maxWidth: 2,
     maxHeight: 1,
     needsUserConfig: true,
-    onConfigOpen: async ({ context }) => {
-      const tasks = require('@guijs/server-core/src/connectors/tasks')
+    onConfigOpen: async () => {
       return {
         prompts: [
           {
             name: 'task',
             type: 'list',
             message: 'org.vue.widgets.run-task.prompts.task',
-            choices: (await tasks.list(undefined, context)).map(task => ({
+            choices: (await api.getTasks()).map(task => ({
               name: task.name,
               value: task.id,
             })),

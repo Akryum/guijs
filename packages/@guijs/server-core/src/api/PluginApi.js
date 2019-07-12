@@ -9,6 +9,7 @@ const suggestions = require('../connectors/suggestions')
 const folders = require('../connectors/folders')
 const progress = require('../connectors/progress')
 const app = require('../connectors/app')
+const tasks = require('../connectors/tasks')
 // Secondary APIs
 const ProjectTypeApi = require('./ProjectTypeApi')
 // Utils
@@ -217,6 +218,13 @@ class PluginApi {
     return this.describedTasks.find(
       options => typeof options.match === 'function' ? options.match(command) : options.match.test(command)
     )
+  }
+
+  /**
+   * Get all project tasks
+   */
+  getTasks () {
+    return tasks.list({ file: this.cwd }, this.context)
   }
 
   /**
