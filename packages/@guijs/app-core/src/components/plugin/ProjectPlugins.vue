@@ -5,6 +5,21 @@
       class="limit-width list"
     >
       <template slot="actions">
+        <VueGroup
+          v-model="displayGlobal"
+        >
+          <VueGroupButton
+            :value="false"
+            :label="$t('org.vue.views.project-plugins.local-plugins')"
+            class="round"
+          />
+          <VueGroupButton
+            :value="true"
+            :label="$t('org.vue.views.project-plugins.global-plugins')"
+            class="round"
+          />
+        </VueGroup>
+
         <VueInput
           v-model="search"
           icon-left="search"
@@ -36,9 +51,14 @@
 
       <ApolloQuery
         :query="require('@/graphql/plugin/plugins.gql')"
+        :variables="{
+          global: displayGlobal,
+        }"
       >
         <template slot-scope="{ result: { data, loading } }">
-          <div class="cta-text">{{ $t('org.vue.views.project-plugins.heading') }}</div>
+          <div class="cta-text">
+            {{ $t(`org.vue.views.project-plugins.heading-${displayGlobal ? 'global' : 'local'}`) }}
+          </div>
 
           <VueLoadingIndicator
             v-if="loading && (!data || !data.plugins)"
@@ -85,6 +105,7 @@ export default {
   data () {
     return {
       search: '',
+      displayGlobal: false,
     }
   },
 

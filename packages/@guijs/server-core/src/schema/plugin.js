@@ -9,7 +9,7 @@ const dependencies = require('../connectors/dependencies')
 exports.types = gql`
 extend type Query {
   pluginInstallation: PluginInstallation
-  plugins: [Plugin]
+  plugins (global: Boolean = false): [Plugin]
   plugin (id: ID!): Plugin
 }
 
@@ -77,7 +77,10 @@ exports.resolvers = {
 
   Query: {
     pluginInstallation: (root, args, context) => plugins.getInstallation(context),
-    plugins: (root, args, context) => plugins.list(cwd.get(), context),
+    plugins: async (root, args, context) => {
+      const list = await plugins.list(cwd.get(), context)
+      return list.filter(p => p.isGlobal === args.global)
+    },
     plugin: (root, { id }, context) => plugins.findOne({ id, file: cwd.get() }, context),
   },
 

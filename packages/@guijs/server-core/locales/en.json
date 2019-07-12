@@ -384,8 +384,11 @@
         "project-plugins": {
           "title": "Project plugins",
           "button": "Add plugin",
-          "heading": "Installed plugins",
-          "update-all": "Update all plugins"
+          "heading-local": "Installed project plugins",
+          "heading-global": "Installed global guijs plugins",
+          "update-all": "Update all plugins",
+          "local-plugins": "Project plugins",
+          "global-plugins": "Global plugins"
         },
         "project-plugins-add": {
           "title": "Add a plugin",

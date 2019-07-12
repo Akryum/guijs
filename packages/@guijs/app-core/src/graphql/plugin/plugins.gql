@@ -1,7 +1,7 @@
 #import "./pluginFragment.gql"
 
-query plugins {
-  plugins {
+query plugins ($global: Boolean) {
+  plugins (global: $global) {
     ...plugin
   }
 }

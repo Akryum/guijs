@@ -29,6 +29,9 @@
     /deep/ > *
       space-between-x($padding-item)
 
+.actions
+  display flex
+
 .title
   font-size 28px
   font-weight 300
