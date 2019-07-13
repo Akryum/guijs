@@ -1,4 +1,10 @@
-/** @type {import('../util/project-type').ProjectType} ProjectType */
+/**
+ * @typedef ProjectType
+ * @prop {string} id
+ * @prop {string} name
+ * @prop {string} [logo]
+ * @prop {Function} filter
+ */
 
 import folders from './folders'
 

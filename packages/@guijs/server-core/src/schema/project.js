@@ -78,11 +78,6 @@ type Feature implements DescribedEntity {
   link: String
   enabled: Boolean!
 }
-
-type ProjectType {
-  id: ID!
-  logo: String
-}
 `
 
 exports.resolvers = {

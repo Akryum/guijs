@@ -1,4 +1,4 @@
-/** @type {import('../util/project-type').ProjectType} ProjectType */
+/** @type {import('../connectors/project-types').ProjectType} ProjectType */
 
 class ProjectTypeApi {
   /**
