@@ -118,7 +118,7 @@
       @close="restoreParameters()"
     >
       <div class="default-body">
-        <PromptsList
+        <Prompts
           :prompts="visiblePrompts"
           @answer="answerPrompt"
         />

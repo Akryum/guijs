@@ -310,7 +310,7 @@
             lazy
           >
             <div class="content vue-ui-disable-scroll">
-              <PromptsList
+              <Prompts
                 :prompts="visiblePrompts"
                 @answer="answerPrompt"
               />

@@ -145,7 +145,7 @@
             v-if="loadingConfig"
             class="big accent"
           />
-          <PromptsList
+          <Prompts
             v-else
             :prompts="visiblePrompts"
             @answer="answerPrompt"

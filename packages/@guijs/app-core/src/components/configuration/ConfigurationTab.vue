@@ -1,6 +1,6 @@
 <template>
   <div class="configuration-tab">
-    <PromptsList
+    <Prompts
       :prompts="visiblePrompts"
       @answer="answerPrompt"
     />
