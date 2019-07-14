@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "packages/@guijs/app-core"
+		},
+		{
+			"path": "packages/@guijs/builtin-plugin"
+		},
+		{
+			"path": "packages/@guijs/server-core"
+		}
+	]
+}
