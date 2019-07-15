@@ -48,6 +48,7 @@ module.exports = (options, cb = null) => {
 
   typeDefs = processSchema(typeDefs)
 
+  /** @type {import('apollo-server-express').ApolloServerExpressConfig} */
   let apolloServerOptions = {
     typeDefs,
     resolvers,
@@ -89,21 +90,14 @@ module.exports = (options, cb = null) => {
         return contextData
       },
     },
-  }
-
-  // Automatic mocking
-  if (options.enableMocks) {
-    // Customize this file
-    apolloServerOptions.mocks = require('./mocks')
-    apolloServerOptions.mockEntireSchema = false
-
-    if (!options.quiet) {
-      if (process.env.NODE_ENV === 'production') {
-        console.warn(`Automatic mocking is enabled, consider disabling it with the 'enableMocks' option.`)
-      } else {
-        console.log(`✔️  Automatic mocking is enabled`)
+    formatError (error) {
+      console.log(chalk.red(`⚠️  An error occured in resolver: ${chalk.bold(error.path.join('.'))}`))
+      console.log(chalk.red(error.originalError.stack))
+      if (process.env.GUIJS_DEBUG) {
+        error.message += `\nServer Error:\n${error.originalError.stack}\n`
       }
-    }
+      return error
+    },
   }
 
   // Final options
