@@ -3,14 +3,9 @@ import fs from 'fs'
 import shortId from 'shortid'
 import execa from 'execa'
 // @TODO extract into separate plugin package
-import { getPromptModules } from '@vue/cli-global-utils/lib/util/createTools'
-import { getFeatures } from '@vue/cli-global-utils/lib/util/features'
-import { defaults } from '@vue/cli-global-utils/lib/options'
-import { getPresets } from '@vue/cli-global-utils/lib/util/getPresets'
-import { resolvePreset } from '@vue/cli-global-utils/lib/util/resolvePreset'
-import { getPresetFromAnswers } from '@vue/cli-global-utils/lib/util/getPresetFromAnswers'
-import PromptModuleAPI from '@vue/cli-global-utils/lib/PromptModuleAPI'
-import { toShortPluginId } from '@vue/cli-shared-utils'
+// import { defaults } from '@vue/cli-global-utils/lib/options'
+// import { resolvePreset } from '@vue/cli-global-utils/lib/util/resolvePreset'
+// import { getPresetFromAnswers } from '@vue/cli-global-utils/lib/util/getPresetFromAnswers'
 // -- end
 import parseGitConfig from 'parse-git-config'
 // Connectors
@@ -28,14 +23,17 @@ import getContext from '../context'
 import { log } from '../util/logger'
 import { notify } from '../util/notification'
 import { getHttpsGitURL } from '../util/strings'
+import ProjectCreationWizard from '../api/ProjectCreationWizard'
 
 const PROGRESS_ID = 'project-create'
 
 let lastProject = null
 let currentProject = null
-let presets = []
-let features = []
-let promptCompleteCbs = []
+
+/** @type {import('./project-types').ProjectType} */
+let createProjectType = null
+/** @type {ProjectCreationWizard} */
+let creationWizard = null
 
 // @TODO
 // let onInstallProgress = null
@@ -81,19 +79,19 @@ function getLast (context) {
   return lastProject
 }
 
-function generatePresetDescription (preset) {
-  let description = preset.features.join(', ')
-  if (preset.raw.useConfigFiles) {
-    description += ` (Use config files)`
+async function initCreator ({ type }, context) {
+  createProjectType = projectTypes.getType(type, context)
+  if (!createProjectType) {
+    throw new Error(`Project type ${type} not found`)
   }
-  return description
-}
 
-async function initCreator (context) {
-  const promptModules = getPromptModules()
-  const promptAPI = new PromptModuleAPI()
-  promptModules.forEach(m => m(promptAPI))
-  promptCompleteCbs = promptAPI.promptCompleteCbs
+  creationWizard = new ProjectCreationWizard(cwd.get())
+  if (!createProjectType.createCbs.length) {
+    throw new Error(`No create handlers registered on project type ${type}`)
+  }
+  for (const cb of createProjectType.createCbs) {
+    await cb({ wizard: creationWizard })
+  }
 
   /* Event listeners */
 
@@ -113,241 +111,146 @@ async function initCreator (context) {
   // }
   // installProgress.on('log', onInstallLog)
 
-  // Presets
-  const manualPreset = {
-    id: '__manual__',
-    name: 'org.vue.views.project-create.tabs.presets.manual.name',
-    description: 'org.vue.views.project-create.tabs.presets.manual.description',
-    link: null,
-    features: [],
-  }
-  const presetsData = getPresets()
-  presets = [
-    ...Object.keys(presetsData).map(
-      key => {
-        const preset = presetsData[key]
-        const features = getFeatures(preset).map(
-          f => toShortPluginId(f)
-        )
-        const info = {
-          id: key,
-          name: key === 'default' ? 'org.vue.views.project-create.tabs.presets.default-preset' : key,
-          features,
-          link: null,
-          raw: preset,
-        }
-        info.description = generatePresetDescription(info)
-        return info
-      }
-    ),
-    manualPreset,
-  ]
-
-  // Features
-  features = [
-    ...promptAPI.features.map(
-      data => ({
-        id: data.value,
-        name: data.name,
-        description: data.description || null,
-        link: data.link || null,
-        plugins: data.plugins || null,
-        enabled: !!data.checked,
-      })
-    ),
-    {
-      id: 'use-config-files',
-      name: 'org.vue.views.project-create.tabs.features.userConfigFiles.name',
-      description: 'org.vue.views.project-create.tabs.features.userConfigFiles.description',
-      link: null,
-      plugins: null,
-      enabled: false,
-    },
-  ]
-
-  manualPreset.features = features.filter(
-    f => f.enabled
-  ).map(
-    f => f.id
-  )
-
   // Prompts
   await prompts.reset()
-  promptAPI.injectedPrompts.forEach(prompts.add)
-  await updatePromptsFeatures()
+  for (const step of creationWizard.steps) {
+    if (step.options.prompts) {
+      step.options.prompts.forEach(prompts.add)
+    }
+  }
   await prompts.start()
+
+  return creationWizard
+}
+
+export function isCreationStepEnabled (id, context) {
+  const step = creationWizard.getStep(id)
+  if (!step) {
+    throw new Error(`Step ${id} not found`)
+  }
+  if (!step.when) {
+    return true
+  }
+  return !!step.when(creationWizard.answers)
 }
 
 function removeCreator (context) {
   // @TODO
   // installProgress.removeListener('progress', onInstallProgress)
   // installProgress.removeListener('log', onInstallLog)
+  prompts.reset()
   return true
 }
 
-async function getCreation (context) {
-  return {
-    presets,
-    features,
-    prompts: prompts.list(),
-  }
+export async function getCreationWizard (context) {
+  return creationWizard
 }
 
-async function updatePromptsFeatures () {
-  await prompts.changeAnswers(answers => {
-    answers.features = features.filter(
-      f => f.enabled
-    ).map(
-      f => f.id
-    )
-  })
-}
-
-async function setFeatureEnabled ({ id, enabled, updatePrompts = true }, context) {
-  const feature = features.find(f => f.id === id)
-  if (feature) {
-    feature.enabled = enabled
-  } else {
-    console.warn(`Feature '${id}' not found`)
-  }
-  if (updatePrompts) await updatePromptsFeatures()
-  return feature
-}
-
-async function applyPreset (id, context) {
-  const preset = presets.find(p => p.id === id)
-  if (preset) {
-    for (const feature of features) {
-      feature.enabled = !!(
-        preset.features.includes(feature.id) ||
-        (feature.plugins && preset.features.some(f => feature.plugins.includes(f)))
-      )
-    }
-    if (preset.raw) {
-      if (preset.raw.router) {
-        await setFeatureEnabled({ id: 'router', enabled: true, updatePrompts: false }, context)
-      }
-      if (preset.raw.vuex) {
-        await setFeatureEnabled({ id: 'vuex', enabled: true, updatePrompts: false }, context)
-      }
-      if (preset.raw.cssPreprocessor) {
-        await setFeatureEnabled({ id: 'css-preprocessor', enabled: true, updatePrompts: false }, context)
-      }
-      if (preset.raw.useConfigFiles) {
-        await setFeatureEnabled({ id: 'use-config-files', enabled: true, updatePrompts: false }, context)
-      }
-    }
-    await updatePromptsFeatures()
-  } else {
-    console.warn(`Preset '${id}' not found`)
-  }
-
-  return getCreation(context)
-}
-
-async function create (input, context) {
+async function create (context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'creating',
     })
 
-    const targetDir = path.join(cwd.get(), input.folder)
+    // @TODO
 
-    cwd.set(targetDir, context)
+    // const targetDir = path.join(cwd.get(), input.folder)
 
-    const inCurrent = input.folder === '.'
-    const name = (inCurrent ? path.relative('../', process.cwd()) : input.folder).toLowerCase()
+    // cwd.set(targetDir, context)
 
-    // Answers
-    const answers = prompts.getAnswers()
-    await prompts.reset()
+    // const inCurrent = input.folder === '.'
+    // const name = (inCurrent ? path.relative('../', process.cwd()) : input.folder).toLowerCase()
 
-    // Config files
-    let index
-    if ((index = answers.features.indexOf('use-config-files')) !== -1) {
-      answers.features.splice(index, 1)
-      answers.useConfigFiles = 'files'
-    }
+    // // Answers
+    // const answers = prompts.getAnswers()
+    // await prompts.reset()
 
-    // Preset
-    answers.preset = input.preset
-    if (input.save) {
-      answers.save = true
-      answers.saveName = input.save
-    }
+    // // Config files
+    // let index
+    // if ((index = answers.features.indexOf('use-config-files')) !== -1) {
+    //   answers.features.splice(index, 1)
+    //   answers.useConfigFiles = 'files'
+    // }
 
-    setProgress({
-      info: 'Resolving preset...',
-    })
-    let preset
-    if (input.preset === '__remote__' && input.remote) {
-      // vue create foo --preset bar
-      preset = await resolvePreset(input.remote, input.clone)
-    } else if (input.preset === 'default') {
-      // vue create foo --default
-      preset = defaults.presets.default
-    } else {
-      preset = await getPresetFromAnswers(answers, promptCompleteCbs)
-    }
-    setProgress({
-      info: null,
-    })
+    // // Preset
+    // answers.preset = input.preset
+    // if (input.save) {
+    //   answers.save = true
+    //   answers.saveName = input.save
+    // }
 
-    // Create
-    const args = [
-      '--skipGetStarted',
-    ]
-    if (input.packageManager) args.push('--packageManager', input.packageManager)
-    if (input.bar) args.push('--bare')
-    if (input.force) args.push('--force')
-    // Git
-    if (input.enableGit && input.gitCommitMessage) {
-      args.push('--git', input.gitCommitMessage)
-    } else if (!input.enableGit) {
-      args.push('--no-git')
-    }
-    // Preset
-    args.push('--inlinePreset', JSON.stringify(preset))
+    // setProgress({
+    //   info: 'Resolving preset...',
+    // })
+    // let preset
+    // if (input.preset === '__remote__' && input.remote) {
+    //   // vue create foo --preset bar
+    //   preset = await resolvePreset(input.remote, input.clone)
+    // } else if (input.preset === 'default') {
+    //   // vue create foo --default
+    //   preset = defaults.presets.default
+    // } else {
+    //   preset = await getPresetFromAnswers(answers, promptCompleteCbs)
+    // }
+    // setProgress({
+    //   info: null,
+    // })
 
-    log('create', name, args)
+    // // Create
+    // const args = [
+    //   '--skipGetStarted',
+    // ]
+    // if (input.packageManager) args.push('--packageManager', input.packageManager)
+    // if (input.bar) args.push('--bare')
+    // if (input.force) args.push('--force')
+    // // Git
+    // if (input.enableGit && input.gitCommitMessage) {
+    //   args.push('--git', input.gitCommitMessage)
+    // } else if (!input.enableGit) {
+    //   args.push('--no-git')
+    // }
+    // // Preset
+    // args.push('--inlinePreset', JSON.stringify(preset))
 
-    const child = execa('vue', [
-      'create',
-      name,
-      ...args,
-    ], {
-      cwd: cwd.get(),
-      stdio: ['inherit', 'pipe', 'inherit'],
-    })
+    // log('create', name, args)
 
-    const onData = buffer => {
-      const text = buffer.toString().trim()
-      if (text) {
-        setProgress({
-          info: text,
-        })
-        logs.add({
-          type: 'info',
-          message: text,
-        }, context)
-      }
-    }
+    // const child = execa('vue', [
+    //   'create',
+    //   name,
+    //   ...args,
+    // ], {
+    //   cwd: cwd.get(),
+    //   stdio: ['inherit', 'pipe', 'inherit'],
+    // })
 
-    child.stdout.on('data', onData)
+    // const onData = buffer => {
+    //   const text = buffer.toString().trim()
+    //   if (text) {
+    //     setProgress({
+    //       info: text,
+    //     })
+    //     logs.add({
+    //       type: 'info',
+    //       message: text,
+    //     }, context)
+    //   }
+    // }
 
-    await child
+    // child.stdout.on('data', onData)
 
-    removeCreator()
+    // await child
 
-    notify({
-      title: `Project created`,
-      message: `Project ${cwd.get()} created`,
-      icon: 'done',
-    })
+    // removeCreator()
 
-    return importProject({
-      path: targetDir,
-    }, context)
+    // notify({
+    //   title: `Project created`,
+    //   message: `Project ${cwd.get()} created`,
+    //   icon: 'done',
+    // })
+
+    // return importProject({
+    //   path: targetDir,
+    // }, context)
   })
 }
 
@@ -486,9 +389,6 @@ export {
   findByPath,
   getCurrent,
   getLast,
-  getCreation,
-  applyPreset,
-  setFeatureEnabled,
   create,
   importProject,
   open,

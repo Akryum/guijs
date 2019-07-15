@@ -1,4 +1,4 @@
-/** @type {import('../connectors/project-types').ProjectType} ProjectType */
+/** @typedef {import('../connectors/project-types').ProjectType} ProjectType */
 
 class ProjectTypeApi {
   /**
@@ -18,6 +18,10 @@ class ProjectTypeApi {
 
   filterProject (callback) {
     this.projectType.filter = callback
+  }
+
+  onCreate (callback) {
+    this.projectType.createCbs.push(callback)
   }
 }
 

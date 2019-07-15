@@ -31,7 +31,7 @@
             icon-left="add"
             :label="$route.query.hideTabs ? $t('org.vue.views.project-create.tabs.details.form.folder.action') : $t('org.vue.views.project-select.buttons.create')"
             class="big primary create-project"
-            @click="createProject()"
+            @click="showProjectTypeModal = true"
           />
         </div>
       </VueTab>
@@ -102,17 +102,27 @@
         />
       </div>
     </VueModal>
+
+    <ProjectTypeModal
+      v-if="showProjectTypeModal"
+      @close="showProjectTypeModal = false"
+    />
   </div>
 </template>
 
 <script>
+import ProjectTypeModal from '../project-create/ProjectTypeModal.vue'
+
 import FOLDER_CURRENT from '@/graphql/folder/folderCurrent.gql'
-import PROJECT_INIT_CREATION from '@/graphql/project/projectInitCreation.gql'
 import PROJECT_IMPORT from '@/graphql/project/projectImport.gql'
 import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
 
 export default {
   name: 'ProjectSelect',
+
+  components: {
+    ProjectTypeModal,
+  },
 
   metaInfo () {
     return {
@@ -126,6 +136,7 @@ export default {
       tab: undefined,
       hideTabs: !!this.$route.query.hideTabs,
       showNoModulesModal: false,
+      showProjectTypeModal: false,
       busy: false,
     }
   },
@@ -143,14 +154,6 @@ export default {
   },
 
   methods: {
-    async createProject () {
-      await this.$apollo.mutate({
-        mutation: PROJECT_INIT_CREATION,
-      })
-
-      this.$router.push({ name: 'project-create' })
-    },
-
     async importProject (force = false) {
       this.showNoModulesModal = false
       this.busy = true

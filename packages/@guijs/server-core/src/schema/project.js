@@ -3,27 +3,26 @@ const gql = require('graphql-tag')
 const projects = require('../connectors/projects')
 const plugins = require('../connectors/plugins')
 const tasks = require('../connectors/tasks')
+const prompts = require('../connectors/prompts')
 
 exports.types = gql`
 extend type Query {
   projects: [Project]
   project (id: ID!): Project
   projectCurrent: Project
-  projectCreation: ProjectCreation
+  projectCreationWizard: ProjectCreationWizard
 }
 
 extend type Mutation {
-  projectInitCreation: ProjectCreation
+  projectInitCreation (input: ProjectInitCreationInput): ProjectCreationWizard!
   projectCancelCreation: Boolean
-  projectCreate (input: ProjectCreateInput!): Project!
+  projectCreate: Project!
   projectImport (input: ProjectImportInput!): Project!
   projectOpen (id: ID!): Project!
   projectRemove (id: ID!): Boolean!
   projectCwdReset: String
   projectSetFavorite (id: ID!, favorite: Int!): Project!
   projectRename (id: ID!, name: String!): Project!
-  presetApply (id: ID!): ProjectCreation
-  featureSetEnabled (id: ID!, enabled: Boolean): Feature
 }
 
 type Project {
@@ -39,17 +38,8 @@ type Project {
   openDate: JSON
 }
 
-input ProjectCreateInput {
-  folder: String!
-  force: Boolean!
-  bare: Boolean!
-  packageManager: PackageManager
-  preset: String!
-  remote: String
-  clone: Boolean
-  save: String
-  enableGit: Boolean!
-  gitCommitMessage: String
+input ProjectInitCreationInput {
+  type: ID!
 }
 
 input ProjectImportInput {
@@ -57,26 +47,23 @@ input ProjectImportInput {
   force: Boolean
 }
 
-type Preset implements DescribedEntity {
-  id: ID!
-  name: String
-  description: String
-  link: String
-  features: [String]
+type ProjectCreationWizard {
+  steps: [ProjectCreationWizardStep!]!
 }
 
-type ProjectCreation {
-  presets: [Preset]
-  features: [Feature]
-  prompts: [Prompt]
-}
-
-type Feature implements DescribedEntity {
+type ProjectCreationWizardStep {
   id: ID!
+  type: ProjectCreationWizardStepType!
   name: String
-  description: String
-  link: String
   enabled: Boolean!
+  prompts: [Prompt!]
+}
+
+enum ProjectCreationWizardStepType {
+  general
+  prompts
+  select
+  modal
 }
 `
 
@@ -90,24 +77,27 @@ exports.resolvers = {
       (await tasks.list({ file: project.path }, context)).some(t => t.status === 'running'),
   },
 
+  ProjectCreationWizardStep: {
+    enabled: (step, args, context) => projects.isCreationStepEnabled(step.id, context),
+    prompts: (step, args, context) => prompts.list().filter(p => p.tabId === step.id),
+  },
+
   Query: {
     projects: (root, args, context) => projects.list(context),
     project: (root, { id }, context) => projects.findOne(id, context),
     projectCurrent: (root, args, context) => projects.getCurrent(context),
-    projectCreation: (root, args, context) => projects.getCreation(context),
+    projectCreationWizard: (root, args, context) => projects.getCreationWizard(context),
   },
 
   Mutation: {
-    projectInitCreation: (root, args, context) => projects.initCreator(context),
+    projectInitCreation: (root, { input }, context) => projects.initCreator(input, context),
     projectCancelCreation: (root, args, context) => projects.removeCreator(context),
-    projectCreate: (root, { input }, context) => projects.create(input, context),
+    projectCreate: (root, args, context) => projects.create(context),
     projectImport: (root, { input }, context) => projects.importProject(input, context),
     projectOpen: (root, { id }, context) => projects.open(id, context),
     projectRemove: (root, { id }, context) => projects.remove(id, context),
     projectCwdReset: (root, args, context) => projects.resetCwd(context),
     projectSetFavorite: (root, args, context) => projects.setFavorite(args, context),
     projectRename: (root, args, context) => projects.rename(args, context),
-    presetApply: (root, { id }, context) => projects.applyPreset(id, context),
-    featureSetEnabled: (root, args, context) => projects.setFeatureEnabled(args, context),
   },
 }

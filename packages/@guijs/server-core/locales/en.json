@@ -151,6 +151,10 @@
             "running-tasks": "{count} running task(s)"
           }
         },
+        "project-type-modal": {
+          "title": "Select a project type",
+          "submit": "Create project"
+        },
         "prompt-list": {
           "default": "Default"
         },

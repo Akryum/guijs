@@ -14,7 +14,7 @@ import ProjectTaskDetails from './components/task/ProjectTaskDetails.vue'
 import ProjectDependencies from './components/dependency/ProjectDependencies.vue'
 
 import ProjectSelect from './components/project-manager/ProjectSelect.vue'
-import ProjectCreate from './components/project-create/ProjectCreate.vue'
+import ProjectCreateWizard from './components/project-create/ProjectCreateWizard.vue'
 
 import FileDiffView from './components/file-diff/FileDiffView.vue'
 
@@ -97,7 +97,7 @@ const router = new Router({
     {
       path: '/project/create',
       name: 'project-create',
-      component: ProjectCreate,
+      component: ProjectCreateWizard,
     },
     {
       path: '/file-diff',

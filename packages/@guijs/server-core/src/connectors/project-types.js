@@ -4,6 +4,7 @@
  * @prop {string} name
  * @prop {string} [logo]
  * @prop {Function} filter
+ * @prop {Function[]} createCbs
  */
 
 import folders from './folders'

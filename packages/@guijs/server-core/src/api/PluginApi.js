@@ -1,4 +1,4 @@
-/** @type {import('../connectors/project-types').ProjectType} ProjectType */
+/** @typedef {import('../connectors/project-types').ProjectType} ProjectType */
 
 const path = require('path')
 // Connectors
@@ -73,6 +73,7 @@ class PluginApi {
       id,
       name,
       filter: () => false,
+      createCbs: [],
     }
     this.projectTypes.push(projectType)
     const api = new ProjectTypeApi(projectType)

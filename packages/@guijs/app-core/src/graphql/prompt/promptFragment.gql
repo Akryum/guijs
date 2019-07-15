@@ -1,6 +1,3 @@
-#import "./promptChoiceFragment.gql"
-#import "./promptErrorFragment.gql"
-
 fragment prompt on Prompt {
   id
   type
@@ -12,12 +9,17 @@ fragment prompt on Prompt {
   description
   link
   choices {
-    ...promptChoice
+    value
+    name
+    checked
+    disabled
+    isDefault
   }
   value
   valueChanged
   error {
-    ...promptError
+    message
+    link
   }
   tabId
 }
