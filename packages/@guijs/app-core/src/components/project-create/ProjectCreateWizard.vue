@@ -59,6 +59,32 @@
         </template>
       </StepWizard>
     </div>
+
+    <VueModal
+      v-if="showCancel"
+      :title="$t('org.vue.views.project-create.tabs.details.modal.title')"
+      class="small"
+      @close="showCancel = false"
+    >
+      <div class="default-body">
+        {{ $t('org.vue.views.project-create.tabs.details.modal.body') }}
+      </div>
+
+      <div slot="footer" class="actions end">
+        <VueButton
+          :label="$t('org.vue.views.project-create.tabs.details.modal.buttons.back')"
+          class="flat"
+          @click="showCancel = false"
+        />
+
+        <VueButton
+          :to="{ name: 'project-select' }"
+          :label="$t('org.vue.views.project-create.tabs.details.modal.buttons.clear')"
+          icon-left="delete_forever"
+          class="danger"
+        />
+      </div>
+    </VueModal>
   </div>
 </template>
 
