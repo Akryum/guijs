@@ -61,7 +61,7 @@ export default {
 
   methods: {
     getModule (prompt) {
-      let type = prompt.type
+      let type = prompt.skin || prompt.type
       if (types[type]) {
         type = types[type]
       }

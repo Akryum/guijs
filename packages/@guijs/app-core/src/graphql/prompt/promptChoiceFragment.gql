@@ -1,6 +1,7 @@
 fragment promptChoice on PromptChoice {
   value
   name
+  description
   checked
   disabled
   isDefault

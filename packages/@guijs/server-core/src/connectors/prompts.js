@@ -2,6 +2,11 @@
 const { get, set, unset } = require('@vue/cli-shared-utils')
 const { log } = require('../util/logger')
 
+const LIST_TYPES = [
+  'list',
+  'rawlist',
+]
+
 let answers = {}
 let prompts = []
 
@@ -57,6 +62,7 @@ function generatePromptChoice (prompt, data, defaultValue) {
   return {
     value: JSON.stringify(getTransformedValue(prompt, data.value)),
     name: data.name,
+    description: data.description,
     checked: data.checked,
     disabled: data.disabled,
     isDefault: data.value === defaultValue,
@@ -76,7 +82,7 @@ async function getChoices (prompt) {
     result = data
   }
   let defaultValue
-  if (prompt.type === 'list' || prompt.type === 'rawlist') {
+  if (LIST_TYPES.includes(prompt.type)) {
     defaultValue = await getDefaultValue(prompt)
   }
   return result.map(
@@ -108,6 +114,7 @@ function generatePrompt (data) {
     valueChanged: false,
     error: null,
     tabId: data.tabId || null,
+    skin: data.skin || null,
     raw: data,
   }
 }

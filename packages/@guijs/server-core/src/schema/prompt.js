@@ -22,6 +22,7 @@ type Prompt implements DescribedEntity {
   valueChanged: Boolean
   error: PromptError
   tabId: String
+  skin: PromptSkin
 }
 
 input PromptInput {
@@ -32,6 +33,7 @@ input PromptInput {
 type PromptChoice {
   value: String!
   name: String
+  description: String
   checked: Boolean
   disabled: Boolean
   isDefault: Boolean
@@ -52,6 +54,11 @@ enum PromptType {
   password
   editor
   color
+}
+
+enum PromptSkin {
+  buttongroup
+  radio
 }
 `
 

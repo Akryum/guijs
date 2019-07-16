@@ -11,6 +11,7 @@ fragment prompt on Prompt {
   choices {
     value
     name
+    description
     checked
     disabled
     isDefault
@@ -22,4 +23,5 @@ fragment prompt on Prompt {
     link
   }
   tabId
+  skin
 }
