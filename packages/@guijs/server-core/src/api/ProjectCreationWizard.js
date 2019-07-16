@@ -1,3 +1,5 @@
+/** @typedef {import('../connectors/project-types').ProjectType} ProjectType */
+
 /** @typedef {'general' | 'prompts' | 'select' | 'modal'} StepType */
 
 /** @typedef {(answers: any) => Boolean} StepWhen */
@@ -11,11 +13,24 @@
  * @prop {StepWhen} [when]
  */
 
+/**
+ * @typedef ProjectCreationWizardOptions
+ * @prop {string} cwd
+ * @prop {ProjectType} type
+ */
+
 import prompts from '../connectors/prompts'
 
 export default class ProjectCreationWizard {
-  constructor (cwd) {
+  /**
+   * @param {ProjectCreationWizardOptions} options
+   */
+  constructor ({
+    cwd,
+    type,
+  }) {
     this.cwd = cwd
+    this.type = type
     /** @type {Step[]} */
     this.steps = [
       {

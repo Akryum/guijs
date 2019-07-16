@@ -48,6 +48,7 @@ input ProjectImportInput {
 }
 
 type ProjectCreationWizard {
+  type: ProjectType!
   steps: [ProjectCreationWizardStep!]!
 }
 
@@ -57,6 +58,8 @@ type ProjectCreationWizardStep {
   name: String
   enabled: Boolean!
   prompts: [Prompt!]
+  icon: String
+  description: String
 }
 
 enum ProjectCreationWizardStepType {
@@ -80,6 +83,8 @@ exports.resolvers = {
   ProjectCreationWizardStep: {
     enabled: (step, args, context) => projects.isCreationStepEnabled(step.id, context),
     prompts: (step, args, context) => prompts.list().filter(p => p.tabId === step.id),
+    icon: (step, args, context) => step.options ? step.options.icon : null,
+    description: (step, args, context) => step.options ? step.options.description : null,
   },
 
   Query: {

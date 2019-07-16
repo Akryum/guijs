@@ -21,7 +21,9 @@
       >
         <slot
           :next="next"
+          :has-next="hasNext"
           :previous="previous"
+          :has-previous="hasPrevious"
         />
       </VueTabs>
     </div>
@@ -44,14 +46,63 @@ export default {
     },
   },
 
+  data () {
+    return {
+      hasNext: false,
+      hasPrevious: false,
+    }
+  },
+
+  mounted () {
+    this.$watch(() => this.hasNextEnabledTab(), value => {
+      this.hasNext = value
+    }, {
+      immediate: true,
+    })
+    this.$watch(() => this.hasPreviousEnabledTab(), value => {
+      this.hasPrevious = value
+    }, {
+      immediate: true,
+    })
+  },
+
   methods: {
+    getNextEnabledTabIndex () {
+      const tabs = this.$refs.tabs
+      for (let i = tabs.activeChildIndex + 1; i < tabs.children.length; i++) {
+        if (!tabs.children[i].disabled) {
+          return i
+        }
+      }
+      return tabs.activeChildIndex
+    },
+
+    hasNextEnabledTab () {
+      return this.getNextEnabledTabIndex() !== this.$refs.tabs.activeChildIndex
+    },
+
     next () {
       const tabs = this.$refs.tabs
-      tabs.activateChild(tabs.activeChildIndex + 1)
+      tabs.activateChild(this.getNextEnabledTabIndex())
     },
+
+    getPreviousEnabledTabIndex () {
+      const tabs = this.$refs.tabs
+      for (let i = tabs.activeChildIndex - 1; i >= 0; i--) {
+        if (!tabs.children[i].disabled) {
+          return i
+        }
+      }
+      return tabs.activeChildIndex
+    },
+
+    hasPreviousEnabledTab () {
+      return this.getPreviousEnabledTabIndex() !== this.$refs.tabs.activeChildIndex
+    },
+
     previous () {
       const tabs = this.$refs.tabs
-      tabs.activateChild(tabs.activeChildIndex - 1)
+      tabs.activateChild(this.getPreviousEnabledTabIndex())
     },
   },
 }

@@ -71,6 +71,10 @@
             },
             "cancel": "Cancel",
             "create": "Create"
+          },
+          "modal": {
+            "title": "Select a folder",
+            "action": "Select this folder"
           }
         },
         "list-item-info": {
@@ -280,7 +284,7 @@
           }
         },
         "project-create": {
-          "title": "Create a new project",
+          "title": "Create new {type} project",
           "tabs": {
             "details": {
               "title": "Details",

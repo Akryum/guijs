@@ -85,7 +85,10 @@ async function initCreator ({ type }, context) {
     throw new Error(`Project type ${type} not found`)
   }
 
-  creationWizard = new ProjectCreationWizard(cwd.get())
+  creationWizard = new ProjectCreationWizard({
+    cwd: cwd.get(),
+    type: createProjectType,
+  })
   if (!createProjectType.createCbs.length) {
     throw new Error(`No create handlers registered on project type ${type}`)
   }
@@ -120,6 +123,8 @@ async function initCreator ({ type }, context) {
   }
   await prompts.start()
 
+  log('Created project create wizard')
+
   return creationWizard
 }
 
@@ -134,11 +139,12 @@ export function isCreationStepEnabled (id, context) {
   return !!step.when(creationWizard.answers)
 }
 
-function removeCreator (context) {
+async function removeCreator (context) {
+  log('Removing project create wizard')
   // @TODO
   // installProgress.removeListener('progress', onInstallProgress)
   // installProgress.removeListener('log', onInstallLog)
-  prompts.reset()
+  await prompts.reset()
   return true
 }
 

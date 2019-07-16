@@ -8,12 +8,14 @@
  */
 
 import folders from './folders'
+import { log } from '../util/logger'
 
 /** @type {ProjectType[]} */
 let types = []
 
 export function setTypes (value, context) {
   types = value
+  log('Registered project types:', types)
 }
 
 export function getType (id, context) {

@@ -2,8 +2,7 @@
   <div class="project-select page">
     <StepWizard
       :tab-id.sync="tab"
-      :title="$route.query.hideTabs ? $t('org.vue.views.project-create.title') : $t('org.vue.views.project-select.title')"
-      :hide-tabs="hideTabs"
+      :title="$t('org.vue.views.project-select.title')"
       class="frame"
     >
       <VueTab
@@ -29,9 +28,9 @@
         <div class="actions-bar center">
           <VueButton
             icon-left="add"
-            :label="$route.query.hideTabs ? $t('org.vue.views.project-create.tabs.details.form.folder.action') : $t('org.vue.views.project-select.buttons.create')"
+            :label="$t('org.vue.views.project-select.buttons.create')"
             class="big primary create-project"
-            @click="showProjectTypeModal = true"
+            @click="selectCreateFolder()"
           />
         </div>
       </VueTab>
@@ -116,6 +115,7 @@ import ProjectTypeModal from '../project-create/ProjectTypeModal.vue'
 import FOLDER_CURRENT from '@/graphql/folder/folderCurrent.gql'
 import PROJECT_IMPORT from '@/graphql/project/projectImport.gql'
 import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
+import gql from 'graphql-tag'
 
 export default {
   name: 'ProjectSelect',
@@ -134,7 +134,6 @@ export default {
     return {
       folderCurrent: {},
       tab: undefined,
-      hideTabs: !!this.$route.query.hideTabs,
       showNoModulesModal: false,
       showProjectTypeModal: false,
       busy: false,
@@ -144,6 +143,19 @@ export default {
   apollo: {
     folderCurrent: FOLDER_CURRENT,
     projectCurrent: PROJECT_CURRENT,
+    projectCreationWizard: {
+      query: gql`
+      query {
+        projectCreationWizard {
+          type {
+            id
+            name
+          }
+        }
+      }
+      `,
+      fetchPolicy: 'network-only',
+    },
   },
 
   mounted () {
@@ -154,6 +166,10 @@ export default {
   },
 
   methods: {
+    selectCreateFolder () {
+      this.showProjectTypeModal = true
+    },
+
     async importProject (force = false) {
       this.showNoModulesModal = false
       this.busy = true

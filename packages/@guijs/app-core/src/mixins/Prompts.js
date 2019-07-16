@@ -1,5 +1,10 @@
 import PROMPT_ANSWER from '@/graphql/prompt/promptAnswer.gql'
 
+const INPUT_TYPES = [
+  'input',
+  'editor',
+]
+
 export default function ({
   field,
   query,
@@ -14,8 +19,7 @@ export default function ({
         return this.visiblePrompts.filter(
           p =>
             p.error ||
-            p.value === null ||
-            JSON.parse(p.value) === ''
+            (!INPUT_TYPES.includes(p.type) && p.value === null)
         ).length === 0
       },
 
