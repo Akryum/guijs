@@ -17,7 +17,7 @@
           >
             <div class="step-content content vue-ui-disable-scroll">
               <div v-if="step.description" class="vue-ui-text info banner">
-                <VueIcon icon="info" class="big"/>
+                <VueIcon icon="info" class="huge"/>
                 <span>{{ $t(step.description) }}</span>
               </div>
 
