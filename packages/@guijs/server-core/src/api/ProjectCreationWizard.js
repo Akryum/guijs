@@ -76,7 +76,19 @@ export default class ProjectCreationWizard {
    * @param {StepWhen} when
    */
   addSelectStep (id, name, options, when) {
-    this._addStep(id, 'select', name, options, when)
+    const finalOptions = {
+      ...options,
+      prompts: [
+        {
+          name: id,
+          type: 'list',
+          message: options.message,
+          skin: 'radio',
+          choices: options.choices,
+        },
+      ],
+    }
+    this._addStep(id, 'select', name, finalOptions, when)
   }
 
   /**

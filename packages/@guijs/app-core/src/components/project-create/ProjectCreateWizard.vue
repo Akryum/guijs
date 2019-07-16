@@ -26,6 +26,7 @@
                 :step="step"
                 :folder.sync="folder"
                 @valid="value => isStepValid = value"
+                @remote-preset="value => remotePreset = value"
               />
             </div>
 
@@ -94,8 +95,10 @@ export default {
     return {
       tabId: 'general',
       showCancel: false,
-      folder: '',
       isStepValid: false,
+      // Additional data
+      folder: '',
+      remotePreset: null,
     }
   },
 
@@ -177,7 +180,7 @@ export default {
     opacity .5
 
 .vue-ui-text.banner
-  margin-bottom 6px
+  margin-bottom $padding-item
 
 .step-content
   grid-area content

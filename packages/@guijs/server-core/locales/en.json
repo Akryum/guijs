@@ -326,7 +326,7 @@
             "presets": {
               "title": "Presets",
               "description": "A preset is an association of plugins and configurations. After you've selected features, you can optionally save it as a preset so that you can reuse it for future projects, without having to reconfigure everything again.",
-              "select": "Select a preset",
+              "message": "Select a preset:",
               "buttons": {
                 "previous": "Previous",
                 "next": "Next",
