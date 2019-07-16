@@ -200,6 +200,16 @@ function getPlugins (file) {
 }
 
 async function resetPluginApi ({ file, lightApi }, context) {
+  let project = projects.findByPath(file, context)
+  if (!project) {
+    project = projects.getCurrent()
+    if (project) {
+      file = project.path
+    } else {
+      return false
+    }
+  }
+
   log('Plugin API reloading...', chalk.grey(file))
 
   let pluginApi = pluginApiInstances.get(file)
@@ -216,12 +226,6 @@ async function resetPluginApi ({ file, lightApi }, context) {
     clientAddons.clear(context)
     suggestions.clear(context)
     widgets.reset(context)
-  }
-
-  const project = projects.findByPath(file, context)
-
-  if (!project) {
-    return false
   }
 
   const plugins = getPlugins(file)
