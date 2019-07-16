@@ -250,7 +250,4 @@ export default {
   position relative
   left -2px
   background $vue-ui-gray-100
-
-.vue-ui-switch
-  font-size 14px
 </style>
