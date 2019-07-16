@@ -31,7 +31,7 @@
 
             <div class="actions-bar">
               <VueButton
-                v-if="index === 0"
+                v-if="index !== 0"
                 icon-left="arrow_back"
                 :label="$t('org.vue.views.project-create.tabs.presets.buttons.previous')"
                 class="big previous"
