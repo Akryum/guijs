@@ -23,6 +23,7 @@
               </div>
 
               <component
+                v-if="tabId === step.id"
                 :is="`step-${step.type}`"
                 :step="step"
                 :folder.sync="folder"
