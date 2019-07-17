@@ -2,7 +2,7 @@
   <div class="project-create-step-prompts">
     <Prompts
       :prompts="step.prompts"
-      @answer="answerPrompt"
+      @answer="customAnswerPrompt"
     />
   </div>
 </template>
@@ -52,6 +52,13 @@ export default {
         this.$emit('valid', value)
       },
       immediate: true,
+    },
+  },
+
+  methods: {
+    async customAnswerPrompt (...args) {
+      await this.answerPrompt(...args)
+      this.$emit('refetch')
     },
   },
 }

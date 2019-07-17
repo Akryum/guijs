@@ -27,6 +27,7 @@
                 :folder.sync="folder"
                 @valid="value => isStepValid = value"
                 @remote-preset="value => remotePreset = value"
+                @refetch="refetch()"
               />
             </div>
 
@@ -177,6 +178,10 @@ export default {
   },
 
   methods: {
+    async refetch () {
+      await this.$apollo.queries.wizard.refetch()
+    },
+
     async cancel () {
       await this.$apollo.mutate({
         mutation: gql`

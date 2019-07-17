@@ -4,6 +4,7 @@
       ref="prompts"
       :step="step"
       @valid="value => $emit('valid', value)"
+      @refetch="$emit('refetch')"
     />
 
     <div

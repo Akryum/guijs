@@ -20,6 +20,7 @@
  */
 
 import prompts from '../connectors/prompts'
+import { log } from '../util/logger'
 
 export default class ProjectCreationWizard {
   /**
@@ -130,6 +131,7 @@ export default class ProjectCreationWizard {
     if (options.prompts) {
       step.options.prompts = this._withTabId(step.options.prompts, id)
     }
+    log('Add creation wizard step', step)
     this.steps.push(step)
     return step
   }

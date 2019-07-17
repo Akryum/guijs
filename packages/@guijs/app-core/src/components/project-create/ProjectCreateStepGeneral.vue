@@ -63,6 +63,7 @@
     <ProjectCreateStepPrompts
       :step="step"
       @valid="value => arePromptsValid = value"
+      @refetch="$emit('refetch')"
     />
 
     <FolderExplorerModal
