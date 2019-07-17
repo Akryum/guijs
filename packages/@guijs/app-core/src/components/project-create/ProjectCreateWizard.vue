@@ -14,6 +14,7 @@
             :label="$t(step.name || 'org.vue.views.project-create.tabs.details.title')"
             :icon="step.id === 'general' ? 'subject' : step.icon"
             :disabled="!step.enabled || (tabSteps.findIndex(t => t.id === tabId) === index - 1 && !isStepValid)"
+            :lazy="index > 0"
           >
             <div class="step-content content vue-ui-disable-scroll">
               <div v-if="step.description" class="vue-ui-text info banner">
