@@ -78,7 +78,7 @@ export default {
 
 .group-name
   padding $padding-item $padding-item ($padding-item / 2)
-  font-size 1.6em
+  font-size 1.3em
   font-weight 300
   color $vue-ui-color-accent
   .vue-ui-dark-mode &
