@@ -1,6 +1,9 @@
+const EventEmitter = require('events')
 // Utils
 const { get, set, unset } = require('@vue/cli-shared-utils')
 const { log } = require('../util/logger')
+
+/** @typedef {'answer'} PromptEventType */
 
 const LIST_TYPES = [
   'list',
@@ -9,6 +12,8 @@ const LIST_TYPES = [
 
 let answers = {}
 let prompts = []
+
+const emitter = new EventEmitter()
 
 function generatePromptError (value) {
   let message
@@ -244,8 +249,25 @@ async function getDefaultValue (prompt) {
 }
 
 async function answerPrompt ({ id, value }, context) {
+  emitter.emit('answer')
   await setValue({ id, value: JSON.parse(value) })
   return list()
+}
+
+/**
+ * @param {PromptEventType} event
+ * @param {function} listener
+ */
+function on (event, listener) {
+  return emitter.on(event, listener)
+}
+
+/**
+ * @param {PromptEventType} event
+ * @param {function} listener
+ */
+function off (event, listener) {
+  return emitter.off(event, listener)
 }
 
 module.exports = {
@@ -262,4 +284,6 @@ module.exports = {
   findOne,
   getDefaultValue,
   answerPrompt,
+  on,
+  off,
 }
