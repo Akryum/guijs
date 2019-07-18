@@ -1,22 +1,11 @@
 <template>
   <div class="prompts-list">
     <div class="content">
-      <div
+      <PromptGroup
         v-for="group of groups"
         :key="group.id"
-        class="group"
-      >
-        <div v-if="group.id" class="group-name">{{ $t(group.id) }}</div>
-
-        <component
-          v-for="prompt of group.prompts"
-          v-if="prompt.visible"
-          :key="prompt.id"
-          :is="getModule(prompt)"
-          :prompt="prompt"
-          @answer="value => $emit('answer', { prompt, value })"
-        />
-      </div>
+        :group="group"
+      />
 
       <div v-if="!prompts.length" class="vue-ui-empty">
         <VueIcon icon="check_circle" class="empty-icon"/>
@@ -27,12 +16,13 @@
 </template>
 
 <script>
-const types = {
-  rawlist: 'list',
-  password: 'input',
-}
+import PromptGroup from './PromptGroup.vue'
 
 export default {
+  components: {
+    PromptGroup,
+  },
+
   props: {
     prompts: {
       type: Array,
@@ -58,29 +48,5 @@ export default {
       return groups
     },
   },
-
-  methods: {
-    getModule (prompt) {
-      let type = prompt.skin || prompt.type
-      if (types[type]) {
-        type = types[type]
-      }
-      type = type.charAt(0).toUpperCase() + type.substr(1)
-      return require(`./Prompt${type}.vue`).default
-    },
-  },
 }
 </script>
-
-<style lang="stylus" scoped>
-.group
-  margin-bottom ($padding-item * 2)
-
-.group-name
-  padding $padding-item $padding-item ($padding-item / 2)
-  font-size 1.3em
-  font-weight 300
-  color $vue-ui-color-accent
-  .vue-ui-dark-mode &
-    color lighten($vue-ui-color-accent, 60%)
-</style>
