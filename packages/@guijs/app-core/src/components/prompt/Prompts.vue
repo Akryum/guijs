@@ -5,6 +5,7 @@
         v-for="group of groups"
         :key="group.id"
         :group="group"
+        @answer="payload => $emit('answer', payload)"
       />
 
       <div v-if="!prompts.length" class="vue-ui-empty">
