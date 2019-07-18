@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import TASK from '@vue/cli-ui/src/graphql/task/task.gql'
-import TASK_RUN from '@vue/cli-ui/src/graphql/task/taskRun.gql'
-import TASK_STOP from '@vue/cli-ui/src/graphql/task/taskStop.gql'
-import TASK_CHANGED from '@vue/cli-ui/src/graphql/task/taskChanged.gql'
+import TASK from '@guijs/app-core/src/graphql/task/task.gql'
+import TASK_RUN from '@guijs/app-core/src/graphql/task/taskRun.gql'
+import TASK_STOP from '@guijs/app-core/src/graphql/task/taskStop.gql'
+import TASK_CHANGED from '@guijs/app-core/src/graphql/task/taskChanged.gql'
 
 export default {
   inject: [
