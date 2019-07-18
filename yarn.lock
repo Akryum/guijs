@@ -2530,9 +2530,9 @@
   integrity sha512-rcn2KhSHESBFMPj5vc5X2pI9bcBNQQixvJXhD5gZ4rN2iym/uH2qfDSQfUS5+qwiz0a85TCkeUs6w6jxFDudbw==
 
 "@vue/ui@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.11.1.tgz#1b691a8a43b8e1b64582fb26be9c7d6408145979"
-  integrity sha512-NtP1RUYYIZmyt3Kp03WKc3Ynz1UUPpMOM2lSih0zq7PYQjr82AnqKdF36wSwkZ2UArcu9mJUzOLKS5ZSKR/2/g==
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@vue/ui/-/ui-0.11.2.tgz#61181f95416b5b7d94cd96e3cd0b26008ef538c0"
+  integrity sha512-eMTng1Nu5wpLhReBbqf/lSYL5NuCrL1zJ6uwvF40mK+VKvSDAX3nzUfAkIxbToAg92/C/7H5EmWOLSKO6sKaCA==
   dependencies:
     focus-visible "^4.1.5"
     v-tooltip "^3.0.0-alpha.11"
