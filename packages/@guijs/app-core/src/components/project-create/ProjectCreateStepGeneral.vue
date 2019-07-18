@@ -1,63 +1,65 @@
 <template>
   <div class="project-create-step-general">
     <VueFormField
-      v-if="cwd"
       :title="$t('org.vue.views.project-create.tabs.details.form.folder.label')"
+      class="folder-field"
     >
-      <VueInput
-        v-model="folderModel"
-        :placeholder="$t('org.vue.views.project-create.tabs.details.form.folder.placeholder')"
-        icon-left="folder"
-        class="big app-name"
-      />
+      <template v-if="cwd">
+        <VueInput
+          v-model="folderModel"
+          :placeholder="$t('org.vue.views.project-create.tabs.details.form.folder.placeholder')"
+          icon-left="folder"
+          class="big app-name"
+        />
 
-      <div slot="subtitle">
-        <div class="project-path">
-          <div class="path">
-            <span
-              class="cwd"
-              v-tooltip="cwd"
+        <div slot="subtitle">
+          <div class="project-path">
+            <div class="path">
+              <span
+                class="cwd"
+                v-tooltip="cwd"
+              >
+                {{ cwd | folder(42 - folder.length) }}
+              </span>
+              <span class="folder">{{ folder }}</span>
+            </div>
+
+            <VueButton
+              icon-left="edit"
+              class="change-folder"
+              @click="showChangeFodler = true"
             >
-              {{ cwd | folder(42 - folder.length) }}
-            </span>
-            <span class="folder">{{ folder }}</span>
+              {{ $t('org.vue.views.project-create.tabs.details.form.folder.tooltip') }}
+            </VueButton>
           </div>
 
-          <VueButton
-            icon-left="edit"
-            class="change-folder"
-            @click="showChangeFodler = true"
-          >
-            {{ $t('org.vue.views.project-create.tabs.details.form.folder.tooltip') }}
-          </VueButton>
-        </div>
-
-        <div
-          v-if="folder && !folderNameValid"
-          class="vue-ui-text danger banner"
-        >
-          <VueIcon icon="error" class="big"/>
-          <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-name-invalid') }}</span>
-        </div>
-
-        <ApolloQuery
-          v-if="folder"
-          :query="require('@/graphql/folder/folderExists.gql')"
-          :variables="{
-            file: `${cwd}/${folder}`
-          }"
-          fetch-policy="no-cache"
-          #default="{ result: { data } }"
-        >
           <div
-            v-if="data && data.folderExists"
-            class="vue-ui-text warning banner"
+            v-if="folder && !folderNameValid"
+            class="vue-ui-text danger banner"
           >
-            <VueIcon icon="warning" class="big"/>
-            <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-exists') }}</span>
+            <VueIcon icon="error" class="big"/>
+            <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-name-invalid') }}</span>
           </div>
-        </ApolloQuery>
-      </div>
+
+          <ApolloQuery
+            v-if="folder"
+            :query="require('@/graphql/folder/folderExists.gql')"
+            :variables="{
+              file: `${cwd}/${folder}`
+            }"
+            fetch-policy="no-cache"
+            #default="{ result: { data } }"
+          >
+            <div
+              v-if="data && data.folderExists"
+              class="vue-ui-text warning banner"
+            >
+              <VueIcon icon="warning" class="big"/>
+              <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-exists') }}</span>
+            </div>
+          </ApolloQuery>
+        </div>
+      </template>
     </VueFormField>
 
     <ProjectCreateStepPrompts
@@ -142,6 +144,9 @@ export default {
 <style lang="stylus" scoped>
 .vue-ui-form-field
   padding $padding-item
+
+.folder-field
+  min-height 141px
 
 .project-path
   h-box()
