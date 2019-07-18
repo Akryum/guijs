@@ -12,14 +12,17 @@
 
       <div class="prompt-input">
         <VueInput
-          :value="value(prompt.value)"
+          :value="inputValue"
           :type="prompt.type === 'password' ? 'password' : 'text'"
           @update="value => answer(value)"
         />
       </div>
     </div>
 
-    <PromptError :error="prompt.error"/>
+    <PromptError
+      v-if="displayError"
+      :error="prompt.error"
+    />
   </VueDisable>
 </template>
 
@@ -30,5 +33,30 @@ export default {
   extends: Prompt,
 
   buffer: true,
+
+  data () {
+    return {
+      displayError: false,
+    }
+  },
+
+  computed: {
+    inputValue () {
+      return this.value(this.prompt.value)
+    },
+  },
+
+  watch: {
+    inputValue (value) {
+      clearTimeout(this.$_timer)
+      if (value != null) {
+        this.$_timer = setTimeout(() => {
+          this.displayError = true
+        }, 500)
+      } else {
+        this.displayError = false
+      }
+    },
+  },
 }
 </script>
