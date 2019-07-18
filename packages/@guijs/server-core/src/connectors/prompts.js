@@ -128,7 +128,6 @@ async function updatePrompts () {
   for (const prompt of prompts) {
     const oldVisible = prompt.visible
     prompt.visible = await getEnabled(prompt.raw.when)
-
     prompt.choices = await getChoices(prompt)
 
     if (oldVisible !== prompt.visible && !prompt.visible) {
@@ -144,6 +143,7 @@ async function updatePrompts () {
       } else {
         value = await getDefaultValue(prompt)
       }
+      await checkValue(prompt, value)
       prompt.rawValue = value
       prompt.value = JSON.stringify(value)
       const finalValue = await getFilteredValue(prompt, value)
@@ -198,6 +198,15 @@ function remove (id) {
   index !== -1 && prompts.splice(index, 1)
 }
 
+async function checkValue (prompt, value) {
+  const validation = await validateInput(prompt, value)
+  if (validation !== true) {
+    prompt.error = generatePromptError(validation)
+  } else {
+    prompt.error = null
+  }
+}
+
 async function setValue ({ id, value }) {
   const prompt = findOne(id)
   if (!prompt) {
@@ -205,12 +214,7 @@ async function setValue ({ id, value }) {
     return null
   }
 
-  const validation = await validateInput(prompt, value)
-  if (validation !== true) {
-    prompt.error = generatePromptError(validation)
-  } else {
-    prompt.error = null
-  }
+  await checkValue(prompt, value)
   prompt.rawValue = value
   const finalValue = await getFilteredValue(prompt, value)
   prompt.value = JSON.stringify(value)
