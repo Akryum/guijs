@@ -7,58 +7,22 @@
         class="frame"
       >
         <template #default="{ next, previous, hasNext, hasPrevious }">
-          <VueTab
-            v-for="(step, index) of tabSteps"
+          <ProjectCreateStepTab
+            v-for="step of tabSteps"
             :key="step.id"
-            :id="step.id"
-            :label="$t(step.name || 'org.vue.views.project-create.tabs.details.title')"
-            :icon="step.id === 'general' ? 'subject' : step.icon"
-            :disabled="!step.enabled || (tabSteps.findIndex(t => t.id === tabId) === index - 1 && !isStepValid)"
-            :lazy="index > 0"
-          >
-            <div class="step-content content vue-ui-disable-scroll">
-              <div v-if="step.description" class="vue-ui-text info banner">
-                <VueIcon icon="info" class="big"/>
-                <span>{{ $t(step.description) }}</span>
-              </div>
-
-              <component
-                v-if="tabId === step.id"
-                :is="`step-${step.type}`"
-                :step="step"
-                :folder.sync="folder"
-                @valid="value => isStepValid = value"
-                @remote-preset="value => remotePreset = value"
-                @refetch="refetch()"
-              />
-            </div>
-
-            <div class="actions-bar">
-              <VueButton
-                v-if="index !== 0"
-                icon-left="arrow_back"
-                :label="$t('org.vue.views.project-create.tabs.presets.buttons.previous')"
-                class="big previous"
-                @click="previous()"
-              />
-
-              <VueButton
-                v-else
-                icon-left="close"
-                :label="$t('org.vue.views.project-create.tabs.details.buttons.cancel')"
-                class="big close"
-                @click="showCancel = true"
-              />
-
-              <VueButton
-                :label="$t('org.vue.views.project-create.tabs.details.buttons.next')"
-                :disabled="!isStepValid || !hasNext"
-                icon-right="arrow_forward"
-                class="big primary next"
-                @click="next()"
-              />
-            </div>
-          </VueTab>
+            :step="step"
+            :valid-steps="validSteps"
+            :current-tab-id="tabId"
+            :has-next="hasNext"
+            :has-previous="hasPrevious"
+            :folder.sync="folder"
+            @next="next()"
+            @previous="previous()"
+            @cancel="showCancel = true"
+            @valid="value => onStepValid(step, value)"
+            @remote-preset="value => remotePreset = value"
+            @refetch="refetch()"
+          />
         </template>
       </StepWizard>
     </div>
@@ -94,22 +58,14 @@
 <script>
 import gql from 'graphql-tag'
 import { projectCreationWizard } from './fragments'
-import ProjectCreateStepGeneral from './ProjectCreateStepGeneral.vue'
-import ProjectCreateStepPrompts from './ProjectCreateStepPrompts.vue'
-import ProjectCreateStepSelect from './ProjectCreateStepSelect.vue'
+import ProjectCreateStepTab from './ProjectCreateStepTab.vue'
+import { isTabStep } from './helpers'
 
-const TAB_TYPES = [
-  'general',
-  'prompts',
-  'select',
-]
 const STORAGE_FOLDER = 'project-create-wizard.folder'
 
 export default {
   components: {
-    'step-general': ProjectCreateStepGeneral,
-    'step-prompts': ProjectCreateStepPrompts,
-    'step-select': ProjectCreateStepSelect,
+    ProjectCreateStepTab,
   },
 
   metaInfo () {
@@ -124,7 +80,7 @@ export default {
     return {
       tabId: 'general',
       showCancel: false,
-      isStepValid: false,
+      validSteps: {},
       // Additional data
       folder: '',
       remotePreset: null,
@@ -157,7 +113,7 @@ export default {
 
   computed: {
     tabSteps () {
-      return this.wizard.steps.filter(step => TAB_TYPES.includes(step.type))
+      return this.wizard.steps.filter(step => isTabStep(step))
     },
   },
 
@@ -180,6 +136,10 @@ export default {
   },
 
   methods: {
+    onStepValid (step, isValid) {
+      this.$set(this.validSteps, step.id, isValid)
+    },
+
     async refetch () {
       await this.$apollo.queries.wizard.refetch()
     },
