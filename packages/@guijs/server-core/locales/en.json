@@ -4,6 +4,7 @@
       "common": {
         "close": "Close",
         "cancel": "Cancel",
+        "skip": "Skip",
         "back": "Go back",
         "more-info": "More info",
         "show-more": "Show more",

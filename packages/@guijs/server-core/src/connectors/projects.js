@@ -1,13 +1,8 @@
 import path from 'path'
 import fs from 'fs'
 import shortId from 'shortid'
-import execa from 'execa'
-// @TODO extract into separate plugin package
-// import { defaults } from '@vue/cli-global-utils/lib/options'
-// import { resolvePreset } from '@vue/cli-global-utils/lib/util/resolvePreset'
-// import { getPresetFromAnswers } from '@vue/cli-global-utils/lib/util/getPresetFromAnswers'
-// -- end
 import parseGitConfig from 'parse-git-config'
+import clone from 'clone'
 // Connectors
 import progress from './progress'
 import cwd from './cwd'
@@ -152,111 +147,44 @@ export async function getCreationWizard (context) {
   return creationWizard
 }
 
-async function create (context) {
+async function create (input, context) {
   return progress.wrap(PROGRESS_ID, context, async setProgress => {
     setProgress({
       status: 'creating',
     })
 
-    // @TODO
+    const projectPath = path.join(cwd.get(), input.folder)
+    const inCurrent = input.folder === '.'
+    const projectName = (inCurrent ? path.relative('../', process.cwd()) : input.folder).toLowerCase()
 
-    // const targetDir = path.join(cwd.get(), input.folder)
+    // Answers
+    const answers = clone(prompts.getAnswers())
+    answers.projectName = projectName
+    answers.remotePreset = input.remotePreset
 
-    // cwd.set(targetDir, context)
+    log('Create project | answers:', answers)
 
-    // const inCurrent = input.folder === '.'
-    // const name = (inCurrent ? path.relative('../', process.cwd()) : input.folder).toLowerCase()
+    for (const cb of creationWizard.submitCbs) {
+      await cb({
+        cwd: cwd.get(),
+        answers,
+        setProgress,
+        addLog: (log) => logs.add(log, context),
+        notify,
+      })
+    }
 
-    // // Answers
-    // const answers = prompts.getAnswers()
-    // await prompts.reset()
+    await removeCreator()
 
-    // // Config files
-    // let index
-    // if ((index = answers.features.indexOf('use-config-files')) !== -1) {
-    //   answers.features.splice(index, 1)
-    //   answers.useConfigFiles = 'files'
-    // }
+    notify({
+      title: `Project created`,
+      message: `Project ${cwd.get()} created`,
+      icon: 'done',
+    })
 
-    // // Preset
-    // answers.preset = input.preset
-    // if (input.save) {
-    //   answers.save = true
-    //   answers.saveName = input.save
-    // }
-
-    // setProgress({
-    //   info: 'Resolving preset...',
-    // })
-    // let preset
-    // if (input.preset === '__remote__' && input.remote) {
-    //   // vue create foo --preset bar
-    //   preset = await resolvePreset(input.remote, input.clone)
-    // } else if (input.preset === 'default') {
-    //   // vue create foo --default
-    //   preset = defaults.presets.default
-    // } else {
-    //   preset = await getPresetFromAnswers(answers, promptCompleteCbs)
-    // }
-    // setProgress({
-    //   info: null,
-    // })
-
-    // // Create
-    // const args = [
-    //   '--skipGetStarted',
-    // ]
-    // if (input.packageManager) args.push('--packageManager', input.packageManager)
-    // if (input.bar) args.push('--bare')
-    // if (input.force) args.push('--force')
-    // // Git
-    // if (input.enableGit && input.gitCommitMessage) {
-    //   args.push('--git', input.gitCommitMessage)
-    // } else if (!input.enableGit) {
-    //   args.push('--no-git')
-    // }
-    // // Preset
-    // args.push('--inlinePreset', JSON.stringify(preset))
-
-    // log('create', name, args)
-
-    // const child = execa('vue', [
-    //   'create',
-    //   name,
-    //   ...args,
-    // ], {
-    //   cwd: cwd.get(),
-    //   stdio: ['inherit', 'pipe', 'inherit'],
-    // })
-
-    // const onData = buffer => {
-    //   const text = buffer.toString().trim()
-    //   if (text) {
-    //     setProgress({
-    //       info: text,
-    //     })
-    //     logs.add({
-    //       type: 'info',
-    //       message: text,
-    //     }, context)
-    //   }
-    // }
-
-    // child.stdout.on('data', onData)
-
-    // await child
-
-    // removeCreator()
-
-    // notify({
-    //   title: `Project created`,
-    //   message: `Project ${cwd.get()} created`,
-    //   icon: 'done',
-    // })
-
-    // return importProject({
-    //   path: targetDir,
-    // }, context)
+    return importProject({
+      path: projectPath,
+    }, context)
   })
 }
 

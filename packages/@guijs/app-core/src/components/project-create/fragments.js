@@ -18,6 +18,7 @@ fragment projectCreationWizard on ProjectCreationWizard {
     prompts {
       ...prompt
     }
+    canSkip
   }
 }
 ${prompt}

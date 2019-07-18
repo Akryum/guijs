@@ -16,7 +16,7 @@ extend type Query {
 extend type Mutation {
   projectInitCreation (input: ProjectInitCreationInput): ProjectCreationWizard!
   projectCancelCreation: Boolean
-  projectCreate: Project!
+  projectCreate (input: ProjectCreateInput!): Project!
   projectImport (input: ProjectImportInput!): Project!
   projectOpen (id: ID!): Project!
   projectRemove (id: ID!): Boolean!
@@ -42,6 +42,16 @@ input ProjectInitCreationInput {
   type: ID!
 }
 
+input ProjectCreateInput {
+  folder: String!
+  remotePreset: RemotePresetInput
+}
+
+input RemotePresetInput {
+  url: String!
+  clone: Boolean!
+}
+
 input ProjectImportInput {
   path: String!
   force: Boolean
@@ -60,6 +70,7 @@ type ProjectCreationWizardStep {
   prompts: [Prompt!]
   icon: String
   description: String
+  canSkip: Boolean
 }
 
 enum ProjectCreationWizardStepType {
@@ -85,6 +96,7 @@ exports.resolvers = {
     prompts: (step, args, context) => prompts.list().filter(p => p.tabId === step.id),
     icon: (step, args, context) => step.options ? step.options.icon : null,
     description: (step, args, context) => step.options ? step.options.description : null,
+    canSkip: (step, args, context) => step.options ? step.options.canSkip : false,
   },
 
   Query: {
@@ -97,7 +109,7 @@ exports.resolvers = {
   Mutation: {
     projectInitCreation: (root, { input }, context) => projects.initCreator(input, context),
     projectCancelCreation: (root, args, context) => projects.removeCreator(context),
-    projectCreate: (root, args, context) => projects.create(context),
+    projectCreate: (root, { input }, context) => projects.create(input, context),
     projectImport: (root, { input }, context) => projects.importProject(input, context),
     projectOpen: (root, { id }, context) => projects.open(id, context),
     projectRemove: (root, { id }, context) => projects.remove(id, context),
