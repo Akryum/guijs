@@ -32,19 +32,19 @@ function remove (id, context) {
 }
 
 async function wrap (id, context, operation) {
-  set({ id }, context)
+  set({ id, error: null }, context)
 
   let result
   try {
     result = await operation(data => {
       set(Object.assign({ id }, data), context)
     })
-  } catch (error) {
-    console.error(error)
-    set({ id, error: error.message }, context)
-  }
 
-  remove(id, context)
+    remove(id, context)
+  } catch (error) {
+    set({ id, error: error.message }, context)
+    throw error
+  }
 
   return result
 }
