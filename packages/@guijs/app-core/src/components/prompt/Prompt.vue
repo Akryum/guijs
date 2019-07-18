@@ -37,16 +37,17 @@ export default {
 .prompt
   list-item()
   .prompt-content
-    display grid
-    grid-template-columns auto 300px
-    grid-template-rows auto
-    grid-template-areas "info input"
+    display flex
+    align-items center
     padding $padding-item
 
     > .list-item-info
       grid-area info
+      flex 100% 1 1
 
     > .prompt-input
+      flex auto 1 0
+      min-width 300px
       grid-area input
       v-box()
       align-items stretch
