@@ -323,18 +323,18 @@ function runPluginApi (id, file, pluginApi, cwd, context) {
       logs.add({
         type: 'error',
         message: `An error occured while loading ${file}: no function exported`,
-      })
+      }, context)
     } else {
       pluginApi.pluginId = id
       try {
         module(pluginApi)
         log('Plugin API loaded for', file, chalk.grey(cwd))
       } catch (e) {
-        log(`${chalk.red('ERROR')} while loading plugin API for ${file}:`, e)
+        log(`${chalk.red('ERROR')} while loading plugin API for ${file}:\n`, chalk.red(e.stack))
         logs.add({
           type: 'error',
           message: `An error occured while loading ${file}: ${e.message}`,
-        })
+        }, context)
       }
       pluginApi.pluginId = null
     }
