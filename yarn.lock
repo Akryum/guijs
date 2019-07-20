@@ -4989,7 +4989,7 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@3.2.6, debug@^3.1.0, debug@^3.2.5, debug@^3.2.6:
+debug@3.2.6, debug@^3.0.1, debug@^3.1.0, debug@^3.2.5, debug@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
   integrity sha512-mel+jf7nrtEl5Pn1Qx46zARXKDpBbvzezse7p7LqINmdoIk8PYP5SySaxEmYv6TZ0JyEKA1hsCId6DIhgITtWQ==
@@ -6390,6 +6390,15 @@ fs-extra@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-5.0.0.tgz#414d0110cdd06705734d055652c5411260c31abd"
   integrity sha512-66Pm4RYbjzdyeuqudYqhFiNBbCIuI9kgRqLPSHIlXHidW8NIQtVdkM1yeZ4lXwuhbTETv3EUGMNHAAw6hiundQ==
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
+fs-extra@^4.0.2:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-4.0.3.tgz#0d852122e5bc5beb453fb028e9c0c9bf36340c94"
+  integrity sha512-q6rbdDd1o2mAnQreO7YADIxf/Whx4AHBiRf6d+/cVT8h44ss+lHgxf1FemcqDnQt9X3ct4McHr+JMGlYSsK7Cg==
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"
@@ -12020,6 +12029,14 @@ systeminformation@^4.5.1:
   version "4.14.3"
   resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.14.3.tgz#ccd7f02dc0c0a0da537f278684b085a56302b8f0"
   integrity sha512-heYWYVekEA1Ana61U4/eoaGMS+UeoSNSbcr9MDQxD9N6+ItumJIdcNnP3VcC47mfe0e/m9ZYRTYs/cyW4RGguQ==
+
+systray@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/systray/-/systray-1.0.5.tgz#cec2aa10c3d369c2022beb580c1cf1a6e5d4aec0"
+  integrity sha512-qLsl5lk8lUuqCTaREJ0nR6NgF2y2Ni01vBjUs0cVWf54ZeV4pr3TFLMcUT+od1Twb1qQMq/SKyj+BKd2vg6+Fg==
+  dependencies:
+    debug "^3.0.1"
+    fs-extra "^4.0.2"
 
 table@^5.2.3:
   version "5.4.4"

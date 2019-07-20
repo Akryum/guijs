@@ -1,6 +1,7 @@
 const portfinder = require('portfinder')
 const shortid = require('shortid')
 const apollo = require('./apollo')
+require('./util/systray')
 const { log, error, openBrowser } = require('@vue/cli-shared-utils')
 
 async function run (options = {}, context = process.cwd()) {
@@ -40,7 +41,7 @@ async function run (options = {}, context = process.cwd()) {
 
   apollo(opts, () => {
     // Open browser
-    const url = `http://${host}:${port}`
+    const url = process.env.GUIJS_URL = `http://${host}:${port}`
     if (!options.quiet) log(`🌠  Ready on ${url}`)
     if (options.headless) {
       console.log(port)

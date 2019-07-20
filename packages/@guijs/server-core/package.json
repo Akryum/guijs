@@ -43,6 +43,7 @@
     "rss-parser": "^3.7.1",
     "semver": "^6.1.0",
     "shortid": "^2.2.11",
+    "systray": "^1.0.5",
     "typescript": "^3.4.5",
     "vue-cli-plugin-apollo": "^0.20.0",
     "watch": "^1.0.2"
