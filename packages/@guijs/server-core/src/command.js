@@ -1,7 +1,6 @@
 const portfinder = require('portfinder')
 const shortid = require('shortid')
 const apollo = require('./apollo')
-require('./util/systray')
 const { log, error, openBrowser } = require('@vue/cli-shared-utils')
 
 async function run (options = {}, context = process.cwd()) {
@@ -26,6 +25,10 @@ async function run (options = {}, context = process.cwd()) {
   }
 
   if (!options.quiet) log(`🚀  Starting GUI...`)
+
+  if (!options.hideSystray) {
+    require('./util/systray')
+  }
 
   const opts = {
     host,
