@@ -184,6 +184,7 @@ async function create (input, context) {
 
     return importProject({
       path: projectPath,
+      type: creationWizard.type.id,
     }, context)
   })
 }
@@ -197,7 +198,7 @@ async function importProject (input, context) {
     id: shortId.generate(),
     path: input.path,
     favorite: 0,
-    type: await projectTypes.detectType({ file: input.path }, context),
+    type: input.type || await projectTypes.detectType({ file: input.path }, context),
   }
 
   const packageData = folders.readPackage(project.path, context)
