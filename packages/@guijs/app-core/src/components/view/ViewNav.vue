@@ -179,7 +179,6 @@ export default {
   .content
     flex 1
     v-box()
-    height 100%
     padding 8px 0
     box-sizing border-box
 
