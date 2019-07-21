@@ -62,7 +62,7 @@
 
           <VueLoadingIndicator
             v-if="loading && (!data || !data.plugins)"
-            class="overlay"
+            class="overlay transparent"
           />
 
           <ListFilter

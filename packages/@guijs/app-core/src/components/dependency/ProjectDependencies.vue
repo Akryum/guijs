@@ -39,7 +39,7 @@
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
             v-if="loading && (!data || !data.dependencies)"
-            class="overlay"
+            class="overlay transparent"
           />
 
           <ListFilter

@@ -11,7 +11,7 @@
         <template slot-scope="{ result: { data, loading } }">
           <VueLoadingIndicator
             v-if="loading && (!data || !data.tasks)"
-            class="overlay"
+            class="overlay transparent"
           />
 
           <NavContent

@@ -32,24 +32,31 @@
           :query="require('@/graphql/widget/widgets.gql')"
           class="widgets"
         >
-          <div
-            slot-scope="{ result: { data, loading } }"
-            class="widgets-wrapper"
-          >
+          <template #default="{ result: { data, loading } }">
             <VueLoadingIndicator
-              v-if="loading && (!data || !data.widgets)"
-              class="overlay"
+              v-if="loading"
+              class="overlay transparent"
             />
 
-            <template v-else-if="data">
-              <Widget
-                v-for="widget of data.widgets"
-                :key="widget.id"
-                :widget="widget"
-                :customize-mode="customizeMode"
+            <div
+              v-else
+              class="widgets-wrapper"
+            >
+              <VueLoadingIndicator
+                v-if="loading && (!data || !data.widgets)"
+                class="overlay"
               />
-            </template>
-          </div>
+
+              <template v-else-if="data">
+                <Widget
+                  v-for="widget of data.widgets"
+                  :key="widget.id"
+                  :widget="widget"
+                  :customize-mode="customizeMode"
+                />
+              </template>
+            </div>
+          </template>
         </ApolloQuery>
 
         <transition name="sidepane">
