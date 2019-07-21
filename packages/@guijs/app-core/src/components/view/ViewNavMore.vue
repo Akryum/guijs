@@ -19,11 +19,13 @@
         icon-left="home"
         :to="{ name: 'project-select' }"
         :label="$t('org.vue.views.project-select.title')"
+        class="big"
       />
       <VueDropdownButton
         icon-left="info"
         :to="{ name: 'about' }"
         :label="$t('org.vue.views.about.title')"
+        class="big"
       />
     </VueDropdown>
   </div>
