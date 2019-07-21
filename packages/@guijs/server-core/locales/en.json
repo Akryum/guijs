@@ -504,6 +504,7 @@
           "title": "Settings"
         },
         "about": {
+          "title": "About guijs",
           "description": "🐣️ The app that makes your #devlife easier.",
           "back": "Go back"
         }
