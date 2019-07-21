@@ -37,33 +37,7 @@
         </template>
       </ApolloQuery>
 
-      <div
-        v-tooltip="$t('org.vue.components.status-bar.log.tooltip')"
-        class="section action console-log"
-        @click="onConsoleClick()"
-      >
-        <VueIcon icon="dvr" />
-        <transition-group
-          name="slide-up"
-          duration="600"
-          tag="div"
-          class="last-message-container"
-        >
-          <LoggerMessage
-            v-if="consoleLogLast"
-            :key="consoleLogLast.id"
-            class="last-message"
-            :message="consoleLogLast"
-          />
-          <div
-            v-else
-            key="__empty"
-            class="last-message no-log"
-          >
-            {{ $t('org.vue.components.status-bar.log.empty') }}
-          </div>
-        </transition-group>
-      </div>
+      <div class="vue-ui-spacer" />
 
       <div
         v-if="enableDarkModeButton"
@@ -71,7 +45,15 @@
         class="section action dark-mode"
         @click="toggleDarkMode()"
       >
-        <VueIcon icon="invert_colors" />
+        <VueIcon icon="brightness_2" />
+      </div>
+
+      <div
+        v-tooltip="$t('org.vue.components.status-bar.log.tooltip')"
+        class="section action console-log"
+        @click="onConsoleClick()"
+      >
+        <VueIcon icon="dvr" />
       </div>
 
       <div
@@ -101,8 +83,6 @@
 
 <script>
 import PROJECT_CURRENT from '@/graphql/project/projectCurrent.gql'
-import CONSOLE_LOG_LAST from '@/graphql/console-log/consoleLogLast.gql'
-import CONSOLE_LOG_ADDED from '@/graphql/console-log/consoleLogAdded.gql'
 import DARK_MODE_SET from '@/graphql/dark-mode/darkModeSet.gql'
 import PLUGIN_RESET_API from '@/graphql/plugin/pluginResetApi.gql'
 import { resetApollo } from '@/vue-apollo'
@@ -123,16 +103,6 @@ export default {
 
   apollo: {
     projectCurrent: PROJECT_CURRENT,
-    consoleLogLast: CONSOLE_LOG_LAST,
-
-    $subscribe: {
-      consoleLogAdded: {
-        query: CONSOLE_LOG_ADDED,
-        result ({ data }) {
-          this.consoleLogLast = data.consoleLogAdded
-        },
-      },
-    },
   },
 
   methods: {
@@ -238,33 +208,4 @@ export default {
     &.action
       user-select none
       cursor pointer
-
-  .console-log
-    &,
-    .last-message-container
-      flex 100% 1 1
-      width 0
-
-    .last-message-container
-      overflow hidden
-      height 100%
-      position relative
-
-    .last-message
-      position absolute
-      left 0
-      top 4px
-      width 100%
-
-    .logger-message
-      font-size .9em
-      padding-right 0
-
-    .last-message >>> .message
-      > span
-        color $vue-ui-color-light
-
-    .no-log
-      padding 2px
-      opacity .5
 </style>
