@@ -119,7 +119,7 @@ async function loadGlobalPlugins (context) {
   await runGlobalPluginApi({ file: cwd.get() }, context)
 }
 
-async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
+async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true, force = false } = {}) {
   let pkg = folders.readPackage(file, context)
   let pkgContext = cwd.get()
   // Custom package.json location
@@ -168,7 +168,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
   }
 
   const oldPlugins = getPlugins(file)
-  if (oldPlugins && deepEqual(plugins, oldPlugins) && pluginApiInstances.has(file)) {
+  if (!force && oldPlugins && deepEqual(plugins, oldPlugins) && pluginApiInstances.has(file)) {
     return oldPlugins
   }
 

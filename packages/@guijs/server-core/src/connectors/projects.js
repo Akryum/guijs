@@ -236,7 +236,7 @@ async function open (id, context) {
 
   // Load plugins if not loaded
   // Delayed (cyclic dependency)
-  await Promise.resolve().then(() => plugins.list(project.path, context))
+  await Promise.resolve().then(() => plugins.list(project.path, context, { force: true }))
 
   const projectType = projectTypes.getType(project.type, context)
   // Toggle plugin view
