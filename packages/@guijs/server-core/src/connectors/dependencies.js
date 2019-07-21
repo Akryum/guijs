@@ -8,7 +8,6 @@ const logs = require('./logs')
 // Context
 // const getContext = require('../context')
 // Utils
-const { isPlugin } = require('@vue/cli-shared-utils')
 const { resolveModule } = require('@nodepack/module')
 const {
   getPackageVersionsInfo,
@@ -23,7 +22,6 @@ const { notify } = require('../util/notification')
 const { log } = require('../util/logger')
 
 const PROGRESS_ID = 'dependency-installation'
-const CLI_SERVICE = '@vue/cli-service'
 
 // Local
 let dependencies
@@ -47,8 +45,9 @@ function findOne (id, context) {
 }
 
 function findDependencies (deps, type, file, context) {
+  const { isPlugin } = require('./plugins')
   return Object.keys(deps).filter(
-    id => !isPlugin(id) && id !== CLI_SERVICE
+    id => !isPlugin(id, file, context)
   ).map(
     id => ({
       id,

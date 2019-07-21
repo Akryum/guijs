@@ -93,7 +93,7 @@ exports.resolvers = {
     pluginUpdate: (root, { id, full }, context) => plugins.update({ id, full }, context),
     pluginActionCall: (root, args, context) => plugins.callAction(args, context),
     pluginsUpdate: (root, args, context) => plugins.updateAll(context),
-    pluginResetApi: (root, args, context) => plugins.resetPluginApi({ file: cwd.get() }, context),
+    pluginResetApi: (root, args, context) => plugins.reloadPluginApi({ file: cwd.get() }, context),
   },
 
   Subscription: {

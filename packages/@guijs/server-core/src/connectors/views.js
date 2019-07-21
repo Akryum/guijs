@@ -5,7 +5,16 @@ const channels = require('../channels')
 // Utils
 const { log } = require('../util/logger')
 
+/**
+ * @typedef View
+ * @prop {string} id
+ * @prop {string} name
+ * @prop {string} [icon]
+ * @prop {string} [tooltip]
+ */
+
 let currentView
+const hiddenViews = new Set()
 
 function createViewsSet () {
   // Builtin views
@@ -43,14 +52,18 @@ function createViewsSet () {
   ]
 }
 
+/** @type {Map<string, View[]} */
 const viewsMap = new Map()
 
-function getViews () {
+function getViews (filterHidden = true) {
   const file = cwd.get()
   let list = viewsMap.get(file)
   if (!list) {
     list = createViewsSet()
     viewsMap.set(file, list)
+  }
+  if (filterHidden) {
+    return list.filter(v => !hiddenViews.has(v.id))
   }
   return list
 }
@@ -91,6 +104,28 @@ function remove (id, context) {
     views.splice(index, 1)
     context.pubsub.publish(channels.VIEW_REMOVED, {
       viewRemoved: view,
+    })
+  }
+}
+
+function hide (id, context) {
+  log('Hide view', id)
+  hiddenViews.add(id)
+  const view = findOne(id)
+  if (view) {
+    context.pubsub.publish(channels.VIEW_REMOVED, {
+      viewRemoved: view,
+    })
+  }
+}
+
+function show (id, context) {
+  log('Show view', id)
+  hiddenViews.delete(id)
+  const view = findOne(id)
+  if (view) {
+    context.pubsub.publish(channels.VIEW_ADDED, {
+      viewAdded: view,
     })
   }
 }
@@ -157,6 +192,11 @@ function open (id, context) {
   return true
 }
 
+function indexOf (id, context) {
+  const views = getViews(false)
+  return views.findIndex(view => view.id === id)
+}
+
 module.exports = {
   list,
   findOne,
@@ -167,4 +207,7 @@ module.exports = {
   removeBadge,
   open,
   getCurrent: () => currentView,
+  hide,
+  show,
+  indexOf,
 }

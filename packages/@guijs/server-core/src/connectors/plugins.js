@@ -3,6 +3,7 @@ import fs from 'fs-extra'
 import LRU from 'lru-cache'
 import chalk from 'chalk'
 import deepEqual from 'fast-deep-equal'
+import execa from 'execa'
 // Context
 import getContext from '../context'
 // Subs
@@ -24,13 +25,8 @@ import widgets from './widgets'
 import * as projects from './projects'
 // Api
 import PluginApi from '../api/PluginApi'
+import GlobalPluginApi from '../api/GlobalPluginApi'
 // Utils
-import {
-  isPlugin,
-  isOfficialPlugin,
-  getPluginLink,
-  execa,
-} from '@vue/cli-shared-utils'
 import {
   resolveModule,
   loadModule,
@@ -46,6 +42,18 @@ import ipc from '../util/ipc'
 import { log } from '../util/logger'
 import { notify } from '../util/notification'
 import { rcFolder } from '../util/rcFolder'
+
+/**
+ * @typedef Plugin
+ * @prop {string} id
+ * @prop {string} baseDir
+ * @prop {string} [versionRange]
+ * @prop {boolean} [official]
+ * @prop {boolean} [installed]
+ * @prop {string} [website]
+ * @prop {boolean} [isGlobal]
+ * @prop {boolean} [hidden]
+ */
 
 const PROGRESS_ID = 'plugin-installation'
 const CLI_SERVICE = '@vue/cli-service'
@@ -63,13 +71,16 @@ const logoCache = new LRU({
 let currentPluginId
 let eventsInstalled = false
 let installationStep
+/** @type {Map<string, Plugin[]>} */
 const pluginsStore = new Map()
 const pluginApiInstances = new Map()
 const pkgStore = new Map()
+/** @type {Plugin[]} */
 let globalPlugins = []
 let globalPluginsPkg = null
 
 function setupGlobalPlugins () {
+  const context = getContext()
   fs.ensureDirSync(GLOBAL_PLUGINS_FOLDER)
   if (!fs.existsSync(GLOBAL_PLUGINS_PKG_FILE)) {
     globalPluginsPkg = {
@@ -84,17 +95,19 @@ function setupGlobalPlugins () {
     globalPluginsPkg = fs.readJSONSync(GLOBAL_PLUGINS_PKG_FILE)
   }
 
-  loadGlobalPlugins()
+  loadGlobalPlugins(context)
 }
 
 setupGlobalPlugins()
 
-async function loadGlobalPlugins () {
+async function loadGlobalPlugins (context) {
   const deps = globalPluginsPkg.dependencies || {}
   globalPlugins = Object.keys(deps).map(
-    id => mapPlugin(deps, GLOBAL_PLUGINS_FOLDER, id, true)
+    id => mapPlugin(deps, GLOBAL_PLUGINS_FOLDER, id, context, true)
   )
   log('Global plugins found:', globalPlugins.length, GLOBAL_PLUGINS_FOLDER)
+
+  await runGlobalPluginApi({ file: cwd.get() }, context)
 }
 
 async function list (file, context, { resetApi = true, lightApi = false, autoLoadApi = true } = {}) {
@@ -107,9 +120,10 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
   }
   pkgStore.set(file, { pkgContext, pkg })
 
+  /** @type {Plugin[]} */
   let plugins = []
-  plugins = plugins.concat(findPlugins(pkg.devDependencies || {}, file))
-  plugins = plugins.concat(findPlugins(pkg.dependencies || {}, file))
+  plugins = plugins.concat(findPlugins(pkg.devDependencies || {}, file, context))
+  plugins = plugins.concat(findPlugins(pkg.dependencies || {}, file, context))
 
   if (pkg.vuedesk) {
     plugins.push({
@@ -154,7 +168,7 @@ async function list (file, context, { resetApi = true, lightApi = false, autoLoa
   log('Total plugins found:', plugins.length, chalk.grey(file))
 
   if (resetApi || (autoLoadApi && !pluginApiInstances.has(file))) {
-    await resetPluginApi({ file, lightApi }, context)
+    await reloadPluginApi({ file, lightApi }, context)
   }
   return plugins.filter(p => !p.hidden)
 }
@@ -168,29 +182,73 @@ function findOne ({ id, file }, context) {
   return plugin
 }
 
-function findPlugins (deps, file) {
+function findPlugins (deps, file, context) {
   return Object.keys(deps).filter(
-    id => isPlugin(id) || id === CLI_SERVICE
+    id => isPlugin(id, file, context)
   ).map(
-    id => mapPlugin(deps, file, id)
+    id => mapPlugin(deps, file, id, context)
   )
 }
 
-function mapPlugin (deps, file, id, isGlobal = false) {
+function mapPlugin (deps, file, id, context, isGlobal = false) {
   return {
     id,
     versionRange: deps[id],
-    official: isOfficialPlugin(id) || id === CLI_SERVICE,
+    official: isGlobal ? false : isOfficialPlugin(id, file, context),
     installed: fs.existsSync(dependencies.getPath({ id, file })),
-    website: getLink(id),
+    website: getLink(id, file, context),
     baseDir: file,
     isGlobal,
   }
 }
 
-function getLink (id) {
-  if (id === CLI_SERVICE) return 'https://cli.vuejs.org/'
-  return getPluginLink(id)
+function getPkg (id, file, context) {
+  const target = path.dirname(resolveModule(path.join(id, 'package.json'), file))
+  return folders.readPackage(target, context)
+}
+
+function getPluginConfig (context) {
+  const project = projects.getCurrent(context)
+  if (project) {
+    const projectType = projectTypes.getType(project.type, context)
+    if (projectType) {
+      return projectType.pluginConfig
+    }
+  }
+}
+
+function isPlugin (id, file, context) {
+  const config = getPluginConfig(context)
+  const fn = config && config.filterPlugin
+  if (fn) {
+    const pkg = getPkg(id, file, context)
+    return fn({ pkg })
+  }
+  return false
+}
+
+function isOfficialPlugin (id, file, context) {
+  const config = getPluginConfig(context)
+  const fn = config && config.isOfficial
+  if (fn) {
+    const pkg = getPkg(id, file, context)
+    return fn({ pkg })
+  }
+  return false
+}
+
+function getLink (id, file, context) {
+  let result = null
+  const config = getPluginConfig(context)
+  const fn = config && config.getLink
+  if (fn) {
+    const pkg = getPkg(id, file, context)
+    result = fn({ pkg })
+  }
+  if (!result) {
+    result = dependencies.getLink({ id, file }, context)
+  }
+  return result
 }
 
 function getPlugins (file) {
@@ -199,7 +257,37 @@ function getPlugins (file) {
   return plugins
 }
 
-async function resetPluginApi ({ file, lightApi }, context) {
+/**
+ * Only runs global APIs like project types
+ */
+async function runGlobalPluginApi ({ file }, context) {
+  log('Global plugin API running...')
+  const pluginApi = new GlobalPluginApi(context)
+  loadAndRunPluginApi({
+    pluginApi,
+    plugin: {
+      id: '@guijs/builtin-plugin',
+      baseDir: __dirname,
+    },
+    file: '@guijs/builtin-plugin/ui',
+  }, context)
+  // Run plugins
+  globalPlugins.forEach(plugin => {
+    loadAndRunPluginApi({
+      pluginApi,
+      plugin,
+      file: plugin.id,
+    }, context)
+  })
+  // Add project types
+  projectTypes.setTypes(pluginApi.projectTypes, context)
+  return pluginApi
+}
+
+/**
+ * Run plugin API on all plugins
+ */
+async function reloadPluginApi ({ file, lightApi }, context) {
   let project = projects.findByPath(file, context)
   if (!project) {
     project = projects.getCurrent()
@@ -211,6 +299,7 @@ async function resetPluginApi ({ file, lightApi }, context) {
   }
 
   log('Plugin API reloading...', chalk.grey(file))
+  const time = Date.now()
 
   let pluginApi = pluginApiInstances.get(file)
   let projectId
@@ -238,11 +327,25 @@ async function resetPluginApi ({ file, lightApi }, context) {
   }, context)
   pluginApiInstances.set(file, pluginApi)
 
-  // Run Plugin API
-  runPluginApi('@guijs/builtin-plugin', '@guijs/builtin-plugin/ui', pluginApi, __dirname, context)
   // Global plugins first
-  plugins.slice().sort(sortPluginRun)
-    .forEach(plugin => runPluginApi(plugin.id, `${plugin.id}${plugin.isGlobal ? '' : '/ui'}`, pluginApi, plugin.baseDir, context))
+  const globalPluginApi = await runGlobalPluginApi({ file }, context)
+  for (const inProjectCb of globalPluginApi.inProjectCbs) {
+    runPluginApi({
+      pluginApi,
+      plugin: inProjectCb.plugin,
+      fn: inProjectCb.callback,
+    }, context)
+  }
+  // Local plugins
+  for (const plugin of plugins) {
+    if (!plugin.isGlobal) {
+      loadAndRunPluginApi({
+        pluginApi,
+        plugin,
+        file: `${plugin.id}/ui`,
+      }, context)
+    }
+  }
   // Project package.json data
   const { pkg, pkgContext } = pkgStore.get(file)
   // Local plugins
@@ -250,13 +353,23 @@ async function resetPluginApi ({ file, lightApi }, context) {
     const files = pkg.vuePlugins.ui
     if (Array.isArray(files)) {
       for (const file of files) {
-        runPluginApi(pkgContext, `${pkgContext}/ui`, pluginApi, pluginApi.cwd, context, file)
+        loadAndRunPluginApi({
+          pluginApi,
+          plugin: {
+            id: pkgContext,
+            baseDir: pluginApi.cwd,
+          },
+          file,
+        }, context)
       }
     }
   }
 
-  // Add project types
-  projectTypes.setTypes(pluginApi.projectTypes, context)
+  if (lightApi) {
+    log(`Light Plugin API reloaded!`, `${Date.now() - time}ms`)
+    return true
+  }
+
   // Add client addons
   pluginApi.clientAddons.forEach(options => {
     clientAddons.add(options, context)
@@ -268,10 +381,6 @@ async function resetPluginApi ({ file, lightApi }, context) {
   // Register widgets
   for (const definition of pluginApi.widgetDefs) {
     await widgets.registerDefinition({ definition, project }, context)
-  }
-
-  if (lightApi) {
-    return true
   }
 
   if (projectId !== project.id) {
@@ -295,23 +404,26 @@ async function resetPluginApi ({ file, lightApi }, context) {
   // Load widgets for current project
   widgets.load(context)
 
+  log(`Plugin API reloaded!`, `${Date.now() - time}ms`)
+
   return true
 }
 
-function sortPluginRun (a, b) {
-  if (a.isGlobal === b.isGlobal) {
-    return 0
-  } else if (a.isGlobal) {
-    return -1
-  } else {
-    return 1
-  }
-}
+/**
+ * @typedef LoadAndRunPluginApiOptions
+ * @prop {any} pluginApi
+ * @prop {Plugin} plugin
+ * @prop {string} file
+ */
 
-function runPluginApi (id, file, pluginApi, cwd, context) {
+/**
+ * @param {LoadAndRunPluginApiOptions} options
+ * @param {any} context
+ */
+function loadAndRunPluginApi ({ pluginApi, plugin, file }, context) {
   let module
   try {
-    module = loadModule(file, cwd, true)
+    module = loadModule(file, plugin.baseDir, true)
   } catch (e) {
     if (process.env.GUIJS_DEBUG) {
       console.error(e)
@@ -319,32 +431,49 @@ function runPluginApi (id, file, pluginApi, cwd, context) {
   }
   if (module) {
     if (typeof module !== 'function') {
-      log(`${chalk.red('ERROR')} while loading plugin API: no function exported, for`, file, chalk.grey(cwd))
+      log(`${chalk.red('ERROR')} while loading plugin API: no function exported in`, file, chalk.grey(plugin.baseDir))
       logs.add({
         type: 'error',
         message: `An error occured while loading ${file}: no function exported`,
       }, context)
     } else {
-      pluginApi.pluginId = id
-      try {
-        module(pluginApi)
-        log('Plugin API loaded for', file, chalk.grey(cwd))
-      } catch (e) {
-        log(`${chalk.red('ERROR')} while loading plugin API for ${file}:\n`, chalk.red(e.stack))
-        logs.add({
-          type: 'error',
-          message: `An error occured while loading ${file}: ${e.message}`,
-        }, context)
-      }
-      pluginApi.pluginId = null
+      runPluginApi({ pluginApi, plugin, fn: module }, context)
     }
   }
 
   // Locales
   try {
-    const folder = fs.existsSync(id) ? id : dependencies.getPath({ id, file: cwd })
+    const folder = fs.existsSync(plugin.id)
+      ? plugin.id
+      : dependencies.getPath({ id: plugin.id, file: plugin.baseDir })
     locales.loadFolder(folder, context)
   } catch (e) {}
+}
+
+/**
+ * @typedef RunPluginApiOptions
+ * @prop {any} pluginApi
+ * @prop {Plugin} plugin
+ * @prop {Function} fn
+ */
+
+/**
+ * @param {RunPluginApiOptions} options
+ * @param {any} context
+ */
+function runPluginApi ({ pluginApi, plugin, fn }, context) {
+  pluginApi.plugin = plugin
+  try {
+    fn(pluginApi)
+    log('Plugin API called', plugin.id, chalk.grey(plugin.baseDir))
+  } catch (e) {
+    log(`${chalk.red('ERROR')} while loading plugin API for ${plugin.id}:\n`, chalk.red(e.stack))
+    logs.add({
+      type: 'error',
+      message: `An error occured while loading ${plugin.id}: ${e.message}`,
+    }, context)
+  }
+  pluginApi.plugin = null
 }
 
 function getApi (folder) {
@@ -558,7 +687,14 @@ function runInvoke (id, context) {
     }
     // Run plugin api
     const pluginApi = getApi(cwd.get())
-    runPluginApi(id, `${id}/ui`, pluginApi, pluginApi.cwd, context)
+    loadAndRunPluginApi({
+      pluginApi,
+      plugin: {
+        id,
+        baseDir: pluginApi.cwd,
+      },
+      file: `${id}/ui`,
+    }, context)
     installationStep = 'diff'
 
     notify({
@@ -618,7 +754,7 @@ function update ({ id, full }, context) {
       icon: 'done',
     })
 
-    await resetPluginApi({ file: cwd.get() }, context)
+    await reloadPluginApi({ file: cwd.get() }, context)
     dependencies.invalidatePackage({ id }, context)
 
     currentPluginId = null
@@ -677,7 +813,7 @@ async function updateAll (context) {
       icon: 'done',
     })
 
-    await resetPluginApi({ file: cwd.get() }, context)
+    await reloadPluginApi({ file: cwd.get() }, context)
 
     return updatedPlugins
   })
@@ -763,11 +899,12 @@ export {
   update,
   updateAll,
   runInvoke,
-  resetPluginApi,
+  reloadPluginApi,
   getApi,
   finishInstall,
   callAction,
   callHook,
   serve,
   serveLogo,
+  isPlugin,
 }

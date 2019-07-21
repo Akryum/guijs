@@ -5,6 +5,14 @@
  * @prop {string} [logo]
  * @prop {Function} filter
  * @prop {Function[]} createCbs
+ * @prop {PluginConfig} pluginConfig
+ */
+
+/**
+ * @typedef PluginConfig
+ * @prop {Function} filterPlugin
+ * @prop {Function} isOfficial
+ * @prop {Function} getLink
  */
 
 import folders from './folders'
@@ -15,7 +23,7 @@ let types = []
 
 export function setTypes (value, context) {
   types = value
-  log('Registered project types:', types)
+  log('Registered project types:', types.map(t => t.id))
 }
 
 export function getType (id, context) {

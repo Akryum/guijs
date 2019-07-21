@@ -12,6 +12,7 @@ import * as plugins from './plugins'
 import locales from './locales'
 import logs from './logs'
 import * as projectTypes from './project-types'
+import views from './views'
 // Context
 import getContext from '../context'
 // Utils
@@ -233,9 +234,18 @@ async function open (id, context) {
   // Reset locales
   locales.reset(context)
 
-  // Load plugins
+  // Load plugins if not loaded
   // Delayed (cyclic dependency)
   await Promise.resolve().then(() => plugins.list(project.path, context))
+
+  const projectType = projectTypes.getType(project.type, context)
+  // Toggle plugin view
+  const pluginViewId = 'vue-project-plugins'
+  if (projectType.pluginConfig) {
+    views.show(pluginViewId, context)
+  } else {
+    views.hide(pluginViewId, context)
+  }
 
   // Date
   context.db.get('projects').find({ id }).assign({

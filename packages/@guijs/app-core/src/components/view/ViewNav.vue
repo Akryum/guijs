@@ -16,7 +16,7 @@
         indicator
       >
         <ViewNavButton
-          v-for="view of views"
+          v-for="view of sortedViews"
           :key="view.id"
           :view="view"
         />
@@ -70,12 +70,15 @@ export default {
         },
         {
           document: VIEW_REMOVED,
-          updateQuery: (previousResult, { subscriptionData }) => {
+          updateQuery (previousResult, { subscriptionData }) {
             if (!previousResult.views) return { views: [] }
-            const index = previousResult.views.findIndex(r => r.id === subscriptionData.data.viewRemoved.id)
+            const view = subscriptionData.data.viewRemoved
+            const index = previousResult.views.findIndex(r => r.id === view.id)
             if (index === -1) return previousResult
             const views = previousResult.views.slice()
             views.splice(index, 1)
+            // Switch to first view if it's the current one
+            this.checkCurrentView()
             return {
               views,
             }
@@ -100,6 +103,9 @@ export default {
           },
         },
       ],
+      result () {
+        this.checkCurrentView()
+      },
     },
   },
 
@@ -122,6 +128,10 @@ export default {
         }
       },
     },
+
+    sortedViews () {
+      return this.views.slice().sort((a, b) => a.index - b.index)
+    },
   },
 
   watch: {
@@ -138,6 +148,14 @@ export default {
         })
       },
       immediate: true,
+    },
+  },
+
+  methods: {
+    checkCurrentView () {
+      if (!this.currentView && this.views && this.views.length) {
+        this.currentViewName = this.views[0].name
+      }
     },
   },
 }

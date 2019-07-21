@@ -1,5 +1,6 @@
 fragment view on View {
   id
+  index
   name
   icon
   tooltip

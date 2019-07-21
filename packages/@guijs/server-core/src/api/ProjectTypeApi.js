@@ -16,12 +16,17 @@ class ProjectTypeApi {
     this.projectType.logo = value
   }
 
-  filterProject (callback) {
+  set filterProject (callback) {
     this.projectType.filter = callback
   }
 
   onCreate (callback) {
     this.projectType.createCbs.push(callback)
+  }
+
+  hasPlugins (callback) {
+    this.projectType.pluginConfig = {}
+    callback(this.projectType.pluginConfig)
   }
 }
 

@@ -21,6 +21,7 @@ extend type Subscription {
 
 type View {
   id: ID!
+  index: Int!
   name: String!
   icon: String!
   tooltip: String
@@ -47,6 +48,10 @@ enum ViewBadgeType {
 `
 
 exports.resolvers = {
+  View: {
+    index: (view, args, context) => views.indexOf(view.id, context),
+  },
+
   Query: {
     views: (root, args, context) => views.list(context),
   },
