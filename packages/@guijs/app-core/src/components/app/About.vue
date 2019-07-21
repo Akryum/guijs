@@ -30,6 +30,13 @@
       >
         Repository
       </VueButton>
+      <VueButton
+        href="https://twitter.com/guijs_official"
+        target="_blank"
+        class="big"
+      >
+        Twitter
+      </VueButton>
     </div>
 
     <div class="actions">
@@ -89,7 +96,7 @@ export default {
 
   .links
     margin-top @padding
-    grid-template-columns repeat(2, 180px)
+    grid-template-columns repeat(3, 150px)
 
   .actions
     margin-top @padding
