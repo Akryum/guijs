@@ -9,7 +9,10 @@
           'icon-button': !$responsive.wide
         }"
       >
-        <span v-if="$responsive.wide" class="label">{{ $t('org.vue.components.project-nav.tooltips.more') }}</span>
+        <span
+          v-if="$responsive.wide"
+          class="label"
+        >{{ $t('org.vue.components.project-nav.tooltips.more') }}</span>
       </VueButton>
 
       <VueDropdownButton

@@ -50,8 +50,14 @@
               </template>
             </ListFilter>
           </div>
-          <div v-else class="vue-ui-empty">
-            <VueIcon icon="attach_file" class="empty-icon"/>
+          <div
+            v-else
+            class="vue-ui-empty"
+          >
+            <VueIcon
+              icon="attach_file"
+              class="empty-icon"
+            />
             <div>{{ $t('org.vue.components.project-select-list.empty') }}</div>
           </div>
         </template>

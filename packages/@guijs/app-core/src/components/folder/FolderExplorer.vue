@@ -7,20 +7,23 @@
   >
     <div class="toolbar">
       <VueButton
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.parent-folder')"
         class="icon-button go-up"
         icon-left="keyboard_arrow_up"
-        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.parent-folder')"
         @click="openParentFolder"
       />
 
-      <div v-if="editingPath" class="path-edit">
+      <div
+        v-if="editingPath"
+        class="path-edit"
+      >
         <VueInput
           ref="pathInput"
-          class="path-input"
           v-model="editedPath"
+          v-focus
+          class="path-input"
           :placeholder="$t('org.vue.components.folder-explorer.toolbar.placeholder')"
           icon-right="edit"
-          v-focus
           @keyup.esc="editingPath = false"
           @keyup.enter="submitPathEdit()"
         />
@@ -66,9 +69,9 @@
             </div>
           </div>
           <VueButton
+            v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.edit-path')"
             class="edit-path-button icon-button"
             icon-left="edit"
-            v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.edit-path')"
             @click="openPathEdit()"
           />
         </template>
@@ -76,22 +79,22 @@
 
       <VueIcon
         v-if="error"
+        v-tooltip="error.message"
         icon="error"
         class="error-icon big"
-        v-tooltip="error.message"
       />
 
       <VueButton
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.refresh')"
         class="icon-button"
         icon-left="refresh"
-        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.refresh')"
         @click="refreshFolder"
       />
 
       <VueButton
+        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite')"
         class="icon-button favorite-button"
         :icon-left="folderCurrent.favorite ? 'star' : 'star_border'"
-        v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite')"
         @click="toggleFavorite()"
       />
 
@@ -100,9 +103,9 @@
       >
         <VueButton
           slot="trigger"
+          v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite-folders')"
           icon-left="arrow_drop_down"
           class="icon-button"
-          v-tooltip="$t('org.vue.components.folder-explorer.toolbar.tooltips.favorite-folders')"
         />
 
         <template v-if="foldersFavorite.length">
@@ -115,7 +118,10 @@
           />
         </template>
 
-        <div v-else class="vue-ui-empty">
+        <div
+          v-else
+          class="vue-ui-empty"
+        >
           {{ $t('org.vue.components.folder-explorer.toolbar.empty') }}
         </div>
       </VueDropdown>
@@ -134,8 +140,8 @@
         />
 
         <VueSwitch
-          icon="visibility"
           v-model="showHidden"
+          icon="visibility"
           class="extend-left"
         >
           {{ $t('org.vue.components.folder-explorer.toolbar.show-hidden') }}
@@ -143,7 +149,10 @@
       </VueDropdown>
     </div>
 
-    <div ref="folders" class="folders">
+    <div
+      ref="folders"
+      class="folders"
+    >
       <transition name="vue-ui-fade">
         <VueLoadingBar
           v-if="loading"
@@ -175,14 +184,17 @@
         >
           <VueInput
             v-model="newFolderName"
-            icon-left="folder"
             v-focus
+            icon-left="folder"
             @keyup.enter="createFolder()"
           />
         </VueFormField>
       </div>
 
-      <div slot="footer" class="actions end">
+      <div
+        slot="footer"
+        class="actions end"
+      >
         <VueButton
           :label="$t('org.vue.components.folder-explorer.new-folder.cancel')"
           class="flat close"

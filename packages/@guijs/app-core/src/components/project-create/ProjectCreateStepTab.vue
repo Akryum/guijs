@@ -7,14 +7,20 @@
     :lazy="indexInTabs > 0"
   >
     <div class="step-content content vue-ui-disable-scroll">
-      <div v-if="step.description" class="vue-ui-text info banner">
-        <VueIcon icon="info" class="big"/>
+      <div
+        v-if="step.description"
+        class="vue-ui-text info banner"
+      >
+        <VueIcon
+          icon="info"
+          class="big"
+        />
         <span>{{ $t(step.description) }}</span>
       </div>
 
       <component
-        v-if="currentTabId === step.id"
         :is="`step-${step.type}`"
+        v-if="currentTabId === step.id"
         :step="step"
         v-bind="$attrs"
         v-on="$listeners"
@@ -76,13 +82,13 @@ import { isTabStep } from './helpers'
 import Step from './Step'
 
 export default {
-  inheritAttrs: false,
 
   components: {
     'step-general': ProjectCreateStepGeneral,
     'step-prompts': ProjectCreateStepPrompts,
     'step-select': ProjectCreateStepSelect,
   },
+  inheritAttrs: false,
 
   mixins: [
     Step(),

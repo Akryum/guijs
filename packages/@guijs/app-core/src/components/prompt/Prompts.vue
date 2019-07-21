@@ -8,8 +8,14 @@
         @answer="payload => $emit('answer', payload)"
       />
 
-      <div v-if="!prompts.length" class="vue-ui-empty">
-        <VueIcon icon="check_circle" class="empty-icon"/>
+      <div
+        v-if="!prompts.length"
+        class="vue-ui-empty"
+      >
+        <VueIcon
+          icon="check_circle"
+          class="empty-icon"
+        />
         <span>{{ $t('org.vue.components.prompts-list.empty') }}</span>
       </div>
     </div>

@@ -83,8 +83,8 @@
       </ApolloQuery>
     </ContentView>
 
-    <ProgressScreen progress-id="plugin-update"/>
-    <ProgressScreen progress-id="plugins-update"/>
+    <ProgressScreen progress-id="plugin-update" />
+    <ProgressScreen progress-id="plugins-update" />
   </div>
 </template>
 

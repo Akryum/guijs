@@ -13,7 +13,7 @@
     "@nodepack/config-transformer": "^0.1.20",
     "@nodepack/module": "^0.1.20",
     "@nodepack/utils": "^0.1.20",
-    "@vue/cli-global-utils": "^4.0.0-alpha.1",
+    "@vue/cli-global-utils": "link:../../../vue-cli/packages/@vue/cli-global-utils",
     "@vue/cli-shared-utils": "^4.0.0-alpha.1",
     "apollo-server-express": "^2.6.7",
     "chalk": "^2.4.1",

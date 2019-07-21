@@ -17,8 +17,8 @@
 
     <div class="actions">
       <VueButton
-        class="primary icon-button"
         v-tooltip="$t('org.vue.components.widget-add-item.add')"
+        class="primary icon-button"
         icon-left="add"
         @click="add()"
       />
@@ -42,7 +42,10 @@
           />
         </div>
 
-        <div v-if="definition.longDescription" class="details">
+        <div
+          v-if="definition.longDescription"
+          class="details"
+        >
           <div
             class="description"
             v-html="$t(definition.longDescription)"
@@ -57,7 +60,10 @@
         </div>
       </div>
 
-      <div slot="footer" class="actions">
+      <div
+        slot="footer"
+        class="actions"
+      >
         <VueButton
           v-if="definition.link"
           :href="definition.link"

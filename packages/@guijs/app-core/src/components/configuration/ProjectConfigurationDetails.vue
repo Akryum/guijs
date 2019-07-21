@@ -1,7 +1,10 @@
 <template>
   <div class="project-configuration-details">
     <template v-if="configuration">
-      <div v-if="configuration.tabs.length > 1" class="tabs">
+      <div
+        v-if="configuration.tabs.length > 1"
+        class="tabs"
+      >
         <VueGroup
           v-model="currentTab"
           class="tabs-selector"
@@ -43,7 +46,7 @@
         target="_blank"
       />
 
-      <div class="vue-ui-spacer"/>
+      <div class="vue-ui-spacer" />
 
       <VueButton
         :disabled="!hasPromptsChanged"

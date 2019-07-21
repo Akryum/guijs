@@ -11,7 +11,10 @@
         class="blank-icon"
       />
 
-      <div v-else class="items">
+      <div
+        v-else
+        class="items"
+      >
         <SpeedStatsItem
           v-for="(stats, key) of speeds"
           :key="key"

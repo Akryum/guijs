@@ -11,7 +11,7 @@
         icon="storage"
         class="select"
       >
-        <ProjectSelectList/>
+        <ProjectSelectList />
       </VueTab>
 
       <VueTab
@@ -22,7 +22,7 @@
         lazy
       >
         <div class="content">
-          <FolderExplorer/>
+          <FolderExplorer />
         </div>
 
         <div class="actions-bar center">
@@ -43,7 +43,7 @@
         lazy
       >
         <div class="content">
-          <FolderExplorer/>
+          <FolderExplorer />
         </div>
 
         <div class="actions-bar center">
@@ -70,10 +70,10 @@
 
     <div class="top-menu right">
       <VueButton
+        v-tooltip="$t('org.vue.views.about.title')"
         :to="{ name: 'about' }"
         class="flat icon-button"
         icon-left="help"
-        v-tooltip="$t('org.vue.views.about.title')"
       />
     </div>
 
@@ -89,7 +89,10 @@
         </div>
       </div>
 
-      <div slot="footer" class="actions center">
+      <div
+        slot="footer"
+        class="actions center"
+      >
         <VueButton
           :label="$t('org.vue.views.project-select.import.force')"
           @click="importProject(true)"

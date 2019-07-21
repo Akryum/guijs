@@ -11,13 +11,16 @@
       v-if="loading"
       class="loading"
     >
-      <VueLoadingIndicator/>
+      <VueLoadingIndicator />
     </div>
     <div
       v-else-if="error"
       class="error vue-ui-empty"
     >
-      <VueIcon :icon="errorData.icon" class="huge"/>
+      <VueIcon
+        :icon="errorData.icon"
+        class="huge"
+      />
       <div>{{ $t(`org.vue.widgets.news.errors.${error}`) }}</div>
     </div>
     <div
@@ -41,7 +44,10 @@
           v-if="selectedItem"
           class="item-details"
         >
-          <div v-if="small" class="back">
+          <div
+            v-if="small"
+            class="back"
+          >
             <VueButton
               icon-left="arrow_back"
               :label="$t('org.vue.common.back')"
@@ -55,8 +61,14 @@
           />
         </div>
 
-        <div v-else-if="!small" class="select-tip vue-ui-empty">
-          <VueIcon icon="rss_feed" class="huge"/>
+        <div
+          v-else-if="!small"
+          class="select-tip vue-ui-empty"
+        >
+          <VueIcon
+            icon="rss_feed"
+            class="huge"
+          />
           <div>{{ $t('org.vue.widgets.news.select-tip') }}</div>
         </div>
       </transition>

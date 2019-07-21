@@ -1,5 +1,8 @@
 <template>
-  <div v-if="implemented" class="status-widget">
+  <div
+    v-if="implemented"
+    class="status-widget"
+  >
     <div class="header">
       <div class="icon-wrapper">
         <ItemLogo
@@ -10,7 +13,10 @@
       </div>
 
       <div class="info">
-        <div class="title" v-html="title"/>
+        <div
+          class="title"
+          v-html="title"
+        />
         <div class="last-updated">
           <template v-if="status.lastUpdate">
             <div class="label">
@@ -40,12 +46,17 @@
           icon-left="add_circle"
           @click="widget.openDetails()"
         />
-        <slot name="more-actions"/>
+        <slot name="more-actions" />
       </slot>
     </div>
   </div>
-  <div v-else class="status-widget soon">
-    <div class="text">Available Soon</div>
+  <div
+    v-else
+    class="status-widget soon"
+  >
+    <div class="text">
+      Available Soon
+    </div>
   </div>
 </template>
 

@@ -11,15 +11,18 @@
       >
         <VueInput
           v-model="newName"
-          icon-left="folder"
           v-focus
+          icon-left="folder"
           class="big"
           @keyup.enter="rename()"
         />
       </VueFormField>
     </div>
 
-    <div slot="footer" class="actions">
+    <div
+      slot="footer"
+      class="actions"
+    >
       <VueButton
         :label="$t('org.vue.common.cancel')"
         class="flat big close"

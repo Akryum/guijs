@@ -11,8 +11,8 @@
         >
           <img
             v-if="projectTypeLogo"
-            :src="projectTypeLogo"
             :key="projectTypeLogo"
+            :src="projectTypeLogo"
             class="project-type-logo"
           >
           <div
@@ -57,11 +57,16 @@
         />
       </template>
 
-      <div class="dropdown-separator"/>
+      <div class="dropdown-separator" />
 
       <!-- Favorites -->
 
-      <div v-if="!favoriteProjects.length" class="vue-ui-empty">{{ $t('org.vue.components.top-bar.no-favorites') }}</div>
+      <div
+        v-if="!favoriteProjects.length"
+        class="vue-ui-empty"
+      >
+        {{ $t('org.vue.components.top-bar.no-favorites') }}
+      </div>
 
       <template v-else>
         <div class="section-title">
@@ -80,7 +85,7 @@
       <!-- Recents -->
 
       <template v-if="recentProjects.length">
-        <div class="dropdown-separator"/>
+        <div class="dropdown-separator" />
 
         <div class="section-title">
           {{ $t('org.vue.components.top-bar.recent-projects') }}
@@ -95,7 +100,7 @@
         />
       </template>
 
-      <div class="dropdown-separator"/>
+      <div class="dropdown-separator" />
 
       <VueDropdownButton
         :to="{ name: 'project-select' }"

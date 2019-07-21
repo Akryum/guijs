@@ -6,8 +6,12 @@
     ]"
   >
     <div class="content">
-      <div class="counter">{{ badge.count }}</div>
-      <div class="label">{{ $t(badge.label) }}</div>
+      <div class="counter">
+        {{ badge.count }}
+      </div>
+      <div class="label">
+        {{ $t(badge.label) }}
+      </div>
     </div>
   </div>
 </template>

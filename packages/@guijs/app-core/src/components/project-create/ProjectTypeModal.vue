@@ -10,17 +10,23 @@
         class="big accent"
       />
 
-      <div v-else class="types">
+      <div
+        v-else
+        class="types"
+      >
         <ProjectTypeItem
           v-for="projectType of projectTypes"
           :key="projectType.id"
-          :projectType="projectType"
+          :project-type="projectType"
           @select="createProject(projectType.id)"
         />
       </div>
     </div>
 
-    <div slot="footer" class="actions">
+    <div
+      slot="footer"
+      class="actions"
+    >
       <VueButton
         :label="$t('org.vue.common.cancel')"
         class="flat big"

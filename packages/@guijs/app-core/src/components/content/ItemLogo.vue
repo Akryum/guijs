@@ -15,9 +15,9 @@
       />
       <img
         v-else-if="displayImage"
+        :key="imageUrl"
         class="image"
         :src="imageUrl"
-        :key="imageUrl"
         @load="loaded = true"
         @error="error = true"
       >

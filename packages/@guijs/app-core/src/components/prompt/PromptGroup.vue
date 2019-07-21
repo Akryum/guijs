@@ -14,9 +14,9 @@
       </div>
 
       <component
+        :is="getModule(prompt)"
         v-for="prompt of visiblePrompts"
         :key="prompt.id"
-        :is="getModule(prompt)"
         :prompt="prompt"
         @answer="value => $emit('answer', { prompt, value })"
       />

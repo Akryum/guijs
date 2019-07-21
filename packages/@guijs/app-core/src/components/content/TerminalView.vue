@@ -1,14 +1,19 @@
 <template>
   <div class="terminal-view card">
-    <div v-if="toolbar" class="pane-toolbar">
+    <div
+      v-if="toolbar"
+      class="pane-toolbar"
+    >
       <VueIcon
         icon="dvr"
       />
-      <div class="title">{{ title }}</div>
+      <div class="title">
+        {{ title }}
+      </div>
       <VueButton
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.clear')"
         class="icon-button flat"
         icon-left="delete_forever"
-        v-tooltip="$t('org.vue.components.terminal-view.buttons.clear')"
         @click="clear(); $emit('clear')"
       />
       <VueIcon
@@ -16,24 +21,30 @@
         class="separator"
       />
       <VueButton
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.content-copy')"
         class="icon-button flat"
         icon-left="content_copy"
-        v-tooltip="$t('org.vue.components.terminal-view.buttons.content-copy')"
         @click="copyContent()"
       />
       <VueButton
+        v-tooltip="$t('org.vue.components.terminal-view.buttons.scroll')"
         class="icon-button flat"
         icon-left="subdirectory_arrow_left"
-        v-tooltip="$t('org.vue.components.terminal-view.buttons.scroll')"
         @click="scrollToBottom()"
       />
     </div>
 
     <div class="view">
-      <div ref="render" class="xterm-render"/>
+      <div
+        ref="render"
+        class="xterm-render"
+      />
     </div>
 
-    <resize-observer v-if="autoSize" @notify="fit"/>
+    <resize-observer
+      v-if="autoSize"
+      @notify="fit"
+    />
   </div>
 </template>
 

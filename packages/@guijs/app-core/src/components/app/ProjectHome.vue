@@ -6,15 +6,18 @@
     }"
   >
     <div class="panes">
-      <ViewNav/>
+      <ViewNav />
 
-      <div v-if="ready" class="content vue-ui-disable-scroll">
+      <div
+        v-if="ready"
+        class="content vue-ui-disable-scroll"
+      >
         <TopBar />
-        <router-view class="router-view"/>
+        <router-view class="router-view" />
       </div>
     </div>
 
-    <ProgressScreen progress-id="__plugins__"/>
+    <ProgressScreen progress-id="__plugins__" />
   </div>
 </template>
 

@@ -1,8 +1,10 @@
 <template>
   <div class="vue-webpack-dashboard">
     <div class="pane-toolbar card">
-      <VueIcon icon="dashboard"/>
-      <div class="title">{{ $t('org.vue.vue-webpack.dashboard.title') }}</div>
+      <VueIcon icon="dashboard" />
+      <div class="title">
+        {{ $t('org.vue.vue-webpack.dashboard.title') }}
+      </div>
 
       <template
         v-if="mode === 'serve'"
@@ -28,29 +30,44 @@
       </VueSwitch>
 
       <VueSelect v-model="sizeField">
-        <VueSelectButton value="stats" :label="`${$t('org.vue.vue-webpack.sizes.stats')}`"/>
-        <VueSelectButton value="parsed" :label="`${$t('org.vue.vue-webpack.sizes.parsed')}`"/>
-        <VueSelectButton value="gzip" :label="`${$t('org.vue.vue-webpack.sizes.gzip')}`"/>
+        <VueSelectButton
+          value="stats"
+          :label="`${$t('org.vue.vue-webpack.sizes.stats')}`"
+        />
+        <VueSelectButton
+          value="parsed"
+          :label="`${$t('org.vue.vue-webpack.sizes.parsed')}`"
+        />
+        <VueSelectButton
+          value="gzip"
+          :label="`${$t('org.vue.vue-webpack.sizes.gzip')}`"
+        />
       </VueSelect>
 
       <VueButton
+        v-tooltip="$t('org.vue.vue-webpack.sizes.help')"
         class="icon-button"
         icon-left="help"
-        v-tooltip="$t('org.vue.vue-webpack.sizes.help')"
       />
     </div>
 
     <div class="content vue-ui-grid">
       <BuildStatus />
       <BuildProgress />
-      <SpeedStats class="span-2"/>
+      <SpeedStats class="span-2" />
       <AssetList />
       <ModuleList />
     </div>
 
     <div class="logo">
-      <a href="https://webpack.js.org/" target="_blank">
-        <img src="../assets/webpack.svg" class="webpack-logo">
+      <a
+        href="https://webpack.js.org/"
+        target="_blank"
+      >
+        <img
+          src="../assets/webpack.svg"
+          class="webpack-logo"
+        >
       </a>
     </div>
   </div>
@@ -66,9 +83,6 @@ import AssetList from './AssetList'
 import ModuleList from './ModuleList'
 
 export default {
-  mixins: [
-    Dashboard,
-  ],
 
   components: {
     BuildStatus,
@@ -77,6 +91,9 @@ export default {
     AssetList,
     ModuleList,
   },
+  mixins: [
+    Dashboard,
+  ],
 }
 </script>
 

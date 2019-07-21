@@ -1,16 +1,20 @@
 <template>
   <div class="file-diff-view">
     <div class="toolbar">
-      <VueIcon icon="cached"/>
-      <div class="title">{{ $t('org.vue.components.file-diff-view.files-changed') }}</div>
-      <div class="file-count">{{ fileDiffs && fileDiffs.length }}</div>
+      <VueIcon icon="cached" />
+      <div class="title">
+        {{ $t('org.vue.components.file-diff-view.files-changed') }}
+      </div>
+      <div class="file-count">
+        {{ fileDiffs && fileDiffs.length }}
+      </div>
       <transition name="vue-ui-fade">
         <VueLoadingIndicator
           v-if="loading && fileDiffs.length"
           class="small accent"
         />
       </transition>
-      <div class="vue-ui-spacer"/>
+      <div class="vue-ui-spacer" />
       <VueInput
         v-model="search"
         icon-left="search"
@@ -28,13 +32,25 @@
       />
     </div>
     <div class="list">
-      <div v-if="error || !fileDiffs" class="vue-ui-empty">
-        <VueIcon icon="error" class="empty-icon"/>
+      <div
+        v-if="error || !fileDiffs"
+        class="vue-ui-empty"
+      >
+        <VueIcon
+          icon="error"
+          class="empty-icon"
+        />
         <span>{{ $t('org.vue.components.file-diff-view.error') }}</span>
       </div>
 
-      <div v-else-if="!filteredList.length" class="vue-ui-empty">
-        <VueIcon icon="check_circle" class="empty-icon"/>
+      <div
+        v-else-if="!filteredList.length"
+        class="vue-ui-empty"
+      >
+        <VueIcon
+          icon="check_circle"
+          class="empty-icon"
+        />
         <span>{{ $t('org.vue.components.file-diff-view.empty') }}</span>
       </div>
 
@@ -100,14 +116,17 @@
         >
           <VueInput
             v-model="commitMessage"
-            icon-left="local_offer"
             v-focus
+            icon-left="local_offer"
             @keyup.enter="commitMessage && commit()"
           />
         </VueFormField>
       </div>
 
-      <div slot="footer" class="actions center">
+      <div
+        slot="footer"
+        class="actions center"
+      >
         <VueButton
           :label="$t('org.vue.components.file-diff-view.modals.commit.actions.cancel')"
           class="flat"

@@ -1,7 +1,9 @@
 <template>
   <div class="project-plugins-add page">
     <div class="content">
-      <portal to="top-title">{{ $t('org.vue.views.project-plugins-add.title') }}</portal>
+      <portal to="top-title">
+        {{ $t('org.vue.views.project-plugins-add.title') }}
+      </portal>
       <StepWizard
         class="frame"
         :tab-id.sync="tabId"
@@ -38,7 +40,9 @@
             lazy
           >
             <div class="content vue-ui-disable-scroll">
-              <div class="cta-text">{{ $t('org.vue.views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}</div>
+              <div class="cta-text">
+                {{ $t('org.vue.views.project-plugins-add.tabs.configuration.heading', { target: pluginId }) }}
+              </div>
               <Prompts
                 :prompts="visiblePrompts"
                 @answer="answerPrompt"
@@ -89,7 +93,10 @@
         {{ $t('org.vue.views.project-plugins-add.modal.body', { target: pluginId }) }}
       </div>
 
-      <div slot="footer" class="actions end">
+      <div
+        slot="footer"
+        class="actions end"
+      >
         <VueButton
           :label="$t('org.vue.views.project-plugins-add.modal.buttons.back')"
           class="flat"

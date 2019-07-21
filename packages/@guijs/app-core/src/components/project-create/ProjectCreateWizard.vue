@@ -1,6 +1,9 @@
 <template>
   <div class="project-create-wizard page">
-    <div v-if="wizard" class="content">
+    <div
+      v-if="wizard"
+      class="content"
+    >
       <StepWizard
         :tab-id.sync="tabId"
         :title="$t('org.vue.views.project-create.title', { type: wizard.type.name })"
@@ -50,7 +53,10 @@
         {{ $t('org.vue.views.project-create.tabs.details.modal.body') }}
       </div>
 
-      <div slot="footer" class="actions end">
+      <div
+        slot="footer"
+        class="actions end"
+      >
         <VueButton
           :label="$t('org.vue.views.project-create.tabs.details.modal.buttons.back')"
           class="flat"

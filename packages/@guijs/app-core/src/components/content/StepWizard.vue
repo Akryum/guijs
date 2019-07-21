@@ -8,7 +8,12 @@
     <div class="shell">
       <div class="header">
         <div class="content">
-          <div v-if="title" class="title">{{ title }}</div>
+          <div
+            v-if="title"
+            class="title"
+          >
+            {{ title }}
+          </div>
         </div>
       </div>
 

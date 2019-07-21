@@ -11,8 +11,12 @@
             {{ item.title }}
           </a>
         </div>
-        <div class="snippet">{{ snippet }}</div>
-        <div class="date">{{ item.pubDate | date }}</div>
+        <div class="snippet">
+          {{ snippet }}
+        </div>
+        <div class="date">
+          {{ item.pubDate | date }}
+        </div>
       </div>
     </div>
   </div>

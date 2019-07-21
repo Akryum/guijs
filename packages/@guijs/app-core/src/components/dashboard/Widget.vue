@@ -1,5 +1,8 @@
 <template>
-  <transition duration="150" appear>
+  <transition
+    duration="150"
+    appear
+  >
     <div
       class="widget"
       :class="{
@@ -19,7 +22,9 @@
         <div class="wrapper card">
           <div class="content-wrapper">
             <div class="header">
-              <div class="title">{{ injected.customTitle || $t(widget.definition.title) }}</div>
+              <div class="title">
+                {{ injected.customTitle || $t(widget.definition.title) }}
+              </div>
 
               <!-- Custom actions -->
               <template v-if="widget.configured">
@@ -27,10 +32,10 @@
                   v-for="action of headerActions"
                   v-if="!action.hidden"
                   :key="action.id"
+                  v-tooltip="$t(action.tooltip)"
                   :icon-left="action.icon"
                   :disabled="action.disabled"
                   class="icon-button flat primary"
-                  v-tooltip="$t(action.tooltip)"
                   @click="action.onCalled()"
                 />
               </template>
@@ -38,9 +43,9 @@
               <!-- Settings button -->
               <VueButton
                 v-if="widget.definition.hasConfigPrompts"
+                v-tooltip="$t('org.vue.components.widget.configure')"
                 icon-left="settings"
                 class="icon-button flat primary"
-                v-tooltip="$t('org.vue.components.widget.configure')"
                 @click="openConfig()"
               />
 
@@ -55,21 +60,27 @@
               <!-- Open details button -->
               <VueButton
                 v-else-if="widget.definition.openDetailsButton"
+                v-tooltip="$t('org.vue.components.widget.open-details')"
                 icon-left="zoom_out_map"
                 class="icon-button flat primary"
-                v-tooltip="$t('org.vue.components.widget.open-details')"
                 @click="openDetails()"
               />
             </div>
 
-            <div v-if="widget.configured" class="content">
+            <div
+              v-if="widget.configured"
+              class="content"
+            >
               <ClientAddonComponent
                 :name="component"
                 class="view"
               />
             </div>
 
-            <div v-else class="content not-configured">
+            <div
+              v-else
+              class="content not-configured"
+            >
               <VueIcon
                 icon="settings"
                 class="icon huge"
@@ -93,12 +104,14 @@
                 fallback-icon="widgets"
                 class="icon"
               />
-              <div class="title">{{ injected.customTitle || $t(widget.definition.title) }}</div>
+              <div class="title">
+                {{ injected.customTitle || $t(widget.definition.title) }}
+              </div>
             </div>
             <VueButton
+              v-tooltip="$t('org.vue.components.widget.remove')"
               class="remove-button primary flat icon-button"
               icon-left="close"
-              v-tooltip="$t('org.vue.components.widget.remove')"
               @mousedown.native.stop
               @click.stop="remove()"
             />
@@ -123,7 +136,7 @@
         class="move-ghost"
         :style="moveGhostStyle"
       >
-        <div class="backdrop"/>
+        <div class="backdrop" />
       </div>
 
       <div
@@ -131,7 +144,7 @@
         class="resize-ghost"
         :style="resizeGhostStyle"
       >
-        <div class="backdrop"/>
+        <div class="backdrop" />
       </div>
 
       <VueModal
@@ -152,7 +165,10 @@
           />
         </div>
 
-        <div slot="footer" class="actions">
+        <div
+          slot="footer"
+          class="actions"
+        >
           <VueButton
             class="primary big"
             :label="$t('org.vue.components.widget.save')"

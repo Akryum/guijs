@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <PromptError :error="prompt.error"/>
+    <PromptError :error="prompt.error" />
   </VueDisable>
 </template>
 

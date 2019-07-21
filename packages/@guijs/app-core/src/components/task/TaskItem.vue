@@ -1,5 +1,6 @@
 <template>
   <div
+    v-tooltip.right="description"
     class="task-item list-item"
     :class="[
       `status-${task.status}`,
@@ -7,14 +8,13 @@
         selected
       }
     ]"
-    v-tooltip.right="description"
     @dblclick="runTask()"
   >
     <div class="content">
       <ItemLogo
+        v-tooltip="status"
         :image="logo ? `${logo}?project=${task.project.id}` : iconData.icon"
         :class="iconData.class"
-        v-tooltip="status"
         color-bullet
       />
 
@@ -24,7 +24,7 @@
         :selected="selected"
       />
 
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>

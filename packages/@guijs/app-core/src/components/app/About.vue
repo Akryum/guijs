@@ -1,16 +1,35 @@
 <template>
   <div class="about page">
     <div class="logo">
-      <img class="logo-image" src="@/assets/guijs.svg" alt="guijs logo">
+      <img
+        class="logo-image"
+        src="@/assets/guijs.svg"
+        alt="guijs logo"
+      >
     </div>
 
     <h1>guijs</h1>
 
-    <p class="description" v-html="$t('org.vue.views.about.description')"/>
+    <p
+      class="description"
+      v-html="$t('org.vue.views.about.description')"
+    />
 
     <div class="links vue-ui-grid default-gap">
-      <VueButton href="https://guijs.dev" target="_blank" class="big">Home</VueButton>
-      <VueButton href="https://github.com/Akryum/guijs" target="_blank" class="big">Repository</VueButton>
+      <VueButton
+        href="https://guijs.dev"
+        target="_blank"
+        class="big"
+      >
+        Home
+      </VueButton>
+      <VueButton
+        href="https://github.com/Akryum/guijs"
+        target="_blank"
+        class="big"
+      >
+        Repository
+      </VueButton>
     </div>
 
     <div class="actions">

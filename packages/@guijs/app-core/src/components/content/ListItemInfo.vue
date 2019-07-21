@@ -7,12 +7,15 @@
   >
     <div class="name">
       <slot name="name">
-        <span v-html="ansiColors(name)"/>
+        <span v-html="ansiColors(name)" />
       </slot>
     </div>
-    <div v-if="description || link || showDescription" class="description">
+    <div
+      v-if="description || link || showDescription"
+      class="description"
+    >
       <slot name="description">
-        <span v-html="ansiColors(description)"/>
+        <span v-html="ansiColors(description)" />
       </slot>
       <a
         v-if="link"
@@ -21,7 +24,10 @@
         class="more-info"
         @click.stop="() => {}"
       >
-        <VueIcon icon="open_in_new" class="medium top"/>
+        <VueIcon
+          icon="open_in_new"
+          class="medium top"
+        />
         {{ $t('org.vue.components.list-item-info.more-info') }}
       </a>
     </div>

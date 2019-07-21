@@ -2,8 +2,8 @@
   <div class="instant-search-input">
     <VueInput
       ref="input"
-      icon-left="search"
       v-model="query"
+      icon-left="search"
       class="big"
       :placeholder="placeholder"
     >

@@ -31,7 +31,10 @@
           ref="searchInput"
           :placeholder="$t('org.vue.views.project-plugins-add.tabs.search.search-input')"
         />
-        <div ref="resultsBox" class="ais-results-box">
+        <div
+          ref="resultsBox"
+          class="ais-results-box"
+        >
           <ais-results>
             <PackageSearchItem
               slot-scope="{ result }"
@@ -43,23 +46,29 @@
           </ais-results>
           <ais-no-results>
             <div class="vue-ui-empty">
-              <VueIcon icon="search" class="huge"/>
+              <VueIcon
+                icon="search"
+                class="huge"
+              />
               <div>{{ $t('org.vue.views.project-plugins-add.tabs.search.not-found') }}</div>
             </div>
           </ais-no-results>
-          <InstantSearchPagination @page-change="scrollResultsToTop()"/>
+          <InstantSearchPagination @page-change="scrollResultsToTop()" />
         </div>
       </ais-index>
     </div>
 
     <div class="actions-bar no-padding-x">
       <div class="algolia">
-        <img class="ais-logo" src="~@/assets/search-by-algolia.svg">
+        <img
+          class="ais-logo"
+          src="~@/assets/search-by-algolia.svg"
+        >
       </div>
 
-      <div class="vue-ui-spacer"/>
+      <div class="vue-ui-spacer" />
 
-      <slot name="more-actions"/>
+      <slot name="more-actions" />
 
       <VueButton
         icon-left="close"

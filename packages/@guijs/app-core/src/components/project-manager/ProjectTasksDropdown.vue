@@ -8,22 +8,24 @@
   >
     <div
       slot="trigger"
+      v-tooltip="countPerStatus.running ? $t('org.vue.components.project-tasks-dropdown.tooltips.running-tasks', { count: countPerStatus.running }) : $t('org.vue.components.project-tasks-dropdown.tooltips.tasks')"
       class="menu-trigger"
       :class="bulletClass"
-      v-tooltip="countPerStatus.running ? $t('org.vue.components.project-tasks-dropdown.tooltips.running-tasks', { count: countPerStatus.running }) : $t('org.vue.components.project-tasks-dropdown.tooltips.tasks')"
     >
-      <div class="bullet"/>
+      <div class="bullet" />
     </div>
 
     <div class="content">
       <div class="pane-toolbar">
-        <VueIcon icon="assignment"/>
-        <div class="title">{{ $t('org.vue.components.project-tasks-dropdown.tooltips.tasks') }}</div>
+        <VueIcon icon="assignment" />
+        <div class="title">
+          {{ $t('org.vue.components.project-tasks-dropdown.tooltips.tasks') }}
+        </div>
         <VueButton
-          class="icon-button flat"
-          icon-left="close"
           v-tooltip="$t('org.vue.components.logger-view.buttons.close')"
           v-close-popper
+          class="icon-button flat"
+          icon-left="close"
         />
       </div>
 
@@ -36,16 +38,16 @@
         >
           <VueButton
             v-if="task.status !== 'running'"
+            v-tooltip="$t('org.vue.views.project-task-details.actions.play')"
             icon-left="play_arrow"
             class="icon-button"
-            v-tooltip="$t('org.vue.views.project-task-details.actions.play')"
             @click.stop="openTask(task, true)"
           />
           <VueButton
             v-else
+            v-tooltip="$t('org.vue.views.project-task-details.actions.stop')"
             icon-left="stop"
             class="icon-button"
-            v-tooltip="$t('org.vue.views.project-task-details.actions.stop')"
             @click.stop="stopTask(task)"
           />
         </TaskItem>

@@ -1,14 +1,22 @@
 <template>
   <div class="top-bar">
-    <portal-target name="top-title" class="title">Vue</portal-target>
+    <portal-target
+      name="top-title"
+      class="title"
+    >
+      Vue
+    </portal-target>
 
-    <AppLoading/>
+    <AppLoading />
 
-    <div class="vue-ui-spacer"/>
+    <div class="vue-ui-spacer" />
 
-    <SuggestionBar/>
+    <SuggestionBar />
 
-    <portal-target name="top-actions" class="actions"/>
+    <portal-target
+      name="top-actions"
+      class="actions"
+    />
   </div>
 </template>
 

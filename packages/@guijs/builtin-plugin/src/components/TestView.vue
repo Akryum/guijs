@@ -9,7 +9,9 @@
       />
     </div>
     <div class="section">
-      <VueButton @click="testPluginAction()">Test plugin action</VueButton>
+      <VueButton @click="testPluginAction()">
+        Test plugin action
+      </VueButton>
     </div>
   </div>
 </template>

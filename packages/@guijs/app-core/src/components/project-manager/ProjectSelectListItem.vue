@@ -23,7 +23,10 @@
         <ListItemInfo
           :description="project.path"
         >
-          <div slot="name" class="name">
+          <div
+            slot="name"
+            class="name"
+          >
             <span>{{ project.name }}</span>
 
             <ProjectTasksDropdown
@@ -36,9 +39,9 @@
 
       <div class="actions">
         <VueButton
+          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.favorite')"
           class="icon-button flat"
           :icon-left="project.favorite ? 'star' : 'star_border'"
-          v-tooltip="$t('org.vue.components.project-select-list-item.tooltips.favorite')"
           data-testid="favorite-button"
           @click="$emit('favorite')"
         />

@@ -1,5 +1,6 @@
 <template>
   <div
+    v-set-size="'.wrapper'"
     class="suggestion-bar-item"
     :class="{
       ping
@@ -7,7 +8,6 @@
     :style="{
       animationDelay: `${index * .5 + 1.5}s`
     }"
-    v-set-size="'.wrapper'"
   >
     <div class="wrapper">
       <VueDropdown
@@ -17,10 +17,10 @@
       >
         <VueButton
           slot="trigger"
+          v-tooltip="$t('org.vue.components.suggestion-bar.suggestion')"
           :label="$t(suggestion.label)"
           :loading="suggestion.busy"
           class="round"
-          v-tooltip="$t('org.vue.components.suggestion-bar.suggestion')"
           @click="onTriggerClick()"
         />
 
@@ -39,7 +39,10 @@
             v-if="suggestion.image"
             class="info image"
           >
-            <img :src="image" alt="image">
+            <img
+              :src="image"
+              alt="image"
+            >
           </div>
 
           <div class="actions-bar">
@@ -51,17 +54,17 @@
               class="flat"
               icon-right="open_in_new"
             />
-            <div class="vue-ui-spacer"/>
+            <div class="vue-ui-spacer" />
             <VueButton
+              v-close-popper
               :label="$t('org.vue.components.suggestion-bar.modal.cancel')"
               icon-left="close"
-              v-close-popper
             />
             <VueButton
+              v-close-popper
               class="primary"
               :label="$t('org.vue.components.suggestion-bar.modal.continue')"
               icon-left="done"
-              v-close-popper
               @click="activate(suggestion)"
             />
           </div>

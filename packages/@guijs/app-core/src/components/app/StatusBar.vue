@@ -7,18 +7,21 @@
 
     <div class="content">
       <div
-        class="section action current-project"
         v-tooltip="$t('org.vue.components.status-bar.project.tooltip')"
+        class="section action current-project"
         @click="onProjectClick()"
       >
-        <VueIcon icon="home"/>
-        <span v-if="!projectCurrent" class="label">{{ $t('org.vue.components.status-bar.project.empty') }}</span>
+        <VueIcon icon="home" />
+        <span
+          v-if="!projectCurrent"
+          class="label"
+        >{{ $t('org.vue.components.status-bar.project.empty') }}</span>
       </div>
 
       <ApolloQuery
+        v-tooltip="$t('org.vue.components.status-bar.path.tooltip')"
         :query="require('@/graphql/cwd/cwd.gql')"
         class="section current-path"
-        v-tooltip="$t('org.vue.components.status-bar.path.tooltip')"
         @click.native="onCwdClick()"
       >
         <ApolloSubscribeToMore
@@ -29,26 +32,27 @@
         />
 
         <template slot-scope="{ result: { data } }">
-          <VueIcon icon="folder"/>
+          <VueIcon icon="folder" />
           <span v-if="data">{{ data.cwd }}</span>
         </template>
       </ApolloQuery>
 
       <div
-        class="section action console-log"
         v-tooltip="$t('org.vue.components.status-bar.log.tooltip')"
+        class="section action console-log"
         @click="onConsoleClick()"
       >
-        <VueIcon icon="dvr"/>
+        <VueIcon icon="dvr" />
         <transition-group
           name="slide-up"
           duration="600"
           tag="div"
           class="last-message-container"
         >
-          <LoggerMessage class="last-message"
+          <LoggerMessage
             v-if="consoleLogLast"
             :key="consoleLogLast.id"
+            class="last-message"
             :message="consoleLogLast"
           />
           <div
@@ -63,33 +67,33 @@
 
       <div
         v-if="enableDarkModeButton"
-        class="section action dark-mode"
         v-tooltip="$t('org.vue.components.status-bar.dark-mode')"
+        class="section action dark-mode"
         @click="toggleDarkMode()"
       >
-        <VueIcon icon="invert_colors"/>
+        <VueIcon icon="invert_colors" />
       </div>
 
       <div
-        class="section action bug-report"
         v-tooltip="$t('org.vue.components.status-bar.report-bug')"
+        class="section action bug-report"
         @click="onBugReportClick()"
       >
-        <VueIcon icon="bug_report"/>
+        <VueIcon icon="bug_report" />
       </div>
       <div
-        class="section action translate"
         v-tooltip="$t('org.vue.components.status-bar.translate')"
+        class="section action translate"
         @click="onTranslateClick()"
       >
-        <VueIcon icon="g_translate"/>
+        <VueIcon icon="g_translate" />
       </div>
       <div
-        class="section action reset-plugin-api"
         v-tooltip="$t('org.vue.components.status-bar.reset-plugin-api')"
+        class="section action reset-plugin-api"
         @click="resetPluginApi()"
       >
-        <VueIcon icon="cached"/>
+        <VueIcon icon="cached" />
       </div>
     </div>
   </div>

@@ -17,7 +17,10 @@
       show-description
     >
       <template slot="name">
-        <span class="name" data-testid="name">
+        <span
+          class="name"
+          data-testid="name"
+        >
           <ais-highlight
             :result="pkg"
             attribute-name="name"
@@ -27,24 +30,36 @@
       </template>
       <template slot="description">
         <span
-          class="info description"
           v-tooltip="pkg.description"
+          class="info description"
         >
           <ais-highlight
             :result="pkg"
             attribute-name="description"
           />
         </span>
-        <span v-if="official" class="info">
-          <VueIcon icon="star" class="top medium"/>
+        <span
+          v-if="official"
+          class="info"
+        >
+          <VueIcon
+            icon="star"
+            class="top medium"
+          />
           <span>{{ $t('org.vue.components.project-plugin-item.official') }}</span>
         </span>
         <span class="info downloads">
-          <VueIcon class="medium" icon="file_download"/>
+          <VueIcon
+            class="medium"
+            icon="file_download"
+          />
           <span>{{ pkg.humanDownloadsLast30Days }}</span>
         </span>
         <span class="info owner">
-          <VueIcon class="medium" icon="account_circle"/>
+          <VueIcon
+            class="medium"
+            icon="account_circle"
+          />
           <span>{{ pkg.owner.name }}</span>
         </span>
       </template>
@@ -52,8 +67,8 @@
 
     <div
       v-if="hasGenerator"
-      class="feature"
       v-tooltip="$t('org.vue.components.project-plugin-item.features.generator')"
+      class="feature"
     >
       <VueIcon
         icon="note_add"
@@ -62,8 +77,8 @@
     </div>
     <div
       v-if="hasUiIntegration"
-      class="feature"
       v-tooltip="$t('org.vue.components.project-plugin-item.features.ui-integration')"
+      class="feature"
     >
       <VueIcon
         icon="brush"

@@ -13,12 +13,20 @@
 
       <template v-else>
         <div class="headers">
-          <div class="header"></div>
-          <div class="header size-field">{{ sizeField }}</div>
-          <div class="header">Global</div>
-          <div class="header">3G Slow</div>
-          <div class="header">3G Fast</div>
-          <div class="header"></div>
+          <div class="header" />
+          <div class="header size-field">
+            {{ sizeField }}
+          </div>
+          <div class="header">
+            Global
+          </div>
+          <div class="header">
+            3G Slow
+          </div>
+          <div class="header">
+            3G Fast
+          </div>
+          <div class="header" />
         </div>
 
         <div class="list">

@@ -40,8 +40,8 @@
         >
           <VueInput
             v-model="remotePreset.url"
-            icon-left="language"
             v-focus
+            icon-left="language"
           />
         </VueFormField>
 
@@ -58,7 +58,10 @@
         </VueFormField>
       </div>
 
-      <div slot="footer" class="actions">
+      <div
+        slot="footer"
+        class="actions"
+      >
         <VueButton
           :label="$t('org.vue.views.project-create.tabs.presets.remote.done')"
           :disabled="!remotePreset.url || !remotePresetValid"

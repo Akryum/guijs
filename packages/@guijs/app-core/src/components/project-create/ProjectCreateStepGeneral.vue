@@ -16,8 +16,8 @@
           <div class="project-path">
             <div class="path">
               <span
-                class="cwd"
                 v-tooltip="cwd"
+                class="cwd"
               >
                 {{ cwd | folder(42 - folder.length) }}
               </span>
@@ -37,7 +37,10 @@
             v-if="folder && !folderNameValid"
             class="vue-ui-text danger banner"
           >
-            <VueIcon icon="error" class="big"/>
+            <VueIcon
+              icon="error"
+              class="big"
+            />
             <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-name-invalid') }}</span>
           </div>
 
@@ -54,7 +57,10 @@
               v-if="data && data.folderExists"
               class="vue-ui-text warning banner"
             >
-              <VueIcon icon="warning" class="big"/>
+              <VueIcon
+                icon="warning"
+                class="big"
+              />
               <span>{{ $t('org.vue.views.project-create.tabs.details.form.folder.folder-exists') }}</span>
             </div>
           </ApolloQuery>

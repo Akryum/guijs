@@ -1,6 +1,6 @@
 <template>
   <div class="project-plugin-add-local">
-    <FolderExplorer/>
+    <FolderExplorer />
 
     <div class="actions-bar center">
       <VueButton

@@ -1,14 +1,23 @@
 <template>
-  <div id="app" class="app">
+  <div
+    id="app"
+    class="app"
+  >
     <ConnectionStatus v-if="ready" />
-    <div v-if="ready" class="content">
-      <router-view/>
+    <div
+      v-if="ready"
+      class="content"
+    >
+      <router-view />
     </div>
-    <VueLoadingIndicator v-else class="app-init-loading overlay big accent"/>
+    <VueLoadingIndicator
+      v-else
+      class="app-init-loading overlay big accent"
+    />
 
-    <StatusBar/>
-    <ClientAddonLoader/>
-    <LocaleLoader/>
+    <StatusBar />
+    <ClientAddonLoader />
+    <LocaleLoader />
   </div>
 </template>
 

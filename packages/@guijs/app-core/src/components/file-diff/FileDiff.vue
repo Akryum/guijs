@@ -6,25 +6,37 @@
     }"
     class="file-diff"
   >
-    <div class="toolbar" @click="$emit('update:collapsed', !collapsed)">
-      <VueIcon class="file-icon" :icon="icon"/>
+    <div
+      class="toolbar"
+      @click="$emit('update:collapsed', !collapsed)"
+    >
+      <VueIcon
+        class="file-icon"
+        :icon="icon"
+      />
       <template v-if="fileDiff.from !== fileDiff.to && !fileDiff.new">
         <div class="name from-file">
           <span v-tooltip="fileDiff.from">{{ fileDiff.from }}</span>
         </div>
-        <VueIcon v-if="!fileDiff.deleted" icon="arrow_forward"/>
+        <VueIcon
+          v-if="!fileDiff.deleted"
+          icon="arrow_forward"
+        />
       </template>
-      <div v-if="!fileDiff.deleted" class="name to-file">
+      <div
+        v-if="!fileDiff.deleted"
+        class="name to-file"
+      >
         <span v-tooltip="fileDiff.to">{{ fileDiff.to }}</span>
       </div>
 
-      <div class="vue-ui-spacer"/>
+      <div class="vue-ui-spacer" />
 
       <VueButton
         v-if="!fileDiff.deleted"
+        v-tooltip="$t('org.vue.components.file-diff.actions.open')"
         icon-left="edit"
         class="icon-button"
-        v-tooltip="$t('org.vue.components.file-diff.actions.open')"
         @click.stop="openInEditor()"
       />
 
@@ -34,9 +46,18 @@
       />
     </div>
 
-    <div v-if="!collapsed" class="content">
-      <div v-if="fileDiff.binary" class="is-binary">
-        <VueIcon icon="memory" class="icon"/>
+    <div
+      v-if="!collapsed"
+      class="content"
+    >
+      <div
+        v-if="fileDiff.binary"
+        class="is-binary"
+      >
+        <VueIcon
+          icon="memory"
+          class="icon"
+        />
         <span>{{ $t('org.vue.components.file-diff.binary') }}</span>
       </div>
       <template v-else>

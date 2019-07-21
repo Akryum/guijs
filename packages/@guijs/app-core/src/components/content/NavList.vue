@@ -1,7 +1,7 @@
 <template>
   <div class="nav-list vue-ui-disable-scroll">
     <div class="content">
-      <slot name="before"/>
+      <slot name="before" />
 
       <div
         v-for="item of items"
@@ -14,7 +14,7 @@
         />
       </div>
 
-      <slot name="after"/>
+      <slot name="after" />
     </div>
   </div>
 </template>

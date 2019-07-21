@@ -5,7 +5,7 @@
   >
     <ApolloSubscribeToMore
       :document="require('@/graphql/suggestion/suggestionAdded.gql')"
-      :updateQuery="(previousResult, { subscriptionData }) => {
+      :update-query="(previousResult, { subscriptionData }) => {
         const newSuggestion = subscriptionData.data.suggestionAdded
         if (!previousResult.suggestions) {
           return {
@@ -30,14 +30,17 @@
 
     <ApolloSubscribeToMore
       :document="require('@/graphql/suggestion/suggestionRemoved.gql')"
-      :updateQuery="(previousResult, { subscriptionData }) => ({
+      :update-query="(previousResult, { subscriptionData }) => ({
         suggestions: previousResult.suggestions ? previousResult.suggestions.filter(
           s => s.id !== subscriptionData.data.suggestionRemoved.id
         ) : []
       })"
     />
 
-    <template slot-scope="{ result: { data } }" v-if="data">
+    <template
+      v-if="data"
+      slot-scope="{ result: { data } }"
+    >
       <SuggestionBarList
         :suggestions="withBuiltins(data.suggestions)"
       />

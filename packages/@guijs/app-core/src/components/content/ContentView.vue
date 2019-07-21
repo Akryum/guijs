@@ -1,13 +1,18 @@
 <template>
   <div class="content-view">
-    <portal v-if="title" to="top-title">{{ title }}</portal>
+    <portal
+      v-if="title"
+      to="top-title"
+    >
+      {{ title }}
+    </portal>
     <portal to="top-actions">
-      <slot name="actions"/>
+      <slot name="actions" />
     </portal>
 
     <div class="content">
       <div class="wrapper">
-        <slot/>
+        <slot />
       </div>
     </div>
   </div>

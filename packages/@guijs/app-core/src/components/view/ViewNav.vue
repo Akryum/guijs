@@ -6,7 +6,7 @@
     }"
   >
     <div class="header">
-      <ProjectQuickDropdown/>
+      <ProjectQuickDropdown />
     </div>
 
     <div class="content">
@@ -22,7 +22,7 @@
         />
       </VueGroup>
 
-      <ViewNavMore/>
+      <ViewNavMore />
     </div>
   </div>
 </template>

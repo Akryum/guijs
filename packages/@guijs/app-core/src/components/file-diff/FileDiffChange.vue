@@ -19,7 +19,10 @@
         {{ ln2 }}
       </div>
     </div>
-    <div class="content" v-html="change.content"/>
+    <div
+      class="content"
+      v-html="change.content"
+    />
   </div>
 </template>
 

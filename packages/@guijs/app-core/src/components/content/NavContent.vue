@@ -3,17 +3,23 @@
     <NavList
       :items="items"
     >
-      <slot name="before" slot="before"/>
+      <slot
+        slot="before"
+        name="before"
+      />
 
       <template slot-scope="props">
-        <slot v-bind="props"/>
+        <slot v-bind="props" />
       </template>
 
-      <slot name="after" slot="after"/>
+      <slot
+        slot="after"
+        name="after"
+      />
     </NavList>
 
     <div class="content vue-ui-disable-scroll">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>

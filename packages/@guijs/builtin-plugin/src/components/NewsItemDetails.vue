@@ -9,7 +9,9 @@
           {{ item.title }}
         </a>
       </div>
-      <div class="date">{{ item.pubDate | date }}</div>
+      <div class="date">
+        {{ item.pubDate | date }}
+      </div>
     </div>
 
     <div
@@ -25,7 +27,7 @@
         v-if="item.enclosure.type.indexOf('image/') === 0"
         :src="item.enclosure.url"
         class="image media-content"
-      />
+      >
 
       <audio
         v-if="item.enclosure.type.indexOf('audio/') === 0"

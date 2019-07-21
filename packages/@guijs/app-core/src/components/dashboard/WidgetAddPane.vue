@@ -8,9 +8,9 @@
         {{ $t('org.vue.components.widget-add-pane.title') }}
       </div>
       <VueButton
+        v-tooltip="$t('org.vue.common.close')"
         class="icon-button flat"
         icon-left="close"
-        v-tooltip="$t('org.vue.common.close')"
         @click="close()"
       />
     </div>

@@ -5,7 +5,9 @@
         <div class="label">
           {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.status') }}
         </div>
-        <div class="value">{{ $t(`org.vue.vue-webpack.dashboard.webpack-status.${status || 'Idle'}`) }}</div>
+        <div class="value">
+          {{ $t(`org.vue.vue-webpack.dashboard.webpack-status.${status || 'Idle'}`) }}
+        </div>
       </div>
       <div
         class="info-block errors"
@@ -16,7 +18,9 @@
         <div class="label">
           {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.errors') }}
         </div>
-        <div class="value">{{ errors.length }}</div>
+        <div class="value">
+          {{ errors.length }}
+        </div>
       </div>
       <div
         class="info-block warnings"
@@ -27,7 +31,9 @@
         <div class="label">
           {{ $t('org.vue.vue-webpack.dashboard.build-status.labels.warnings') }}
         </div>
-        <div class="value">{{ warnings.length }}</div>
+        <div class="value">
+          {{ warnings.length }}
+        </div>
       </div>
       <div class="info-block assets">
         <div class="label">

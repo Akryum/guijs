@@ -1,8 +1,10 @@
 <template>
   <div class="vue-webpack-analyzer">
     <div class="pane-toolbar card">
-      <VueIcon icon="donut_large"/>
-      <div class="title">{{ $t('org.vue.vue-webpack.analyzer.title') }}</div>
+      <VueIcon icon="donut_large" />
+      <div class="title">
+        {{ $t('org.vue.vue-webpack.analyzer.title') }}
+      </div>
 
       <VueSwitch
         v-if="mode !== 'serve' && modernMode"
@@ -43,15 +45,24 @@
       </VueSelect>
 
       <VueSelect v-model="sizeField">
-        <VueSelectButton value="stats" :label="`${$t('org.vue.vue-webpack.sizes.stats')}`"/>
-        <VueSelectButton value="parsed" :label="`${$t('org.vue.vue-webpack.sizes.parsed')}`"/>
-        <VueSelectButton value="gzip" :label="`${$t('org.vue.vue-webpack.sizes.gzip')}`"/>
+        <VueSelectButton
+          value="stats"
+          :label="`${$t('org.vue.vue-webpack.sizes.stats')}`"
+        />
+        <VueSelectButton
+          value="parsed"
+          :label="`${$t('org.vue.vue-webpack.sizes.parsed')}`"
+        />
+        <VueSelectButton
+          value="gzip"
+          :label="`${$t('org.vue.vue-webpack.sizes.gzip')}`"
+        />
       </VueSelect>
 
       <VueButton
+        v-tooltip="$t('org.vue.vue-webpack.sizes.help')"
         class="icon-button"
         icon-left="help"
-        v-tooltip="$t('org.vue.vue-webpack.sizes.help')"
       />
     </div>
 
@@ -83,26 +94,32 @@
         </svg>
       </template>
 
-      <div v-if="describedModule" class="described-module">
+      <div
+        v-if="describedModule"
+        class="described-module"
+      >
         <div class="wrapper card">
-          <div class="path" v-html="modulePath"/>
+          <div
+            class="path"
+            v-html="modulePath"
+          />
           <div
             class="stats size"
             :class="{ selected: sizeField === 'stats' }"
           >
-            {{ $t('org.vue.vue-webpack.sizes.stats') }}: {{ describedModule.size.stats | size('B')}}
+            {{ $t('org.vue.vue-webpack.sizes.stats') }}: {{ describedModule.size.stats | size('B') }}
           </div>
           <div
             class="parsed size"
             :class="{ selected: sizeField === 'parsed' }"
           >
-            {{ $t('org.vue.vue-webpack.sizes.parsed') }}: {{ describedModule.size.parsed | size('B')}}
+            {{ $t('org.vue.vue-webpack.sizes.parsed') }}: {{ describedModule.size.parsed | size('B') }}
           </div>
           <div
             class="gzip size"
             :class="{ selected: sizeField === 'gzip' }"
           >
-            {{ $t('org.vue.vue-webpack.sizes.gzip') }}: {{ describedModule.size.gzip | size('B')}}
+            {{ $t('org.vue.vue-webpack.sizes.gzip') }}: {{ describedModule.size.gzip | size('B') }}
           </div>
         </div>
       </div>
@@ -121,10 +138,6 @@ import DonutModule from './DonutModule.vue'
 export default {
   clientState: true,
 
-  mixins: [
-    Dashboard,
-  ],
-
   filters: {
     size,
   },
@@ -132,6 +145,10 @@ export default {
   components: {
     DonutModule,
   },
+
+  mixins: [
+    Dashboard,
+  ],
 
   provide () {
     return {

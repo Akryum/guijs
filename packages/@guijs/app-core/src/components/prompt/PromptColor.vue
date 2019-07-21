@@ -18,10 +18,16 @@
           :value="value(prompt.value)"
           @update="value => answer(value)"
         >
-          <div slot="right" class="color-preview">
-            <div class="color-swatch" :style="{
-              backgroundColor: value(prompt.value)
-            }" />
+          <div
+            slot="right"
+            class="color-preview"
+          >
+            <div
+              class="color-swatch"
+              :style="{
+                backgroundColor: value(prompt.value)
+              }"
+            />
           </div>
         </VueInput>
 
@@ -33,7 +39,7 @@
       </VueDropdown>
     </div>
 
-    <PromptError :error="prompt.error"/>
+    <PromptError :error="prompt.error" />
   </VueDisable>
 </template>
 
@@ -42,11 +48,11 @@ import Prompt from './Prompt'
 import { Sketch } from 'vue-color'
 
 export default {
-  extends: Prompt,
 
   components: {
     ColorPicker: Sketch,
   },
+  extends: Prompt,
 
   buffer: true,
 }

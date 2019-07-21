@@ -11,11 +11,17 @@
           class="banner"
         >
           <div class="content disconnected">
-            <VueIcon icon="cloud_off" class="medium"/>
+            <VueIcon
+              icon="cloud_off"
+              class="medium"
+            />
             <span>{{ $t('org.vue.components.connection-status.disconnected') }}</span>
           </div>
           <div class="content connected">
-            <VueIcon icon="wifi" class="medium"/>
+            <VueIcon
+              icon="wifi"
+              class="medium"
+            />
             <span>{{ $t('org.vue.components.connection-status.connected') }}</span>
           </div>
         </div>

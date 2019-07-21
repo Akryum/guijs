@@ -16,7 +16,10 @@
         :link="plugin.website"
         show-description
       >
-        <span slot="description" class="plugin-description">
+        <span
+          slot="description"
+          class="plugin-description"
+        >
           <span class="info version">
             <span class="label">{{ $t('org.vue.components.project-plugin-item.version') }}</span>
             <span class="value">{{ pluginDetails && pluginDetails.version.current }}</span>
@@ -32,7 +35,10 @@
             <span class="value">{{ pluginDetails && pluginDetails.version.latest }}</span>
           </span>
 
-          <span v-if="plugin.official" class="info">
+          <span
+            v-if="plugin.official"
+            class="info"
+          >
             <VueIcon
               icon="star"
               class="top medium"
@@ -40,7 +46,10 @@
             {{ $t('org.vue.components.project-plugin-item.official') }}
           </span>
 
-          <span v-if="plugin.installed" class="info">
+          <span
+            v-if="plugin.installed"
+            class="info"
+          >
             <template v-if="isLocal">
               <VueIcon
                 icon="folder"
@@ -59,7 +68,10 @@
             </template>
           </span>
 
-          <span v-if="pluginDetails && pluginDetails.description" class="package-description">
+          <span
+            v-if="pluginDetails && pluginDetails.description"
+            class="package-description"
+          >
             {{ pluginDetails.description }}
           </span>
         </span>
@@ -67,18 +79,18 @@
 
       <VueButton
         v-if="isLocal"
+        v-tooltip="$t('org.vue.components.project-plugin-item.actions.refresh', { target: plugin.id })"
         icon-left="cached"
         class="icon-button"
-        v-tooltip="$t('org.vue.components.project-plugin-item.actions.refresh', { target: plugin.id })"
         :loading-left="updating"
         @click="e => updatePlugin(!e.shiftKey)"
       />
 
       <VueButton
         v-else-if="pluginDetails && pluginDetails.version.current !== pluginDetails.version.wanted"
+        v-tooltip="$t('org.vue.components.project-plugin-item.actions.update', { target: plugin.id })"
         icon-left="file_download"
         class="icon-button"
-        v-tooltip="$t('org.vue.components.project-plugin-item.actions.update', { target: plugin.id })"
         :loading-left="updating"
         @click="updatePlugin()"
       />

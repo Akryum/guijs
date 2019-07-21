@@ -34,7 +34,7 @@
           <div
             class="progress-animation"
             :class="{
-               active: status && status !== 'Idle'
+              active: status && status !== 'Idle'
             }"
           >
             <div
@@ -49,17 +49,23 @@
         </div>
 
         <transition duration="500">
-          <div v-if="status === 'Success'" class="status-icon done">
+          <div
+            v-if="status === 'Success'"
+            class="status-icon done"
+          >
             <div class="wrapper">
-              <VueIcon icon="check_circle"/>
+              <VueIcon icon="check_circle" />
             </div>
           </div>
         </transition>
 
         <transition duration="500">
-          <div v-if="status === 'Failed'" class="status-icon error">
+          <div
+            v-if="status === 'Failed'"
+            class="status-icon error"
+          >
             <div class="wrapper">
-              <VueIcon icon="error"/>
+              <VueIcon icon="error" />
             </div>
           </div>
         </transition>

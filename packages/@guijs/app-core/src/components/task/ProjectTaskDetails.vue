@@ -2,17 +2,22 @@
   <div class="project-task-details">
     <template v-if="task">
       <div class="header">
-        <VueIcon icon="assignment" class="task-icon big"/>
-        <div class="name">{{ task.name }}</div>
+        <VueIcon
+          icon="assignment"
+          class="task-icon big"
+        />
+        <div class="name">
+          {{ task.name }}
+        </div>
         <div
-          class="description"
           v-tooltip="$t(task.description)"
+          class="description"
         >
           {{ $t(task.description) }}
         </div>
         <div
-          class="command"
           v-tooltip="`${$t('org.vue.views.project-task-details.command')}:<br><code>${task.command}</code>`"
+          class="command"
         >
           {{ task.command }}
         </div>
@@ -48,11 +53,11 @@
 
           <VueButton
             v-if="task.link"
+            v-tooltip="$t('org.vue.views.project-task-details.more-info')"
             :href="task.link"
             target="_blank"
             icon-left="open_in_new"
             class="icon-button"
-            v-tooltip="$t('org.vue.views.project-task-details.more-info')"
           />
         </div>
 
@@ -77,17 +82,23 @@
         </VueGroup>
       </div>
 
-      <div v-if="!defer(3)" class="content placeholder-content">
-        <div class="view card"/>
+      <div
+        v-if="!defer(3)"
+        class="content placeholder-content"
+      >
+        <div class="view card" />
       </div>
 
-      <div v-else class="content">
+      <div
+        v-else
+        class="content"
+      >
         <TerminalView
           ref="terminal"
+          :key="id"
           :class="{
             ghost: currentView !== '_output'
           }"
-          :key="id"
           :cols="100"
           :rows="24"
           auto-size
@@ -104,8 +115,8 @@
 
         <ClientAddonComponent
           v-if="currentView !== '_output'"
-          :name="currentViewComponent"
           :key="currentView"
+          :name="currentViewComponent"
           class="view"
         />
       </div>
@@ -124,7 +135,10 @@
         />
       </div>
 
-      <div slot="footer" class="actions">
+      <div
+        slot="footer"
+        class="actions"
+      >
         <VueButton
           class="primary big"
           :label="$t('org.vue.views.project-task-details.actions.save')"

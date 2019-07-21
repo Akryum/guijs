@@ -2,11 +2,11 @@
   <Widget
     :widget="widget"
     :shell-style="{
-      left: `${this.dashboard.left + 8}px`,
-      top: `${this.dashboard.top + 8}px`,
-      width: `${this.dashboard.width}px`,
-      height: `${this.dashboard.height}px`,
-      transformOrigin: `${this.shellOrigin.x}px ${this.shellOrigin.y}px`
+      left: `${dashboard.left + 8}px`,
+      top: `${dashboard.top + 8}px`,
+      width: `${dashboard.width}px`,
+      height: `${dashboard.height}px`,
+      transformOrigin: `${shellOrigin.x}px ${shellOrigin.y}px`
     }"
     class="widget-details-view"
     details

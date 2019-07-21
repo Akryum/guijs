@@ -17,7 +17,10 @@
         :link="dependency.website"
         show-description
       >
-        <span slot="description" class="dependency-description">
+        <span
+          slot="description"
+          class="dependency-description"
+        >
           <span class="info version">
             <span class="label">{{ $t('org.vue.components.project-dependency-item.version') }}</span>
             <span class="value">{{ dependencyDetails && dependencyDetails.version.current }}</span>
@@ -43,7 +46,10 @@
             <span class="value">{{ dependencyDetails && dependencyDetails.version.latest }}</span>
           </span>
 
-          <span v-if="dependency.installed" class="info installed">
+          <span
+            v-if="dependency.installed"
+            class="info installed"
+          >
             <VueIcon
               icon="check_circle"
               class="top medium"
@@ -51,7 +57,10 @@
             {{ $t('org.vue.components.project-dependency-item.installed') }}
           </span>
 
-          <span v-if="dependencyDetails && dependencyDetails.description" class="package-description">
+          <span
+            v-if="dependencyDetails && dependencyDetails.description"
+            class="package-description"
+          >
             {{ dependencyDetails.description }}
           </span>
         </span>
@@ -59,16 +68,16 @@
 
       <VueButton
         v-if="dependencyDetails && dependencyDetails.version.current !== dependencyDetails.version.wanted"
+        v-tooltip="$t('org.vue.components.project-dependency-item.actions.update', { target: dependency.id })"
         icon-left="file_download"
         class="icon-button"
-        v-tooltip="$t('org.vue.components.project-dependency-item.actions.update', { target: dependency.id })"
         :loading-left="updating"
         @click="updateDependency()"
       />
       <VueButton
+        v-tooltip="$t('org.vue.components.project-dependency-item.actions.uninstall', { target: dependency.id })"
         icon-left="delete"
         class="icon-button"
-        v-tooltip="$t('org.vue.components.project-dependency-item.actions.uninstall', { target: dependency.id })"
         @click="$emit('uninstall')"
       />
     </div>

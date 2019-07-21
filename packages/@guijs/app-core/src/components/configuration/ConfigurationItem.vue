@@ -1,10 +1,10 @@
 <template>
   <div
+    v-tooltip.right="$t(configuration.description)"
     class="configuration-item list-item"
     :class="{
       selected
     }"
-    v-tooltip.right="$t(configuration.description)"
   >
     <div class="content">
       <ItemLogo

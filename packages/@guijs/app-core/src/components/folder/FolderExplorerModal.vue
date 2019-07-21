@@ -5,9 +5,12 @@
     class="large"
     v-on="$listeners"
   >
-    <FolderExplorer/>
+    <FolderExplorer />
 
-    <div slot="footer" class="actions">
+    <div
+      slot="footer"
+      class="actions"
+    >
       <VueButton
         :label="$t('org.vue.components.folder-explorer.modal.action')"
         class="primary big"

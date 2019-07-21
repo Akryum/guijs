@@ -21,13 +21,21 @@
           class="image-icon"
         >
 
-        <span v-if="$responsive.wide" class="label">{{ $t(view.tooltip) }}</span>
+        <span
+          v-if="$responsive.wide"
+          class="label"
+        >{{ $t(view.tooltip) }}</span>
       </VueGroupButton>
 
       <template #popper>
-        <div class="title">{{ $t(view.tooltip) }}</div>
+        <div class="title">
+          {{ $t(view.tooltip) }}
+        </div>
 
-        <div v-if="badges" class="badges">
+        <div
+          v-if="badges"
+          class="badges"
+        >
           <ViewBadge
             v-for="badge of badges"
             :key="badge.id"

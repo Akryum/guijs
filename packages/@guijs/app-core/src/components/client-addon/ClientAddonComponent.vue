@@ -1,9 +1,12 @@
 <template>
   <component
-    v-if="component"
     :is="component"
+    v-if="component"
   />
-  <div v-else-if="timeout" class="vue-ui-empty">
+  <div
+    v-else-if="timeout"
+    class="vue-ui-empty"
+  >
     <VueIcon
       icon="cake"
       class="big"
@@ -15,7 +18,10 @@
       {{ $t('org.vue.components.client-addon-component.timeout-info') }}
     </div>
   </div>
-  <div v-else class="loading">
+  <div
+    v-else
+    class="loading"
+  >
     <VueLoadingIndicator />
   </div>
 </template>

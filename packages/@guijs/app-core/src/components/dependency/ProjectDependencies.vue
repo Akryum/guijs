@@ -54,8 +54,13 @@
                 :list="list"
                 :filter="item => item.type === type"
               >
-                <template slot-scope="{ list }" v-if="list.length">
-                  <div class="cta-text">{{ $t(`org.vue.views.project-dependencies.heading.${type}`) }}</div>
+                <template
+                  v-if="list.length"
+                  slot-scope="{ list }"
+                >
+                  <div class="cta-text">
+                    {{ $t(`org.vue.views.project-dependencies.heading.${type}`) }}
+                  </div>
 
                   <ListSort
                     :list="list"
@@ -86,7 +91,10 @@
     >
       <div class="default-body">
         <div class="install-options">
-          <VueGroup v-model="installType" class="inline">
+          <VueGroup
+            v-model="installType"
+            class="inline"
+          >
             <VueGroupButton
               v-for="type of ['dependencies', 'devDependencies']"
               :key="type"
@@ -116,7 +124,10 @@
         {{ $t('org.vue.views.project-dependencies.uninstall.body', { id: selectedId }) }}
       </div>
 
-      <div slot="footer" class="actions end">
+      <div
+        slot="footer"
+        class="actions end"
+      >
         <VueButton
           :label="$t('org.vue.views.project-dependencies.uninstall.cancel')"
           class="flat"
@@ -132,7 +143,7 @@
       </div>
     </VueModal>
 
-    <ProgressScreen progress-id="dependency-installation"/>
+    <ProgressScreen progress-id="dependency-installation" />
   </div>
 </template>
 

@@ -1,14 +1,18 @@
 <template>
   <div
-    class="speed-stats-item"
     v-tooltip="{
       content: tooltip,
       offset: 16
     }"
+    class="speed-stats-item"
   >
     <div class="content">
-      <div class="label">{{ stats.title }}</div>
-      <div class="value">{{ stats.totalDownloadTime | round(100) }}s</div>
+      <div class="label">
+        {{ stats.title }}
+      </div>
+      <div class="value">
+        {{ stats.totalDownloadTime | round(100) }}s
+      </div>
     </div>
   </div>
 </template>

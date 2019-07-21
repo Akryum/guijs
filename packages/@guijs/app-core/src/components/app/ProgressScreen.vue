@@ -11,7 +11,10 @@
         class="primary big overlay fixed"
       >
         <div class="content">
-          <div v-if="progress.error" class="error">
+          <div
+            v-if="progress.error"
+            class="error"
+          >
             <VueIcon
               icon="error"
               class="huge"
@@ -27,7 +30,10 @@
           </div>
 
           <template v-else>
-            <div v-if="statusMessage" class="status">
+            <div
+              v-if="statusMessage"
+              class="status"
+            >
               {{ statusMessage }}
             </div>
 
@@ -43,7 +49,12 @@
                 :value="progress.progress"
               />
 
-              <div v-if="debug" class="debug"><pre>{{ debug }}</pre></div>
+              <div
+                v-if="debug"
+                class="debug"
+              >
+                <pre>{{ debug }}</pre>
+              </div>
             </div>
           </template>
         </div>
