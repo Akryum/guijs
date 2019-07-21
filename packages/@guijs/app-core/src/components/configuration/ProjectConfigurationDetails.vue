@@ -7,7 +7,7 @@
       >
         <VueGroup
           v-model="currentTab"
-          class="tabs-selector"
+          class="tabs-selector min-size"
         >
           <VueGroupButton
             v-for="tab of configuration.tabs"
