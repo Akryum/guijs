@@ -7,7 +7,7 @@
       <VueTab
         id="existing"
         :label="$t('org.vue.views.project-select.tabs.projects')"
-        icon="storage"
+        icon="home"
         class="select"
       >
         <ProjectSelectList />
