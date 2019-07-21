@@ -25,6 +25,7 @@ type Suggestion {
   importance: SuggestionImportance!
   label: String!
   image: String
+  icon: String
   message: String
   link: String
   actionLink: String

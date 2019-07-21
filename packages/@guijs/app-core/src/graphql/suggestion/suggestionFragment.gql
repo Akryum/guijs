@@ -3,6 +3,7 @@ fragment suggestion on Suggestion {
   type
   importance
   label
+  icon
   message
   image
   link

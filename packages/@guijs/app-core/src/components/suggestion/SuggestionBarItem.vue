@@ -20,6 +20,7 @@
           v-tooltip="$t('org.vue.components.suggestion-bar.suggestion')"
           :label="$t(suggestion.label)"
           :loading="suggestion.busy"
+          :icon-left="suggestion.icon || 'assistant'"
           class="round"
           @click="onTriggerClick()"
         />
