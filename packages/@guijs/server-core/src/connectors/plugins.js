@@ -79,6 +79,13 @@ const pkgStore = new Map()
 let globalPlugins = []
 let globalPluginsPkg = null
 
+/** @type {Plugin} */
+const builtinPlugin = {
+  id: '@guijs/builtin-plugin',
+  baseDir: __dirname,
+  isGlobal: true,
+}
+
 function setupGlobalPlugins () {
   const context = getContext()
   fs.ensureDirSync(GLOBAL_PLUGINS_FOLDER)
@@ -102,9 +109,11 @@ setupGlobalPlugins()
 
 async function loadGlobalPlugins (context) {
   const deps = globalPluginsPkg.dependencies || {}
-  globalPlugins = Object.keys(deps).map(
+  globalPlugins = [
+    builtinPlugin,
+  ].concat(Object.keys(deps).map(
     id => mapPlugin(deps, GLOBAL_PLUGINS_FOLDER, id, context, true)
-  )
+  ))
   log('Global plugins found:', globalPlugins.length, GLOBAL_PLUGINS_FOLDER)
 
   await runGlobalPluginApi({ file: cwd.get() }, context)
@@ -263,14 +272,6 @@ function getPlugins (file) {
 async function runGlobalPluginApi ({ file }, context) {
   log('Global plugin API running...')
   const pluginApi = new GlobalPluginApi(context)
-  loadAndRunPluginApi({
-    pluginApi,
-    plugin: {
-      id: '@guijs/builtin-plugin',
-      baseDir: __dirname,
-    },
-    file: '@guijs/builtin-plugin/ui',
-  }, context)
   // Run plugins
   globalPlugins.forEach(plugin => {
     loadAndRunPluginApi({
