@@ -2,7 +2,6 @@
   <div class="project-select page">
     <StepWizard
       :tab-id.sync="tab"
-      :title="$t('org.vue.views.project-select.title')"
       class="frame"
     >
       <VueTab
@@ -209,6 +208,9 @@ export default {
 
 .project-select
   height 100%
+
+  >>> .tabs
+    padding-top $padding-item
 
 .top-menu
   position fixed

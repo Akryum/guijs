@@ -265,7 +265,6 @@
       },
       "views": {
         "project-select": {
-          "title": "Project Manager",
           "tabs": {
             "projects": "Projects",
             "create": "Create",
