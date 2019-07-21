@@ -224,6 +224,8 @@ export default {
   &.v-popper--open
     .project-label
       background $vue-ui-primary-100
+      .vue-ui-dark-mode &
+        background $vue-ui-gray-800
 
 .vue-ui-empty
   padding 6px
