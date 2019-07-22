@@ -5,6 +5,7 @@ fragment folderCurrent on Folder {
   isPackage
   projectType {
     id
+    name
     logo
   }
   children {
@@ -13,6 +14,7 @@ fragment folderCurrent on Folder {
     isPackage
     projectType {
       id
+      name
       logo
     }
     hidden

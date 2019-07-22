@@ -27,6 +27,7 @@ export default {
         { props.folder.name }
         { props.folder.projectType ? <img
           src={getImageUrl(props.folder.projectType.logo)}
+          vTooltip_right={props.folder.projectType.name}
           class="project-icon"
         /> : null }
       </div>
