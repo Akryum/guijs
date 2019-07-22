@@ -15,6 +15,6 @@ extend type Query {
 
 export const resolvers = {
   Query: {
-    projectTypes: (root, args, context) => getTypes(context),
+    projectTypes: async (root, args, context) => (await getTypes(context)).filter(t => t.createCbs.length),
   },
 }
