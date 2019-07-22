@@ -204,6 +204,11 @@ async function importProject (input, context) {
 
   const packageData = folders.readPackage(project.path, context)
   project.name = packageData.name
+
+  if (!packageData.name) {
+    throw new Error(`No 'name' field in package.json`)
+  }
+
   context.db.get('projects').push(project).write()
   return open(project.id, context)
 }
