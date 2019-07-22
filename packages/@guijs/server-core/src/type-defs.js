@@ -70,6 +70,7 @@ type Query {
 type Mutation {
   fileOpenInEditor (input: OpenInEditorInput!): Boolean
   sharedDataUpdate (id: ID!, projectId: ID!, value: JSON!): SharedData
+  removeProgress (id: ID!): Boolean
 }
 
 type Subscription {

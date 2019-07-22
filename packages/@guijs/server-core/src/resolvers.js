@@ -41,6 +41,7 @@ const resolvers = [{
   Mutation: {
     fileOpenInEditor: (root, { input }, context) => files.openInEditor(input, context),
     sharedDataUpdate: (root, args, context) => sharedData.set(args, context),
+    removeProgress: (root, { id }, context) => progress.remove(id, context),
   },
 
   Subscription: {

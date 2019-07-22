@@ -66,6 +66,7 @@
 <script>
 import { DisableScroll } from '@vue/ui'
 import Progress from '@/mixins/Progress'
+import gql from 'graphql-tag'
 
 export default {
   mixins: [
@@ -78,7 +79,18 @@ export default {
   },
 
   methods: {
-    close () {
+    async close () {
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation removeProgress ($id: ID!) {
+            removeProgress (id: $id)
+          }
+        `,
+        variables: {
+          id: this.progressId,
+        },
+      })
+
       this.progress = null
     },
   },
