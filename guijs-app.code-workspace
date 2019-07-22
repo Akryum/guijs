@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "packages/@guijs/server-core"
+		},
+		{
+			"path": "."
 		}
 	]
 }
