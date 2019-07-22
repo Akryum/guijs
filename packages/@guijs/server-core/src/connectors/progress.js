@@ -42,7 +42,7 @@ async function wrap (id, context, operation) {
 
     remove(id, context)
   } catch (error) {
-    set({ id, error: error.message }, context)
+    set({ id, error: error.message || error }, context)
     throw error
   }
 
