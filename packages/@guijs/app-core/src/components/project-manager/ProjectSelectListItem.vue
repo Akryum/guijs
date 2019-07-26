@@ -200,6 +200,8 @@ export default {
 .project-select-list-item
   &:active
     background $vue-ui-primary-100
+    .vue-ui-dark-mode &
+      background rgba($vue-ui-primary-500, .03)
 
   &.open
     .project-type
