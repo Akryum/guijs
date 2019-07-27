@@ -10,7 +10,13 @@
 			"path": "packages/@guijs/server-core"
 		},
 		{
+			"path": "packages/@guijs/plugin-store-client"
+		},
+		{
+			"path": "packages/@guijs/plugin-store-server"
+		},
+		{
 			"path": "."
-		}
+		},
 	]
 }

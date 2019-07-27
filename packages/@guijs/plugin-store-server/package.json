@@ -1,0 +1,16 @@
+{
+  "name": "plugin-store-server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodepack-service dev",
+    "build": "nodepack-service build",
+    "lint": "nodepack-service lint",
+    "start": "node ./dist/app.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@nodepack/plugin-typescript": "^0.2.0",
+    "@nodepack/service": "^0.2.0"
+  }
+}
