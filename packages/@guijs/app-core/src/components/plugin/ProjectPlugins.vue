@@ -5,21 +5,6 @@
       class="limit-width list"
     >
       <template slot="actions">
-        <VueGroup
-          v-model="displayGlobal"
-        >
-          <VueGroupButton
-            :value="false"
-            :label="$t('org.vue.views.project-plugins.local-plugins')"
-            class="round"
-          />
-          <VueGroupButton
-            :value="true"
-            :label="$t('org.vue.views.project-plugins.global-plugins')"
-            class="round"
-          />
-        </VueGroup>
-
         <VueInput
           v-model="search"
           icon-left="search"
@@ -102,10 +87,16 @@ export default {
     }
   },
 
+  props: {
+    displayGlobal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   data () {
     return {
       search: '',
-      displayGlobal: false,
     }
   },
 
