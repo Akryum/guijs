@@ -58,8 +58,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.content
-  margin-bottom ($padding-item * 2)
+.group
+  &:not(:last-child)
+    margin-bottom ($padding-item * 2)
 
 .group-name
   padding $padding-item $padding-item ($padding-item / 2)
