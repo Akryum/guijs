@@ -6,6 +6,8 @@ type ProjectType {
   id: ID!
   name: String!
   logo: String
+  description: String
+  link: String
 }
 
 extend type Query {

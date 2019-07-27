@@ -53,6 +53,8 @@ export default {
           id
           name
           logo
+          description
+          link
         }
       }
     `,

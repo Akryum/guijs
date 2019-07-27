@@ -16,6 +16,22 @@ class ProjectTypeApi {
     this.projectType.logo = value
   }
 
+  get description () {
+    return this.projectType.description
+  }
+
+  set description (value) {
+    this.projectType.description = value
+  }
+
+  get link () {
+    return this.projectType.link
+  }
+
+  set link (value) {
+    this.projectType.link = value
+  }
+
   set filterProject (callback) {
     this.projectType.filter = callback
   }

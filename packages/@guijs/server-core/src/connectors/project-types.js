@@ -3,6 +3,8 @@
  * @prop {string} id
  * @prop {string} name
  * @prop {string} [logo]
+ * @prop {string} [description]
+ * @prop {string} [link]
  * @prop {Function} filter
  * @prop {Function[]} createCbs
  * @prop {PluginConfig} pluginConfig

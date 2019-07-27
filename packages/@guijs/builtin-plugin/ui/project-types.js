@@ -21,6 +21,7 @@ ${answers.pkg.description}
 module.exports = api => {
   api.addProjectType('unknown', 'JavaScript', projectType => {
     projectType.logo = '/public/js-logo.png'
+    projectType.description = `Minimal JS project`
 
     // Project creation
     projectType.onCreate(onCreate)
@@ -92,6 +93,9 @@ function onCreate ({ wizard }) {
       encoding: 'utf8',
     })
     await fs.writeFile(path.join(projectPath, 'README.md'), readme(answers), {
+      encoding: 'utf8',
+    })
+    await fs.writeFile(path.join(projectPath, '.gitignore'), gitignore, {
       encoding: 'utf8',
     })
   })
