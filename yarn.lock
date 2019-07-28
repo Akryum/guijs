@@ -2409,10 +2409,6 @@
     "@vue/babel-plugin-transform-vue-jsx" "^1.0.0"
     camelcase "^5.0.0"
 
-"@vue/cli-global-utils@link:vue-cli/packages/@vue/cli-global-utils":
-  version "0.0.0"
-  uid ""
-
 "@vue/cli-overlay@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-3.9.0.tgz#11f513d1fa11b0135fb8ba8b88d228df0dc542e0"
