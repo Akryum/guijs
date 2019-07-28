@@ -39,21 +39,25 @@ const config = {
   debug: false,
 }
 
-const systray = new SysTray(config)
+export function createSystrayMenu ({
+  openApp,
+}) {
+  const systray = new SysTray(config)
 
-systray.onClick(action => {
-  // Open
-  if (action.seq_id === config.menu.items.indexOf(OPEN_ITEM)) {
-    openBrowser(process.env.GUIJS_URL)
-  }
+  systray.onClick(action => {
+    // Open
+    if (action.seq_id === config.menu.items.indexOf(OPEN_ITEM)) {
+      openApp()
+    }
 
-  // About
-  if (action.seq_id === config.menu.items.indexOf(ABOUT_ITEM)) {
-    openBrowser(`https://guijs.dev`)
-  }
+    // About
+    if (action.seq_id === config.menu.items.indexOf(ABOUT_ITEM)) {
+      openBrowser(`https://guijs.dev`)
+    }
 
-  // Exit
-  if (action.seq_id === config.menu.items.indexOf(EXIT_ITEM)) {
-    process.exit(0)
-  }
-})
+    // Exit
+    if (action.seq_id === config.menu.items.indexOf(EXIT_ITEM)) {
+      process.exit(0)
+    }
+  })
+}

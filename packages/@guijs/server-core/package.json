@@ -15,6 +15,7 @@
     "@nodepack/utils": "^0.1.20",
     "@vue/cli-shared-utils": "^4.0.0-alpha.1",
     "apollo-server-express": "^2.6.7",
+    "carlo": "^0.9.46",
     "chalk": "^2.4.1",
     "clone": "^2.1.1",
     "deepmerge": "^3.2.0",

@@ -1,7 +1,13 @@
-const portfinder = require('portfinder')
-const shortid = require('shortid')
-const apollo = require('./apollo')
-const { log, error, openBrowser } = require('@vue/cli-shared-utils')
+import portfinder from 'portfinder'
+import shortid from 'shortid'
+import apollo from './apollo'
+import {
+  log,
+  error,
+  openBrowser,
+} from '@nodepack/utils'
+import { chromeApp } from './util/chromeApp'
+import { createSystrayMenu } from './util/systray'
 
 async function run (options = {}, context = process.cwd()) {
   const host = options.host || 'localhost'
@@ -26,8 +32,19 @@ async function run (options = {}, context = process.cwd()) {
 
   if (!options.quiet) log(`🚀  Starting GUI...`)
 
+  const openApp = async () => {
+    const url = process.env.GUIJS_URL
+    if (options.chromeApp) {
+      await chromeApp(url)
+    } else {
+      openBrowser(url)
+    }
+  }
+
   if (!options.hideSystray) {
-    require('./util/systray')
+    createSystrayMenu({
+      openApp,
+    })
   }
 
   const opts = {
@@ -42,19 +59,22 @@ async function run (options = {}, context = process.cwd()) {
     quiet: true,
   }
 
-  apollo(opts, () => {
+  apollo(opts, async () => {
     // Open browser
+    if (process.env.GUIJS_DEV_CLIENT_PORT) {
+      port = process.env.GUIJS_DEV_CLIENT_PORT
+    }
     const url = process.env.GUIJS_URL = `http://${host}:${port}`
     if (!options.quiet) log(`🌠  Ready on ${url}`)
     if (options.headless) {
       console.log(port)
     } else {
-      openBrowser(url)
+      await openApp()
     }
   })
 }
 
-module.exports = (...args) => {
+export default (...args) => {
   return run(...args).catch(err => {
     error(err)
     if (!process.env.VUE_CLI_TEST) {

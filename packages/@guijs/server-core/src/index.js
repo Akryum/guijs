@@ -1,4 +1,6 @@
-const run = require('./command')
+import run from './command'
+
 run({
   headless: true,
+  // chromeApp: true,
 })
