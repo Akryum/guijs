@@ -15,10 +15,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="guijs.svg"
-   inkscape:export-filename="/home/akryum/Pictures/Logos/guijs.png"
-   inkscape:export-xdpi="558.54547"
-   inkscape:export-ydpi="558.54547">
+   sodipodi:docname="guijs-round.svg"
+   inkscape:export-filename="/home/akryum/Pictures/Logos/guijs-square.png"
+   inkscape:export-xdpi="279.27274"
+   inkscape:export-ydpi="279.27274">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="-110.58268"
-     inkscape:cy="140.41193"
+     inkscape:zoom="3.959798"
+     inkscape:cx="2.5594592"
+     inkscape:cy="81.305662"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -69,7 +69,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -83,25 +83,30 @@
        id="rect928"
        width="46.566654"
        height="46.566662"
-       x="0"
-       y="250.43332" />
-    <path
-       inkscape:connector-curvature="0"
-       id="path922"
-       d="M 29.633349,273.71666 V 277.95"
-       style="fill:none;stroke:#000000;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       sodipodi:nodetypes="cc" />
-    <path
-       inkscape:connector-curvature="0"
-       id="path924"
-       d="m 38.100008,273.71666 v 6.35 c 0,4.23334 -2.116659,8.46667 -8.466659,8.46667"
-       style="fill:none;stroke:#000000;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       sodipodi:nodetypes="ccc" />
-    <path
-       inkscape:connector-curvature="0"
-       id="path926"
-       d="m 27.516677,265.24999 h 12.7"
-       style="fill:none;stroke:#000000;stroke-width:4.23333311;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       sodipodi:nodetypes="cc" />
+       x="6.1473388e-06"
+       y="250.43332"
+       rx="52.916668" />
+    <g
+       id="g820"
+       transform="translate(-10.583344,-6.6747727e-6)">
+      <path
+         sodipodi:nodetypes="cc"
+         style="fill:none;stroke:#000000;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 29.633349,273.71666 V 277.95"
+         id="path922"
+         inkscape:connector-curvature="0" />
+      <path
+         sodipodi:nodetypes="ccc"
+         style="fill:none;stroke:#000000;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 38.100008,273.71666 v 6.35 c 0,4.23334 -2.116659,8.46667 -8.466659,8.46667"
+         id="path924"
+         inkscape:connector-curvature="0" />
+      <path
+         sodipodi:nodetypes="cc"
+         style="fill:none;stroke:#000000;stroke-width:4.23333311;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 27.516677,265.24999 h 12.7"
+         id="path926"
+         inkscape:connector-curvature="0" />
+    </g>
   </g>
 </svg>
