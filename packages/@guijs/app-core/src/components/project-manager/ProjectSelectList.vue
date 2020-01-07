@@ -5,7 +5,10 @@
     >
       <template slot-scope="{ result: { data, loading } }">
         <template v-if="data">
-          <div v-if="data.projects.length">
+          <div
+            v-if="data.projects.length"
+            class="projects"
+          >
             <div class="toolbar">
               <VueInput
                 v-model="search"
