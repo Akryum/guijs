@@ -1,7 +1,7 @@
 {
-  "name": "server-core",
+  "name": "@guijs/server-core",
   "version": "0.1.0",
-  "private": true,
+  "author": "Guillaume Chau",
   "scripts": {
     "dev": "nodepack-service dev",
     "build": "nodepack-service build",
@@ -34,5 +34,17 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/server-core"
   }
 }
