@@ -1,0 +1,57 @@
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
+/* purgecss start ignore */
+body {
+  overflow-x: hidden;
+}
+
+.material-icons {
+  vertical-align: middle;
+}
+
+[type="button"],
+[type="submit"],
+.button-like {
+  -webkit-appearance: none !important;
+  outline: none !important;
+
+  &:active {
+    filter: brightness(90%);
+  }
+
+  &:focus-visible {
+    @apply shadow-outline;
+  }
+}
+
+/* Disable touch blue rectangle */
+[type="button"],
+[type="submit"],
+.button-like,
+a {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: theme('colors.gray.900');
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: theme('colors.gray.800');
+  border: theme('colors.gray.900') 1px solid;
+  border-radius: 2px;
+}
+
+.bg-blur {
+  backdrop-filter: blur(24px);
+}
+
+.no-scroll {
+  @apply overflow-y-hidden;
+}
+/* purgecss end ignore */
