@@ -1,0 +1,65 @@
+[
+  {
+    "id": "defaultTemplate",
+    "pluginId": "@nodepack/service",
+    "pluginVersion": "0.8.4",
+    "options": {},
+    "date": "2020-01-07T09:24:52.442Z"
+  },
+  {
+    "id": "defaultTemplate",
+    "pluginId": "@nodepack/plugin-typescript",
+    "pluginVersion": "0.8.3",
+    "options": {},
+    "date": "2020-01-07T09:24:52.451Z"
+  },
+  {
+    "id": "configPath",
+    "pluginId": "@nodepack/plugin-typescript",
+    "pluginVersion": "0.8.3",
+    "options": {},
+    "date": "2020-01-07T09:24:52.648Z"
+  },
+  {
+    "id": "contextTypePath",
+    "pluginId": "@nodepack/plugin-typescript",
+    "pluginVersion": "0.8.3",
+    "options": {},
+    "date": "2020-01-07T09:24:52.660Z"
+  },
+  {
+    "id": "skipLibCheck",
+    "pluginId": "@nodepack/plugin-typescript",
+    "pluginVersion": "0.8.3",
+    "options": {},
+    "date": "2020-01-07T09:24:52.663Z"
+  },
+  {
+    "id": "defaultConfig",
+    "pluginId": "@nodepack/plugin-eslint",
+    "pluginVersion": "0.8.3",
+    "options": {},
+    "date": "2020-01-07T09:24:52.673Z"
+  },
+  {
+    "id": "defaultRoutes",
+    "pluginId": "@nodepack/plugin-express",
+    "pluginVersion": "0.8.0",
+    "options": {},
+    "date": "2020-01-07T09:24:52.678Z"
+  },
+  {
+    "id": "defaultPackage",
+    "pluginId": "@nodepack/plugin-apollo",
+    "pluginVersion": "0.8.5",
+    "options": {},
+    "date": "2020-01-07T09:24:52.682Z"
+  },
+  {
+    "id": "defaultSchema",
+    "pluginId": "@nodepack/plugin-apollo",
+    "pluginVersion": "0.8.5",
+    "options": {},
+    "date": "2020-01-07T09:24:52.691Z"
+  }
+]

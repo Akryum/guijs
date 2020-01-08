@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@config/*": [
+        "config/*"
+      ],
+      "@context": [
+        "src/generated/context.d.ts"
+      ]
+    },
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "types": [
+      "node",
+      "webpack-env"
+    ],
+    "target": "es5",
+    "module": "esnext",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    // Strict
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    // May break autocomplete
+    "strictNullChecks": false,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ]
+}
