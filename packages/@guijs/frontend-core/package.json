@@ -1,6 +1,7 @@
 {
-  "name": "frontend-core",
+  "name": "@guijs/frontend-core",
   "version": "0.1.0",
+  "author": "Guillaume Chau",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
