@@ -123,7 +123,7 @@ export default {
         >
           <div
             v-tooltip="`${terminal.name} ${terminal.title}`"
-            class="flex-1 truncate mr-4"
+            class="flex-1 truncate"
           >
             {{ terminal.name }}
             {{ terminal.title }}
@@ -132,7 +132,7 @@ export default {
           <!-- Close -->
           <VButton
             icon-left="close"
-            class="opacity-0 group-hover:opacity-100 text-primary-300 hover:text-primary-600 hover:bg-primary-200"
+            class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200"
             stop
             @click="removeTerminal({ id: terminal.id })"
           />
