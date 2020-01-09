@@ -129,9 +129,10 @@ export default {
             {{ terminal.title }}
           </div>
 
+          <!-- Close -->
           <VButton
             icon-left="close"
-            class="opacity-0 group-hover:opacity-100 hover:text-primary-600 hover:bg-primary-200"
+            class="opacity-0 group-hover:opacity-100 text-primary-300 hover:text-primary-600 hover:bg-primary-200"
             stop
             @click="removeTerminal({ id: terminal.id })"
           />

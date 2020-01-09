@@ -302,7 +302,7 @@ export default {
 <template>
   <div
     ref="el"
-    class="p-4 overflow-hidden"
+    class="p-1 overflow-hidden"
   >
     <div
       ref="xtermTarget"
