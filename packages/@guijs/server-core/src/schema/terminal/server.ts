@@ -5,8 +5,11 @@ import { spawn as spawnPty, IWindowsPtyForkOptions, IPty } from 'node-pty'
 import defaultShell from 'default-shell'
 import { EventEmitter } from 'events'
 import consola from 'consola'
+import fs from 'fs-extra'
+import path from 'path'
 import projectPackage from '../../../package.json'
 import { DataBatcher } from './data-batcher'
+import { rcFolder } from '@/util/rc-folder'
 
 export class Terminal extends EventEmitter {
   id: string = shortid()
@@ -18,6 +21,8 @@ export class Terminal extends EventEmitter {
   batcher: DataBatcher
   ended: boolean = null
   sockets: ws[] = []
+  backupFile: string
+  backupStream: fs.WriteStream
 
   constructor (name: string, title: string, cwd: string, hidden: boolean) {
     super()
@@ -56,11 +61,18 @@ export class Terminal extends EventEmitter {
 
     this.batcher = new DataBatcher()
 
+    this.backupFile = path.resolve(rcFolder, 'terminals', `${this.id}.log`)
+    fs.ensureFileSync(this.backupFile)
+    this.backupStream = fs.createWriteStream(this.backupFile, {
+      encoding: 'utf8',
+    })
+
     this.pty.onData(chunk => {
       if (this.ended) {
         return
       }
       this.batcher.write(chunk as any)
+      this.backupStream.write(chunk)
     })
 
     this.batcher.on('flush', data => {
@@ -73,6 +85,13 @@ export class Terminal extends EventEmitter {
       if (!this.ended) {
         this.ended = true
         this.emit('exit')
+        // Notify sockets
+        for (const socket of this.sockets) {
+          send(socket, MESSAGE_TYPE.TerminalDestroyed, {})
+        }
+        // Cleanup backup
+        this.backupStream.close()
+        fs.remove(this.backupFile)
       }
     })
   }
@@ -90,10 +109,15 @@ export class Terminal extends EventEmitter {
   }
 
   destroy () {
-    for (const socket of this.sockets) {
-      send(socket, MESSAGE_TYPE.TerminalDestroyed, {})
-    }
     this.pty.kill()
+  }
+
+  async readBackup (socket: ws) {
+    // @TODO optimize
+    const data = await fs.readFile(this.backupFile, {
+      encoding: 'utf8',
+    })
+    send(socket, MESSAGE_TYPE.TerminalDataOut, data)
   }
 }
 
@@ -135,6 +159,7 @@ terminalServer.on('connection', socket => {
             terminal.sockets.push(socket)
             attachedTerminals.push(terminal)
             send(socket, MESSAGE_TYPE.TerminalAttached, {})
+            terminal.readBackup(socket)
           }
           break
         }
