@@ -72,13 +72,13 @@ export class Terminal extends EventEmitter {
         return
       }
       this.batcher.write(chunk as any)
-      this.backupStream.write(chunk)
     })
 
     this.batcher.on('flush', data => {
       for (const socket of this.sockets) {
         send(socket, MESSAGE_TYPE.TerminalDataOut, data)
       }
+      this.backupStream.write(data)
     })
 
     this.pty.onExit(() => {
