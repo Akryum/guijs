@@ -5,11 +5,13 @@ import { DefaultApolloClient } from '@vue/apollo-composable'
 import App from './App.vue'
 import router from './router'
 import { apolloClient } from './apollo'
+import { i18n } from './util/i18n'
 
 Vue.config.productionTip = false
 
 new Vue({
   router,
+  i18n,
 
   setup () {
     provide(DefaultApolloClient, apolloClient)

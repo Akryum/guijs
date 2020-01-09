@@ -6,7 +6,7 @@
       class="max-w-32 max-h-32"
     >
     <h1 class="text-gray-600 text-2xl mt-6">
-      Welcome to guijs
+      {{ $t('guijs.home.welcome') }}
     </h1>
 
     <VButton
