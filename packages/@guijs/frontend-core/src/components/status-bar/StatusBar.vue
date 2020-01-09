@@ -67,8 +67,10 @@ export default {
       <!-- Resize handle -->
       <div
         ref="resizeHandle"
-        class="absolute top-0 left-0 right-0 -mt-1 h-2 z-10 cursor-ns-resize hover:bg-primary-200"
-      />
+        class="resize-handle absolute left-0 right-0 z-10 cursor-ns-resize group flex items-center"
+      >
+        <div class="resize-handle-border w-full bg-primary-200 invisible group-hover:visible" />
+      </div>
 
       <Terminals
         v-if="openPaneId === 'terminals'"
@@ -94,3 +96,14 @@ export default {
     </div>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.resize-handle {
+  top: -3px;
+  height: 5px;
+}
+
+.resize-handle-border {
+  height: 3px;
+}
+</style>
