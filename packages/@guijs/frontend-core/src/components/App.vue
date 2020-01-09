@@ -13,7 +13,9 @@ export default {
     id="app"
     class="w-screen h-screen overflow-hidden flex flex-col items-stretch"
   >
-    <router-view />
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <router-view class="flex-1 overflow-hidden" />
+    </div>
 
     <StatusBar class="flex-none" />
   </div>
