@@ -126,6 +126,7 @@ export const terminals: Terminal[] = []
 export enum MESSAGE_TYPE {
   TerminalAttach = 'terminal-attach',
   TerminalAttached = 'terminal-attached',
+  TerminalReady = 'terminal-ready',
   TerminalResize = 'terminal-resize',
   TerminalDataOut = 'terminal-data-out',
   TerminalDataIn = 'terminal-data-in',
@@ -159,6 +160,12 @@ terminalServer.on('connection', socket => {
             terminal.sockets.push(socket)
             attachedTerminals.push(terminal)
             send(socket, MESSAGE_TYPE.TerminalAttached, {})
+          }
+          break
+        }
+
+        case MESSAGE_TYPE.TerminalReady: {
+          for (const terminal of attachedTerminals) {
             terminal.readBackup(socket)
           }
           break

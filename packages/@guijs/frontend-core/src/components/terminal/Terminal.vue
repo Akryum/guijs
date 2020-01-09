@@ -205,6 +205,8 @@ export default {
       // https://github.com/xtermjs/xterm.js/issues/291
       // term.scrollToLine(cached.scroll)
       term._core._onScroll.fire(cached.scroll)
+
+      mayBeReady()
     }
 
     onMounted(() => {
@@ -227,7 +229,21 @@ export default {
 
     watch(attached, value => {
       cached.attached = value
+      if (value) {
+        mayBeReady()
+      }
     })
+
+    function mayBeReady () {
+      if (term && attached.value) {
+        onTerminalReady()
+      }
+    }
+
+    function onTerminalReady () {
+      onResize(term.cols, term.rows)
+      send('terminal-ready', '')
+    }
 
     onUnmounted(() => {
       for (const off of disposableListeners) {
