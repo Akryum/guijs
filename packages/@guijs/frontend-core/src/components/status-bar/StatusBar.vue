@@ -1,5 +1,6 @@
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, computed } from '@vue/composition-api'
+import { onDrag } from '@guijs/frontend-ui/util/drag'
 const Terminals = () => import(
   /* webpackChunkName: 'Terminals' */
   '../terminal/Terminals.vue'
@@ -30,10 +31,24 @@ export default {
       localStorage.setItem(STORAGE_PANE_SIZE, JSON.stringify(value))
     })
 
+    // Resize
+
+    function getSize (size) {
+      return Math.max(100, Math.min(size, window.innerHeight * 0.95))
+    }
+
+    const resizeHandle = ref(null)
+    const { previewY } = onDrag(resizeHandle, ({ dY }) => {
+      paneSize.value = getSize(paneSize.value - dY)
+    })
+
+    const paneDisplaySize = computed(() => getSize(paneSize.value - previewY.value))
+
     return {
       openPaneId,
       togglePane,
-      paneSize,
+      paneDisplaySize,
+      resizeHandle,
     }
   },
 }
@@ -44,11 +59,17 @@ export default {
     <!-- Pane -->
     <div
       v-if="openPaneId"
-      class="border-gray-300 border-t"
+      class="relative border-gray-300 border-t"
       :style="{
-        height: `${paneSize}px`,
+        height: `${paneDisplaySize}px`,
       }"
     >
+      <!-- Resize handle -->
+      <div
+        ref="resizeHandle"
+        class="absolute top-0 left-0 right-0 -mt-1 h-2 z-10 cursor-ns-resize hover:bg-primary-200"
+      />
+
       <Terminals
         v-if="openPaneId === 'terminals'"
         class="h-full"

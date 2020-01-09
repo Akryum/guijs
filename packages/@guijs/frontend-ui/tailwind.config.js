@@ -25,6 +25,10 @@ module.exports = {
         '10': '0.1',
         '90': '0.9',
       },
+      cursor: {
+        'ns-resize': 'ns-resize',
+        'ew-resize': 'ew-resize',
+      },
     },
   },
   variants: {

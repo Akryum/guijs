@@ -1,5 +1,6 @@
 import VTooltip from 'v-tooltip'
 import 'v-tooltip/dist/v-tooltip.css'
+import VueResize from 'vue-resize'
 
 export const DEFAULT_OPTIONS = {
   componentsPrefix: 'V',
@@ -31,6 +32,8 @@ export default {
         },
       },
     })
+
+    Vue.use(VueResize)
 
     // Require all the components that start with 'BaseXXX.vue'
     const requireComponents = require.context('./components', true, /[a-z0-9]+\.(jsx?|vue)$/i)
