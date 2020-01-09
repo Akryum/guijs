@@ -134,8 +134,6 @@ export default {
         </VButton>
       </div>
 
-      <div class="spacer" />
-
       <VButton
         icon-left="add"
         square
