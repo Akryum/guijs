@@ -2,6 +2,9 @@
   "guijs": {
     "home": {
       "welcome": "Welcome to guijs"
+    },
+    "status-bar": {
+      "toggle-terminals": "Toggle terminals"
     }
   }
 }
