@@ -59,6 +59,16 @@ export default {
       currentTerminalId.value = result.data.createTerminal.id
     })
 
+    function newTerminal () {
+      return createTerminal({
+        input: {
+          name: '~',
+          title: '',
+          hidden: false,
+        },
+      })
+    }
+
     // Remove
 
     const { mutate: removeTerminal, onDone: onTerminalRemoved } = useMutation(gql`
@@ -85,7 +95,7 @@ export default {
       terminals,
       loading,
       currentTerminalId,
-      createTerminal,
+      newTerminal,
       removeTerminal,
     }
   },
@@ -135,16 +145,11 @@ export default {
       </div>
 
       <VButton
+        v-tooltip="$t('guijs.terminals.new-terminal')"
         icon-left="add"
         square
         class="px-3 py-3 hover:bg-primary-100"
-        @click="createTerminal({
-          input: {
-            name: '~',
-            title: '',
-            hidden: false,
-          },
-        })"
+        @click="newTerminal()"
       />
     </div>
 
@@ -160,6 +165,21 @@ export default {
         />
       </template>
     </keep-alive>
+
+    <VEmpty
+      v-if="!terminals.length"
+      icon="laptop"
+      class="h-full"
+    >
+      <div>{{ $t('guijs.terminals.no-terminal') }}</div>
+
+      <a
+        class="text-secondary-500 hover:text-secondary-400 cursor-pointer"
+        @click="newTerminal()"
+      >
+        {{ $t('guijs.terminals.new-terminal') }}
+      </a>
+    </VEmpty>
   </div>
 </template>
 

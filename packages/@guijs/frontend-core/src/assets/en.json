@@ -5,6 +5,10 @@
     },
     "status-bar": {
       "toggle-terminals": "Toggle terminals"
+    },
+    "terminals": {
+      "new-terminal": "New terminal",
+      "no-terminal": "No terminal open"
     }
   }
 }

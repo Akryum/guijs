@@ -44,7 +44,7 @@ export default {
     <!-- Pane -->
     <div
       v-if="openPaneId"
-      class="border-gray-200 border-t"
+      class="border-gray-300 border-t"
       :style="{
         height: `${paneSize}px`,
       }"
@@ -67,6 +67,7 @@ export default {
         v-tooltip="$t('guijs.status-bar.toggle-terminals')"
         icon-left="laptop"
         class="h-full px-2 text-gray-600 hover:bg-gray-300"
+        square
         @click="togglePane('terminals')"
       />
     </div>
