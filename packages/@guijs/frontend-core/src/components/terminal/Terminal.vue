@@ -264,14 +264,12 @@ export default {
     listeners.push(on('terminal-destroyed', destroy))
 
     // Paste
-    // @TODO not working
     onWindowEvent('paste', event => {
       if (term) {
         const data = (event.clipboardData || window.clipboardData).getData('text')
-        console.log('paste', data)
         event.preventDefault()
         event.stopPropagation()
-        term._core.handler(data)
+        write(data)
       }
     }, {
       capture: true,
