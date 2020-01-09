@@ -148,7 +148,7 @@ export default {
       if (!term) {
         term = new Terminal({
           theme: defaultTheme,
-          scrollback: 10000,
+          scrollback: 4000,
           windowsMode: isWindows,
           macOptionIsMeta: true,
         })
