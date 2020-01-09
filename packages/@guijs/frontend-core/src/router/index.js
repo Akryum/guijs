@@ -17,7 +17,7 @@ const routes = [
     name: 'terminals',
     component: () => import(
       /* webpackChunkName: 'Terminals' */
-      '../components/Terminals.vue'
+      '../components/terminal/Terminals.vue'
     ),
   },
 ]
