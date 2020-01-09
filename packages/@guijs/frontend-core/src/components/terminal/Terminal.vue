@@ -5,7 +5,7 @@ import { FitAddon } from 'xterm-addon-fit'
 import { SearchAddon } from 'xterm-addon-search'
 import { WebLinksAddon } from 'xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
-import { onWindowEvent } from '@/util/window'
+import { onWindowEvent } from '@guijs/frontend-ui/util/window'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
@@ -152,6 +152,7 @@ export default {
           windowsMode: isWindows,
           macOptionIsMeta: true,
         })
+        cached.term = term
 
         // Addons
 
@@ -159,7 +160,7 @@ export default {
         term.loadAddon(searchAddon)
         term.loadAddon(new WebLinksAddon())
 
-        term.open(xtermTarget.value)
+        term.open(cached.targetEl)
 
         term.loadAddon(new WebglAddon())
 
@@ -204,37 +205,28 @@ export default {
       // https://github.com/xtermjs/xterm.js/issues/291
       // term.scrollToLine(cached.scroll)
       term._core._onScroll.fire(cached.scroll)
-
-      // @TODO on re-create, no scroll until a new line is added
     }
 
-    let mounted = false
     onMounted(() => {
       // Re-use the same DOM element
       if (cached.targetEl) {
-        el.value.removeChild(el.value.lastChild)
+        while (el.value.firstChild) {
+          el.value.removeChild(el.value.firstChild)
+        }
         el.value.appendChild(cached.targetEl)
       } else {
         cached.targetEl = xtermTarget.value
       }
 
-      mounted = true
-      if (attached.value) {
-        createTerminal()
-      }
+      createTerminal()
     })
 
     onActivated(() => {
-      if (attached.value) {
-        createTerminal()
-      }
+      createTerminal()
     })
 
     watch(attached, value => {
       cached.attached = value
-      if (value && mounted) {
-        createTerminal()
-      }
     })
 
     onUnmounted(() => {
@@ -251,6 +243,7 @@ export default {
     // Terminal utils
 
     function write (data) {
+      if (!attached.value) return
       send('terminal-data-in', data)
     }
 
@@ -271,6 +264,7 @@ export default {
     listeners.push(on('terminal-destroyed', destroy))
 
     // Paste
+    // @TODO not working
     onWindowEvent('paste', event => {
       if (term) {
         const data = (event.clipboardData || window.clipboardData).getData('text')
@@ -283,17 +277,18 @@ export default {
       capture: true,
     })
 
-    // Screen resize
-    onWindowEvent('resize', () => {
+    // Element resize
+    function onElResize () {
       if (term) {
         fitAddon.fit()
       }
-    })
+    }
 
     return {
       el,
       xtermTarget,
       clear,
+      onElResize,
     }
   },
 }
@@ -302,12 +297,14 @@ export default {
 <template>
   <div
     ref="el"
-    class="p-1 overflow-hidden"
+    class="relative p-1 overflow-hidden"
   >
     <div
       ref="xtermTarget"
       class="w-full h-full"
     />
+
+    <resize-observer @notify="onElResize()" />
   </div>
 </template>
 
