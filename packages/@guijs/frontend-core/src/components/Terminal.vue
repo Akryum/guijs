@@ -72,6 +72,7 @@ export default {
         fitAddon: new FitAddon(),
         searchAddon: new SearchAddon(),
         scroll: 0,
+        targetEl: null,
       }
     }
 
@@ -140,6 +141,7 @@ export default {
     /** @type {Terminal} */
     let term = cached.term
 
+    const el = ref(null)
     const xtermTarget = ref(null)
 
     function createTerminal () {
@@ -150,7 +152,6 @@ export default {
           windowsMode: isWindows,
           macOptionIsMeta: true,
         })
-        terminalCache[props.terminalId] = term
 
         // Addons
 
@@ -197,16 +198,26 @@ export default {
       fitAddon.fit()
       term.focus()
       // Initial size is undefined on the server
-      onResize(term.cols, term.rows)
 
       term.setOption('cursorBlink', true)
+
       // https://github.com/xtermjs/xterm.js/issues/291
       // term.scrollToLine(cached.scroll)
       term._core._onScroll.fire(cached.scroll)
+
+      // @TODO on re-create, no scroll until a new line is added
     }
 
     let mounted = false
     onMounted(() => {
+      // Re-use the same DOM element
+      if (cached.targetEl) {
+        el.value.removeChild(el.value.lastChild)
+        el.value.appendChild(cached.targetEl)
+      } else {
+        cached.targetEl = xtermTarget.value
+      }
+
       mounted = true
       if (attached.value) {
         createTerminal()
@@ -280,6 +291,7 @@ export default {
     })
 
     return {
+      el,
       xtermTarget,
       clear,
     }
@@ -288,7 +300,10 @@ export default {
 </script>
 
 <template>
-  <div class="p-4">
+  <div
+    ref="el"
+    class="p-4 overflow-hidden"
+  >
     <div
       ref="xtermTarget"
       class="w-full h-full"

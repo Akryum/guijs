@@ -95,7 +95,7 @@ export default {
 <template>
   <div
     v-if="!loading"
-    class="h-full flex flex-col"
+    class="h-full flex flex-col overflow-hidden"
   >
     <!-- Tabs -->
     <div class="flex border-gray-200 border-b">
