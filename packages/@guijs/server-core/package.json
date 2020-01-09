@@ -1,12 +1,15 @@
 {
   "name": "@guijs/server-core",
+  "productName": "guijs",
   "version": "0.1.0",
   "author": "Guillaume Chau",
   "scripts": {
     "dev": "nodepack-service dev",
     "build": "nodepack-service build",
-    "lint": "nodepack-service lint",
-    "start": "node ./dist/app.js"
+    "lint": "nodepack-service lint --no-maintenance",
+    "start": "node ./dist/app.js",
+    "schema-gen": "graphql-codegen --config gql-codegen.yml",
+    "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done"
   },
   "dependencies": {
     "@nodepack/app": "^0.8.0",
@@ -14,14 +17,22 @@
     "@nodepack/module": "^0.8.0",
     "@nodepack/utils": "^0.8.3",
     "consola": "^2.11.3",
+    "default-shell": "^1.0.1",
     "execa": "^4.0.0",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "nedb": "^1.8.0",
     "node-pty": "^0.9.0",
-    "websocket-lib": "^3.2.2"
+    "os-locale": "^4.0.0",
+    "shortid": "^2.2.15",
+    "string_decoder": "^1.3.0",
+    "ws": "^7.2.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.11.2",
+    "@graphql-codegen/fragment-matcher": "^1.11.2",
+    "@graphql-codegen/typescript": "^1.11.2",
+    "@graphql-codegen/typescript-resolvers": "^1.11.2",
     "@nodepack/plugin-apollo": "^0.8.5",
     "@nodepack/plugin-eslint": "^0.8.3",
     "@nodepack/plugin-express": "^0.8.0",

@@ -4,6 +4,9 @@
   "author": "Guillaume Chau",
   "private": true,
   "main": "index.js",
+  "scripts": {
+    "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done"
+  },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@vue/composition-api": "^0.3.4",

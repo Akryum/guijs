@@ -54,6 +54,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    stop: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup (props, { attrs, emit }) {
@@ -75,6 +80,11 @@ export default {
         event.stopPropagation()
         event.stopImmediatePropagation()
       } else {
+        if (props.stop) {
+          console.log('stop')
+          event.stopPropagation()
+          event.stopImmediatePropagation()
+        }
         emit('click', event)
       }
     }
@@ -102,10 +112,10 @@ export default {
       'text-center': align === 'center',
       'rounded': !square,
     }"
-    @click.capture="handleClick"
+    @click="handleClick"
   >
     <div
-      class="flex items-center rounded"
+      class="flex items-center rounded w-full"
       :class="{
         'opacity-0': loading,
         'opacity-50': !loading && ghost,
@@ -143,6 +153,10 @@ export default {
   &:hover {
     @apply bg-primary-400;
   }
+}
+
+.btn-small {
+  @apply px-2 py-2;
 }
 
 .btn-regular {

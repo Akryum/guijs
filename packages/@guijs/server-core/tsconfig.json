@@ -28,6 +28,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "noUnusedLocals": true,
+    "resolveJsonModule": true,
     // Strict
     "noImplicitAny": false,
     "noImplicitThis": true,
