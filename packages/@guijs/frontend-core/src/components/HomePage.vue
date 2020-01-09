@@ -8,12 +8,5 @@
     <h1 class="text-gray-600 text-2xl mt-6">
       {{ $t('guijs.home.welcome') }}
     </h1>
-
-    <VButton
-      class="btn-primary btn-regular mt-4"
-      icon-left="star"
-    >
-      Hello
-    </VButton>
   </div>
 </template>
