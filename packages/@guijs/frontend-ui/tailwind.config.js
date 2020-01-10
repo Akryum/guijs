@@ -10,6 +10,7 @@ module.exports = {
         tertiary: colors.green,
       },
       spacing: {
+        '72p': '72px',
         128: '32rem',
         192: '48rem',
         256: '64rem',
