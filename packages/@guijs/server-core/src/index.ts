@@ -8,10 +8,12 @@ bootstrap(() => {
   printReady()
 })
 
-// Auto-generate shcema code
-hook('apolloListen', () => {
-  spawn('yarn', ['schema-gen'], {
-    cwd: process.cwd(),
-    stdio: ['inherit', 'inherit', 'inherit'],
+if (process.env.NODE_ENV !== 'production') {
+  // Auto-generate shcema code
+  hook('apolloListen', () => {
+    spawn('yarn', ['schema-gen'], {
+      cwd: process.cwd(),
+      stdio: ['inherit', 'inherit', 'inherit'],
+    })
   })
-})
+}
