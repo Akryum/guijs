@@ -17,10 +17,12 @@ export default {
     id="app"
     class="w-screen h-screen overflow-hidden flex flex-col items-stretch"
   >
-    <div class="flex-1 flex overflow-hidden">
+    <div class="flex-1 flex items-stretch overflow-hidden">
       <SidePane class="flex-none" />
 
-      <router-view class="flex-1 overflow-hidden" />
+      <div class="flex-1 overflow-y-auto">
+        <router-view />
+      </div>
     </div>
 
     <StatusBar class="flex-none" />

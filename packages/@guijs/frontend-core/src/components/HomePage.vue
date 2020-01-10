@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-full">
+  <div class="flex flex-col items-center justify-center min-h-full p-8">
     <img
       src="~@/assets/guijs.svg"
       alt="guijs logo"
-      class="max-w-32 max-h-32"
+      class="flex-none max-w-32 max-h-32"
     >
     <h1 class="text-gray-600 text-2xl mt-6">
       {{ $t('guijs.home.welcome') }}
