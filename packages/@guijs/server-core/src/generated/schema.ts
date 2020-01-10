@@ -80,6 +80,13 @@ export type MutationRunCommandArgs = {
   id: Scalars['ID']
 };
 
+export type Project = {
+   __typename?: 'Project',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  bookmarked: Scalars['Boolean'],
+};
+
 export type Query = {
    __typename?: 'Query',
   terminal?: Maybe<Terminal>,
@@ -96,6 +103,11 @@ export type QueryTerminalArgs = {
 
 export type QuerySearchCommandsArgs = {
   text: Scalars['String']
+};
+
+export type Subscription = {
+   __typename?: 'Subscription',
+  commandRan?: Maybe<Command>,
 };
 
 export type Terminal = {
@@ -188,6 +200,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+  Subscription: ResolverTypeWrapper<{}>,
+  Project: ResolverTypeWrapper<Project>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -203,6 +217,8 @@ export type ResolversParentTypes = {
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+  Subscription: {},
+  Project: Project,
 };
 
 export type CommandResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Command'] = ResolversParentTypes['Command']> = {
@@ -229,11 +245,21 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'id'>>,
 };
 
+export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  bookmarked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+};
+
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<QueryTerminalArgs, 'id'>>,
   terminals?: Resolver<Array<ResolversTypes['Terminal']>, ParentType, ContextType>,
   searchCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QuerySearchCommandsArgs, 'text'>>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
+};
+
+export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  commandRan?: SubscriptionResolver<Maybe<ResolversTypes['Command']>, "commandRan", ParentType, ContextType>,
 };
 
 export type TerminalResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Terminal'] = ResolversParentTypes['Terminal']> = {
@@ -247,7 +273,9 @@ export type Resolvers<ContextType = Context> = {
   Command?: CommandResolvers<ContextType>,
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
+  Project?: ProjectResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  Subscription?: SubscriptionResolvers<ContextType>,
   Terminal?: TerminalResolvers<ContextType>,
 };
 

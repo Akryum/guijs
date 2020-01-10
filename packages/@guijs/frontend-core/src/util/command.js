@@ -1,4 +1,6 @@
 import { onUnmounted, onActivated } from '@vue/composition-api'
+import { apolloClient } from '@/apollo'
+import gql from 'graphql-tag'
 
 const handlers = {}
 
@@ -35,4 +37,19 @@ export function onCommand (id, handler) {
 export function dispatchCommand (id) {
   getHandlers(id).forEach(handler => handler())
   lastCommand = id
+}
+
+export function runCommand (id) {
+  return apolloClient.mutate({
+    mutation: gql`
+    mutation runCommand ($id: ID!) {
+      runCommand (id: $id) {
+        id
+      }
+    }
+  `,
+    variables: {
+      id,
+    },
+  })
 }

@@ -1,9 +1,9 @@
 <script>
 import { ref, computed, watch } from '@vue/composition-api'
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { onKeybind, onAnyKeybind, bindScope, onKey } from '@/util/keybinding'
-import { dispatchCommand, onCommand } from '@/util/command'
+import { bindScope, onKey } from '@/util/keybinding'
+import { onCommand, runCommand } from '@/util/command'
 import { getSearchType, TYPE_WORDS } from './util'
 import { ICONS } from './icons'
 import FindItem from './FindItem.vue'
@@ -18,12 +18,14 @@ export default {
 
     const isOpen = ref(false)
 
-    onKeybind('find', () => {
+    onCommand('find', () => {
       isOpen.value = !isOpen.value
     })
-    onKeybind('command', () => {
-      isOpen.value = true
-      searchText.value = '>'
+    onCommand('command', () => {
+      isOpen.value = !isOpen.value
+      if (isOpen.value) {
+        searchText.value = '>'
+      }
     })
 
     bindScope('find-modal', isOpen)
@@ -72,20 +74,10 @@ export default {
     })
     const commands = useResult(result, [])
 
-    // Select command
-    const { mutate: runCommand } = useMutation(gql`
-      mutation runCommand ($id: ID!) {
-        runCommand (id: $id) {
-          id
-        }
-      }
-    `)
-
     async function selectCommand (id) {
       const { data } = await runCommand({ id })
       if (data.runCommand) {
         isOpen.value = false
-        dispatchCommand(id)
       }
     }
 
@@ -124,11 +116,6 @@ export default {
     }, {
       scope: 'find-modal',
       global: true,
-    })
-
-    // Keybinding
-    onAnyKeybind(async (id) => {
-      selectCommand(id)
     })
 
     // Commands

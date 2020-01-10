@@ -4,6 +4,7 @@ import { MetaCommand } from './meta-types'
 import { Resolvers, CommandType } from '@/generated/schema'
 import consola from 'consola'
 import { keybindings } from '../keybinding'
+import Context from '@/generated/context'
 
 export const typeDefs = gql`
 type Command {
@@ -31,6 +32,10 @@ extend type Query {
 extend type Mutation {
   runCommand(id: ID!): Command
 }
+
+type Subscription {
+  commandRan: Command
+}
 `
 
 export const commands: MetaCommand[] = []
@@ -53,8 +58,10 @@ const globalSearchIndex = createIndex()
 export function addCommand (cmd: MetaCommand) {
   commands.push(cmd)
   commandsMap.set(cmd.id, cmd)
-  searchIndexes[cmd.type].addDoc(cmd)
-  globalSearchIndex.addDoc(cmd)
+  if (!cmd.hidden) {
+    searchIndexes[cmd.type].addDoc(cmd)
+    globalSearchIndex.addDoc(cmd)
+  }
 }
 
 const typeWords = {
@@ -99,9 +106,9 @@ export function searchCommands (text: string) {
 function getRecentCommands (type: string = null) {
   let list = commands
   if (type) {
-    list = list.filter(c => c.type === type)
+    list = list.filter(c => !c.hidden && c.type === type)
   } else {
-    list = list.filter(c => c.type !== CommandType.Help).slice()
+    list = list.filter(c => !c.hidden && c.type !== CommandType.Help).slice()
   }
   list.sort((a, b) => {
     if (a.lastUsed && b.lastUsed) {
@@ -116,7 +123,7 @@ function getRecentCommands (type: string = null) {
   return list.slice(0, 20)
 }
 
-export function runCommand (id: string) {
+export function runCommand (id: string, ctx: Context) {
   const command = commands.find(c => c.id === id)
   if (!command) {
     consola.warn(`Command ${id} not found`)
@@ -125,6 +132,7 @@ export function runCommand (id: string) {
   if (command.handler) {
     command.handler()
   }
+  ctx.pubsub.publish('commandRan', { commandRan: command })
   return command
 }
 
@@ -138,10 +146,17 @@ export const resolvers: Resolvers = {
   },
 
   Mutation: {
-    runCommand: (root, { id }) => runCommand(id),
+    runCommand: (root, { id }, ctx) => runCommand(id, ctx),
+  },
+
+  Subscription: {
+    commandRan: {
+      subscribe: (root, args, ctx) => ctx.pubsub.asyncIterator(['commandRan']),
+    },
   },
 }
 
+// Help commands
 for (const word in typeWords) {
   if (word === '?') continue
   addCommand({
@@ -151,3 +166,17 @@ for (const word in typeWords) {
     description: `guijs.find.help.${typeWords[word]}`,
   })
 }
+
+// Internal commands
+addCommand({
+  id: 'find',
+  type: CommandType.Action,
+  label: 'Find',
+  hidden: true,
+})
+addCommand({
+  id: 'command',
+  type: CommandType.Action,
+  label: 'Command',
+  hidden: true,
+})
