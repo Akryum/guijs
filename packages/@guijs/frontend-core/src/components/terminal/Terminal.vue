@@ -73,6 +73,7 @@ export default {
         searchAddon: new SearchAddon(),
         scroll: 0,
         targetEl: null,
+        ready: false,
       }
     }
 
@@ -236,7 +237,7 @@ export default {
     })
 
     function mayBeReady () {
-      if (term && attached.value) {
+      if (term && attached.value && !cached.ready) {
         onTerminalReady()
       }
     }
@@ -244,6 +245,7 @@ export default {
     function onTerminalReady () {
       onResize(term.cols, term.rows)
       send('terminal-ready', '')
+      cached.ready = true
     }
 
     onUnmounted(() => {
