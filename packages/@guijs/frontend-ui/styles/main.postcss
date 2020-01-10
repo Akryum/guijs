@@ -18,7 +18,6 @@ img {
 [type="submit"],
 .button-like {
   -webkit-appearance: none !important;
-  outline: none !important;
 
   &:active {
     filter: brightness(90%);
@@ -30,10 +29,8 @@ img {
 }
 
 /* Disable touch blue rectangle */
-[type="button"],
-[type="submit"],
-.button-like,
-a {
+* {
+  outline: none !important;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
 }

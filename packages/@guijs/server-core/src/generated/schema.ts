@@ -23,6 +23,15 @@ export type CreateTerminalInput = {
   hidden: Scalars['Boolean'],
 };
 
+export type Keybinding = {
+   __typename?: 'Keybinding',
+  id: Scalars['ID'],
+  description?: Maybe<Scalars['String']>,
+  sequences: Array<Scalars['String']>,
+  scope: Scalars['String'],
+  global?: Maybe<Scalars['Boolean']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   createTerminal?: Maybe<Terminal>,
@@ -49,6 +58,7 @@ export type Query = {
    __typename?: 'Query',
   terminal?: Maybe<Terminal>,
   terminals: Array<Terminal>,
+  keybindings: Array<Keybinding>,
 };
 
 
@@ -139,9 +149,10 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>,
   Terminal: ResolverTypeWrapper<Terminal>,
   String: ResolverTypeWrapper<Scalars['String']>,
+  Keybinding: ResolverTypeWrapper<Keybinding>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
 };
 
@@ -151,10 +162,19 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'],
   Terminal: Terminal,
   String: Scalars['String'],
+  Keybinding: Keybinding,
+  Boolean: Scalars['Boolean'],
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
-  Boolean: Scalars['Boolean'],
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+};
+
+export type KeybindingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Keybinding'] = ResolversParentTypes['Keybinding']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  sequences?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  scope?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  global?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -166,6 +186,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<QueryTerminalArgs, 'id'>>,
   terminals?: Resolver<Array<ResolversTypes['Terminal']>, ParentType, ContextType>,
+  keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
 };
 
 export type TerminalResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Terminal'] = ResolversParentTypes['Terminal']> = {
@@ -176,6 +197,7 @@ export type TerminalResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type Resolvers<ContextType = Context> = {
+  Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Terminal?: TerminalResolvers<ContextType>,

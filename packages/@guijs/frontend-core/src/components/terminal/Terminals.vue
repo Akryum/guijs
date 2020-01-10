@@ -1,8 +1,9 @@
 <script>
 import { ref, watch } from '@vue/composition-api'
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
-import Terminal from './Terminal.vue'
 import gql from 'graphql-tag'
+import { onKeyboard, bindScope } from '@/util/keybinding'
+import Terminal from './Terminal.vue'
 
 const terminalFragment = gql`
 fragment terminal on Terminal {
@@ -30,6 +31,8 @@ export default {
   },
 
   setup () {
+    const el = ref(null)
+
     const { result, loading } = useQuery(TERMINALS)
     const terminals = useResult(result, [])
 
@@ -88,10 +91,22 @@ export default {
     })
 
     onTerminalRemoved(() => {
-      // @TODO Select other terminal
+      if (terminals.value.length) {
+        currentTerminalId.value = terminals.value[terminals.value.length - 1].id
+      }
+    })
+
+    // Keybindings
+    bindScope('terminals', el)
+    onKeyboard('new-terminal', () => {
+      newTerminal()
+    })
+    onKeyboard('close-terminal', () => {
+      removeTerminal({ id: currentTerminalId.value })
     })
 
     return {
+      el,
       terminals,
       loading,
       currentTerminalId,
@@ -105,6 +120,8 @@ export default {
 <template>
   <div
     v-if="!loading"
+    ref="el"
+    tabindex="0"
     class="h-full flex flex-col overflow-hidden"
   >
     <!-- Tabs -->
@@ -131,6 +148,7 @@ export default {
 
           <!-- Close -->
           <VButton
+            v-tooltip="$t('guijs.terminals.close-terminal')"
             icon-left="close"
             class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200"
             stop

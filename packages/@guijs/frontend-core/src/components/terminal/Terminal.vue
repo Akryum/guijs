@@ -7,6 +7,7 @@ import { WebLinksAddon } from 'xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
 import { onWindowEvent } from '@guijs/frontend-ui/util/window'
 import { useMutation } from '@vue/apollo-composable'
+import { pushScope, popScope } from '@/util/keybinding'
 import gql from 'graphql-tag'
 
 const isWindows = ['Windows', 'Win16', 'Win32', 'WinCE'].includes(navigator.platform)
@@ -185,6 +186,23 @@ export default {
         listeners.push(term.onScroll(position => {
           cached.scroll = position
         }))
+
+        // Focus
+        const onFocus = () => {
+          pushScope('terminals')
+          pushScope('terminal')
+        }
+        const onBlur = () => {
+          popScope('terminal')
+          popScope('terminals')
+        }
+        term.textarea.addEventListener('focus', onFocus)
+        term.textarea.addEventListener('blur', onBlur)
+        listeners.push(() => {
+          term.textarea.removeEventListener('focus', onFocus)
+          term.textarea.removeEventListener('blur', onBlur)
+          onBlur()
+        })
 
         // Title
         disposableListeners.push(term.onTitleChange(async title => {

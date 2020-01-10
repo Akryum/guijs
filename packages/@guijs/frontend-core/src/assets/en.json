@@ -8,7 +8,8 @@
     },
     "terminals": {
       "new-terminal": "New terminal",
-      "no-terminal": "No terminal open"
+      "no-terminal": "No terminal open",
+      "close-terminal": "Close terminal"
     }
   }
 }
