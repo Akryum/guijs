@@ -5,6 +5,7 @@ module.exports = {
   ],
 
   chainWebpack (config) {
+    config.resolve.symlinks(false)
     config.plugins.delete('prefetch')
     config.plugins.delete('preload')
   },
