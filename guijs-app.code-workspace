@@ -1,19 +1,22 @@
 {
 	"folders": [
 		{
-			"path": "packages/@guijs/app-core"
+			"path": "packages/@guijs/frontend-core"
 		},
 		{
-			"path": "packages/@guijs/builtin-plugin"
+			"path": "packages/@guijs/frontend-ui"
+		},
+		{
+			"path": "packages/@guijs/app-core"
 		},
 		{
 			"path": "packages/@guijs/server-core"
 		},
 		{
-			"path": "packages/@guijs/plugin-store-client"
+			"path": "packages/@guijs/server-core-old"
 		},
 		{
-			"path": "packages/@guijs/plugin-store-server"
+			"path": "packages/@guijs/builtin-plugin"
 		},
 		{
 			"path": "."
