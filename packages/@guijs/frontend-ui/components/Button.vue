@@ -81,7 +81,6 @@ export default {
         event.stopImmediatePropagation()
       } else {
         if (props.stop) {
-          console.log('stop')
           event.stopPropagation()
           event.stopImmediatePropagation()
         }
