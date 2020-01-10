@@ -26,7 +26,7 @@ module.exports = {
     // @TODO fix the warnings below
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
-    '@typescript-eslint/no-use-before-define': 1,
+    '@typescript-eslint/no-use-before-define': 0,
     '@typescript-eslint/no-empty-function': 0,
   },
   parser: '@typescript-eslint/parser',
