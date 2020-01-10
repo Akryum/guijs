@@ -79,7 +79,13 @@ export default {
     </div>
 
     <!-- Status bar -->
-    <div class="flex-none flex items-center h-6 bg-gray-200 px-6">
+    <div
+      class="flex-none flex items-center h-6 px-6"
+      :class="{
+        'bg-gray-200': !openPaneId,
+        'bg-white': openPaneId,
+      }"
+    >
       <!-- Start elements -->
       <div class="flex-1 items-center h-full">
         <!-- TODO -->
