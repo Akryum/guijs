@@ -59,6 +59,10 @@ export default {
           label
           icon
           description
+          keybinding {
+            id
+            sequences
+          }
         }
       }
     `, () => ({

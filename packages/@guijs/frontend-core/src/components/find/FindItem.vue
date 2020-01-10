@@ -40,12 +40,24 @@ export default {
     <i class="material-icons mr-4 text-gray-500 text-2xl">
       {{ icon }}
     </i>
-    <span>{{ command.label }}</span>
-    <span
-      v-if="command.description && $t(command.description) !== command.label"
-      class="text-gray-500 ml-4"
-    >
-      {{ $t(command.description) }}
-    </span>
+
+    <div class="flex-1 text-left">
+      <span>{{ command.label }}</span>
+      <span
+        v-if="command.description && $t(command.description) !== command.label"
+        class="text-gray-500 ml-4"
+      >
+        {{ $t(command.description) }}
+      </span>
+    </div>
+
+    <div v-if="command.keybinding">
+      <VKeybinding
+        v-for="seq of command.keybinding.sequences"
+        :key="seq"
+        :sequence="seq"
+        class="ml-2"
+      />
+    </div>
   </VButton>
 </template>

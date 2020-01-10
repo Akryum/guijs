@@ -24,6 +24,7 @@ export type Command = {
   label: Scalars['String'],
   icon?: Maybe<Scalars['String']>,
   description?: Maybe<Scalars['String']>,
+  keybinding?: Maybe<Keybinding>,
 };
 
 export enum CommandType {
@@ -210,6 +211,7 @@ export type CommandResolvers<ContextType = Context, ParentType extends Resolvers
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType>,
 };
 
 export type KeybindingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Keybinding'] = ResolversParentTypes['Keybinding']> = {

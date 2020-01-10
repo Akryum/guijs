@@ -3,6 +3,7 @@ import lunr from 'elasticlunr'
 import { MetaCommand } from './meta-types'
 import { Resolvers, CommandType } from '@/generated/schema'
 import consola from 'consola'
+import { keybindings } from '../keybinding'
 
 export const typeDefs = gql`
 type Command {
@@ -11,6 +12,7 @@ type Command {
   label: String!
   icon: String
   description: String
+  keybinding: Keybinding
 }
 
 enum CommandType {
@@ -127,6 +129,10 @@ export function runCommand (id: string) {
 }
 
 export const resolvers: Resolvers = {
+  Command: {
+    keybinding: command => keybindings.find(k => k.id === command.id),
+  },
+
   Query: {
     searchCommands: (root, { text }) => searchCommands(text),
   },
