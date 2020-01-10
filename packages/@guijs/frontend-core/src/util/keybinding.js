@@ -130,11 +130,11 @@ export function bindScope (id, elRef) {
   if (elRef) {
     watch(elRef, (el, oldValue, onCleanup) => {
       if (el) {
-        el.addEventListener('focus', push)
-        el.addEventListener('blur', pop)
+        el.addEventListener('focusin', push)
+        el.addEventListener('focusout', pop)
         onCleanup(() => {
-          el.removeEventListener('focus', push)
-          el.removeEventListener('blur', pop)
+          el.removeEventListener('focusin', push)
+          el.removeEventListener('focusout', pop)
         })
       }
     })
