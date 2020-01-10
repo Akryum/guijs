@@ -31,7 +31,6 @@ export function popScope (id) {
   const index = currentScopeChain.indexOf(id)
   if (index !== -1) {
     for (let i = index; i < currentScopeChain.length; i++) {
-      console.log(i)
       getScopedMousetrap(currentScopeChain[i]).pause()
     }
     currentScopeChain.splice(index, currentScopeChain.length - index)
@@ -60,9 +59,18 @@ apolloClient.watchQuery({
 
 function applyKeybindings (keybindings) {
   // Reset scopes
-  for (const key in scopes) {
-    scopes[key].reset()
-    scopes = {}
+  for (const scope in scopes) {
+    const mousetrap = scopes[scope]
+    mousetrap.reset()
+    // Restore key handlers
+    const handlers = getKeyHandlers(scope)
+    for (const h of handlers) {
+      if (h.global) {
+        mousetrap.bindGlobal(h.keys, h.handler)
+      } else {
+        mousetrap.bind(h.keys, h.handler)
+      }
+    }
   }
 
   for (const keybinding of keybindings) {
@@ -83,6 +91,16 @@ function applyKeybindings (keybindings) {
 
 /** @type {{ [key: string]: Function[] }} */
 const handlers = {}
+/** @type {Function[]} */
+const globalHandlers = []
+
+export function onAnyKeybind (handler) {
+  globalHandlers.push(handler)
+  onUnmounted(() => {
+    const index = globalHandlers.indexOf(handler)
+    if (index !== -1) globalHandlers.splice(index, 1)
+  })
+}
 
 function getKeybindingHandlers (id) {
   let result = handlers[id]
@@ -99,12 +117,15 @@ function registerKeybinding (id) {
     getKeybindingHandlers(id).forEach(handler => {
       handler(event)
     })
+    globalHandlers.forEach(handler => {
+      handler(id, event)
+    })
     lastKeybindingId = id
     return false
   }
 }
 
-export function onKeyboard (id, handler) {
+export function onKeybind (id, handler) {
   getKeybindingHandlers(id).push(handler)
 
   if (lastKeybindingId === id) {
@@ -118,7 +139,45 @@ export function onKeyboard (id, handler) {
   })
 }
 
-export function bindScope (id, elRef) {
+const keyHandlers = {}
+
+function getKeyHandlers (scope) {
+  let handlers = keyHandlers[scope]
+  if (!handlers) {
+    handlers = keyHandlers[scope] = []
+  }
+  return handlers
+}
+
+export function onKey (keys, handler, options = {}) {
+  const scope = options.scope || 'root'
+  const h = {
+    keys,
+    handler,
+    global: options.global,
+  }
+  getKeyHandlers(scope).push(h)
+  if (options.global) {
+    getScopedMousetrap(scope).bindGlobal(keys, handler)
+  } else {
+    getScopedMousetrap(scope).bind(keys, handler)
+  }
+
+  const off = () => {
+    const list = getKeyHandlers(scope)
+    const index = list.indexOf(h)
+    if (index !== -1) list.splice(index, 1)
+    getScopedMousetrap(scope).unbind(keys, handler)
+  }
+
+  onUnmounted(() => off())
+
+  return {
+    off,
+  }
+}
+
+export function bindScope (id, ref) {
   const push = () => {
     pushScope(id)
   }
@@ -127,14 +186,20 @@ export function bindScope (id, elRef) {
     popScope(id)
   }
 
-  if (elRef) {
-    watch(elRef, (el, oldValue, onCleanup) => {
-      if (el) {
-        el.addEventListener('focusin', push)
-        el.addEventListener('focusout', pop)
+  if (ref) {
+    watch(ref, (value, oldValue, onCleanup) => {
+      if (typeof value === 'boolean') {
+        if (value) {
+          push()
+        } else {
+          pop()
+        }
+      } else if (value instanceof Element) {
+        value.addEventListener('focusin', push)
+        value.addEventListener('focusout', pop)
         onCleanup(() => {
-          el.removeEventListener('focusin', push)
-          el.removeEventListener('focusout', pop)
+          value.removeEventListener('focusin', push)
+          value.removeEventListener('focusout', pop)
         })
       }
     })

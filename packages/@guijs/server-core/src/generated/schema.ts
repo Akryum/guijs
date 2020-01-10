@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { MetaCommand } from '@/schema/command/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -15,6 +16,24 @@ export type ChangeTerminalTitleInput = {
   id: Scalars['ID'],
   title: Scalars['String'],
 };
+
+export type Command = {
+   __typename?: 'Command',
+  id: Scalars['ID'],
+  type: CommandType,
+  label: Scalars['String'],
+  icon?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+};
+
+export enum CommandType {
+  Help = 'help',
+  Action = 'action',
+  Project = 'project',
+  Package = 'package',
+  Config = 'config',
+  Script = 'script'
+}
 
 export type CreateTerminalInput = {
   name: Scalars['String'],
@@ -37,6 +56,7 @@ export type Mutation = {
   createTerminal?: Maybe<Terminal>,
   changeTerminalTitle?: Maybe<Terminal>,
   removeTerminal?: Maybe<Terminal>,
+  runCommand?: Maybe<Command>,
 };
 
 
@@ -54,16 +74,27 @@ export type MutationRemoveTerminalArgs = {
   id: Scalars['ID']
 };
 
+
+export type MutationRunCommandArgs = {
+  id: Scalars['ID']
+};
+
 export type Query = {
    __typename?: 'Query',
   terminal?: Maybe<Terminal>,
   terminals: Array<Terminal>,
+  searchCommands: Array<Command>,
   keybindings: Array<Keybinding>,
 };
 
 
 export type QueryTerminalArgs = {
   id: Scalars['ID']
+};
+
+
+export type QuerySearchCommandsArgs = {
+  text: Scalars['String']
 };
 
 export type Terminal = {
@@ -149,6 +180,8 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>,
   Terminal: ResolverTypeWrapper<Terminal>,
   String: ResolverTypeWrapper<Scalars['String']>,
+  Command: ResolverTypeWrapper<MetaCommand>,
+  CommandType: CommandType,
   Keybinding: ResolverTypeWrapper<Keybinding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
@@ -162,11 +195,21 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'],
   Terminal: Terminal,
   String: Scalars['String'],
+  Command: MetaCommand,
+  CommandType: CommandType,
   Keybinding: Keybinding,
   Boolean: Scalars['Boolean'],
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+};
+
+export type CommandResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Command'] = ResolversParentTypes['Command']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['CommandType'], ParentType, ContextType>,
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type KeybindingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Keybinding'] = ResolversParentTypes['Keybinding']> = {
@@ -181,11 +224,13 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationCreateTerminalArgs, 'input'>>,
   changeTerminalTitle?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationChangeTerminalTitleArgs, 'input'>>,
   removeTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationRemoveTerminalArgs, 'id'>>,
+  runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'id'>>,
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<QueryTerminalArgs, 'id'>>,
   terminals?: Resolver<Array<ResolversTypes['Terminal']>, ParentType, ContextType>,
+  searchCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QuerySearchCommandsArgs, 'text'>>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
 };
 
@@ -197,6 +242,7 @@ export type TerminalResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type Resolvers<ContextType = Context> = {
+  Command?: CommandResolvers<ContextType>,
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,

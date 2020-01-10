@@ -10,6 +10,15 @@
       "new-terminal": "New terminal",
       "no-terminal": "No terminal open",
       "close-terminal": "Close terminal"
+    },
+    "find": {
+      "help": {
+        "action": "Find actions...",
+        "project": "Find projects...",
+        "package": "Find packages...",
+        "config": "Find configurations...",
+        "script": "Find scripts..."
+      }
     }
   }
 }

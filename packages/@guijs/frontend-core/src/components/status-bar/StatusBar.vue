@@ -1,7 +1,7 @@
 <script>
 import { ref, watch, computed } from '@vue/composition-api'
 import { onDrag } from '@guijs/frontend-ui/util/drag'
-import { onKeyboard } from '@/util/keybinding'
+import { onCommand } from '@/util/command'
 const Terminals = () => import(
   /* webpackChunkName: 'Terminals' */
   '../terminal/Terminals.vue'
@@ -51,11 +51,11 @@ export default {
 
     const paneDisplaySize = computed(() => getSize(paneSize.value - previewY.value))
 
-    // Default keybindings
-    onKeyboard('toggle-terminals', () => {
+    // Commands
+    onCommand('toggle-terminals', () => {
       togglePane('terminals')
     })
-    onKeyboard('new-terminal', () => {
+    onCommand('new-terminal', () => {
       openPaneId.value = 'terminals'
     })
 

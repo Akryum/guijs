@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
-import { Resolvers } from '@/generated/schema'
+import { Resolvers, CommandType } from '@/generated/schema'
 import { terminals, createTerminal, removeTerminal } from './server'
+import { addCommand } from '../command'
 
 export const typeDefs = gql`
 type Terminal {
@@ -52,3 +53,22 @@ export const resolvers: Resolvers = {
     removeTerminal: (root, { id }) => removeTerminal(id),
   },
 }
+
+addCommand({
+  id: 'toggle-terminals',
+  type: CommandType.Action,
+  label: 'Toggle terminals',
+  icon: 'laptop',
+  description: 'guijs.status-bar.toggle-terminals',
+})
+
+addCommand({
+  id: 'new-terminal',
+  type: CommandType.Action,
+  label: 'New terminal',
+  icon: 'add',
+  description: 'guijs.terminals.new-terminal',
+  handler () {
+    console.log('new terminal called')
+  },
+})

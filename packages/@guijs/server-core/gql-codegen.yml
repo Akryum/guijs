@@ -6,8 +6,8 @@ generates:
       - typescript-resolvers
     config:
       contextType: '@context#Context'
-      # mappers:
-      #   User: '@/schema/user/db-types#DBUser'
+      mappers:
+        Command: '@/schema/command/meta-types#MetaCommand'
       optionalResolveType: true
   schema-fragment-matcher.js:
     - fragment-matcher

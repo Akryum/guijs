@@ -2,7 +2,8 @@
 import { ref, watch } from '@vue/composition-api'
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { onKeyboard, bindScope } from '@/util/keybinding'
+import { onKeybind, bindScope } from '@/util/keybinding'
+import { onCommand } from '@/util/command'
 import Terminal from './Terminal.vue'
 
 const terminalFragment = gql`
@@ -98,10 +99,10 @@ export default {
 
     // Keybindings
     bindScope('terminals', el)
-    onKeyboard('new-terminal', () => {
+    onCommand('new-terminal', () => {
       newTerminal()
     })
-    onKeyboard('close-terminal', () => {
+    onKeybind('close-terminal', () => {
       removeTerminal({ id: currentTerminalId.value })
     })
 

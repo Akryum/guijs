@@ -21,6 +21,18 @@ export const resolvers: Resolvers = {
   Query: {
     keybindings: () => [
       {
+        id: 'find',
+        sequences: ['mod+p', 'mod+k'],
+        scope: 'root',
+        global: true,
+      },
+      {
+        id: 'command',
+        sequences: ['mod+shift+p', 'mod+shift+k'],
+        scope: 'root',
+        global: true,
+      },
+      {
         id: 'toggle-terminals',
         description: 'guijs.status-bar.toggle-terminals',
         sequences: ['mod+shift+¥'],

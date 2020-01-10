@@ -1,9 +1,11 @@
 <script>
+import FindModal from './find/FindModal.vue'
 import SidePane from './side-pane/SidePane.vue'
 import StatusBar from './status-bar/StatusBar.vue'
 
 export default {
   components: {
+    FindModal,
     SidePane,
     StatusBar,
   },
@@ -22,6 +24,8 @@ export default {
     </div>
 
     <StatusBar class="flex-none" />
+
+    <FindModal />
   </div>
 </template>
 

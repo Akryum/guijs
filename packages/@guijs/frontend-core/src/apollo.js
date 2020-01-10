@@ -4,7 +4,6 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { onError } from 'apollo-link-error'
 import { logErrorMessages } from '@vue/apollo-util'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
@@ -18,12 +17,13 @@ link = link.concat(createHttpLink({
   uri: `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/graphql`,
 }))
 
-const wsClient = new SubscriptionClient(`http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/subscriptions`, {
-  reconnect: true,
-})
-
 // Create the subscription websocket link
-const wsLink = new WebSocketLink(wsClient)
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/subscriptions`,
+  options: {
+    reconnect: true,
+  },
+})
 
 link = split(
   // split based on operation type
