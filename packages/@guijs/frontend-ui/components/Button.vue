@@ -123,7 +123,7 @@ export default {
     >
       <i
         v-if="iconLeft"
-        class="material-icons text-lg"
+        class="material-icons flex-none text-lg"
         :class="{
           'mr-2': $slots.default,
         }"
@@ -131,7 +131,7 @@ export default {
       <slot />
       <i
         v-if="iconRight"
-        class="material-icons text-lg"
+        class="material-icons flex-none text-lg"
         :class="{
           'ml-2': $slots.default,
         }"
