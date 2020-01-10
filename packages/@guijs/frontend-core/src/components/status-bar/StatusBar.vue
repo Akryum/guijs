@@ -9,13 +9,19 @@ const Terminals = () => import(
 const STORAGE_PANE_SIZE = 'dev.guijs.status-bar.pane-size'
 
 export default {
-  components: {
-    Terminals,
-  },
-
   setup () {
-    // Pange above the status bar
+    const panes = [
+      {
+        id: 'terminals',
+        icon: 'laptop',
+        tooltip: 'guijs.status-bar.toggle-terminals',
+        component: Terminals,
+      },
+    ]
+
     const openPaneId = ref(null)
+
+    const currentPane = computed(() => panes.find(p => p.id === openPaneId.value))
 
     function togglePane (id) {
       if (openPaneId.value === id) {
@@ -45,6 +51,8 @@ export default {
     const paneDisplaySize = computed(() => getSize(paneSize.value - previewY.value))
 
     return {
+      panes,
+      currentPane,
       openPaneId,
       togglePane,
       paneDisplaySize,
@@ -58,7 +66,7 @@ export default {
   <div class="flex flex-col items-stretch bg-white">
     <!-- Pane -->
     <div
-      v-if="openPaneId"
+      v-if="currentPane"
       class="relative border-gray-300 border-t"
       :style="{
         height: `${paneDisplaySize}px`,
@@ -72,8 +80,8 @@ export default {
         <div class="resize-handle-border w-full bg-primary-200 invisible group-hover:visible" />
       </div>
 
-      <Terminals
-        v-if="openPaneId === 'terminals'"
+      <component
+        :is="currentPane.component"
         class="h-full"
       />
     </div>
@@ -82,8 +90,8 @@ export default {
     <div
       class="flex-none flex items-center h-6 px-6"
       :class="{
-        'bg-gray-200': !openPaneId,
-        'bg-white': openPaneId,
+        'bg-gray-200': !currentPane,
+        'bg-white': currentPane,
       }"
     >
       <!-- Start elements -->
@@ -92,15 +100,19 @@ export default {
       </div>
 
       <!-- End elements -->
+
+      <!-- Pane buttons -->
       <VButton
-        v-tooltip="$t('guijs.status-bar.toggle-terminals')"
-        icon-left="laptop"
+        v-for="pane of panes"
+        :key="pane.id"
+        v-tooltip="$t(pane.tooltip)"
+        :icon-left="pane.icon"
         class="h-full px-2 text-gray-600 hover:bg-gray-300"
         :class="{
-          'text-primary-500': openPaneId === 'terminals',
+          'text-primary-500': openPaneId === pane.id,
         }"
         square
-        @click="togglePane('terminals')"
+        @click="togglePane(pane.id)"
       />
     </div>
   </div>
