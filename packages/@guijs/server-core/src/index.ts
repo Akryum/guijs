@@ -3,8 +3,7 @@ import { hook } from '@nodepack/app-context'
 import { spawn } from 'child_process'
 
 bootstrap(() => {
-  console.log(`Welcome to your new nodepack-powered app!`)
-  console.log(`Getting started: https://nodepackjs.com/guide`)
+  // @TODO remove printReady
   printReady()
 })
 
