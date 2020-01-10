@@ -2985,10 +2985,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@vue/apollo-composable@^4.0.0-alpha.1":
-  version "4.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@vue/apollo-composable/-/apollo-composable-4.0.0-alpha.4.tgz#5b17ec8952cd5a85c9dee254ac72517632026f1e"
-  integrity sha512-jyh0/oXRn27FiWprt0KIqp6OCYt1mH4PfeH7wEhlH3ciKFkPfyJhJXjRlUMHFALsUrgt96EIQuKGxFHRGQIRFg==
+"@vue/apollo-composable@^4.0.0-alpha.5":
+  version "4.0.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/@vue/apollo-composable/-/apollo-composable-4.0.0-alpha.5.tgz#88ad832c7f7144c1dc994a7c395b2460d3bfe89b"
+  integrity sha512-n4CGrng4Npn8AUk6qMmjIoQAiXTWLFhQ/gPs/xT2QkUvMrZsIsdz2jJ7ewXopLrA7SJlZwGQlpSxZ+Aj8qAETA==
   dependencies:
     throttle-debounce "^2.1.0"
 
