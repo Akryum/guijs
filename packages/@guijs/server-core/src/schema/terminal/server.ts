@@ -11,6 +11,8 @@ import projectPackage from '../../../package.json'
 import { DataBatcher } from './data-batcher'
 import { rcFolder } from '@/util/rc-folder'
 
+const terminalsFolder = path.resolve(rcFolder, 'terminals')
+
 export class Terminal extends EventEmitter {
   id: string = shortid()
   name: string
@@ -61,7 +63,7 @@ export class Terminal extends EventEmitter {
 
     this.batcher = new DataBatcher()
 
-    this.backupFile = path.resolve(rcFolder, 'terminals', `${this.id}.log`)
+    this.backupFile = path.resolve(terminalsFolder, `${this.id}.log`)
     fs.ensureFileSync(this.backupFile)
     this.backupStream = fs.createWriteStream(this.backupFile, {
       encoding: 'utf8',
@@ -85,13 +87,7 @@ export class Terminal extends EventEmitter {
       if (!this.ended) {
         this.ended = true
         this.emit('exit')
-        // Notify sockets
-        for (const socket of this.sockets) {
-          send(socket, MESSAGE_TYPE.TerminalDestroyed, {})
-        }
-        // Cleanup backup
-        this.backupStream.close()
-        fs.remove(this.backupFile)
+        this.clean()
       }
     })
   }
@@ -109,10 +105,33 @@ export class Terminal extends EventEmitter {
   }
 
   destroy () {
-    this.pty.kill()
+    return new Promise((resolve, reject) => {
+      this.clean()
+      try {
+        this.pty.on('exit', () => {
+          resolve()
+        })
+        this.pty.kill()
+      } catch (e) {
+        reject(e)
+      }
+    })
+  }
+
+  clean () {
+    // Notify sockets
+    for (const socket of this.sockets) {
+      send(socket, MESSAGE_TYPE.TerminalDestroyed, {})
+    }
+    // Cleanup backup
+    this.backupStream.close()
+    if (fs.existsSync(this.backupFile)) {
+      fs.removeSync(this.backupFile)
+    }
   }
 
   async readBackup (socket: ws) {
+    if (!fs.existsSync(this.backupFile)) return
     // @TODO optimize
     const data = await fs.readFile(this.backupFile, {
       encoding: 'utf8',
@@ -207,15 +226,32 @@ export function createTerminal (
   return terminal
 }
 
-export function removeTerminal (
+export async function removeTerminal (
   id: string,
 ) {
   const index = terminals.findIndex(t => t.id === id)
   if (index !== -1) {
     const terminal = terminals[index]
-    terminal.destroy()
+    await terminal.destroy()
     terminals.splice(index, 1)
     return terminal
   }
   return null
 }
+
+export async function cleanTerminals () {
+  for (const terminal of terminals) {
+    await terminal.destroy()
+  }
+  terminalServer.close()
+}
+
+export async function cleanBackupFiles () {
+  fs.ensureDirSync(terminalsFolder)
+  const files = await fs.readdir(terminalsFolder)
+  for (const file of files) {
+    await fs.remove(path.resolve(terminalsFolder, file))
+  }
+}
+
+cleanBackupFiles()
