@@ -151,6 +151,7 @@ export default {
           scrollback: 4000,
           windowsMode: isWindows,
           macOptionIsMeta: true,
+          fontSize: 14,
         })
         cached.term = term
 
