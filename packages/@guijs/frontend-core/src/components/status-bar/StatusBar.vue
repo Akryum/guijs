@@ -96,6 +96,9 @@ export default {
         v-tooltip="$t('guijs.status-bar.toggle-terminals')"
         icon-left="laptop"
         class="h-full px-2 text-gray-600 hover:bg-gray-300"
+        :class="{
+          'text-primary-500': openPaneId === 'terminals',
+        }"
         square
         @click="togglePane('terminals')"
       />
