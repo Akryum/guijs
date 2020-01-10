@@ -51,7 +51,10 @@ export default {
       </span>
     </div>
 
-    <div v-if="command.keybinding">
+    <div
+      v-if="command.keybinding"
+      class="flex"
+    >
       <VKeybinding
         v-for="seq of command.keybinding.sequences"
         :key="seq"

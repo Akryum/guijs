@@ -32,7 +32,7 @@ export const keybindings = [
   {
     id: 'toggle-terminals',
     description: 'guijs.status-bar.toggle-terminals',
-    sequences: ['mod+shift+¥'],
+    sequences: ['mod+shift+¥', 'mod+alt+k t'],
     scope: 'root',
     global: true,
   },
