@@ -15,7 +15,6 @@ export default {
       }
     `)
     onResult(result => {
-      console.log(result)
       dispatchCommand(result.data.commandRan.id)
     })
 
