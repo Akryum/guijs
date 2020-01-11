@@ -21,7 +21,7 @@ export default {
 
     // Try Keybinding
     onAnyKeybind(async (id) => {
-      runCommand(id)
+      await runCommand(id)
     })
 
     return {}

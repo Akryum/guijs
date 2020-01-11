@@ -75,7 +75,7 @@ export default {
     const commands = useResult(result, [])
 
     async function selectCommand (id) {
-      const { data } = await runCommand({ id })
+      const { data } = await runCommand(id)
       if (data.runCommand) {
         isOpen.value = false
       }
