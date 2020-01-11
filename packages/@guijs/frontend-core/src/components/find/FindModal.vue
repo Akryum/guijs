@@ -18,16 +18,6 @@ export default {
 
     const isOpen = ref(false)
 
-    onCommand('find', () => {
-      isOpen.value = !isOpen.value
-    })
-    onCommand('command', () => {
-      isOpen.value = !isOpen.value
-      if (isOpen.value) {
-        searchText.value = '>'
-      }
-    })
-
     bindScope('find-modal', isOpen)
     onKey('esc', () => {
       isOpen.value = false
@@ -127,6 +117,24 @@ export default {
         input.value.focus()
       })
     }
+
+    onCommand('find', () => {
+      isOpen.value = !isOpen.value
+    })
+
+    onCommand('command', () => {
+      isOpen.value = !isOpen.value
+      if (isOpen.value) {
+        searchText.value = '>'
+      }
+    })
+
+    onCommand('find-projects', () => {
+      isOpen.value = !isOpen.value
+      if (isOpen.value) {
+        searchText.value = '<'
+      }
+    })
 
     return {
       isOpen,

@@ -1,7 +1,13 @@
 {
   "guijs": {
     "home": {
-      "welcome": "Welcome to guijs"
+      "welcome": "Welcome to guijs",
+      "quick-actions": "Quick-actions",
+      "show-all-commands": "Show all commands",
+      "recent-projects": "Recent projects",
+      "help": "Help",
+      "github-repository": "GitHub repository",
+      "website": "Website"
     },
     "status-bar": {
       "toggle-terminals": "Toggle terminals"
