@@ -17,6 +17,13 @@ export default {
     // Open
 
     const isOpen = ref(false)
+    let keepOpen = 0
+
+    watch(isOpen, value => {
+      if (!value) {
+        keepOpen = 0
+      }
+    })
 
     bindScope('find-modal', isOpen)
     onKey('esc', () => {
@@ -67,7 +74,11 @@ export default {
     async function selectCommand (id) {
       const { data } = await runCommand(id)
       if (data.runCommand) {
-        isOpen.value = false
+        if (keepOpen > 0) {
+          keepOpen--
+        } else {
+          isOpen.value = false
+        }
       }
     }
 
@@ -112,6 +123,7 @@ export default {
     for (const word of Object.keys(TYPE_WORDS)) {
       if (word === '?') continue
       onCommand(word, () => {
+        keepOpen++
         isOpen.value = true
         searchText.value = word
         input.value.focus()
@@ -123,17 +135,15 @@ export default {
     })
 
     onCommand('command', () => {
-      isOpen.value = !isOpen.value
-      if (isOpen.value) {
-        searchText.value = '>'
-      }
+      keepOpen++
+      isOpen.value = true
+      searchText.value = '>'
     })
 
     onCommand('find-projects', () => {
-      isOpen.value = !isOpen.value
-      if (isOpen.value) {
-        searchText.value = '<'
-      }
+      keepOpen++
+      isOpen.value = true
+      searchText.value = '<'
     })
 
     return {
