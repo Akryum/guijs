@@ -1,10 +1,11 @@
 import gql from 'graphql-tag'
 import lunr from 'elasticlunr'
-import { MetaCommand } from './meta-types'
-import { Resolvers, CommandType } from '@/generated/schema'
 import consola from 'consola'
-import { keybindings } from '../keybinding'
+import { withFilter } from 'apollo-server-express'
+import { Resolvers, CommandType } from '@/generated/schema'
 import Context from '@/generated/context'
+import { MetaCommand } from './meta-types'
+import { keybindings } from '../keybinding'
 
 export const typeDefs = gql`
 type Command {
@@ -132,7 +133,10 @@ export function runCommand (id: string, ctx: Context) {
   if (command.handler) {
     command.handler()
   }
-  ctx.pubsub.publish('commandRan', { commandRan: command })
+  ctx.pubsub.publish('commandRan', {
+    commandRan: command,
+    clientId: ctx.getClientId(),
+  })
   return command
 }
 
@@ -151,7 +155,12 @@ export const resolvers: Resolvers = {
 
   Subscription: {
     commandRan: {
-      subscribe: (root, args, ctx) => ctx.pubsub.asyncIterator(['commandRan']),
+      subscribe: withFilter(
+        (root, args, ctx) => ctx.pubsub.asyncIterator(['commandRan']),
+        (payload, variables, context: Context) => {
+          return payload.clientId === context.getClientId()
+        },
+      ),
     },
   },
 }

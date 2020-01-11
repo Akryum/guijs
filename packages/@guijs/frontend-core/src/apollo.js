@@ -6,11 +6,22 @@ import { onError } from 'apollo-link-error'
 import { logErrorMessages } from '@vue/apollo-util'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
+import { setContext } from 'apollo-link-context'
 
 // HTTP connection to the API
 let link = onError(error => {
   logErrorMessages(error)
 })
+
+// Client ID to differentiate tabs
+const clientId = `${Date.now()}-${Math.round(Math.random() * 100000)}`
+link = link.concat(setContext((req, context) => ({
+  ...context,
+  headers: {
+    ...context.headers,
+    'client-id': clientId,
+  },
+})))
 
 link = link.concat(createHttpLink({
   // You should use an absolute URL here
@@ -22,6 +33,11 @@ const wsLink = new WebSocketLink({
   uri: `ws://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/subscriptions`,
   options: {
     reconnect: true,
+    connectionParams: {
+      context: {
+        clientId,
+      },
+    },
   },
 })
 

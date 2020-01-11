@@ -9,6 +9,7 @@ import ProjectConfigBase from './config'
 import NodepackPluginApollo from '@nodepack/plugin-apollo/types/context'
 import NodepackPluginExpress from '@nodepack/plugin-express/types/context'
 // Project context files
+import ClientId from '@/context/clientId'
 import Db from '@/context/db'
 
 interface ContextBase {
@@ -18,6 +19,7 @@ interface ContextBase {
 export type Context = ContextBase
   & NodepackPluginApollo
   & NodepackPluginExpress
+  & ClientId
   & Db
 
 export default Context
