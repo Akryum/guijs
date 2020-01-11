@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import { Resolvers, CommandType } from '@/generated/schema'
 import { terminals, createTerminal, removeTerminal } from './server'
 import { addCommand } from '../command'
+import { addKeybinding } from '../keybinding'
 
 export const typeDefs = gql`
 type Terminal {
@@ -62,13 +63,34 @@ addCommand({
   description: 'guijs.status-bar.toggle-terminals',
 })
 
+addKeybinding({
+  id: 'toggle-terminals',
+  description: 'guijs.status-bar.toggle-terminals',
+  sequences: ['mod+shift+;', 'mod+alt+k t'],
+  scope: 'root',
+  global: true,
+})
+
 addCommand({
   id: 'new-terminal',
   type: CommandType.Action,
   label: 'New terminal',
   icon: 'add',
   description: 'guijs.terminals.new-terminal',
-  handler () {
-    console.log('new terminal called')
-  },
+})
+
+addKeybinding({
+  id: 'new-terminal',
+  description: 'guijs.terminals.new-terminal',
+  sequences: ['mod+shift+c'],
+  scope: 'root',
+  global: true,
+})
+
+addKeybinding({
+  id: 'close-terminal',
+  description: 'guijs.terminals.close-terminal',
+  sequences: ['mod+shift+w', 'mod+shift+x'],
+  scope: 'terminals',
+  global: true,
 })

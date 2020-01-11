@@ -5,7 +5,7 @@ import { withFilter } from 'apollo-server-express'
 import { Resolvers, CommandType } from '@/generated/schema'
 import Context from '@/generated/context'
 import { MetaCommand } from './meta-types'
-import { keybindings } from '../keybinding'
+import { keybindings, addKeybinding } from '../keybinding'
 
 export const typeDefs = gql`
 type Command {
@@ -183,9 +183,24 @@ addCommand({
   label: 'Find',
   hidden: true,
 })
+
+addKeybinding({
+  id: 'find',
+  sequences: ['mod+p', 'mod+k'],
+  scope: 'root',
+  global: true,
+})
+
 addCommand({
   id: 'command',
   type: CommandType.Action,
   label: 'Command',
   hidden: true,
+})
+
+addKeybinding({
+  id: 'command',
+  sequences: ['mod+shift+p', 'mod+shift+k'],
+  scope: 'root',
+  global: true,
 })
