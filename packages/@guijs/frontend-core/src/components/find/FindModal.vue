@@ -17,11 +17,11 @@ export default {
     // Open
 
     const isOpen = ref(false)
-    let keepOpen = 0
+    let keepOpen = false
 
     watch(isOpen, value => {
       if (!value) {
-        keepOpen = 0
+        keepOpen = false
       }
     })
 
@@ -74,8 +74,8 @@ export default {
     async function selectCommand (id) {
       const { data } = await runCommand(id)
       if (data.runCommand) {
-        if (keepOpen > 0) {
-          keepOpen--
+        if (keepOpen) {
+          keepOpen = false
         } else {
           isOpen.value = false
         }
@@ -123,7 +123,7 @@ export default {
     for (const word of Object.keys(TYPE_WORDS)) {
       if (word === '?') continue
       onCommand(word, () => {
-        keepOpen++
+        keepOpen = true
         isOpen.value = true
         searchText.value = word
         input.value.focus()
@@ -135,13 +135,13 @@ export default {
     })
 
     onCommand('command', () => {
-      keepOpen++
+      keepOpen = true
       isOpen.value = true
       searchText.value = '>'
     })
 
     onCommand('find-projects', () => {
-      keepOpen++
+      keepOpen = true
       isOpen.value = true
       searchText.value = '<'
     })
