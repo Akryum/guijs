@@ -102,7 +102,7 @@ export default {
     onKey('up', () => {
       selectedIndex.value--
       if (selectedIndex.value < 0) {
-        selectedIndex.value = 0
+        selectedIndex.value = commands.value.length - 1
       }
     }, {
       scope: 'find-modal',
@@ -112,7 +112,7 @@ export default {
     onKey('down', () => {
       selectedIndex.value++
       if (selectedIndex.value > commands.value.length - 1) {
-        selectedIndex.value = commands.value.length - 1
+        selectedIndex.value = 0
       }
     }, {
       scope: 'find-modal',
