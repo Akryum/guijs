@@ -1,8 +1,10 @@
 import execa from 'execa'
+import { DialogOptions, getZenityArgs } from './dialog-common'
 import { mergeOptions } from '../util/merge-options'
 import { implement } from '../util/os-implementation'
+import { escapeArg } from '../util/escape'
 
-export interface SelectFileOptions {
+export interface SelectFileOptions extends DialogOptions {
   cwd?: string
   filename?: string
   multiple?: boolean
@@ -22,11 +24,12 @@ const implementation = implement({
     const args = [
       '--file-selection',
       '--separator=|',
+      ...getZenityArgs(options),
     ]
     if (options.directory) args.push('--directory')
     if (options.save) args.push('--save')
     if (options.multiple) args.push('--multiple')
-    if (options.filename) args.push(`--filename="${options.filename.replace(/"/, '\\"')}"`)
+    if (options.filename) args.push(`--filename="${escapeArg(options.filename)}"`)
     try {
       const { stdout } = await execa('zenity', args, {
         cwd: options.cwd,
