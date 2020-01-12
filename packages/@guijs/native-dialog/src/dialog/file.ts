@@ -46,6 +46,9 @@ const implementation = implement<(options: SelectFileOptions) => Promise<string[
     if (options.title) {
       appleScript += `with prompt "${options.title}" `
     }
+    if (options.filename) {
+      appleScript += `default name "${options.filename}" `
+    }
     if (options.multiple) {
       appleScript += `with multiple selections allowed `
     }
