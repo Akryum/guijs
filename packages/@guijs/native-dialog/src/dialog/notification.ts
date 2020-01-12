@@ -19,5 +19,5 @@ const implementation = implement({
 })
 
 export async function notify (options: NotifyOptions) {
-  await implementation(options)
+  await implementation()(options)
 }

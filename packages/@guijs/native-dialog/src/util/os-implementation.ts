@@ -12,13 +12,15 @@ export const osMap: Partial<{ [key in NodeJS.Platform]: keyof Implementations }>
   'linux': 'linux',
 }
 
-export function implement<T = Implementations> (implementations: Implementations<T>): T {
-  const currentPlatform = platform()
-  const fn = implementations[osMap[currentPlatform]]
+export function implement<T = Implementations> (implementations: Implementations<T>): () => T {
+  return () => {
+    const currentPlatform = platform()
+    const fn = implementations[osMap[currentPlatform]]
 
-  if (!fn) {
-    throw new Error(`Not implemented for platform ${currentPlatform} (mapped to ${osMap[currentPlatform]})`)
+    if (!fn) {
+      throw new Error(`Not implemented for platform ${currentPlatform} (mapped to ${osMap[currentPlatform]})`)
+    }
+
+    return fn
   }
-
-  return fn
 }

@@ -70,5 +70,5 @@ export async function selectFile (options: SelectFileOptions = {}) {
   if (options.multiple && options.save) {
     throw new Error(`Options multiple and save can't be enabled at the same time.`)
   }
-  return implementation(finalOptions)
+  return implementation()(finalOptions)
 }
