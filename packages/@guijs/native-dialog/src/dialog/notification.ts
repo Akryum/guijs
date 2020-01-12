@@ -13,7 +13,6 @@ const implementation = implement({
       `--text=${options.text}`,
     ]
     if (options.icon) args.push(`--window-icon=${options.icon}`)
-    console.log(args)
     await execa('zenity', args)
   },
 })
