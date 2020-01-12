@@ -1,22 +1,32 @@
-import execa from 'execa'
-import { implement } from '../util/os-implementation'
+import nodeNotifier from 'node-notifier'
+import { DialogOptions } from './dialog-common'
+import { getPlatform, SupportedPlatforms } from '../util/os-implementation'
+import { getLinuxIcon } from '../util/icon'
 
-export interface NotifyOptions {
+export interface NotifyOptions extends DialogOptions {
   text: string
   icon?: string
 }
 
-const implementation = implement({
-  linux: async (options: NotifyOptions) => {
-    const args = [
-      '--notification',
-      `--text=${options.text}`,
-    ]
-    if (options.icon) args.push(`--window-icon=${options.icon}`)
-    await execa('zenity', args)
-  },
-})
-
 export async function notify (options: NotifyOptions) {
-  await implementation()(options)
+  return new Promise(async (resolve) => {
+    let icon = options.icon
+    let cleanIcon: Function
+    if (icon && getPlatform() === SupportedPlatforms.Linux) {
+      const { iconName, clean } = await getLinuxIcon(icon)
+      icon = iconName
+      cleanIcon = clean
+    }
+
+    nodeNotifier.notify({
+      title: options.title,
+      message: options.text,
+      icon,
+    }, async () => {
+      if (cleanIcon) {
+        await cleanIcon()
+      }
+      resolve()
+    })
+  })
 }

@@ -11,9 +11,14 @@
     "prepublishOnly": "build"
   },
   "dependencies": {
-    "execa": "^4.0.0"
+    "execa": "^4.0.0",
+    "fs-extra": "^8.1.0",
+    "md5": "^2.2.1",
+    "node-notifier": "^6.0.0"
   },
   "devDependencies": {
+    "@types/md5": "^2.1.33",
+    "@types/node-notifier": "^5.4.0",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "eslint": "^6.5.1",
@@ -22,8 +27,8 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "typescript": "^3.7.4",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "typescript": "^3.7.4"
   },
   "engines": {
     "node": ">=12"
