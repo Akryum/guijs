@@ -1,4 +1,5 @@
 import execa from 'execa'
+import path from 'path'
 import { DialogOptions, getZenityArgs } from './dialog-common'
 import { mergeOptions } from '../util/merge-options'
 import { implement } from '../util/os-implementation'
@@ -31,7 +32,7 @@ const implementation = implement<(options: SelectFileOptions) => Promise<string[
     if (options.filename) args.push(`--filename=${options.filename}`)
     try {
       const { stdout } = await execa('zenity', args, {
-        cwd: options.cwd,
+        cwd: path.resolve(process.cwd(), options.cwd),
       })
       return stdout.split('|')
     } catch (e) {
@@ -56,7 +57,7 @@ const implementation = implement<(options: SelectFileOptions) => Promise<string[
 
     try {
       const { stdout } = await execa('osascript', args, {
-        cwd: options.cwd,
+        cwd: path.resolve(process.cwd(), options.cwd),
       })
       return stdout.split(',').map(result => {
         result = result.replace('alias ', '')
