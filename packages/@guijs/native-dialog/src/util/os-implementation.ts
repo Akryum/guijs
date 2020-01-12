@@ -17,7 +17,7 @@ export function implement<T = Implementations> (implementations: Implementations
   const fn = implementations[osMap[currentPlatform]]
 
   if (!fn) {
-    throw new Error(`Not implemented for platform ${currentPlatform}`)
+    throw new Error(`Not implemented for platform ${currentPlatform} (mapped to ${osMap[currentPlatform]})`)
   }
 
   return fn
