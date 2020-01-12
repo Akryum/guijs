@@ -6,7 +6,17 @@ export const typeDefs = gql`
 type Project {
   id: ID!
   name: String!
+  path: String!
   bookmarked: Boolean!
+  lastOpen: Date
+  workspaces: [Workspace!]!
+}
+
+type Workspace {
+  id: ID!
+  name: String!
+  relativePath: String!
+  type: ProjectType!
 }
 `
 

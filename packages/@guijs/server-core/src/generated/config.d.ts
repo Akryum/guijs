@@ -3,10 +3,10 @@
 /* eslint-disable */
 /* tslint:disable */
 
-
+import ConfigFauna from '@config/fauna'
 
 export default interface BaseConfig {
-
+  fauna: typeof ConfigFauna
 }
 
 export type Config = BaseConfig

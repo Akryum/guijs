@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { MetaCommand } from '@/schema/command/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
@@ -10,6 +10,7 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  Date: any,
 };
 
 export type ChangeTerminalTitleInput = {
@@ -42,6 +43,7 @@ export type CreateTerminalInput = {
   cwd?: Maybe<Scalars['String']>,
   hidden: Scalars['Boolean'],
 };
+
 
 export type Keybinding = {
    __typename?: 'Keybinding',
@@ -84,7 +86,17 @@ export type Project = {
    __typename?: 'Project',
   id: Scalars['ID'],
   name: Scalars['String'],
+  path: Scalars['String'],
   bookmarked: Scalars['Boolean'],
+  lastOpen?: Maybe<Scalars['Date']>,
+  workspaces: Array<Workspace>,
+};
+
+export type ProjectType = {
+   __typename?: 'ProjectType',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  logo: Scalars['String'],
 };
 
 export type Query = {
@@ -116,6 +128,14 @@ export type Terminal = {
   name: Scalars['String'],
   title: Scalars['String'],
   cwd: Scalars['String'],
+};
+
+export type Workspace = {
+   __typename?: 'Workspace',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  relativePath: Scalars['String'],
+  type: ProjectType,
 };
 
 
@@ -201,7 +221,10 @@ export type ResolversTypes = {
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   Subscription: ResolverTypeWrapper<{}>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
   Project: ResolverTypeWrapper<Project>,
+  Workspace: ResolverTypeWrapper<Workspace>,
+  ProjectType: ResolverTypeWrapper<ProjectType>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -218,7 +241,10 @@ export type ResolversParentTypes = {
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   Subscription: {},
+  Date: Scalars['Date'],
   Project: Project,
+  Workspace: Workspace,
+  ProjectType: ProjectType,
 };
 
 export type CommandResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Command'] = ResolversParentTypes['Command']> = {
@@ -229,6 +255,10 @@ export type CommandResolvers<ContextType = Context, ParentType extends Resolvers
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType>,
 };
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date'
+}
 
 export type KeybindingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Keybinding'] = ResolversParentTypes['Keybinding']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
@@ -248,7 +278,16 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  path?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   bookmarked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  lastOpen?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>,
+  workspaces?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>,
+};
+
+export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -269,14 +308,24 @@ export type TerminalResolvers<ContextType = Context, ParentType extends Resolver
   cwd?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 };
 
+export type WorkspaceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Workspace'] = ResolversParentTypes['Workspace']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  relativePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
+};
+
 export type Resolvers<ContextType = Context> = {
   Command?: CommandResolvers<ContextType>,
+  Date?: GraphQLScalarType,
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
+  ProjectType?: ProjectTypeResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   Terminal?: TerminalResolvers<ContextType>,
+  Workspace?: WorkspaceResolvers<ContextType>,
 };
 
 

@@ -61,5 +61,12 @@
     "pluginVersion": "0.8.5",
     "options": {},
     "date": "2020-01-07T09:24:52.691Z"
+  },
+  {
+    "id": "defaultConfig",
+    "pluginId": "@nodepack/plugin-db-fauna",
+    "pluginVersion": "0.8.3",
+    "options": {},
+    "date": "2020-01-12T11:10:29.556Z"
   }
 ]

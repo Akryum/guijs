@@ -1,7 +1,8 @@
 {
   "@nodepack/service": "0.8.4",
-  "@nodepack/plugin-typescript": "0.8.3",
+  "@nodepack/plugin-apollo": "0.8.5",
   "@nodepack/plugin-eslint": "0.8.3",
   "@nodepack/plugin-express": "0.8.0",
-  "@nodepack/plugin-apollo": "0.8.5"
+  "@nodepack/plugin-typescript": "0.8.3",
+  "@nodepack/plugin-db-fauna": "0.8.3"
 }

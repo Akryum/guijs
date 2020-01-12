@@ -1,0 +1,40 @@
+{
+  "name": "@guijs/native-dialog",
+  "version": "0.1.0",
+  "description": "Native dialogs for nodejs apps",
+  "author": "Guillaume Chau",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "yarn build --watch",
+    "build": "rimraf ./dist && tsc --outDir dist -d",
+    "prepublishOnly": "build"
+  },
+  "dependencies": {
+    "execa": "^4.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
+    "eslint": "^6.5.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "typescript": "^3.7.4",
+    "rimraf": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/native-dialog"
+  }
+}

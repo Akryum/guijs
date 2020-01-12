@@ -1,15 +1,14 @@
 {
   "name": "@guijs/server-core",
-  "productName": "guijs",
   "version": "0.1.0",
   "author": "Guillaume Chau",
   "scripts": {
     "dev": "nodepack-service dev",
     "build": "nodepack-service build",
     "lint": "nodepack-service lint --no-maintenance",
-    "start": "node ./dist/app.js",
+    "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done",
     "schema-gen": "graphql-codegen --config gql-codegen.yml",
-    "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done"
+    "start": "node ./dist/app.js"
   },
   "dependencies": {
     "@nodepack/app": "^0.8.0",
@@ -18,11 +17,11 @@
     "@nodepack/utils": "^0.8.3",
     "consola": "^2.11.3",
     "default-shell": "^1.0.1",
+    "elasticlunr": "^0.9.5",
     "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
-    "elasticlunr": "^0.9.5",
     "nedb": "^1.8.0",
     "node-pty": "^0.9.0",
     "os-locale": "^4.0.0",
@@ -36,6 +35,7 @@
     "@graphql-codegen/typescript": "^1.11.2",
     "@graphql-codegen/typescript-resolvers": "^1.11.2",
     "@nodepack/plugin-apollo": "^0.8.5",
+    "@nodepack/plugin-db-fauna": "^0.8.3",
     "@nodepack/plugin-eslint": "^0.8.3",
     "@nodepack/plugin-express": "^0.8.0",
     "@nodepack/plugin-typescript": "^0.8.3",
@@ -56,6 +56,7 @@
     "node": ">=12"
   },
   "license": "MIT",
+  "productName": "guijs",
   "publishConfig": {
     "access": "public"
   },
