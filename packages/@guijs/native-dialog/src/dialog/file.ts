@@ -18,7 +18,7 @@ export const DEFAULT_SELECT_FILE_OPTIONS: SelectFileOptions = {
   save: false,
 }
 
-const implementation = implement({
+const implementation = implement<(options: SelectFileOptions) => Promise<string[]>>({
   linux: async (options: SelectFileOptions) => {
     const args = [
       '--file-selection',
@@ -38,9 +38,37 @@ const implementation = implement({
       return []
     }
   },
+  macos: async (options: SelectFileOptions) => {
+    const args = [
+      '-e',
+    ]
+    let appleScript = `set theFiles to choose ${options.directory ? 'folder' : 'file'} ${options.save ? 'name' : ''} `
+    if (options.title) {
+      appleScript += `with prompt "${options.title}" `
+    }
+    if (options.multiple) {
+      appleScript += `with multiple selections allowed `
+    }
+    args.push(appleScript)
+
+    try {
+      const { stdout } = await execa('osascript', args, {
+        cwd: options.cwd,
+      })
+      return stdout.split(',').map(result => {
+        result = result.replace('alias ', '')
+        return result.split(':').slice(1).join('/')
+      })
+    } catch (e) {
+      return []
+    }
+  },
 })
 
 export async function selectFile (options: SelectFileOptions = {}) {
   const finalOptions = mergeOptions(options, DEFAULT_SELECT_FILE_OPTIONS)
+  if (options.multiple && options.save) {
+    throw new Error(`Options multiple and save can't be enabled at the same time.`)
+  }
   return implementation(finalOptions)
 }
