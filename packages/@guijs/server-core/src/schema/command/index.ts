@@ -158,7 +158,7 @@ export const resolvers: Resolvers = {
       subscribe: withFilter(
         (root, args, ctx) => ctx.pubsub.asyncIterator(['commandRan']),
         (payload, variables, context: Context) => {
-          return payload.clientId === context.getClientId()
+          return !payload.clientId || payload.clientId === context.getClientId()
         },
       ),
     },
