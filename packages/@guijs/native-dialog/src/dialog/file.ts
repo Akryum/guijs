@@ -3,6 +3,7 @@ import path from 'path'
 import { DialogOptions, getZenityArgs } from './dialog-common'
 import { mergeOptions } from '../util/merge-options'
 import { implement } from '../util/os-implementation'
+import { runVBS } from '../util/vbs'
 
 export interface SelectFileOptions extends DialogOptions {
   cwd?: string
@@ -39,6 +40,7 @@ const implementation = implement<(options: SelectFileOptions) => Promise<string[
       return []
     }
   },
+
   macos: async (options: SelectFileOptions) => {
     const args = [
       '-e',
@@ -66,6 +68,14 @@ const implementation = implement<(options: SelectFileOptions) => Promise<string[
     } catch (e) {
       return []
     }
+  },
+
+  windows: async (options: SelectFileOptions) => {
+    // @TODO multiple options
+    const result = await runVBS(path.resolve(__dirname, `../../scripts/${options.directory ? 'folder' : 'file'}-chooser.vbs`), [
+      options.title || 'Select',
+    ])
+    return result ? [result] : []
   },
 })
 
