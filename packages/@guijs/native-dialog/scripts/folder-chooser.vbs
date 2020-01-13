@@ -1,9 +1,5 @@
-Option Explicit
-
 Set objArgs = WScript.Arguments
 dialogTitle = objArgs(0)
-
-Dim strPath
 
 strPath = SelectFolder(dialogTitle)
 If strPath = vbNull Then
@@ -30,7 +26,7 @@ Function SelectFolder( title )
 
     ' Standard housekeeping
     Dim objFolder, objItem, objShell
-    
+
     ' Custom error handling
     On Error Resume Next
     SelectFolder = vbNull

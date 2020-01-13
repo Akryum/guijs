@@ -4,6 +4,7 @@ import { DialogOptions, getZenityArgs } from './dialog-common'
 import { mergeOptions } from '../util/merge-options'
 import { implement } from '../util/os-implementation'
 import { runVBS } from '../util/vbs'
+import { escapeArg } from '../util/excape'
 
 export interface SelectFileOptions extends DialogOptions {
   cwd?: string
@@ -73,7 +74,7 @@ const implementation = implement<(options: SelectFileOptions) => Promise<string[
   windows: async (options: SelectFileOptions) => {
     // @TODO multiple options
     const result = await runVBS(path.resolve(__dirname, `../../scripts/${options.directory ? 'folder' : 'file'}-chooser.vbs`), [
-      options.title || 'Select',
+      `"${escapeArg(options.title || '')}"`,
     ])
     return result ? [result] : []
   },
