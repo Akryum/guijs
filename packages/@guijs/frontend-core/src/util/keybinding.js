@@ -30,10 +30,16 @@ export function pushScope (id) {
 export function popScope (id) {
   const index = currentScopeChain.indexOf(id)
   if (index !== -1) {
-    for (let i = index; i < currentScopeChain.length; i++) {
-      getScopedMousetrap(currentScopeChain[i]).pause()
+    const newChain = []
+    const reg = new RegExp(`${id}.`)
+    for (const scope of currentScopeChain) {
+      if (scope === id || reg.test(scope)) {
+        getScopedMousetrap(scope).pause()
+      } else {
+        newChain.push(scope)
+      }
     }
-    currentScopeChain.splice(index, currentScopeChain.length - index)
+    currentScopeChain = newChain
   }
   debugScopes()
 }

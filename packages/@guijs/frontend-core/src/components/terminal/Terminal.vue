@@ -190,10 +190,10 @@ export default {
         // Focus
         const onFocus = () => {
           pushScope('terminals')
-          pushScope('terminal')
+          pushScope('terminals.terminal')
         }
         const onBlur = () => {
-          popScope('terminal')
+          popScope('terminals.terminal')
           popScope('terminals')
         }
         term.textarea.addEventListener('focus', onFocus)
