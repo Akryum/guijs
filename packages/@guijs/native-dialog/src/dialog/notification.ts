@@ -1,6 +1,6 @@
 import nodeNotifier from 'node-notifier'
+import os from 'os'
 import { DialogOptions } from './dialog-common'
-import { getPlatform, SupportedPlatforms } from '../util/os-implementation'
 import { getLinuxIcon } from '../util/icon'
 
 export interface NotifyOptions extends DialogOptions {
@@ -12,7 +12,7 @@ export async function notify (options: NotifyOptions) {
   return new Promise(async (resolve) => {
     let icon = options.icon
     let cleanIcon: Function
-    if (icon && getPlatform() === SupportedPlatforms.Linux) {
+    if (icon && os.platform() === 'linux') {
       const { iconName, clean } = await getLinuxIcon(icon)
       icon = iconName
       cleanIcon = clean
