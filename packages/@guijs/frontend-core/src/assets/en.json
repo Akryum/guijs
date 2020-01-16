@@ -35,6 +35,15 @@
       "select-a-folder": "Select a folder:",
       "no-file-selected": "No file selected",
       "no-folder-selected": "No folder selected"
+    },
+    "setting-category": {
+      "general": "General",
+      "display": "Display"
+    },
+    "settings": {
+      "dark-mode": "Dark mode",
+      "dark-mode-description": "Use dark colors for the interface",
+      "toggle-dark-mode": "Toggle dark mode"
     }
   }
 }

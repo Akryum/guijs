@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { MetaCommand } from '@/schema/command/meta-types';
+import { MetaSetting } from '@/schema/setting/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -112,6 +113,7 @@ export type Query = {
   searchCommands: Array<Command>,
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
+  settings: Array<Setting>,
 };
 
 
@@ -127,6 +129,20 @@ export type QuerySearchCommandsArgs = {
 export type SelectFileInput = {
   cwd?: Maybe<Scalars['String']>,
   directory?: Maybe<Scalars['Boolean']>,
+};
+
+export type Setting = {
+   __typename?: 'Setting',
+  id: Scalars['ID'],
+  label: Scalars['String'],
+  description?: Maybe<Scalars['String']>,
+  category: SettingCategory,
+};
+
+export type SettingCategory = {
+   __typename?: 'SettingCategory',
+  id: Scalars['ID'],
+  label: Scalars['String'],
 };
 
 export type Subscription = {
@@ -229,6 +245,8 @@ export type ResolversTypes = {
   CommandType: CommandType,
   Keybinding: ResolverTypeWrapper<Keybinding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  Setting: ResolverTypeWrapper<MetaSetting>,
+  SettingCategory: ResolverTypeWrapper<SettingCategory>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
@@ -250,6 +268,8 @@ export type ResolversParentTypes = {
   CommandType: CommandType,
   Keybinding: Keybinding,
   Boolean: Scalars['Boolean'],
+  Setting: MetaSetting,
+  SettingCategory: SettingCategory,
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
@@ -311,6 +331,19 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   searchCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QuerySearchCommandsArgs, 'text'>>,
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
+  settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
+};
+
+export type SettingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Setting'] = ResolversParentTypes['Setting']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  category?: Resolver<ResolversTypes['SettingCategory'], ParentType, ContextType>,
+};
+
+export type SettingCategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SettingCategory'] = ResolversParentTypes['SettingCategory']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 };
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -339,6 +372,8 @@ export type Resolvers<ContextType = Context> = {
   Project?: ProjectResolvers<ContextType>,
   ProjectType?: ProjectTypeResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  Setting?: SettingResolvers<ContextType>,
+  SettingCategory?: SettingCategoryResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   Terminal?: TerminalResolvers<ContextType>,
   Workspace?: WorkspaceResolvers<ContextType>,

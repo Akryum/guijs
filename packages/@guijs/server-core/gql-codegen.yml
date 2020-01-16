@@ -8,6 +8,7 @@ generates:
       contextType: '@context#Context'
       mappers:
         Command: '@/schema/command/meta-types#MetaCommand'
+        Setting: '@/schema/setting/meta-types#MetaSetting'
       optionalResolveType: true
   schema-fragment-matcher.js:
     - fragment-matcher
