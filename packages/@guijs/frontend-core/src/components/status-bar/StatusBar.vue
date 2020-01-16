@@ -1,7 +1,10 @@
 <script>
 import { ref, watch, computed } from '@vue/composition-api'
 import { onDrag } from '@guijs/frontend-ui/util/drag'
-import { onCommand } from '@/util/command'
+import { onCommand, runCommand } from '@/util/command'
+import { useQuery, useResult } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+import { commandWithKeybindingFragment } from '../find/command-fragments'
 const Terminals = () => import(
   /* webpackChunkName: 'Terminals' */
   '../terminal/Terminals.vue'
@@ -51,6 +54,18 @@ export default {
 
     const paneDisplaySize = computed(() => getSize(paneSize.value - previewY.value))
 
+    // Shortcuts
+
+    const shortcutsQuery = useQuery(gql`
+      query commandShortcuts {
+        commandShortcuts {
+          ...command
+        }
+      }
+      ${commandWithKeybindingFragment}
+    `)
+    const commandShortcuts = useResult(shortcutsQuery.result, [])
+
     // Commands
     onCommand('toggle-terminals', () => {
       togglePane('terminals')
@@ -66,6 +81,8 @@ export default {
       togglePane,
       paneDisplaySize,
       resizeHandle,
+      commandShortcuts,
+      runCommand,
     }
   },
 }
@@ -105,23 +122,32 @@ export default {
     >
       <!-- Start elements -->
       <div class="flex-1 items-center h-full">
-        <!-- TODO -->
+        <!-- Pane buttons -->
+        <VButton
+          v-for="pane of panes"
+          :key="pane.id"
+          v-tooltip="$t(pane.tooltip)"
+          :icon-left="pane.icon"
+          class="h-full px-2 text-gray-600 hover:bg-gray-300"
+          :class="{
+            'text-primary-500': openPaneId === pane.id,
+          }"
+          square
+          @click="togglePane(pane.id)"
+        />
       </div>
 
       <!-- End elements -->
 
-      <!-- Pane buttons -->
+      <!-- Command shortcuts -->
       <VButton
-        v-for="pane of panes"
-        :key="pane.id"
-        v-tooltip="$t(pane.tooltip)"
-        :icon-left="pane.icon"
+        v-for="command of commandShortcuts"
+        :key="command.id"
+        v-tooltip="$t(command.description || command.label)"
+        :icon-left="command.icon"
         class="h-full px-2 text-gray-600 hover:bg-gray-300"
-        :class="{
-          'text-primary-500': openPaneId === pane.id,
-        }"
         square
-        @click="togglePane(pane.id)"
+        @click="runCommand(command.id)"
       />
     </div>
   </div>

@@ -6,6 +6,7 @@ import { bindScope, onKey } from '@/util/keybinding'
 import { onCommand, onAnyCommand, runCommand } from '@/util/command'
 import { getSearchType, TYPE_WORDS } from './util'
 import { ICONS } from './icons'
+import { commandWithKeybindingFragment } from './command-fragments'
 import FindItem from './FindItem.vue'
 
 export default {
@@ -61,17 +62,10 @@ export default {
     const { result } = useQuery(gql`
       query searchCommands ($text: String!) {
         searchCommands (text: $text) {
-          id
-          type
-          label
-          icon
-          description
-          keybinding {
-            id
-            sequences
-          }
+          ...command
         }
       }
+      ${commandWithKeybindingFragment}
     `, () => ({
       text: searchText.value,
     }), {
