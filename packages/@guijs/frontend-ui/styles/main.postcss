@@ -37,7 +37,7 @@ img {
 }
 
 *::-webkit-scrollbar-track {
-  background-color: theme('colors.gray.900');
+  background-color: theme('colors.gray.200');
 }
 
 *::-webkit-scrollbar {
@@ -45,8 +45,8 @@ img {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: theme('colors.gray.800');
-  border: theme('colors.gray.900') 1px solid;
+  background-color: theme('colors.gray.100');
+  border: theme('colors.gray.200') 1px solid;
   border-radius: 2px;
 }
 
@@ -57,4 +57,18 @@ img {
 .no-scroll {
   @apply overflow-y-hidden;
 }
+
+.mode-dark {
+  *::-webkit-scrollbar-track {
+    background-color: theme('colors.gray.900');
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: theme('colors.gray.800');
+    border-color: theme('colors.gray.900');
+  }
+
+  scrollbar-color: theme('colors.gray.900') theme('colors.gray.800');
+}
+
 /* purgecss end ignore */
