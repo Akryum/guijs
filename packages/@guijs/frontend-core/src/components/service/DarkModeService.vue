@@ -1,8 +1,6 @@
 <script>
-import { useQuery, useSubscription, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
 import { onCommand } from '@/util/command'
-import { updateSetting } from '@/util/setting'
+import { useSetting } from '@/util/setting'
 import { watch } from '@vue/composition-api'
 
 const STORAGE_DARK_MODE = 'dev.guijs.darkMode'
@@ -30,33 +28,13 @@ try {
 
 export default {
   setup () {
-    // GraphQL
-
-    const { result } = useQuery(gql`
-      query darkModeSetting {
-        darkMode: setting (id: "dark-mode") {
-          id
-          value
-        }
-      }
-    `)
-    const darkMode = useResult(result, null, data => data.darkMode.value)
-
-    watch(darkMode, applyDarkMode)
-
-    useSubscription(gql`
-      subscription darkModeSettingUpdated {
-        darkModeSettingUpdated: settingUpdated (id: "dark-mode") {
-          id
-          value
-        }
-      }
-    `)
+    const { setting, update } = useSetting('dark-mode')
+    watch(setting, applyDarkMode)
 
     // Commands
 
     onCommand('toggle-dark-mode', async () => {
-      await updateSetting('dark-mode', !darkMode.value)
+      await update(!setting.value)
     })
   },
 }
