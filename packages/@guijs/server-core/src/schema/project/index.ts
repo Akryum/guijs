@@ -40,4 +40,5 @@ addCommand({
   type: CommandType.Action,
   label: 'Import a project',
   description: 'guijs.import-project.import-a-project',
+  icon: 'unarchive',
 })
