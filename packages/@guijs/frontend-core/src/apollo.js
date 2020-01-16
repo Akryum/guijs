@@ -1,5 +1,5 @@
 import { ApolloClient } from 'apollo-client'
-import { split } from 'apollo-link'
+import { split, from } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { onError } from 'apollo-link-error'
@@ -8,22 +8,18 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
 
-// HTTP connection to the API
-let link = onError(error => {
-  logErrorMessages(error)
-})
-
 // Client ID to differentiate tabs
 const clientId = `${Date.now()}-${Math.round(Math.random() * 100000)}`
-link = link.concat(setContext((req, context) => ({
+let httpLink = setContext((req, context) => ({
   ...context,
   headers: {
     ...context.headers,
     'client-id': clientId,
   },
-})))
+}))
 
-link = link.concat(createHttpLink({
+// HTTP connection to the API
+httpLink = httpLink.concat(createHttpLink({
   // You should use an absolute URL here
   uri: `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/graphql`,
 }))
@@ -41,16 +37,24 @@ const wsLink = new WebSocketLink({
   },
 })
 
-link = split(
-  // split based on operation type
-  ({ query }) => {
-    const { kind, operation } = getMainDefinition(query)
-    return kind === 'OperationDefinition' &&
-      operation === 'subscription'
-  },
-  wsLink,
-  link
-)
+const link = from([
+  // Error handling
+  onError(error => {
+    logErrorMessages(error)
+  }),
+
+  // Select HTTP or WebSockets
+  split(
+    // split based on operation type
+    ({ query }) => {
+      const { kind, operation } = getMainDefinition(query)
+      return kind === 'OperationDefinition' &&
+        operation === 'subscription'
+    },
+    wsLink,
+    httpLink
+  ),
+])
 
 // Cache implementation
 const cache = new InMemoryCache()
