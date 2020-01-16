@@ -141,7 +141,6 @@ export default {
     })
 
     onAnyCommand(command => {
-      console.log(JSON.stringify(command), command.id === 'find' || keepOpen)
       if (command.id !== 'find' && !keepOpen) {
         isOpen.value = false
       }
