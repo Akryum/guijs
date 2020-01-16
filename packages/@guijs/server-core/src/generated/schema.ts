@@ -11,6 +11,7 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  JSON: any,
   Date: any,
 };
 
@@ -46,6 +47,7 @@ export type CreateTerminalInput = {
 };
 
 
+
 export type Keybinding = {
    __typename?: 'Keybinding',
   id: Scalars['ID'],
@@ -62,6 +64,7 @@ export type Mutation = {
   removeTerminal?: Maybe<Terminal>,
   runCommand?: Maybe<Command>,
   selectFile?: Maybe<Scalars['String']>,
+  updateSetting?: Maybe<Setting>,
 };
 
 
@@ -89,6 +92,11 @@ export type MutationSelectFileArgs = {
   input: SelectFileInput
 };
 
+
+export type MutationUpdateSettingArgs = {
+  input: UpdateSettingInput
+};
+
 export type Project = {
    __typename?: 'Project',
   id: Scalars['ID'],
@@ -114,6 +122,7 @@ export type Query = {
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
   settings: Array<Setting>,
+  setting?: Maybe<Setting>,
 };
 
 
@@ -124,6 +133,11 @@ export type QueryTerminalArgs = {
 
 export type QuerySearchCommandsArgs = {
   text: Scalars['String']
+};
+
+
+export type QuerySettingArgs = {
+  id: Scalars['ID']
 };
 
 export type SelectFileInput = {
@@ -137,6 +151,7 @@ export type Setting = {
   label: Scalars['String'],
   description?: Maybe<Scalars['String']>,
   category: SettingCategory,
+  value?: Maybe<Scalars['JSON']>,
 };
 
 export type SettingCategory = {
@@ -148,6 +163,12 @@ export type SettingCategory = {
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<Command>,
+  settingUpdated?: Maybe<Setting>,
+};
+
+
+export type SubscriptionSettingUpdatedArgs = {
+  id: Scalars['ID']
 };
 
 export type Terminal = {
@@ -156,6 +177,11 @@ export type Terminal = {
   name: Scalars['String'],
   title: Scalars['String'],
   cwd: Scalars['String'],
+};
+
+export type UpdateSettingInput = {
+  id: Scalars['ID'],
+  value?: Maybe<Scalars['JSON']>,
 };
 
 export type Workspace = {
@@ -247,10 +273,12 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
+  JSON: ResolverTypeWrapper<Scalars['JSON']>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   SelectFileInput: SelectFileInput,
+  UpdateSettingInput: UpdateSettingInput,
   Subscription: ResolverTypeWrapper<{}>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Project: ResolverTypeWrapper<Project>,
@@ -270,10 +298,12 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'],
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
+  JSON: Scalars['JSON'],
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   SelectFileInput: SelectFileInput,
+  UpdateSettingInput: UpdateSettingInput,
   Subscription: {},
   Date: Scalars['Date'],
   Project: Project,
@@ -294,6 +324,10 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date'
 }
 
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON'
+}
+
 export type KeybindingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Keybinding'] = ResolversParentTypes['Keybinding']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -308,6 +342,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   removeTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationRemoveTerminalArgs, 'id'>>,
   runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'id'>>,
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
+  updateSetting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<MutationUpdateSettingArgs, 'input'>>,
 };
 
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
@@ -332,6 +367,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
   settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
+  setting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<QuerySettingArgs, 'id'>>,
 };
 
 export type SettingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Setting'] = ResolversParentTypes['Setting']> = {
@@ -339,6 +375,7 @@ export type SettingResolvers<ContextType = Context, ParentType extends Resolvers
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   category?: Resolver<ResolversTypes['SettingCategory'], ParentType, ContextType>,
+  value?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>,
 };
 
 export type SettingCategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SettingCategory'] = ResolversParentTypes['SettingCategory']> = {
@@ -348,6 +385,7 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['Command']>, "commandRan", ParentType, ContextType>,
+  settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
 };
 
 export type TerminalResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Terminal'] = ResolversParentTypes['Terminal']> = {
@@ -367,6 +405,7 @@ export type WorkspaceResolvers<ContextType = Context, ParentType extends Resolve
 export type Resolvers<ContextType = Context> = {
   Command?: CommandResolvers<ContextType>,
   Date?: GraphQLScalarType,
+  JSON?: GraphQLScalarType,
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,

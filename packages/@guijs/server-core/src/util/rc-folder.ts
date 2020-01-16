@@ -37,3 +37,15 @@ function migrateRcFolder () {
     })
   }
 }
+
+export function getRcFile (filePath: string) {
+  const file = path.resolve(rcFolder, filePath)
+  fs.ensureDirSync(path.dirname(file))
+  return file
+}
+
+export function getRcDir (dirPath: string) {
+  const dir = path.resolve(rcFolder, dirPath)
+  fs.ensureDirSync(dir)
+  return dir
+}
