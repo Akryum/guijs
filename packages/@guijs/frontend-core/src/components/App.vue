@@ -1,5 +1,5 @@
 <script>
-import AllServices from './service/AllServices.vue'
+import AllServices from './AllServices.vue'
 import AllModals from './AllModals.vue'
 import SidePane from './side-pane/SidePane.vue'
 import StatusBar from './status-bar/StatusBar.vue'

@@ -26,9 +26,5 @@ export default {
 
     return {}
   },
-
-  render () {
-    return null
-  },
 }
 </script>
