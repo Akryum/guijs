@@ -33,6 +33,15 @@ export default {
           <div class="text-gray-500">
             No recent projects
           </div>
+          <!-- Suggested project actions -->
+          <div class="mt-2">
+            <VButton
+              class="text-secondary-600"
+              @click="runCommand('import-project')"
+            >
+              {{ $t('guijs.import-project.import-a-project') }}
+            </VButton>
+          </div>
         </div>
 
         <!-- Quick actions -->
