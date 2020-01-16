@@ -69,7 +69,7 @@ export default {
         ref="input"
         v-bind="$attrs"
         :value="value"
-        class="flex-1 h-full"
+        class="flex-1 h-full bg-transparent"
         @input="$emit('update', $event.currentTarget.value)"
       >
 

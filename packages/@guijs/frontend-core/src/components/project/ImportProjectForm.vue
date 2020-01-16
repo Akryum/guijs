@@ -1,6 +1,6 @@
 <script>
 import { ref } from '@vue/composition-api'
-import FileInput from '../fs/FileInput.vue'
+import FileInput from '../form/FileInput.vue'
 
 export default {
   components: {

@@ -172,7 +172,7 @@ export default {
         v-model="searchText"
         placeholder="Type '?' to get help"
         auto-focus
-        class="px-4 border-gray-200 border-r h-full"
+        class="px-4 border-gray-200 dark:border-gray-950 border-r h-full"
       >
         <template #before>
           <i class="material-icons text-2xl text-gray-500 ml-2 mr-4">

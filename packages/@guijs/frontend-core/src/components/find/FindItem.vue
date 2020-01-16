@@ -31,7 +31,7 @@ export default {
   <VButton
     class="px-6 py-4"
     :class="{
-      'bg-primary-100': selected,
+      'bg-primary-100 dark:bg-primary-900': selected,
     }"
     align="left"
     square

@@ -66,17 +66,17 @@ export default {
 
 <template>
   <div
-    class="flex items-center border border-gray-200 rounded px-6 py-4 hover:bg-gray-100 cursor-pointer group"
+    class="flex items-center border border-gray-200 dark:border-gray-950 rounded px-6 py-4 hover:bg-gray-100 dark-hover:bg-gray-900 cursor-pointer group"
     @click="browse"
   >
     <div class="flex-1">
-      <div class="text-gray-600">
+      <div class="text-gray-600 dark:text-gray-400">
         {{ label }}
       </div>
       <div class="text-sm font-mono">
         <div
           v-if="value"
-          class="text-gray-900"
+          class="text-gray-900 dark:text-gray-100"
         >
           {{ value }}
         </div>

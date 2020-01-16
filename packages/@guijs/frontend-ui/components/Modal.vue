@@ -23,17 +23,17 @@ export default {
   <div class="fixed inset-0 flex flex-col items-center py-16 z-10">
     <!-- Backdrop -->
     <div
-      class="bg-white opacity-90 absolute inset-0"
+      class="bg-white dark:bg-gray-900 opacity-90 absolute inset-0"
       @click="!locked && $emit('close')"
     />
 
     <!-- Shell -->
     <div
-      class="relative z-10 w-screen bg-white border border-gray-200 rounded shadow-lg"
+      class="relative z-10 w-screen bg-white dark:bg-gray-850 border border-gray-200 dark:border-gray-950 rounded shadow-lg"
       :class="shellClass"
     >
       <!-- Titlebar -->
-      <div class="flex items-stretch border-b border-gray-200">
+      <div class="flex items-stretch border-b border-gray-200 dark:border-gray-950">
         <div class="flex-1">
           <slot name="title">
             {{ title }}
