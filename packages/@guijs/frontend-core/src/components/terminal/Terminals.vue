@@ -3,7 +3,7 @@ import { ref, watch } from '@vue/composition-api'
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { onKeybind, bindScope } from '@/util/keybinding'
-import { onCommand } from '@/util/command'
+import { onCommand, runCommand } from '@/util/command'
 import Terminal from './Terminal.vue'
 
 const terminalFragment = gql`
@@ -97,6 +97,12 @@ export default {
       }
     })
 
+    // Close terminals
+
+    function closeTerminals () {
+      runCommand('toggle-terminals')
+    }
+
     // Keybindings
     bindScope('terminals', el)
     onCommand('new-terminal', () => {
@@ -113,6 +119,7 @@ export default {
       currentTerminalId,
       newTerminal,
       removeTerminal,
+      closeTerminals,
     }
   },
 }
@@ -170,6 +177,14 @@ export default {
         square
         class="px-3 py-3 hover:bg-primary-100"
         @click="newTerminal()"
+      />
+
+      <VButton
+        v-tooltip="$t('guijs.terminals.close-terminal-pane')"
+        icon-left="close"
+        square
+        class="px-3 py-3 hover:bg-primary-100"
+        @click="closeTerminals()"
       />
     </div>
 
