@@ -133,13 +133,13 @@ export default {
     class="h-full flex flex-col overflow-hidden"
   >
     <!-- Tabs -->
-    <div class="flex border-gray-200 border-b">
+    <div class="flex border-gray-200 border-b dark:border-gray-950">
       <div class="flex flex-1">
         <VButton
           v-for="terminal of terminals"
           :key="terminal.id"
           square
-          class="tab group flex items-center relative px-4 py-2 text-sm max-w-48 border-gray-200 border-r hover:bg-primary-100"
+          class="tab group flex items-center relative px-4 py-2 text-sm max-w-48 border-gray-200 border-r hover:bg-primary-100 dark:border-gray-950 dark-hover:bg-primary-800 dark-hover:text-primary-300"
           :class="{
             'text-primary-500': currentTerminalId === terminal.id,
           }"
@@ -158,7 +158,7 @@ export default {
           <VButton
             v-tooltip="$t('guijs.terminals.close-terminal')"
             icon-left="close"
-            class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200"
+            class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200 dark-hover:text-primary-400 dark-hover:bg-primary-900"
             stop
             @click="removeTerminal({ id: terminal.id })"
           />
@@ -166,7 +166,7 @@ export default {
           <!-- Selected border -->
           <div
             v-if="currentTerminalId === terminal.id"
-            class="selected-border absolute left-0 right-0 border-primary-300 border-b"
+            class="selected-border absolute left-0 right-0 border-primary-300 dark:border-primary-600 border-b"
           />
         </VButton>
       </div>
@@ -175,7 +175,7 @@ export default {
         v-tooltip="$t('guijs.terminals.new-terminal')"
         icon-left="add"
         square
-        class="px-3 py-3 hover:bg-primary-100"
+        class="px-3 py-3 hover:bg-primary-100 dark-hover:bg-primary-800"
         @click="newTerminal()"
       />
 
@@ -183,7 +183,7 @@ export default {
         v-tooltip="$t('guijs.terminals.close-terminal-pane')"
         icon-left="close"
         square
-        class="px-3 py-3 hover:bg-primary-100"
+        class="px-3 py-3 hover:bg-primary-100 dark-hover:bg-primary-800"
         @click="closeTerminals()"
       />
     </div>

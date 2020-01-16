@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted, watch, onUnmounted, onActivated } from '@vue/composition-api'
+import { ref, onMounted, watch, onUnmounted, onActivated, computed } from '@vue/composition-api'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { SearchAddon } from 'xterm-addon-search'
@@ -8,6 +8,7 @@ import { WebglAddon } from 'xterm-addon-webgl'
 import { onWindowEvent } from '@guijs/frontend-ui/util/window'
 import { useMutation } from '@vue/apollo-composable'
 import { pushScope, popScope } from '@/util/keybinding'
+import { useSetting } from '@/util/setting'
 import gql from 'graphql-tag'
 
 const isWindows = ['Windows', 'Win16', 'Win32', 'WinCE'].includes(navigator.platform)
@@ -38,15 +39,15 @@ const defaultTheme = {
   brightWhite: '#ffffff',
 }
 
-// const darkTheme = {
-//   ...defaultTheme,
-//   foreground: '#fff',
-//   background: '#1d2935',
-//   cursor: 'rgba(255, 255, 255, .4)',
-//   selection: 'rgba(255, 255, 255, 0.3)',
-//   magenta: '#e83030',
-//   brightMagenta: '#e83030',
-// }
+const darkTheme = {
+  ...defaultTheme,
+  foreground: '#fff',
+  background: '#212935',
+  cursor: '#A0AEC0',
+  selection: '#4A5568',
+  magenta: '#e83030',
+  brightMagenta: '#e83030',
+}
 
 export default {
   props: {
@@ -135,6 +136,22 @@ export default {
       }
     `)
 
+    // Theme
+    const { setting: darkMode } = useSetting('dark-mode')
+
+    const currentTheme = computed(() => {
+      if (darkMode.value) {
+        return darkTheme
+      }
+      return defaultTheme
+    })
+
+    watch(currentTheme, value => {
+      if (term) {
+        term.setOption('theme', value)
+      }
+    })
+
     // XTerminal
 
     const fitAddon = cached.fitAddon
@@ -149,7 +166,7 @@ export default {
     function createTerminal () {
       if (!term) {
         term = new Terminal({
-          theme: defaultTheme,
+          theme: currentTheme.value,
           scrollback: 4000,
           windowsMode: isWindows,
           macOptionIsMeta: true,
@@ -221,6 +238,7 @@ export default {
       // Initial size is undefined on the server
 
       term.setOption('cursorBlink', true)
+      term.setOption('theme', currentTheme.value)
 
       // https://github.com/xtermjs/xterm.js/issues/291
       // term.scrollToLine(cached.scroll)
@@ -332,7 +350,7 @@ export default {
 <template>
   <div
     ref="el"
-    class="relative p-1 overflow-hidden"
+    class="relative p-2 overflow-hidden"
   >
     <div
       ref="xtermTarget"

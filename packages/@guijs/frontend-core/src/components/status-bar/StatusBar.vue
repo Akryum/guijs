@@ -93,7 +93,7 @@ export default {
     <!-- Pane -->
     <div
       v-if="currentPane"
-      class="relative border-gray-300 border-t"
+      class="relative border-gray-300 border-t dark:bg-gray-850 dark:border-gray-950"
       :style="{
         height: `${paneDisplaySize}px`,
       }"
@@ -103,7 +103,7 @@ export default {
         ref="resizeHandle"
         class="resize-handle absolute left-0 right-0 z-10 cursor-ns-resize group flex items-center"
       >
-        <div class="resize-handle-border w-full bg-primary-200 invisible group-hover:visible" />
+        <div class="resize-handle-border w-full bg-primary-200 dark:bg-primary-900 invisible group-hover:visible" />
       </div>
 
       <component
@@ -116,8 +116,8 @@ export default {
     <div
       class="flex-none flex items-center h-6 px-6"
       :class="{
-        'bg-gray-200': !currentPane,
-        'bg-white': currentPane,
+        'bg-gray-200 dark:bg-gray-950': !currentPane,
+        'bg-white dark:bg-gray-850': currentPane,
       }"
     >
       <!-- Start elements -->
@@ -128,7 +128,7 @@ export default {
           :key="pane.id"
           v-tooltip="$t(pane.tooltip)"
           :icon-left="pane.icon"
-          class="h-full px-2 text-gray-600 hover:bg-gray-300"
+          class="h-full px-2 text-gray-600 hover:bg-gray-300 dark-hover:bg-gray-800"
           :class="{
             'text-primary-500': openPaneId === pane.id,
           }"
@@ -145,7 +145,7 @@ export default {
         :key="command.id"
         v-tooltip="$t(command.description || command.label)"
         :icon-left="command.icon"
-        class="h-full px-2 text-gray-600 hover:bg-gray-300"
+        class="h-full px-2 text-gray-600 hover:bg-gray-300 dark-hover:bg-gray-800"
         square
         @click="runCommand(command.id)"
       />

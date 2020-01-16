@@ -7,7 +7,10 @@ export default {
 </script>
 
 <template>
-  <div class="bg-gray-100 border-gray-200 border-r w-64">
+  <div
+    class="bg-gray-100 border-gray-200 border-r w-64
+    dark:bg-gray-900 dark:border-gray-950"
+  >
     <VEmpty class="mt-8">
       <svg
         width="29"
@@ -34,5 +37,9 @@ export default {
 <style lang="postcss" scoped>
 .box-path {
   stroke: theme('colors.gray.300');
+
+  .mode-dark & {
+    stroke: theme('colors.gray.600');
+  }
 }
 </style>
