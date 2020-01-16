@@ -25,6 +25,16 @@
         "config": "Find configurations...",
         "script": "Find scripts..."
       }
+    },
+    "import-project": {
+      "import-a-project": "Import a project",
+      "import-button": "Import"
+    },
+    "file-input": {
+      "select-a-file": "Select a file:",
+      "select-a-folder": "Select a folder:",
+      "no-file-selected": "No file selected",
+      "no-folder-selected": "No folder selected"
     }
   }
 }

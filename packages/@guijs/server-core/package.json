@@ -11,6 +11,7 @@
     "start": "node ./dist/app.js"
   },
   "dependencies": {
+    "@guijs/native-dialog": "^0.1.0",
     "@nodepack/app": "^0.8.0",
     "@nodepack/app-context": "^0.8.0",
     "@nodepack/module": "^0.8.0",

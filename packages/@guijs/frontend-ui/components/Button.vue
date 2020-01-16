@@ -154,11 +154,31 @@ export default {
   }
 }
 
-.btn-small {
+.btn-secondary {
+  @apply text-white bg-secondary-500;
+
+  &:hover {
+    @apply bg-secondary-400;
+  }
+}
+
+.btn-tertiary {
+  @apply text-white bg-tertiary-500;
+
+  &:hover {
+    @apply bg-tertiary-400;
+  }
+}
+
+.btn-sm {
   @apply px-2 py-2;
 }
 
-.btn-regular {
+.btn-md {
   @apply px-5 py-3;
+}
+
+.btn-lg {
+  @apply px-6 py-4;
 }
 </style>

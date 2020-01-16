@@ -56,3 +56,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style lang="postcss">
+.modal-title {
+  @apply h-full flex items-center text-gray-500 text-xl px-6;
+}
+</style>

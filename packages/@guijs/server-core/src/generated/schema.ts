@@ -60,6 +60,7 @@ export type Mutation = {
   changeTerminalTitle?: Maybe<Terminal>,
   removeTerminal?: Maybe<Terminal>,
   runCommand?: Maybe<Command>,
+  selectFile?: Maybe<Scalars['String']>,
 };
 
 
@@ -80,6 +81,11 @@ export type MutationRemoveTerminalArgs = {
 
 export type MutationRunCommandArgs = {
   id: Scalars['ID']
+};
+
+
+export type MutationSelectFileArgs = {
+  input: SelectFileInput
 };
 
 export type Project = {
@@ -115,6 +121,11 @@ export type QueryTerminalArgs = {
 
 export type QuerySearchCommandsArgs = {
   text: Scalars['String']
+};
+
+export type SelectFileInput = {
+  cwd?: Maybe<Scalars['String']>,
+  directory?: Maybe<Scalars['Boolean']>,
 };
 
 export type Subscription = {
@@ -220,6 +231,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+  SelectFileInput: SelectFileInput,
   Subscription: ResolverTypeWrapper<{}>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Project: ResolverTypeWrapper<Project>,
@@ -240,6 +252,7 @@ export type ResolversParentTypes = {
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+  SelectFileInput: SelectFileInput,
   Subscription: {},
   Date: Scalars['Date'],
   Project: Project,
@@ -273,6 +286,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   changeTerminalTitle?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationChangeTerminalTitleArgs, 'input'>>,
   removeTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationRemoveTerminalArgs, 'id'>>,
   runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'id'>>,
+  selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
 };
 
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {

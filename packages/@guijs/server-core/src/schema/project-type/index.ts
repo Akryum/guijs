@@ -1,4 +1,8 @@
 import gql from 'graphql-tag'
+import { ProjectType } from '@/generated/schema'
+import { hook } from '@nodepack/app-context'
+import Context from '@/generated/context'
+import { query as q } from 'faunadb'
 
 export const typeDefs = gql`
 type ProjectType {
@@ -7,3 +11,19 @@ type ProjectType {
   logo: String!
 }
 `
+
+let projectTypes: ProjectType[]
+
+hook('apolloSchema', async (ctx: Context) => {
+  if (!projectTypes) {
+    const { data } = await ctx.fauna.query(q.Map(
+      q.Paginate(q.Match(q.Index('all_projecttypes')), { size: 10000 }),
+      q.Lambda(['ref'], q.Get(q.Var('ref'))),
+    ))
+    projectTypes = data.map(doc => ({
+      id: doc.ref.id,
+      red: doc.red,
+      ...doc.data,
+    }))
+  }
+})
