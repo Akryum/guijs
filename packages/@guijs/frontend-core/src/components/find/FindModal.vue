@@ -3,7 +3,7 @@ import { ref, computed, watch } from '@vue/composition-api'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { bindScope, onKey } from '@/util/keybinding'
-import { onCommand, runCommand } from '@/util/command'
+import { onCommand, onAnyCommand, runCommand } from '@/util/command'
 import { getSearchType, TYPE_WORDS } from './util'
 import { ICONS } from './icons'
 import FindItem from './FindItem.vue'
@@ -32,6 +32,14 @@ export default {
       scope: 'find-modal',
       global: true,
     })
+
+    function openAndKeepOpen () {
+      if (isOpen.value) {
+        keepOpen = true
+      } else {
+        isOpen.value = true
+      }
+    }
 
     // Search
 
@@ -72,14 +80,7 @@ export default {
     const commands = useResult(result, [])
 
     async function selectCommand (id) {
-      const { data } = await runCommand(id)
-      if (data.runCommand) {
-        if (keepOpen) {
-          keepOpen = false
-        } else {
-          isOpen.value = false
-        }
-      }
+      await runCommand(id)
     }
 
     // Keyboard navigation
@@ -123,8 +124,7 @@ export default {
     for (const word of Object.keys(TYPE_WORDS)) {
       if (word === '?') continue
       onCommand(word, () => {
-        keepOpen = true
-        isOpen.value = true
+        openAndKeepOpen()
         searchText.value = word
         input.value.focus()
       })
@@ -135,15 +135,23 @@ export default {
     })
 
     onCommand('command', () => {
-      keepOpen = true
-      isOpen.value = true
+      openAndKeepOpen()
       searchText.value = '>'
+      input.value.focus()
     })
 
     onCommand('find-projects', () => {
-      keepOpen = true
-      isOpen.value = true
+      openAndKeepOpen()
       searchText.value = '<'
+      input.value.focus()
+    })
+
+    onAnyCommand(command => {
+      console.log(JSON.stringify(command), command.id === 'find' || keepOpen)
+      if (command.id !== 'find' && !keepOpen) {
+        isOpen.value = false
+      }
+      keepOpen = false
     })
 
     return {

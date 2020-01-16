@@ -11,11 +11,12 @@ export default {
       subscription commandRan {
         commandRan {
           id
+          type
         }
       }
     `)
     onResult(result => {
-      dispatchCommand(result.data.commandRan.id)
+      dispatchCommand(result.data.commandRan)
     })
 
     // Try Keybinding

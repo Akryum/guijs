@@ -3,6 +3,7 @@ import { apolloClient } from '@/apollo'
 import gql from 'graphql-tag'
 
 const handlers = {}
+const anyHandlers = []
 
 function getHandlers (id) {
   let result = handlers[id]
@@ -17,7 +18,7 @@ let lastCommand = null
 export function onCommand (id, handler) {
   const add = () => {
     getHandlers(id).push(handler)
-    if (lastCommand === id) {
+    if (lastCommand && lastCommand.id === id) {
       handler()
     }
   }
@@ -30,13 +31,29 @@ export function onCommand (id, handler) {
 
   add()
   onActivated(() => add())
-
   onUnmounted(() => remove())
 }
 
-export function dispatchCommand (id) {
-  getHandlers(id).forEach(handler => handler())
-  lastCommand = id
+export function onAnyCommand (handler) {
+  const add = () => {
+    anyHandlers.push(handler)
+  }
+
+  const remove = () => {
+    const index = anyHandlers.indexOf(handler)
+    if (index !== -1) anyHandlers.splice(index, 1)
+  }
+
+  add()
+  onActivated(() => add())
+  onUnmounted(() => remove())
+}
+
+export function dispatchCommand (command) {
+  console.log(command, anyHandlers)
+  getHandlers(command.id).forEach(handler => handler(command))
+  anyHandlers.forEach(handler => handler(command))
+  lastCommand = command
 }
 
 export function runCommand (id) {
