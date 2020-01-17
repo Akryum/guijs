@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { addCommand } from '../command'
+import { addCommand, getRecentCommands } from '../command'
 import { CommandType, Resolvers } from '@/generated/schema'
 import { addKeybinding } from '../keybinding'
 import { MetaProject } from './meta-types'
@@ -18,6 +18,7 @@ type Project implements Document {
 extend type Query {
   projects: [Project!]!
   project (id: ID!): Project
+  recentProjectCommands: [Command!]!
 }
 `
 
@@ -28,6 +29,8 @@ export const resolvers: Resolvers = {
     },
 
     project: async (root, { id }, ctx) => ctx.db.projects.findOne<MetaProject>({ id }),
+
+    recentProjectCommands: () => getRecentCommands(CommandType.Project, 5),
   },
 }
 
@@ -56,6 +59,7 @@ function addProjectCommand (project: MetaProject) {
     label: project.name,
     description: project.path,
     icon: 'work',
+    lastUsed: project.lastOpen,
   })
 }
 

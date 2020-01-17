@@ -132,7 +132,7 @@ export function searchCommands (text: string) {
   return results.map(r => commandsMap.get(r.ref))
 }
 
-function getRecentCommands (type: string = null) {
+export function getRecentCommands (type: string = null, maxCount = 20) {
   let list = commands
   if (type) {
     list = list.filter(c => !c.hidden && c.type === type)
@@ -149,7 +149,7 @@ function getRecentCommands (type: string = null) {
     }
     return 0
   })
-  return list.slice(0, 20)
+  return list.slice(0, maxCount)
 }
 
 export function runCommand (id: string, ctx: Context) {

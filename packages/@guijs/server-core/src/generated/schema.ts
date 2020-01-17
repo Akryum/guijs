@@ -161,6 +161,7 @@ export type Query = {
   keybindings: Array<Keybinding>,
   projects: Array<Project>,
   project?: Maybe<Project>,
+  recentProjectCommands: Array<Command>,
   settings: Array<Setting>,
   setting?: Maybe<Setting>,
 };
@@ -430,6 +431,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
+  recentProjectCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
   setting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<QuerySettingArgs, 'id'>>,
 };
