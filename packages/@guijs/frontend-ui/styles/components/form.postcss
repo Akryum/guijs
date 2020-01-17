@@ -1,0 +1,20 @@
+.form-input {
+  @apply border border-gray-200 rounded px-6 py-4;
+
+  &:hover {
+    @apply bg-gray-100;
+  }
+
+  &:focus-within,
+  &:focus {
+    @apply border-primary-500;
+  }
+
+  .mode-dark & {
+    @apply border-gray-950;
+
+    &:hover {
+      @apply bg-gray-900;
+    }
+  }
+}

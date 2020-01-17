@@ -18,6 +18,7 @@
       "close-terminal": "Close terminal","close-terminal-pane": "Close terminal pane"
     },
     "find": {
+      "placeholder": "Type '?' to get help",
       "help": {
         "action": "Find actions...",
         "project": "Find projects...",

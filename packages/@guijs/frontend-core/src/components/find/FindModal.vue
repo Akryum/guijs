@@ -170,7 +170,7 @@ export default {
       <VInput
         ref="input"
         v-model="searchText"
-        placeholder="Type '?' to get help"
+        placeholder="guijs.find.placeholder"
         auto-focus
         class="px-4 border-gray-200 dark:border-gray-950 border-r h-full"
       >

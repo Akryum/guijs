@@ -23,6 +23,16 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    label: {
+      type: String,
+      default: null,
+    },
+
+    placeholder: {
+      type: String,
+      default: null,
+    },
   },
 
   setup (props) {
@@ -54,7 +64,13 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div
+    @click="focus()"
+  >
+    <VLabel v-if="label">
+      {{ $t(label) }}
+    </VLabel>
+
     <div class="flex items-center h-full">
       <slot name="before" />
 
@@ -68,6 +84,7 @@ export default {
       <input
         ref="input"
         v-bind="$attrs"
+        :placeholder="$t(placeholder)"
         :value="value"
         class="flex-1 h-full bg-transparent"
         @input="$emit('update', $event.currentTarget.value)"
