@@ -34,7 +34,7 @@ export default {
     >
       <!-- Titlebar -->
       <div class="flex items-stretch border-b border-gray-200 dark:border-gray-950">
-        <div class="flex-1">
+        <div class="flex-1 h-72p">
           <slot name="title">
             {{ title }}
           </slot>
