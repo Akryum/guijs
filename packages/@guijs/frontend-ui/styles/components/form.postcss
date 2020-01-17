@@ -5,16 +5,19 @@
     @apply bg-gray-100;
   }
 
-  &:focus-within,
-  &:focus {
-    @apply border-primary-500;
-  }
-
   .mode-dark & {
     @apply border-gray-950;
 
     &:hover {
       @apply bg-gray-900;
+    }
+  }
+
+  &,
+  .mode-dark & {
+    &:focus-within,
+    &:focus {
+      @apply border-primary-500;
     }
   }
 }
