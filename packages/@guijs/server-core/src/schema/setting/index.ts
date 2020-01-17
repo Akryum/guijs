@@ -75,7 +75,9 @@ export async function updateSetting (
   ctx.pubsub.publish('settingUpdated', {
     settingUpdated: setting,
   })
-  await fs.writeJson(settingsFile, currentSettings)
+  await fs.writeJson(settingsFile, currentSettings, {
+    spaces: 2,
+  })
   return setting
 }
 
