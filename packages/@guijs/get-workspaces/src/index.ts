@@ -1,5 +1,5 @@
 // This is a modified version of the package-getting in bolt
-// It supports yarn workspaces as well, and can fall back through
+// It supports yarn and lerna workspaces as well, and can fall back through
 // several options
 
 import fs from 'fs-extra'
