@@ -130,7 +130,7 @@ export default {
         v-if="iconLeft"
         class="material-icons flex-none text-lg"
         :class="{
-          'mr-2': $slots.default,
+          'mr-2 opacity-50': $slots.default,
         }"
       >{{ iconLeft }}</i>
 
@@ -147,7 +147,7 @@ export default {
         v-if="iconRight"
         class="material-icons flex-none text-lg"
         :class="{
-          'ml-2': $slots.default,
+          'ml-2 opacity-50': $slots.default,
         }"
       >{{ iconRight }}</i>
     </div>
