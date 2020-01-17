@@ -6,7 +6,7 @@ import { bindScope, onKey } from '@/util/keybinding'
 import { onCommand, onAnyCommand, runCommand } from '@/util/command'
 import { getSearchType, TYPE_WORDS } from './util'
 import { ICONS } from './icons'
-import { commandWithKeybindingFragment } from './command-fragments'
+import { commandWithKeybindingFragment } from '../command/fragments'
 import FindItem from './FindItem.vue'
 
 export default {

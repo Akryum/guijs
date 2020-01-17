@@ -28,6 +28,7 @@ enum CommandType {
 
 extend type Query {
   searchCommands(text: String!): [Command!]!
+  command (id: ID!): Command
 }
 
 extend type Mutation {
@@ -175,6 +176,8 @@ export const resolvers: Resolvers = {
 
   Query: {
     searchCommands: (root, { text }) => searchCommands(text),
+
+    command: (root, { id }) => commands.find(c => c.id === id),
   },
 
   Mutation: {
@@ -228,7 +231,7 @@ addCommand({
 
 addKeybinding({
   id: 'command',
-  sequences: ['mod+shift+p', 'mod+shift+k'],
+  sequences: ['mod+shift+k', 'mod+shift+p'],
   scope: 'root',
   global: true,
 })

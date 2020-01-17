@@ -1,9 +1,11 @@
 <script>
 import { runCommand } from '@/util/command'
+import CommandKeybinding from './command/CommandKeybinding.vue'
 import QuickRecentProjects from './project/QuickRecentProjects.vue'
 
 export default {
   components: {
+    CommandKeybinding,
     QuickRecentProjects,
   },
 
@@ -58,6 +60,11 @@ export default {
               @click="runCommand('command')"
             >
               {{ $t('guijs.home.show-all-commands') }}
+
+              <CommandKeybinding
+                commandId="command"
+                class="ml-3"
+              />
             </VButton>
 
             <VButton
@@ -65,6 +72,11 @@ export default {
               @click="runCommand('find-projects')"
             >
               {{ $t('guijs.home.recent-projects') }}
+
+              <CommandKeybinding
+                commandId="find-projects"
+                class="ml-3"
+              />
             </VButton>
           </div>
         </div>

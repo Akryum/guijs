@@ -157,6 +157,7 @@ export type Query = {
   terminal?: Maybe<Terminal>,
   terminals: Array<Terminal>,
   searchCommands: Array<Command>,
+  command?: Maybe<Command>,
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
   projects: Array<Project>,
@@ -174,6 +175,11 @@ export type QueryTerminalArgs = {
 
 export type QuerySearchCommandsArgs = {
   text: Scalars['String']
+};
+
+
+export type QueryCommandArgs = {
+  id: Scalars['ID']
 };
 
 
@@ -427,6 +433,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<QueryTerminalArgs, 'id'>>,
   terminals?: Resolver<Array<ResolversTypes['Terminal']>, ParentType, ContextType>,
   searchCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QuerySearchCommandsArgs, 'text'>>,
+  command?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QueryCommandArgs, 'id'>>,
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
