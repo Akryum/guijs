@@ -13,8 +13,8 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  JSON: any,
   Date: any,
+  JSON: any,
 };
 
 export type ChangeTerminalTitleInput = {
@@ -159,6 +159,8 @@ export type Query = {
   searchCommands: Array<Command>,
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
+  projects: Array<Project>,
+  project?: Maybe<Project>,
   settings: Array<Setting>,
   setting?: Maybe<Setting>,
 };
@@ -171,6 +173,11 @@ export type QueryTerminalArgs = {
 
 export type QuerySearchCommandsArgs = {
   text: Scalars['String']
+};
+
+
+export type QueryProjectArgs = {
+  id: Scalars['ID']
 };
 
 
@@ -301,6 +308,11 @@ export type ResolversTypes = {
   CommandType: CommandType,
   Keybinding: ResolverTypeWrapper<Keybinding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  Project: ResolverTypeWrapper<MetaProject>,
+  Document: ResolverTypeWrapper<MetaDocument>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
+  ProjectType: ResolverTypeWrapper<ProjectType>,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
@@ -310,11 +322,6 @@ export type ResolversTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
-  Project: ResolverTypeWrapper<MetaProject>,
-  Document: ResolverTypeWrapper<MetaDocument>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
-  ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
-  ProjectType: ResolverTypeWrapper<ProjectType>,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: ResolverTypeWrapper<{}>,
 };
@@ -329,6 +336,11 @@ export type ResolversParentTypes = {
   CommandType: CommandType,
   Keybinding: Keybinding,
   Boolean: Scalars['Boolean'],
+  Project: MetaProject,
+  Document: MetaDocument,
+  Date: Scalars['Date'],
+  ProjectWorkspace: MetaProjectWorkspace,
+  ProjectType: ProjectType,
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
@@ -338,11 +350,6 @@ export type ResolversParentTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
-  Project: MetaProject,
-  Document: MetaDocument,
-  Date: Scalars['Date'],
-  ProjectWorkspace: MetaProjectWorkspace,
-  ProjectType: ProjectType,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: {},
 };
@@ -421,6 +428,8 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   searchCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QuerySearchCommandsArgs, 'text'>>,
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
+  projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
+  project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
   settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
   setting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<QuerySettingArgs, 'id'>>,
 };

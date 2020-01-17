@@ -1,7 +1,10 @@
 import gql from 'graphql-tag'
 import { addCommand } from '../command'
-import { CommandType } from '@/generated/schema'
+import { CommandType, Resolvers } from '@/generated/schema'
 import { addKeybinding } from '../keybinding'
+import { MetaProject } from './meta-types'
+import Context from '@/generated/context'
+import { hook } from '@nodepack/app-context'
 
 export const typeDefs = gql`
 type Project implements Document {
@@ -11,7 +14,50 @@ type Project implements Document {
   bookmarked: Boolean!
   lastOpen: Date
 }
+
+extend type Query {
+  projects: [Project!]!
+  project (id: ID!): Project
+}
 `
+
+export const resolvers: Resolvers = {
+  Query: {
+    projects: async (root, args, ctx) => {
+      return ctx.db.projects.find<MetaProject>({})
+    },
+
+    project: async (root, { id }, ctx) => ctx.db.projects.findOne<MetaProject>({ id }),
+  },
+}
+
+export async function addProject (project: MetaProject, ctx: Context) {
+  const [doc] = await ctx.db.projects.insert([
+    project,
+  ])
+
+  addProjectCommand(doc)
+
+  return doc
+}
+
+hook('apolloSchema', async (ctx: Context) => {
+  // Add project commands
+  const projects = await ctx.db.projects.find({})
+  for (const project of projects) {
+    addProjectCommand(project)
+  }
+})
+
+function addProjectCommand (project: MetaProject) {
+  addCommand({
+    id: `project.${project._id}`,
+    type: CommandType.Project,
+    label: project.name,
+    description: project.path,
+    icon: 'work',
+  })
+}
 
 addCommand({
   id: 'find-projects',

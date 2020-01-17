@@ -1,7 +1,7 @@
 export const ICONS = {
   help: 'help',
   action: 'assistant',
-  project: 'bookmark',
+  project: 'work',
   package: 'extension',
   config: 'settings_applications',
   script: 'assignment',

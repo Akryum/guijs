@@ -5,6 +5,7 @@ import path from 'path'
 import Context from '@/generated/context'
 import shortid from 'shortid'
 import { MetaProject } from './meta-types'
+import { addProject } from '.'
 
 export const typeDefs = gql`
 extend type Mutation {
@@ -60,18 +61,14 @@ async function importProject (
     throw new Error('guijs.import-project.error-already-exists')
   }
 
-  let project: MetaProject = {
+  const project: MetaProject = {
     _id: shortid(),
     name: input.name,
     path: input.path,
     bookmarked: input.bookmarked,
   }
 
-  project = (await ctx.db.projects.insert([
-    project,
-  ]))[0]
-
-  return project
+  return addProject(project, ctx)
 }
 
 export const resolvers: Resolvers = {
