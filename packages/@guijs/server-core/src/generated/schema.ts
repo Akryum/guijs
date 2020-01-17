@@ -20,6 +20,11 @@ export type ChangeTerminalTitleInput = {
   title: Scalars['String'],
 };
 
+export type CheckProjectPayload = {
+   __typename?: 'CheckProjectPayload',
+  packageName: Scalars['String'],
+};
+
 export type Command = {
    __typename?: 'Command',
   id: Scalars['ID'],
@@ -47,6 +52,12 @@ export type CreateTerminalInput = {
 };
 
 
+export type ImportProjectInput = {
+  path: Scalars['String'],
+  name: Scalars['String'],
+  bookmarked?: Maybe<Scalars['Boolean']>,
+};
+
 
 export type Keybinding = {
    __typename?: 'Keybinding',
@@ -64,6 +75,8 @@ export type Mutation = {
   removeTerminal?: Maybe<Terminal>,
   runCommand?: Maybe<Command>,
   selectFile?: Maybe<Scalars['String']>,
+  checkImportProject: CheckProjectPayload,
+  importProject: Project,
   updateSetting?: Maybe<Setting>,
 };
 
@@ -90,6 +103,16 @@ export type MutationRunCommandArgs = {
 
 export type MutationSelectFileArgs = {
   input: SelectFileInput
+};
+
+
+export type MutationCheckImportProjectArgs = {
+  path: Scalars['String']
+};
+
+
+export type MutationImportProjectArgs = {
+  input: ImportProjectInput
 };
 
 
@@ -278,12 +301,14 @@ export type ResolversTypes = {
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   SelectFileInput: SelectFileInput,
-  UpdateSettingInput: UpdateSettingInput,
-  Subscription: ResolverTypeWrapper<{}>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
+  CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
+  ImportProjectInput: ImportProjectInput,
   Project: ResolverTypeWrapper<Project>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
   Workspace: ResolverTypeWrapper<Workspace>,
   ProjectType: ResolverTypeWrapper<ProjectType>,
+  UpdateSettingInput: UpdateSettingInput,
+  Subscription: ResolverTypeWrapper<{}>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -303,12 +328,18 @@ export type ResolversParentTypes = {
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   SelectFileInput: SelectFileInput,
-  UpdateSettingInput: UpdateSettingInput,
-  Subscription: {},
-  Date: Scalars['Date'],
+  CheckProjectPayload: CheckProjectPayload,
+  ImportProjectInput: ImportProjectInput,
   Project: Project,
+  Date: Scalars['Date'],
   Workspace: Workspace,
   ProjectType: ProjectType,
+  UpdateSettingInput: UpdateSettingInput,
+  Subscription: {},
+};
+
+export type CheckProjectPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CheckProjectPayload'] = ResolversParentTypes['CheckProjectPayload']> = {
+  packageName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 };
 
 export type CommandResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Command'] = ResolversParentTypes['Command']> = {
@@ -342,6 +373,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   removeTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationRemoveTerminalArgs, 'id'>>,
   runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'id'>>,
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
+  checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
+  importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
   updateSetting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<MutationUpdateSettingArgs, 'input'>>,
 };
 
@@ -403,6 +436,7 @@ export type WorkspaceResolvers<ContextType = Context, ParentType extends Resolve
 };
 
 export type Resolvers<ContextType = Context> = {
+  CheckProjectPayload?: CheckProjectPayloadResolvers<ContextType>,
   Command?: CommandResolvers<ContextType>,
   Date?: GraphQLScalarType,
   JSON?: GraphQLScalarType,

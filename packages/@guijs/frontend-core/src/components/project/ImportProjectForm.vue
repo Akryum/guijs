@@ -1,6 +1,8 @@
 <script>
-import { ref } from '@vue/composition-api'
+import { watch, reactive } from '@vue/composition-api'
 import FileInput from '../form/FileInput.vue'
+import { useMutation } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
 
 export default {
   components: {
@@ -8,10 +10,37 @@ export default {
   },
 
   setup () {
-    const folder = ref(null)
+    const formData = reactive({
+      folder: '',
+      name: '',
+      bookmarked: false,
+    })
+
+    const { mutate: check, error: checkError } = useMutation(gql`
+      mutation checkImportProject ($path: String!) {
+        checkImportProject (path: $path) {
+          packageName
+        }
+      }
+    `, () => ({
+      variables: {
+        path: formData.folder,
+      },
+    }))
+
+    watch(() => formData.folder, async value => {
+      if (value) {
+        const { data } = await check()
+        // Autofill name
+        if (!formData.name) {
+          formData.name = data.checkImportProject.packageName
+        }
+      }
+    })
 
     return {
-      folder,
+      formData,
+      checkError,
     }
   },
 }
@@ -20,13 +49,32 @@ export default {
 <template>
   <div class="p-6">
     <FileInput
-      v-model="folder"
+      v-model="formData.folder"
       directory
     />
 
-    <div class="flex mt-6">
+    <template v-if="formData.folder">
+      <VInput
+        v-model="formData.name"
+        label="guijs.import-project.input-name-label"
+        placeholder="guijs.import-project.input-name-placeholder"
+        class="form-input my-6"
+      />
+
+      <VSwitch
+        v-model="formData.bookmarked"
+        label="guijs.import-project.input-bookmarked-label"
+        class="form-input my-6"
+      />
+    </template>
+
+    <VError :error="checkError" />
+
+    <div
+      v-if="formData.folder"
+      class="flex mt-6"
+    >
       <VButton
-        v-if="folder"
         icon-left="unarchive"
         class="flex-1 btn-lg btn-primary"
       >

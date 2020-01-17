@@ -29,7 +29,14 @@
     },
     "import-project": {
       "import-a-project": "Import a project",
-      "import-button": "Import"
+      "import-button": "Import",
+      "input-name-label": "Project name",
+      "input-name-placeholder": "Enter a project name",
+      "input-bookmarked-label": "Bookmark the project",
+      "error-path-does-not-exist": "Path doesn't exist",
+      "error-not-directory": "Path is not a directory",
+      "error-no-package-json": "No package.json found",
+      "error-no-package-name": "No name field found in package.json"
     },
     "file-input": {
       "select-a-file": "Select a file:",
