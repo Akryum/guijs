@@ -65,9 +65,13 @@ export default {
 
 <template>
   <div
+    class="cursor-text"
     @click="focus()"
   >
-    <VLabel v-if="label">
+    <VLabel
+      v-if="label"
+      class="mb-1"
+    >
       {{ $t(label) }}
     </VLabel>
 

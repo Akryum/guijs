@@ -70,7 +70,7 @@ export default {
     @click="browse"
   >
     <div class="flex-1">
-      <VLabel>
+      <VLabel class="mb-1">
         {{ label }}
       </VLabel>
       <div class="text-sm font-mono">
