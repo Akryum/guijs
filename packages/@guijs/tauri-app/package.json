@@ -1,0 +1,14 @@
+{
+  "name": "@guijs/tauri-app",
+  "version": "1.0.0-alpha.0",
+  "description": "desktop app builder for guijs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Thompson-Yvetot",
+  "license": "MIT",
+  "dependencies": {
+    "tauri": "^0.3.1"
+  }
+}
