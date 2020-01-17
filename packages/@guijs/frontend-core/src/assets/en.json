@@ -56,7 +56,8 @@
     },
     "side-pane": {
       "no-project-open": "No project open",
-      "project-not-found": "Project not found"
+      "project-not-found": "Project not found",
+      "find": "Find"
     }
   }
 }

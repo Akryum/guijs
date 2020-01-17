@@ -24,7 +24,9 @@ export default {
     <NoProjectOpen v-if="!$route.params.projectId" />
 
     <template v-else>
-      <ProjectDropdown />
+      <ProjectDropdown
+        class="mb-4"
+      />
 
       <ProjectNav />
     </template>
