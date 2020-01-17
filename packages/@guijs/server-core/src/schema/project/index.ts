@@ -4,20 +4,12 @@ import { CommandType } from '@/generated/schema'
 import { addKeybinding } from '../keybinding'
 
 export const typeDefs = gql`
-type Project {
+type Project implements Document {
   id: ID!
   name: String!
   path: String!
   bookmarked: Boolean!
   lastOpen: Date
-  workspaces: [Workspace!]!
-}
-
-type Workspace {
-  id: ID!
-  name: String!
-  relativePath: String!
-  type: ProjectType!
 }
 `
 

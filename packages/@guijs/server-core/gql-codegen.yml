@@ -7,8 +7,11 @@ generates:
     config:
       contextType: '@context#Context'
       mappers:
+        Document: '@/schema/db/meta-types#MetaDocument'
         Command: '@/schema/command/meta-types#MetaCommand'
         Setting: '@/schema/setting/meta-types#MetaSetting'
+        Project: '@/schema/project/meta-types#MetaProject'
+        ProjectWorkspace: '@/schema/project/meta-types#MetaProjectWorkspace'
       optionalResolveType: true
   schema-fragment-matcher.js:
     - fragment-matcher

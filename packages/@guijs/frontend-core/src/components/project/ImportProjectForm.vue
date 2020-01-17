@@ -9,9 +9,9 @@ export default {
     FileInput,
   },
 
-  setup () {
+  setup (props, { emit }) {
     const formData = reactive({
-      folder: '',
+      path: '',
       name: '',
       bookmarked: false,
     })
@@ -24,11 +24,11 @@ export default {
       }
     `, () => ({
       variables: {
-        path: formData.folder,
+        path: formData.path,
       },
     }))
 
-    watch(() => formData.folder, async value => {
+    watch(() => formData.path, async value => {
       if (value) {
         const { data } = await check()
         // Autofill name
@@ -38,9 +38,38 @@ export default {
       }
     })
 
+    // Import
+
+    const {
+      mutate: importProject,
+      loading: importing,
+      error: importError,
+      onDone,
+    } = useMutation(gql`
+      mutation importProject ($input: ImportProjectInput!) {
+        importProject (input: $input) {
+          id
+        }
+      }
+    `, () => ({
+      variables: {
+        input: {
+          ...formData,
+        },
+      },
+    }))
+
+    onDone((result) => {
+      emit('close')
+      // @TODO go to project
+    })
+
     return {
       formData,
       checkError,
+      importProject,
+      importing,
+      importError,
     }
   },
 }
@@ -49,11 +78,11 @@ export default {
 <template>
   <div class="p-6">
     <FileInput
-      v-model="formData.folder"
+      v-model="formData.path"
       directory
     />
 
-    <template v-if="formData.folder">
+    <template v-if="formData.path">
       <VInput
         v-model="formData.name"
         label="guijs.import-project.input-name-label"
@@ -69,15 +98,17 @@ export default {
       />
     </template>
 
-    <VError :error="checkError" />
+    <VError :error="checkError || importError" />
 
     <div
-      v-if="formData.folder"
+      v-if="formData.path"
       class="flex mt-6"
     >
       <VButton
+        :loading="importing"
         icon-left="unarchive"
         class="flex-1 btn-lg btn-primary"
+        @click="importProject()"
       >
         {{ $t('guijs.import-project.import-button') }}
       </VButton>

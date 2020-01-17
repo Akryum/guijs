@@ -1,6 +1,8 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { MetaDocument } from '@/schema/db/meta-types';
 import { MetaCommand } from '@/schema/command/meta-types';
 import { MetaSetting } from '@/schema/setting/meta-types';
+import { MetaProject, MetaProjectWorkspace } from '@/schema/project/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -51,6 +53,10 @@ export type CreateTerminalInput = {
   hidden: Scalars['Boolean'],
 };
 
+
+export type Document = {
+  id: Scalars['ID'],
+};
 
 export type ImportProjectInput = {
   path: Scalars['String'],
@@ -120,14 +126,14 @@ export type MutationUpdateSettingArgs = {
   input: UpdateSettingInput
 };
 
-export type Project = {
+export type Project = Document & {
    __typename?: 'Project',
   id: Scalars['ID'],
   name: Scalars['String'],
   path: Scalars['String'],
   bookmarked: Scalars['Boolean'],
   lastOpen?: Maybe<Scalars['Date']>,
-  workspaces: Array<Workspace>,
+  workspaces: Array<ProjectWorkspace>,
 };
 
 export type ProjectType = {
@@ -135,6 +141,15 @@ export type ProjectType = {
   id: Scalars['ID'],
   name: Scalars['String'],
   logo: Scalars['String'],
+};
+
+export type ProjectWorkspace = {
+   __typename?: 'ProjectWorkspace',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  absolutePath: Scalars['String'],
+  relativePath: Scalars['String'],
+  type: ProjectType,
 };
 
 export type Query = {
@@ -205,14 +220,6 @@ export type Terminal = {
 export type UpdateSettingInput = {
   id: Scalars['ID'],
   value?: Maybe<Scalars['JSON']>,
-};
-
-export type Workspace = {
-   __typename?: 'Workspace',
-  id: Scalars['ID'],
-  name: Scalars['String'],
-  relativePath: Scalars['String'],
-  type: ProjectType,
 };
 
 
@@ -303,9 +310,10 @@ export type ResolversTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
-  Project: ResolverTypeWrapper<Project>,
+  Project: ResolverTypeWrapper<MetaProject>,
+  Document: ResolverTypeWrapper<MetaDocument>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
-  Workspace: ResolverTypeWrapper<Workspace>,
+  ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectType: ResolverTypeWrapper<ProjectType>,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: ResolverTypeWrapper<{}>,
@@ -330,9 +338,10 @@ export type ResolversParentTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
-  Project: Project,
+  Project: MetaProject,
+  Document: MetaDocument,
   Date: Scalars['Date'],
-  Workspace: Workspace,
+  ProjectWorkspace: MetaProjectWorkspace,
   ProjectType: ProjectType,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: {},
@@ -354,6 +363,11 @@ export type CommandResolvers<ContextType = Context, ParentType extends Resolvers
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date'
 }
+
+export type DocumentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Document'] = ResolversParentTypes['Document']> = {
+  __resolveType?: TypeResolveFn<'Project', ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+};
 
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON'
@@ -384,13 +398,21 @@ export type ProjectResolvers<ContextType = Context, ParentType extends Resolvers
   path?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   bookmarked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   lastOpen?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>,
-  workspaces?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>,
+  workspaces?: Resolver<Array<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType>,
 };
 
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+};
+
+export type ProjectWorkspaceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectWorkspace'] = ResolversParentTypes['ProjectWorkspace']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  absolutePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  relativePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -428,28 +450,22 @@ export type TerminalResolvers<ContextType = Context, ParentType extends Resolver
   cwd?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 };
 
-export type WorkspaceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Workspace'] = ResolversParentTypes['Workspace']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  relativePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
-};
-
 export type Resolvers<ContextType = Context> = {
   CheckProjectPayload?: CheckProjectPayloadResolvers<ContextType>,
   Command?: CommandResolvers<ContextType>,
   Date?: GraphQLScalarType,
+  Document?: DocumentResolvers,
   JSON?: GraphQLScalarType,
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
   ProjectType?: ProjectTypeResolvers<ContextType>,
+  ProjectWorkspace?: ProjectWorkspaceResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Setting?: SettingResolvers<ContextType>,
   SettingCategory?: SettingCategoryResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   Terminal?: TerminalResolvers<ContextType>,
-  Workspace?: WorkspaceResolvers<ContextType>,
 };
 
 

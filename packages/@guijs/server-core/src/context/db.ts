@@ -1,15 +1,26 @@
 import { onCreate, addProp } from '@nodepack/app-context'
-import Datastore from 'nedb'
+import Datastore from 'nedb-promise'
 import path from 'path'
 import { rcFolder } from '@/util/rc-folder'
 
-onCreate(context => {
-  addProp(context, 'db', () => new Datastore({
-    filename: path.resolve(rcFolder, 'main.db'),
+function collection (name: string): Datastore {
+  return new Datastore({
+    filename: path.resolve(rcFolder, `db/${name}.db`),
     autoload: true,
-  }))
+    timestampData: true,
+  })
+}
+
+function createCollections () {
+  return {
+    projects: collection('projects'),
+  }
+}
+
+onCreate(context => {
+  addProp(context, 'db', () => createCollections())
 })
 
 export default interface DbContext {
-  db: Datastore
+  db: ReturnType<typeof createCollections>
 }

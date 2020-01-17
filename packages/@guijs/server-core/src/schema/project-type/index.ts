@@ -14,6 +14,10 @@ type ProjectType {
 
 let projectTypes: ProjectType[]
 
+export function getProjectTypes () {
+  return projectTypes
+}
+
 hook('apolloSchema', async (ctx: Context) => {
   if (!projectTypes) {
     const { data } = await ctx.fauna.query(q.Map(

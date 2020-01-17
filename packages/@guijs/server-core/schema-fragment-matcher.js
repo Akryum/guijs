@@ -1,7 +1,17 @@
 
       export default {
   "__schema": {
-    "types": []
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "Document",
+        "possibleTypes": [
+          {
+            "name": "Project"
+          }
+        ]
+      }
+    ]
   }
 }
     
