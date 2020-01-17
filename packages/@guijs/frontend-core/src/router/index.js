@@ -13,7 +13,7 @@ const routes = [
     ),
   },
   {
-    path: '/:projectId',
+    path: '/project/:projectId',
     component: { render: h => h('router-view') },
     children: [
       {

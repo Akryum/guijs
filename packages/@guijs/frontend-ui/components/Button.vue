@@ -55,6 +55,11 @@ export default {
       default: false,
     },
 
+    extend: {
+      type: Boolean,
+      default: false,
+    },
+
     stop: {
       type: Boolean,
       default: false,
@@ -128,7 +133,16 @@ export default {
           'mr-2': $slots.default,
         }"
       >{{ iconLeft }}</i>
-      <slot />
+
+      <span
+        class="flex items-center"
+        :class="{
+          'flex-1': extend,
+        }"
+      >
+        <slot />
+      </span>
+
       <i
         v-if="iconRight"
         class="material-icons flex-none text-lg"

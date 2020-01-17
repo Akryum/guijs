@@ -53,6 +53,10 @@
       "dark-mode": "Dark mode",
       "dark-mode-description": "Use dark colors for the interface",
       "toggle-dark-mode": "Toggle dark mode"
+    },
+    "side-pane": {
+      "no-project-open": "No project open",
+      "project-not-found": "Project not found"
     }
   }
 }
