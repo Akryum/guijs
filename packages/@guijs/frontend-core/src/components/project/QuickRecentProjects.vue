@@ -13,7 +13,9 @@ export default {
           description
         }
       }
-    `)
+    `, null, {
+      fetchPolicy: 'cache-and-network',
+    })
     const recentProjectCommands = useResult(result, [])
 
     return {
