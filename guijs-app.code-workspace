@@ -7,7 +7,7 @@
 			"path": "packages/@guijs/frontend-ui"
 		},
 		{
-			"path": "packages/@guijs/app-core"
+			"path": "legacy/app-core"
 		},
 		{
 			"path": "packages/@guijs/server-core"
@@ -16,10 +16,10 @@
 			"path": "packages/@guijs/native-dialog"
 		},
 		{
-			"path": "packages/@guijs/server-core-old"
+			"path": "legacy/server-core-old"
 		},
 		{
-			"path": "packages/@guijs/builtin-plugin"
+			"path": "legacy/builtin-plugin"
 		},
 		{
 			"path": "."
