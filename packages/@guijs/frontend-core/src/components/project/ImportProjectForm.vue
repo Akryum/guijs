@@ -3,6 +3,7 @@ import { watch, reactive, ref } from '@vue/composition-api'
 import FileInput from '../form/FileInput.vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { runCommand } from '../../util/command'
 
 export default {
   components: {
@@ -73,9 +74,11 @@ export default {
       await mutate()
     }
 
-    onDone((result) => {
+    onDone(async (result) => {
       emit('close')
-      // @TODO go to project
+      await runCommand('open-project', {
+        projectId: result.data.importProject.id,
+      })
     })
 
     return {
