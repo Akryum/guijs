@@ -45,7 +45,7 @@ export default {
           class="w-72p h-72p group"
           @click="$emit('close')"
         >
-          <i class="material-icons text-2xl text-gray-500 group-hover:text-gray-800">close</i>
+          <i class="material-icons text-2xl text-gray-500 group-hover:text-gray-800 dark-group-hover:text-gray-200">close</i>
         </VButton>
       </div>
 
