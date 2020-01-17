@@ -28,7 +28,7 @@ export const resolvers: Resolvers = {
       return ctx.db.projects.find<MetaProject>({})
     },
 
-    project: async (root, { id }, ctx) => ctx.db.projects.findOne<MetaProject>({ id }),
+    project: async (root, { id }, ctx) => ctx.db.projects.findOne<MetaProject>({ _id: id }),
 
     recentProjectCommands: () => getRecentCommands(CommandType.Project, 5),
   },
@@ -60,6 +60,7 @@ function addProjectCommand (project: MetaProject) {
     description: project.path,
     icon: 'work',
     lastUsed: project.lastOpen,
+    related: project,
   })
 }
 

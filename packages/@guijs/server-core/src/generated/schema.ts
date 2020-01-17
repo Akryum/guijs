@@ -5,6 +5,7 @@ import { MetaSetting } from '@/schema/setting/meta-types';
 import { MetaProject, MetaProjectWorkspace } from '@/schema/project/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -35,6 +36,12 @@ export type Command = {
   icon?: Maybe<Scalars['String']>,
   description?: Maybe<Scalars['String']>,
   keybinding?: Maybe<Keybinding>,
+};
+
+export type CommandRan = {
+   __typename?: 'CommandRan',
+  command: Command,
+  payload?: Maybe<Scalars['JSON']>,
 };
 
 export enum CommandType {
@@ -103,7 +110,7 @@ export type MutationRemoveTerminalArgs = {
 
 
 export type MutationRunCommandArgs = {
-  id: Scalars['ID']
+  input: RunCommandInput
 };
 
 
@@ -192,6 +199,11 @@ export type QuerySettingArgs = {
   id: Scalars['ID']
 };
 
+export type RunCommandInput = {
+  id: Scalars['ID'],
+  payload?: Maybe<Scalars['JSON']>,
+};
+
 export type SelectFileInput = {
   cwd?: Maybe<Scalars['String']>,
   directory?: Maybe<Scalars['Boolean']>,
@@ -214,7 +226,7 @@ export type SettingCategory = {
 
 export type Subscription = {
    __typename?: 'Subscription',
-  commandRan?: Maybe<Command>,
+  commandRan?: Maybe<CommandRan>,
   settingUpdated?: Maybe<Setting>,
 };
 
@@ -326,11 +338,13 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+  RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: ResolverTypeWrapper<{}>,
+  CommandRan: ResolverTypeWrapper<Omit<CommandRan, 'command'> & { command: ResolversTypes['Command'] }>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -354,11 +368,13 @@ export type ResolversParentTypes = {
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
+  RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: {},
+  CommandRan: Omit<CommandRan, 'command'> & { command: ResolversParentTypes['Command'] },
 };
 
 export type CheckProjectPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CheckProjectPayload'] = ResolversParentTypes['CheckProjectPayload']> = {
@@ -372,6 +388,11 @@ export type CommandResolvers<ContextType = Context, ParentType extends Resolvers
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType>,
+};
+
+export type CommandRanResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CommandRan'] = ResolversParentTypes['CommandRan']> = {
+  command?: Resolver<ResolversTypes['Command'], ParentType, ContextType>,
+  payload?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>,
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -399,7 +420,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationCreateTerminalArgs, 'input'>>,
   changeTerminalTitle?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationChangeTerminalTitleArgs, 'input'>>,
   removeTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationRemoveTerminalArgs, 'id'>>,
-  runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'id'>>,
+  runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'input'>>,
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
@@ -457,7 +478,7 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 };
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  commandRan?: SubscriptionResolver<Maybe<ResolversTypes['Command']>, "commandRan", ParentType, ContextType>,
+  commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
 };
 
@@ -471,6 +492,7 @@ export type TerminalResolvers<ContextType = Context, ParentType extends Resolver
 export type Resolvers<ContextType = Context> = {
   CheckProjectPayload?: CheckProjectPayloadResolvers<ContextType>,
   Command?: CommandResolvers<ContextType>,
+  CommandRan?: CommandRanResolvers<ContextType>,
   Date?: GraphQLScalarType,
   Document?: DocumentResolvers,
   JSON?: GraphQLScalarType,

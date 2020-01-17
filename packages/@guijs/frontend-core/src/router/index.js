@@ -13,6 +13,20 @@ const routes = [
     ),
   },
   {
+    path: '/:projectId',
+    component: { render: h => h('router-view') },
+    children: [
+      {
+        path: '',
+        name: 'project-home',
+        component: () => import(
+          /* webpackChunkName: 'HomePage' */
+          '../components/HomePage.vue'
+        ),
+      },
+    ],
+  },
+  {
     path: '/terminals',
     name: 'terminals',
     component: () => import(

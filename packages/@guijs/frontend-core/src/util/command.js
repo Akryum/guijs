@@ -49,24 +49,26 @@ export function onAnyCommand (handler) {
   onUnmounted(() => remove())
 }
 
-export function dispatchCommand (command) {
-  console.log(command, anyHandlers)
-  getHandlers(command.id).forEach(handler => handler(command))
-  anyHandlers.forEach(handler => handler(command))
+export function dispatchCommand (command, payload) {
+  getHandlers(command.id).forEach(handler => handler(command, payload))
+  anyHandlers.forEach(handler => handler(command, payload))
   lastCommand = command
 }
 
-export function runCommand (id) {
+export function runCommand (id, payload = null) {
   return apolloClient.mutate({
     mutation: gql`
-    mutation runCommand ($id: ID!) {
-      runCommand (id: $id) {
+    mutation runCommand ($input: RunCommandInput!) {
+      runCommand (input: $input) {
         id
       }
     }
   `,
     variables: {
-      id,
+      input: {
+        id,
+        payload,
+      },
     },
   })
 }

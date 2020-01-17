@@ -32,11 +32,21 @@ extend type Query {
 }
 
 extend type Mutation {
-  runCommand(id: ID!): Command
+  runCommand(input: RunCommandInput!): Command
+}
+
+input RunCommandInput {
+  id: ID!
+  payload: JSON
 }
 
 type Subscription {
-  commandRan: Command
+  commandRan: CommandRan
+}
+
+type CommandRan {
+  command: Command!
+  payload: JSON
 }
 `
 
@@ -153,17 +163,29 @@ export function getRecentCommands (type: string = null, maxCount = 20) {
   return list.slice(0, maxCount)
 }
 
-export function runCommand (id: string, ctx: Context) {
+export type OnCommandHandler = (command: MetaCommand, payload: any, ctx: Context) => void | Promise<void>
+
+const runHandlers: OnCommandHandler[] = []
+
+export function onAnyCommand (handler: OnCommandHandler) {
+  runHandlers.push(handler)
+}
+
+export function runCommand (id: string, payload: any, ctx: Context) {
   const command = commands.find(c => c.id === id)
   if (!command) {
     consola.warn(`Command ${id} not found`)
     return null
   }
   if (command.handler) {
-    command.handler()
+    command.handler(command, payload, ctx)
   }
+  runHandlers.forEach(h => h(command, payload, ctx))
   ctx.pubsub.publish('commandRan', {
-    commandRan: command,
+    commandRan: {
+      command,
+      payload,
+    },
     clientId: ctx.getClientId(),
   })
   return command
@@ -181,7 +203,7 @@ export const resolvers: Resolvers = {
   },
 
   Mutation: {
-    runCommand: (root, { id }, ctx) => runCommand(id, ctx),
+    runCommand: (root, { input }, ctx) => runCommand(input.id, input.payload, ctx),
   },
 
   Subscription: {
@@ -234,4 +256,11 @@ addKeybinding({
   sequences: ['mod+shift+k', 'mod+shift+p'],
   scope: 'root',
   global: true,
+})
+
+onAnyCommand(async (cmd, ctx) => {
+  // @TODO persist lastUsed
+  updateCommand(cmd.id, {
+    lastUsed: new Date(),
+  })
 })
