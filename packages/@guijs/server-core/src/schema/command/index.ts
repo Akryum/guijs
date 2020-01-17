@@ -65,6 +65,34 @@ export function addCommand (cmd: MetaCommand) {
   }
 }
 
+export function updateCommand (id: string, info: Omit<Partial<MetaCommand>, 'id' | 'hidden'>) {
+  const cmd = commands.find(c => c.id === id)
+  if (cmd) {
+    Object.assign(cmd, info)
+    if (!cmd.hidden) {
+      searchIndexes[cmd.type].updateDoc(cmd)
+      globalSearchIndex.updateDoc(cmd)
+    }
+  } else {
+    consola.warn(`Command ${id} not found`)
+  }
+}
+
+export function removeCommand (id: string) {
+  const index = commands.findIndex(c => c.id === id)
+  if (index !== -1) {
+    const cmd = commands[index]
+    commands.splice(index, 1)
+    commandsMap.delete(cmd.id)
+    if (!cmd.hidden) {
+      searchIndexes[cmd.type].removeDocByRef(cmd.id)
+      globalSearchIndex.removeDocByRef(cmd.id)
+    }
+  } else {
+    consola.warn(`Command ${id} not found`)
+  }
+}
+
 const typeWords = {
   '?': CommandType.Help,
   '>': CommandType.Action,
