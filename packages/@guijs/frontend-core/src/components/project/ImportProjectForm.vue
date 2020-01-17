@@ -63,6 +63,7 @@ export default {
 
       <VSwitch
         v-model="formData.bookmarked"
+        :icon="formData.bookmarked ? 'bookmark' : 'bookmark_border'"
         label="guijs.import-project.input-bookmarked-label"
         class="form-input my-6"
       />

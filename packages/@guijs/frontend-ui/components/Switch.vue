@@ -54,7 +54,7 @@ export default {
     <div class="flex items-center">
       <i
         v-if="icon"
-        class="material-icons"
+        class="material-icons mr-2 text-base opacity-75"
       >
         {{ icon }}
       </i>
