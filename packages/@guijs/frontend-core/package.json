@@ -46,5 +46,10 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "vue-template-compiler": "^2.6.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/frontend-core"
   }
 }

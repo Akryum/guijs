@@ -25,5 +25,10 @@
   },
   "peerDependencies": {
     "vue": "^2.6.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/Akryum/guijs.git",
+    "directory": "packages/@guijs/frontend-ui"
   }
 }
