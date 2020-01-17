@@ -1,5 +1,5 @@
 <script>
-import { watch, reactive } from '@vue/composition-api'
+import { watch, reactive, ref } from '@vue/composition-api'
 import FileInput from '../form/FileInput.vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
@@ -40,8 +40,10 @@ export default {
 
     // Import
 
+    const validationError = ref(null)
+
     const {
-      mutate: importProject,
+      mutate,
       loading: importing,
       error: importError,
       onDone,
@@ -59,6 +61,18 @@ export default {
       },
     }))
 
+    async function importProject () {
+      validationError.value = null
+
+      // Validate input
+      if (!formData.name) {
+        validationError.value = 'guijs.import-project.error-name-required'
+        return
+      }
+
+      await mutate()
+    }
+
     onDone((result) => {
       emit('close')
       // @TODO go to project
@@ -67,6 +81,7 @@ export default {
     return {
       formData,
       checkError,
+      validationError,
       importProject,
       importing,
       importError,
@@ -98,7 +113,7 @@ export default {
       />
     </template>
 
-    <VError :error="checkError || importError" />
+    <VError :error="checkError || validationError || importError" />
 
     <div
       v-if="formData.path"

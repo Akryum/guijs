@@ -36,7 +36,7 @@
       "error-path-does-not-exist": "Path doesn't exist",
       "error-not-directory": "Path is not a directory",
       "error-no-package-json": "No package.json found",
-      "error-no-package-name": "No name field found in package.json",
+      "error-name-required": "Project name is required",
       "error-already-exists": "Project already exists in guijs database"
     },
     "file-input": {

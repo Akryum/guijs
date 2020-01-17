@@ -25,7 +25,7 @@ export type ChangeTerminalTitleInput = {
 
 export type CheckProjectPayload = {
    __typename?: 'CheckProjectPayload',
-  packageName: Scalars['String'],
+  packageName?: Maybe<Scalars['String']>,
 };
 
 export type Command = {
@@ -378,7 +378,7 @@ export type ResolversParentTypes = {
 };
 
 export type CheckProjectPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CheckProjectPayload'] = ResolversParentTypes['CheckProjectPayload']> = {
-  packageName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  packageName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type CommandResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Command'] = ResolversParentTypes['Command']> = {

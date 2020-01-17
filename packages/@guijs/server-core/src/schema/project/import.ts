@@ -14,7 +14,7 @@ extend type Mutation {
 }
 
 type CheckProjectPayload {
-  packageName: String!
+  packageName: String
 }
 
 input ImportProjectInput {
@@ -40,10 +40,6 @@ async function checkImportProject (dir: string) {
   }
 
   const pkg = await fs.readJson(pkgFile)
-  if (!pkg.name) {
-    throw new Error('guijs.import-project.error-no-package-name')
-  }
-
   return {
     packageName: pkg.name,
   }
