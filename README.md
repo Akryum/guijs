@@ -4,17 +4,10 @@
 
 ### Local development
 
-You should serve `@guijs/builtin-plugin` by running:
-
-```bash
-cd packages/@guijs/builtin-plugin
-yarn run serve
-```
-
 Then in another terminal, you should serve the ui web app:
 
 ```bash
-cd packages/@guijs/app-core
+cd packages/@guijs/frontend-core
 yarn run serve
 ```
 
