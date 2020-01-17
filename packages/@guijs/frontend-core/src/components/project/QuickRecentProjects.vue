@@ -39,7 +39,7 @@ export default {
       v-for="command of recentProjectCommands"
       :key="command.id"
       v-tooltip.right="command.description"
-      icon-left="work"
+      iconLeft="work"
       class="text-secondary-600 mb-2"
       @click="runCommand(command.id)"
     >

@@ -13,6 +13,7 @@ module.exports = {
     // trailing comma
     'comma-dangle': ['error', 'always-multiline'],
     'no-inner-declarations': 'off',
+    'vue/attribute-hyphenation': ['error', 'never'],
   },
   parserOptions: {
     parser: 'babel-eslint',

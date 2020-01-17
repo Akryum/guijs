@@ -106,7 +106,7 @@ export default {
     >
       <VButton
         :loading="importing"
-        icon-left="unarchive"
+        iconLeft="unarchive"
         class="flex-1 btn-lg btn-primary"
         @click="importProject()"
       >

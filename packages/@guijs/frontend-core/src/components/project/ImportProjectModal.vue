@@ -44,7 +44,7 @@ export default {
   <VModal
     v-if="isOpen"
     :locked="mutating"
-    shell-class="max-w-128"
+    shellClass="max-w-128"
     @close="isOpen = false"
   >
     <template #title>
