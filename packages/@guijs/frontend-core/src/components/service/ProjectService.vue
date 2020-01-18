@@ -1,10 +1,12 @@
 <script>
-import { onCommand } from '@/util/command'
-import { useRouter } from '@/util/router'
+import { onCommand, runCommand } from '@/util/command'
+import { useRouter, useRoute } from '@/util/router'
+import { watch } from '@vue/composition-api'
 
 export default {
   setup () {
     const router = useRouter()
+    const route = useRoute()
 
     onCommand('open-project', (cmd, payload) => {
       if (!router.currentRoute.params.projectId) {
@@ -19,6 +21,15 @@ export default {
           params: {
             projectId: payload.projectId,
           },
+        })
+      }
+    })
+
+    // Dispatch project open (after)
+    watch(() => route.value.params.projectId, value => {
+      if (value) {
+        runCommand('open-project-apply', {
+          projectId: value,
         })
       }
     })
