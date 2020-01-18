@@ -165,10 +165,23 @@ export function getRecentCommands (type: string = null, maxCount = 20) {
 
 export type OnCommandHandler = (command: MetaCommand, payload: any, ctx: Context) => void | Promise<void>
 
-const runHandlers: OnCommandHandler[] = []
+const runHandlers: { [commandId: string]: OnCommandHandler[] } = {}
+const globalRunHandlers: OnCommandHandler[] = []
+
+function getOnRunHandlers (commandId: string) {
+  let list = runHandlers[commandId]
+  if (!list) {
+    list = runHandlers[commandId] = []
+  }
+  return list
+}
+
+export function onCommand (id: string, handler: OnCommandHandler) {
+  getOnRunHandlers(id).push(handler)
+}
 
 export function onAnyCommand (handler: OnCommandHandler) {
-  runHandlers.push(handler)
+  globalRunHandlers.push(handler)
 }
 
 export function runCommand (id: string, payload: any, ctx: Context) {
@@ -180,7 +193,8 @@ export function runCommand (id: string, payload: any, ctx: Context) {
   if (command.handler) {
     command.handler(command, payload, ctx)
   }
-  runHandlers.forEach(h => h(command, payload, ctx))
+  getOnRunHandlers(command.id).forEach(h => h(command, payload, ctx))
+  globalRunHandlers.forEach(h => h(command, payload, ctx))
   ctx.pubsub.publish('commandRan', {
     commandRan: {
       command,
@@ -258,7 +272,7 @@ addKeybinding({
   global: true,
 })
 
-onAnyCommand(async (cmd, ctx) => {
+onAnyCommand(async (cmd, payload, ctx) => {
   // @TODO persist lastUsed
   updateCommand(cmd.id, {
     lastUsed: new Date(),
