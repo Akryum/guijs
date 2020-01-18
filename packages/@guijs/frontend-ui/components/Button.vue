@@ -110,7 +110,7 @@ export default {
     :tabindex="ghost ? -1 : 0"
     role="button"
     :aria-disabled="ghost"
-    class="inline-block cursor-pointer relative select-none outline-none"
+    class="inline-block cursor-pointer relative select-none outline-none group"
     :class="{
       'pointer-events-none opacity-75': ghost,
       'text-center': align === 'center',
@@ -130,7 +130,7 @@ export default {
         v-if="iconLeft"
         class="material-icons flex-none text-lg"
         :class="{
-          'mr-2 opacity-75': $slots.default,
+          'mr-2 opacity-75 group-hover:opacity-100': $slots.default,
         }"
       >{{ iconLeft }}</i>
 
@@ -147,7 +147,7 @@ export default {
         v-if="iconRight"
         class="material-icons flex-none text-lg"
         :class="{
-          'ml-2 opacity-75': $slots.default,
+          'ml-2 opacity-75 group-hover:opacity-100': $slots.default,
         }"
       >{{ iconRight }}</i>
     </div>
