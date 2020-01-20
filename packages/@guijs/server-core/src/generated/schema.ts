@@ -141,6 +141,12 @@ export type Project = Document & {
   bookmarked: Scalars['Boolean'],
   lastOpen?: Maybe<Scalars['Date']>,
   workspaces: Array<ProjectWorkspace>,
+  workspace?: Maybe<ProjectWorkspace>,
+};
+
+
+export type ProjectWorkspaceArgs = {
+  id: Scalars['ID']
 };
 
 export type ProjectType = {
@@ -434,6 +440,7 @@ export type ProjectResolvers<ContextType = Context, ParentType extends Resolvers
   bookmarked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   lastOpen?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>,
   workspaces?: Resolver<Array<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType>,
+  workspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<ProjectWorkspaceArgs, 'id'>>,
 };
 
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {

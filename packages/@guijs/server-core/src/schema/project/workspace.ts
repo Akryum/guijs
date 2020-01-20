@@ -4,6 +4,7 @@ import path from 'path'
 import { MetaProjectWorkspace } from './meta-types'
 import { Resolvers } from '@/generated/schema'
 import { getProjectTypes } from '../project-type'
+import Context from '@/generated/context'
 
 export const typeDefs = gql`
 type ProjectWorkspace {
@@ -16,21 +17,43 @@ type ProjectWorkspace {
 
 extend type Project {
   workspaces: [ProjectWorkspace!]!
+  workspace (id: ID!): ProjectWorkspace
 }
 `
 
-async function detectWorkspaces (cwd: string): Promise<MetaProjectWorkspace[]> {
+async function detectWorkspaces (cwd: string, projectId: string, ctx: Context): Promise<MetaProjectWorkspace[]> {
   const workspaces = await getWorkspaces({
     cwd,
   })
 
-  return workspaces.map(w => ({
-    id: w.dir,
-    name: w.name,
-    absolutePath: w.dir,
-    relativePath: path.relative(cwd, w.dir),
-    typeId: '244960132405920258',
-  }))
+  if (!workspaces.some(w => w.name === 'root')) {
+    workspaces.unshift(...await getWorkspaces({
+      cwd,
+      tools: ['root'],
+    }))
+  }
+
+  const result = workspaces.map(w => {
+    const relativeDir = path.relative(cwd, w.dir)
+    return {
+      id: !relativeDir.length ? '__root' : relativeDir,
+      name: w.name,
+      absolutePath: w.dir,
+      relativePath: relativeDir,
+      typeId: '244960132405920258',
+    }
+  })
+
+  // Cache workspaces
+  await ctx.db.projects.update({
+    _id: projectId,
+  }, {
+    $set: {
+      workspaces: result,
+    },
+  })
+
+  return result
 }
 
 export const resolvers: Resolvers = {
@@ -39,6 +62,8 @@ export const resolvers: Resolvers = {
   },
 
   Project: {
-    workspaces: (project) => detectWorkspaces(project.path),
+    workspaces: (project, args, ctx) => detectWorkspaces(project.path, project._id, ctx),
+
+    workspace: async (project, { id }) => project.workspaces.find(w => w.id === id),
   },
 }
