@@ -22,7 +22,7 @@ export async function updateSetting (id, value) {
 }
 
 export function useSetting (id) {
-  const { result } = useQuery(gql`
+  const { result, loading } = useQuery(gql`
     query darkModeSetting ($id: ID!) {
       setting (id: $id) {
         id
@@ -51,6 +51,7 @@ export function useSetting (id) {
 
   return {
     setting,
+    loading,
     update,
   }
 }

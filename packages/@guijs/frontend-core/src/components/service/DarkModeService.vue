@@ -28,8 +28,12 @@ try {
 
 export default {
   setup () {
-    const { setting, update } = useSetting('dark-mode')
-    watch(setting, applyDarkMode)
+    const { setting, loading, update } = useSetting('dark-mode')
+    watch(setting, value => {
+      if (!loading.value) {
+        applyDarkMode(value)
+      }
+    })
 
     // Commands
 
