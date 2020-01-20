@@ -34,6 +34,10 @@ const routes = [
       '../components/terminal/Terminals.vue'
     ),
   },
+  {
+    path: '*',
+    redirect: { name: 'home' },
+  },
 ]
 
 const router = new VueRouter({
