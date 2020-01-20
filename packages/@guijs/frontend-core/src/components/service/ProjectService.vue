@@ -1,7 +1,7 @@
 <script>
 import { onCommand, runCommand } from '@/util/command'
 import { useRouter, useRoute } from '@/util/router'
-import { watch } from '@vue/composition-api'
+import { watch, computed } from '@vue/composition-api'
 
 export default {
   setup () {
@@ -25,13 +25,21 @@ export default {
       }
     })
 
-    // Dispatch project open (after)
-    watch(() => route.value.params.projectId, value => {
+    const projectId = computed(() => route.value.params.projectId)
+
+    // On open project, reload the page
+    watch(projectId, value => {
       if (value) {
-        runCommand('open-project-apply', {
-          projectId: value,
-        })
+        // @TODO find a better way?
+        location.reload()
       }
+    }, {
+      lazy: true,
+    })
+
+    // Dispatch project open (after)
+    runCommand('open-project-apply', {
+      projectId: projectId.value,
     })
   },
 }

@@ -7,14 +7,20 @@ import { logErrorMessages } from '@vue/apollo-util'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
+import router from './router'
 
 // Client ID to differentiate tabs
 const clientId = `${Date.now()}-${Math.round(Math.random() * 100000)}`
+
+// Scope context to current project
+const getProjectId = () => router.currentRoute.params.projectId
+
 let httpLink = setContext((req, context) => ({
   ...context,
   headers: {
     ...context.headers,
     'client-id': clientId,
+    'project-id': getProjectId(),
   },
 }))
 
@@ -32,6 +38,7 @@ const wsLink = new WebSocketLink({
     connectionParams: {
       context: {
         clientId,
+        projectId: getProjectId(),
       },
     },
   },

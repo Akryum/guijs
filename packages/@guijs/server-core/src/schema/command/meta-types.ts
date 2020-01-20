@@ -6,4 +6,5 @@ export interface MetaCommand<T = any> extends Command {
   lastUsed?: Date
   hidden?: boolean
   related?: T
+  projectId?: string
 }

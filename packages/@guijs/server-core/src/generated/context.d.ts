@@ -12,6 +12,7 @@ import NodepackPluginExpress from '@nodepack/plugin-express/types/context'
 // Project context files
 import ClientId from '@/context/clientId'
 import Db from '@/context/db'
+import ProjectId from '@/context/projectId'
 
 interface ContextBase {
   config: ProjectConfigBase
@@ -23,5 +24,6 @@ export type Context = ContextBase
   & NodepackPluginExpress
   & ClientId
   & Db
+  & ProjectId
 
 export default Context
