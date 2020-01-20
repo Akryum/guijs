@@ -2,6 +2,8 @@ import { onAnyCommand, addCommand, runCommand, onCommand } from '../command'
 import { CommandType } from '@/generated/schema'
 import { MetaCommand } from '../command/meta-types'
 import { MetaProject } from './meta-types'
+import { callHook, hook } from '@nodepack/app-context'
+import Context from '@/generated/context'
 
 addCommand({
   id: 'open-project',
@@ -36,4 +38,10 @@ onCommand('open-project-apply', async (command, { projectId }, ctx) => {
       lastOpen: new Date(),
     },
   })
+
+  await callHook('project-open', ctx)
 })
+
+export function onProjectOpen (handler: (ctx: Context) => void) {
+  hook('project-open', handler)
+}
