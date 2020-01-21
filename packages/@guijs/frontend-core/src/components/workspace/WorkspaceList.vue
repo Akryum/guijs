@@ -68,7 +68,7 @@ export default {
       <VInput
         v-model="searchText"
         :placeholder="$t('guijs.common.search')"
-        class="p-4 border-gray-200 dark-border-950 border-b"
+        class="p-4 border-gray-200 dark:border-gray-950 border-b"
         autoFocus
       />
 
