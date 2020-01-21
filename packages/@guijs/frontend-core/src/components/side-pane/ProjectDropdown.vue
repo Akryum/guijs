@@ -14,7 +14,7 @@ export default {
 </script>
 
 <template>
-  <VDropdown
+  <VPopper
     v-if="project"
   >
     <div class="flex">
@@ -32,9 +32,11 @@ export default {
     </div>
 
     <template #popper>
-      No recent project
+      <div class="w-64">
+        No recent project
+      </div>
     </template>
-  </VDropdown>
+  </VPopper>
 
   <VError
     v-else-if="!loading"

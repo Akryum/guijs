@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+const RouterViewOnly = { render: h => h('router-view') }
+
 const routes = [
   {
     path: '/',
@@ -14,7 +16,7 @@ const routes = [
   },
   {
     path: '/project/:projectId',
-    component: { render: h => h('router-view') },
+    component: RouterViewOnly,
     children: [
       {
         path: '',
@@ -23,6 +25,23 @@ const routes = [
           /* webpackChunkName: 'HomePage' */
           '../components/HomePage.vue'
         ),
+      },
+      {
+        path: 'worskpace/:workspaceId?',
+        component: () => import(
+          /* webpackChunkName: 'ProjectMainLayout' */
+          '../components/project/ProjectMainLayout.vue'
+        ),
+        children: [
+          {
+            path: 'packages',
+            name: 'project-packages',
+            component: () => import(
+              /* webpackChunkName: 'PackagesPage' */
+              '../components/pkg/PackagesPage.vue'
+            ),
+          },
+        ],
       },
     ],
   },

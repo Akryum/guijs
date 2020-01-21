@@ -31,5 +31,17 @@ export default {
         class="ml-2"
       />
     </VButton>
+
+    <VButton
+      :to="{
+        name: 'project-packages',
+      }"
+      iconLeft="extension"
+      class="flex-1 btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
+      square
+      align="left"
+    >
+      {{ $t('guijs.side-pane.packages') }}
+    </VButton>
   </div>
 </template>

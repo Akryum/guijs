@@ -36,8 +36,8 @@ async function detectWorkspaces (cwd: string, projectId: string, ctx: Context): 
   const result = workspaces.map(w => {
     const relativeDir = path.relative(cwd, w.dir)
     return {
-      id: !relativeDir.length ? '__root' : relativeDir,
-      name: w.name,
+      id: !relativeDir ? '__root' : relativeDir,
+      name: !w.name ? path.basename(w.dir) : w.name,
       absolutePath: w.dir,
       relativePath: relativeDir,
       typeId: '244960132405920258',
