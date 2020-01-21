@@ -4,6 +4,7 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { bindScope, onKey } from '@/util/keybinding'
 import { onCommand, onAnyCommand, runCommand } from '@/util/command'
+import { useKeyboardNavigation } from '@/util/navigation'
 import { getSearchType, TYPE_WORDS } from './util'
 import { ICONS } from './icons'
 import { commandWithKeybindingFragment } from '../command/fragments'
@@ -79,39 +80,12 @@ export default {
 
     // Keyboard navigation
 
-    const selectedIndex = ref(0)
-    watch(commands, () => {
-      selectedIndex.value = 0
-    })
+    const { selectedIndex, onSelect } = useKeyboardNavigation(commands, 'find-modal')
 
-    onKey('enter', () => {
-      const command = commands.value[selectedIndex.value]
+    onSelect(command => {
       if (command) {
         selectCommand(command.id)
       }
-    }, {
-      scope: 'find-modal',
-      global: true,
-    })
-
-    onKey('up', () => {
-      selectedIndex.value--
-      if (selectedIndex.value < 0) {
-        selectedIndex.value = commands.value.length - 1
-      }
-    }, {
-      scope: 'find-modal',
-      global: true,
-    })
-
-    onKey('down', () => {
-      selectedIndex.value++
-      if (selectedIndex.value > commands.value.length - 1) {
-        selectedIndex.value = 0
-      }
-    }, {
-      scope: 'find-modal',
-      global: true,
     })
 
     // Commands
