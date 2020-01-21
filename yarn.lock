@@ -11052,7 +11052,7 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-popper.js@^1.15.0:
+popper.js@^1.16.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.0.tgz#2e1816bcbbaa518ea6c2e15a466f4cb9c6e2fbb3"
   integrity sha512-+G+EkOPoE5S/zChTpmBSSDYmhXJ5PsW8eMhH8cP/CQHMFPBG/kC9Y5IIw6qNYgdJ+/COf0ddY2li28iHaZRSjw==
@@ -14075,12 +14075,12 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-v-tooltip@^3.0.0-alpha.10:
-  version "3.0.0-alpha.11"
-  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-3.0.0-alpha.11.tgz#e278dfb068246acdd7b633baba2135599b3b22ab"
-  integrity sha512-n95vxc1fBZrCkmkJTuH/O0if+8r7r+dFfZpOYCysYT+bIJiK4gxMiEo8olTMoIM1uxikiOGN+CMURcW764m6Xw==
+v-tooltip@^3.0.0-alpha.13:
+  version "3.0.0-alpha.13"
+  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-3.0.0-alpha.13.tgz#eca576b5d35486a55289bfbd9f8365540364feba"
+  integrity sha512-wX1ubmdxDhOnhBsY4+hHuKZQWZ15VdMqImJAoeMQKm+fF+OPSmMsM30m0Wcgt7G4fiX3Nylak4C7xXLbBoKjGg==
   dependencies:
-    popper.js "^1.15.0"
+    popper.js "^1.16.0"
     vue-resize "^0.4.5"
 
 v8-compile-cache@^2.0.3:
@@ -14212,6 +14212,11 @@ vue-loader@^15.7.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-observe-visibility@^0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/vue-observe-visibility/-/vue-observe-visibility-0.4.6.tgz#878cb8ebcf3078e40807af29774e97105ebd519e"
+  integrity sha512-xo0CEVdkjSjhJoDdLSvoZoQrw/H2BlzB5jrCBKGZNXN2zdZgMuZ9BKrxXDjNP2AxlcCoKc8OahI3F3r3JGLv2Q==
 
 vue-resize@^0.4.5:
   version "0.4.5"
