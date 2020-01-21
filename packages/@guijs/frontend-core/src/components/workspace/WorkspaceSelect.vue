@@ -1,7 +1,7 @@
 <script>
 import WorkspaceList from './WorkspaceList.vue'
-import { ref } from '@vue/composition-api'
-import { useRouter } from '@/util/router'
+import { ref, watch } from '@vue/composition-api'
+import { useRouter, useRoute } from '@/util/router'
 
 export default {
   components: {
@@ -11,6 +11,7 @@ export default {
   setup () {
     const isOpen = ref(false)
     const router = useRouter()
+    const route = useRoute()
 
     function select (id) {
       router.push({
@@ -20,6 +21,17 @@ export default {
       })
       isOpen.value = false
     }
+
+    // Auto select __root
+    watch(route, value => {
+      if (!route.value.params.workspaceId) {
+        router.push({
+          params: {
+            workspaceId: '__root',
+          },
+        })
+      }
+    })
 
     return {
       isOpen,
