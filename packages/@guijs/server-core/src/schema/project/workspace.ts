@@ -64,6 +64,11 @@ export const resolvers: Resolvers = {
   Project: {
     workspaces: (project, args, ctx) => detectWorkspaces(project.path, project._id, ctx),
 
-    workspace: async (project, { id }) => project.workspaces.find(w => w.id === id),
+    workspace: async (project, { id }, ctx) => {
+      if (!project.workspaces) {
+        project.workspaces = await detectWorkspaces(project.path, project._id, ctx)
+      }
+      return project.workspaces.find(w => w.id === id)
+    },
   },
 }
