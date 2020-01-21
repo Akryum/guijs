@@ -25,19 +25,23 @@ export default {
       isOpen.value = false
     }
 
+    function resetWorkspaceSelection () {
+      router.push({
+        params: {
+          workspaceId: '__root',
+        },
+      })
+    }
+
     // Auto select __root
     watch(route, value => {
       if (!route.value.params.workspaceId) {
-        router.push({
-          params: {
-            workspaceId: '__root',
-          },
-        })
+        resetWorkspaceSelection()
       }
     })
 
     // Current workspace
-    const { result } = useQuery(gql`
+    const { result, onResult } = useQuery(gql`
       query currentWorkspace ($projectId: ID!, $workspaceId: ID!) {
         project (id: $projectId) {
           id
@@ -52,8 +56,16 @@ export default {
       workspaceId: route.value.params.workspaceId,
     }), () => ({
       enabled: !!route.value.params.workspaceId,
+      fetchPolicy: 'network-only',
     }))
     const currentWorkspace = useResult(result, null, data => data.project.workspace)
+
+    // Reset selection if workspace doesn't exist
+    onResult(result => {
+      if (!result.loading && !currentWorkspace.value) {
+        resetWorkspaceSelection()
+      }
+    })
 
     return {
       isOpen,
