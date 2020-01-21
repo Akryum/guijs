@@ -4,9 +4,11 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
 import { ref, computed } from '@vue/composition-api'
+import { bindScope } from '@/util/keybinding'
+import { useKeyboardNavigation } from '../../util/navigation'
 
 export default {
-  setup () {
+  setup (props, { emit }) {
     const route = useRoute()
 
     const { result } = useQuery(gql`
@@ -41,10 +43,20 @@ export default {
       return workspaces.value
     })
 
+    // Keybindings
+    bindScope('workspace-list')
+
+    const { selectedIndex, onSelect } = useKeyboardNavigation(filteredList, 'workspace-list')
+
+    onSelect(workspace => {
+      emit('select', workspace.id)
+    })
+
     return {
       result,
       searchText,
       filteredList,
+      selectedIndex,
     }
   },
 }
@@ -61,13 +73,17 @@ export default {
       />
 
       <VButton
-        v-for="w of filteredList"
+        v-for="(w, index) of filteredList"
         :key="w.id"
         v-tooltip.right="$t('guijs.workspace.select-button', { name: w.name, type: w.type.name })"
-        class="p-4 hover:bg-primary-100 dark-hover:bg-primary-900"
+        class="p-4"
+        :class="{
+          'bg-primary-100 dark:bg-primary-900': index === selectedIndex,
+        }"
         align="left"
         extend
         square
+        @mouseover.native="selectedIndex = index"
         @click="$emit('select', w.id)"
       >
         <img
