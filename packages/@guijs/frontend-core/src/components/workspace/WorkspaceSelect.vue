@@ -1,15 +1,38 @@
 <script>
 import WorkspaceList from './WorkspaceList.vue'
+import { ref } from '@vue/composition-api'
+import { useRouter } from '@/util/router'
 
 export default {
   components: {
     WorkspaceList,
   },
+
+  setup () {
+    const isOpen = ref(false)
+    const router = useRouter()
+
+    function select (id) {
+      router.push({
+        params: {
+          workspaceId: id,
+        },
+      })
+      isOpen.value = false
+    }
+
+    return {
+      isOpen,
+      select,
+    }
+  },
 }
 </script>
 
 <template>
-  <VPopper>
+  <VPopper
+    :open.sync="isOpen"
+  >
     <div class="flex">
       <VButton
         iconRight="keyboard_arrow_down"
@@ -25,11 +48,7 @@ export default {
     <template #popper>
       <WorkspaceList
         class="w-64"
-        @select="(id) => $router.push({
-          params: {
-            workspaceId: id,
-          },
-        })"
+        @select="select"
       />
     </template>
   </VPopper>
