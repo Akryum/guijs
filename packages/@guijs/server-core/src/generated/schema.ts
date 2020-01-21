@@ -3,6 +3,7 @@ import { MetaDocument } from '@/schema/db/meta-types';
 import { MetaCommand } from '@/schema/command/meta-types';
 import { MetaSetting } from '@/schema/setting/meta-types';
 import { MetaProject, MetaProjectWorkspace } from '@/schema/project/meta-types';
+import { MetaProjectPackage } from '@/schema/pkg/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -149,6 +150,21 @@ export type ProjectWorkspaceArgs = {
   id: Scalars['ID']
 };
 
+export type ProjectPackage = {
+   __typename?: 'ProjectPackage',
+  id: Scalars['ID'],
+  metadataId?: Maybe<Scalars['ID']>,
+  type: ProjectPackageType,
+  projectTypes: Array<ProjectType>,
+  versionSelector: Scalars['String'],
+  isWorkspace?: Maybe<Scalars['Boolean']>,
+};
+
+export enum ProjectPackageType {
+  Main = 'main',
+  Dev = 'dev'
+}
+
 export type ProjectType = {
    __typename?: 'ProjectType',
   id: Scalars['ID'],
@@ -163,6 +179,7 @@ export type ProjectWorkspace = {
   absolutePath: Scalars['String'],
   relativePath: Scalars['String'],
   type: ProjectType,
+  packages: Array<ProjectPackage>,
 };
 
 export type Query = {
@@ -338,6 +355,8 @@ export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>,
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectType: ResolverTypeWrapper<ProjectType>,
+  ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
+  ProjectPackageType: ProjectPackageType,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
@@ -368,6 +387,8 @@ export type ResolversParentTypes = {
   Date: Scalars['Date'],
   ProjectWorkspace: MetaProjectWorkspace,
   ProjectType: ProjectType,
+  ProjectPackage: MetaProjectPackage,
+  ProjectPackageType: ProjectPackageType,
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
@@ -443,6 +464,15 @@ export type ProjectResolvers<ContextType = Context, ParentType extends Resolvers
   workspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<ProjectWorkspaceArgs, 'id'>>,
 };
 
+export type ProjectPackageResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectPackage'] = ResolversParentTypes['ProjectPackage']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  metadataId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['ProjectPackageType'], ParentType, ContextType>,
+  projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
+  versionSelector?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  isWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+};
+
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -455,6 +485,7 @@ export type ProjectWorkspaceResolvers<ContextType = Context, ParentType extends 
   absolutePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   relativePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
+  packages?: Resolver<Array<ResolversTypes['ProjectPackage']>, ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -506,6 +537,7 @@ export type Resolvers<ContextType = Context> = {
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
+  ProjectPackage?: ProjectPackageResolvers<ContextType>,
   ProjectType?: ProjectTypeResolvers<ContextType>,
   ProjectWorkspace?: ProjectWorkspaceResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,

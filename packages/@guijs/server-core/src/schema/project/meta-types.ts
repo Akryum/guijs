@@ -5,6 +5,6 @@ export interface MetaProject extends MetaDocument, Omit<Project, 'id' | 'workspa
   workspaces?: MetaProjectWorkspace[]
 }
 
-export interface MetaProjectWorkspace extends Omit<ProjectWorkspace, 'type'> {
+export interface MetaProjectWorkspace extends Omit<ProjectWorkspace, 'type' | 'packages'> {
   typeId: string
 }

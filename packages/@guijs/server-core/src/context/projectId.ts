@@ -20,5 +20,5 @@ onCreate(context => {
 
 export default interface ProjectIdContext {
   getProjectId: () => string
-  getProject: () => MetaProject
+  getProject: () => Promise<MetaProject>
 }

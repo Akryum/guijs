@@ -40,6 +40,9 @@ const routes = [
               /* webpackChunkName: 'PackagesPage' */
               '../components/pkg/PackagesPage.vue'
             ),
+            meta: {
+              hideAside: true,
+            },
           },
         ],
       },
