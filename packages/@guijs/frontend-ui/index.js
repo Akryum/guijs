@@ -26,9 +26,11 @@ export default {
           },
           offset: 8,
           instantMove: true,
+          contentHtml: true,
         },
         dropdown: {
           offset: 8,
+          disposeTimeout: 10,
         },
       },
     })
