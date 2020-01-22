@@ -46,7 +46,9 @@ export async function getWorkspacePackages (
   const project = await ctx.getProject()
 
   // Clear package commands
-  removeCommands(commands.filter(cmd => cmd.projectId === project._id && cmd.type === CommandType.Package))
+  removeCommands(commands.filter(cmd => cmd.projectId === project._id &&
+    cmd.type === CommandType.Package &&
+    cmd.related.workspaceId === workspace.id))
 
   const list: MetaProjectPackage[] = []
 
@@ -97,6 +99,10 @@ export async function getWorkspacePackages (
       id: `package-${pkg.id}`,
       type: CommandType.Package,
       label: pkg.id,
+      projectId: project._id,
+      related: {
+        workspaceId: workspace.id,
+      },
       handler: (cmd, payload, ctx) => {
         let projectTypeId
         const metadata = pkg.metadata
@@ -201,6 +207,7 @@ addCommand({
 })
 
 onProjectOpen(async (project, ctx) => {
+  console.log(project)
   // Scan workspaces to index packages
   const workspaces = await detectWorkspaces(project, ctx)
   for (const workspace of workspaces) {
