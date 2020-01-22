@@ -13,6 +13,7 @@ import { MetaProjectWorkspace } from '../project/meta-types'
 import Context from '@/generated/context'
 import { onProjectOpen } from '../project/open'
 import { detectWorkspaces } from '../project/workspace'
+import { onProjectClose } from '../project/close'
 
 const PACKAGE_CACHE_VERSION = '0.0.1'
 
@@ -211,4 +212,10 @@ onProjectOpen(async (project, ctx) => {
   for (const workspace of workspaces) {
     await getWorkspacePackages(workspace, ctx)
   }
+})
+
+onProjectClose(async (project) => {
+  // Clear package commands
+  removeCommands(commands.filter(cmd => cmd.projectId === project._id &&
+    cmd.type === CommandType.Package))
 })
