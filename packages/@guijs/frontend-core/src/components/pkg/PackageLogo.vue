@@ -2,6 +2,8 @@
 import { ref, watch } from '@vue/composition-api'
 import genericLogo from '@/assets/package.png'
 
+const cache = {}
+
 export default {
   props: {
     pkg: {
@@ -14,9 +16,13 @@ export default {
     const src = ref(null)
 
     watch(() => props.pkg.id, async id => {
-      src.value = null
-      await tryLogo(id, 'logo.svg')
-      await tryLogo(id, 'logo.png')
+      if (cache[id] !== undefined) {
+        src.value = cache[id]
+      } else {
+        src.value = null
+        await tryLogo(id, 'logo.svg')
+        await tryLogo(id, 'logo.png')
+      }
     })
 
     function tryLogo (id, filename) {
@@ -32,10 +38,11 @@ export default {
           if (!checkId()) {
             resolve(false)
           } else {
-            src.value = img.src
+            src.value = cache[id] = img.src
           }
         }
         img.onerror = () => {
+          cache[id] = null
           resolve(false)
         }
         img.src = `https://unpkg.com/${props.pkg.id}/${filename}`
