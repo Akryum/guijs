@@ -1,5 +1,5 @@
 <script>
-import { useRoute } from '@/util/router'
+import { useRoute, useRouter } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectPackageFragment } from './fragments'
@@ -25,8 +25,9 @@ export default {
 
   setup () {
     const route = useRoute()
+    const router = useRouter()
 
-    const { result } = useQuery(gql`
+    const { result, onResult } = useQuery(gql`
       query projectPackages ($projectId: ID!, $workspaceId: ID!) {
         project (id: $projectId) {
           id
@@ -42,9 +43,10 @@ export default {
     `, () => ({
       projectId: route.value.params.projectId,
       workspaceId: route.value.params.workspaceId,
-    }), {
+    }), () => ({
       fetchPolicy: 'cache-and-network',
-    })
+      enabled: !!route.value.params.projectId && !!route.value.params.workspaceId,
+    }))
     const packages = useResult(result, [], data => data.project.workspace.packages)
 
     // Project types
@@ -89,6 +91,20 @@ export default {
     watch(() => route.value.params.projectTypeId, (value) => {
       if (scroller.value) {
         scroller.value.scrollTop = 0
+      }
+    })
+
+    // Unselect project type if it doesn't exist
+    onResult(result => {
+      if (!result.loading &&
+        route.value.params.projectTypeId &&
+        !projectTypes.value.some(pt => pt.id === route.value.params.projectTypeId)) {
+        router.push({
+          name: 'project-packages',
+          params: {
+            workspaceId: route.value.params.workspaceId,
+          },
+        })
       }
     })
 

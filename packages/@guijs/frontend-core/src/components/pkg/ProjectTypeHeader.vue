@@ -9,7 +9,7 @@ export default {
     const route = useRoute()
 
     const projectTypeId = computed(() => route.value.params.projectTypeId)
-    const isSpecial = computed(() => projectTypeId.value.startsWith('__'))
+    const isSpecial = computed(() => projectTypeId.value && projectTypeId.value.startsWith('__'))
 
     const { result } = useQuery(gql`
       query projectType ($id: ID!) {
@@ -23,13 +23,14 @@ export default {
     `, () => ({
       id: projectTypeId.value,
     }), () => ({
-      enabled: projectTypeId.value && !isSpecial.value,
+      enabled: !!projectTypeId.value && !isSpecial.value,
     }))
 
     const projectType = useResult(result)
 
     return {
       projectType,
+      projectTypeId,
       isSpecial,
     }
   },
@@ -38,7 +39,7 @@ export default {
 
 <template>
   <div
-    v-if="!isSpecial && projectType"
+    v-if="projectTypeId && !isSpecial && projectType"
     class="flex items-center h-full px-6"
   >
     <img
