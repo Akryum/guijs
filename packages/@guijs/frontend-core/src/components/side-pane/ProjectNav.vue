@@ -22,6 +22,15 @@ export default {
       })
     })
 
+    onCommand('show-scripts', () => {
+      router.push({
+        name: 'project-scripts',
+        params: {
+          ...router.currentRoute.params,
+        },
+      })
+    })
+
     return {
       runCommand,
     }
@@ -78,23 +87,37 @@ export default {
       </template>
     </VTooltip>
 
-    <VButton
-      :to="{
-        name: 'project-scripts',
-        params: {
-          ...$route.params,
-        },
-      }"
-      :class="{
-        active: $route.fullPath.includes('/scripts/'),
-      }"
-      iconLeft="assignment"
-      class="flex-none btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
-      square
-      align="left"
+    <VTooltip
+      placement="right"
+      class="flex-none"
     >
-      {{ $t('guijs.side-pane.scripts') }}
-    </VButton>
+      <VButton
+        :to="{
+          name: 'project-scripts',
+          params: {
+            ...$route.params,
+          },
+        }"
+        :class="{
+          active: $route.fullPath.includes('/scripts/'),
+        }"
+        iconLeft="assignment"
+        class="btn-md w-full hover:bg-primary-100 dark-hover:bg-primary-900 leading-normal"
+        square
+        align="left"
+      >
+        {{ $t('guijs.side-pane.scripts') }}
+      </VButton>
+
+      <template #popper>
+        <div class="flex">
+          <div class="mr-2">
+            {{ $t('guijs.script.show-scripts') }}
+          </div>
+          <Keybindings keybindingId="show-scripts" />
+        </div>
+      </template>
+    </VTooltip>
   </div>
 </template>
 

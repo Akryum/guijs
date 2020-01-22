@@ -78,6 +78,9 @@
       "unknown": "Unknown",
       "all": "All packages",
       "show-packages": "Show packages"
+    },
+    "script": {
+      "show-scripts": "Show scripts"
     }
   }
 }
