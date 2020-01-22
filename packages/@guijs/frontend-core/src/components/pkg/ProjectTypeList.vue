@@ -25,6 +25,9 @@ export default {
       square
       extend
       class="btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
+      :class="{
+        active: $route.params.projectTypeId === pt.id,
+      }"
     >
       <img
         :src="pt.logo"
@@ -37,3 +40,12 @@ export default {
     </VButton>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.active {
+  @apply bg-primary-100;
+  .mode-dark & {
+    @apply bg-primary-900;
+  }
+}
+</style>
