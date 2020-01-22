@@ -33,6 +33,8 @@ addCommand({
 
 // Main project open logic belongs here
 onCommand('open-project-apply', async (command, { projectId }, ctx) => {
+  if (!projectId) return
+
   // Update last open dates
   await ctx.db.projects.update<MetaProject>({
     _id: projectId,
@@ -42,6 +44,7 @@ onCommand('open-project-apply', async (command, { projectId }, ctx) => {
     },
   })
 
+  ctx.setProjectId(projectId)
   const project = await ctx.getProject()
 
   for (const handler of openProjectHandlers) {
