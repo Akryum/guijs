@@ -194,6 +194,7 @@ export type Query = {
   command?: Maybe<Command>,
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
+  keybinding?: Maybe<Keybinding>,
   projectType?: Maybe<ProjectType>,
   projects: Array<Project>,
   project?: Maybe<Project>,
@@ -214,6 +215,11 @@ export type QuerySearchCommandsArgs = {
 
 
 export type QueryCommandArgs = {
+  id: Scalars['ID']
+};
+
+
+export type QueryKeybindingArgs = {
   id: Scalars['ID']
 };
 
@@ -509,6 +515,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   command?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QueryCommandArgs, 'id'>>,
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
+  keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType, RequireFields<QueryKeybindingArgs, 'id'>>,
   projectType?: Resolver<Maybe<ResolversTypes['ProjectType']>, ParentType, ContextType, RequireFields<QueryProjectTypeArgs, 'id'>>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
