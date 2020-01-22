@@ -71,7 +71,9 @@
     "package": {
       "official": "official",
       "workspace": "workspace",
-      "improve-metadata": "Help improve metadata"
+      "improve-metadata": "Help improve metadata",
+      "unknown": "Unknown",
+      "all": "All packages"
     }
   }
 }

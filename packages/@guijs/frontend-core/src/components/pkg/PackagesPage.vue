@@ -6,9 +6,15 @@ import { projectPackageFragment } from './fragments'
 import { computed, ref, watch } from '@vue/composition-api'
 import ProjectTypeList from './ProjectTypeList.vue'
 
+const allProjectType = {
+  id: '__all',
+  name: 'guijs.package.all',
+  icon: 'extension',
+}
+
 const unknownProjectType = {
   id: '__unknown',
-  name: 'Unknown',
+  name: 'guijs.package.unknown',
   logo: require('@/assets/box.svg'),
 }
 
@@ -44,7 +50,9 @@ export default {
     // Project types
 
     const projectTypes = computed(() => {
-      const list = []
+      const list = [
+        allProjectType,
+      ]
       const map = {}
 
       for (const pkg of packages.value) {
@@ -65,6 +73,8 @@ export default {
 
       return list.sort((a, b) => a.name.localeCompare(b.name))
         .sort((a, b) => {
+          if (a.id === allProjectType.id) return -1
+          if (b.id === allProjectType.id) return 1
           if (a.id === unknownProjectType.id) return 1
           if (b.id === unknownProjectType.id) return -1
           return 0

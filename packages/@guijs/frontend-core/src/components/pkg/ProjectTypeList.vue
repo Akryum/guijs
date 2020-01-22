@@ -29,13 +29,20 @@ export default {
         active: $route.params.projectTypeId === pt.id,
       }"
     >
+      <i
+        v-if="pt.icon"
+        class="material-icons mr-4 text-gray-600 dark:text-gray-400"
+      >
+        {{ pt.icon }}
+      </i>
       <img
+        v-else
         :src="pt.logo"
         alt="Logo"
         class="w-6 h-6 rounded mr-4 flex-none"
       >
       <div class="flex-1 text-left w-0 truncate">
-        {{ pt.name }}
+        {{ $t(pt.name) }}
       </div>
     </VButton>
   </div>
