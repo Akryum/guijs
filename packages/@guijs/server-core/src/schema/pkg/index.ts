@@ -11,6 +11,8 @@ import { MetaDocument } from '../db/meta-types'
 import { removeCommands, commands, addCommand, runCommand } from '../command'
 import { MetaProjectWorkspace } from '../project/meta-types'
 import Context from '@/generated/context'
+import { onProjectOpen } from '../project/open'
+import { detectWorkspaces } from '../project/workspace'
 
 const PACKAGE_CACHE_VERSION = '0.0.1'
 
@@ -196,4 +198,12 @@ addCommand({
   type: CommandType.Action,
   label: 'Show package',
   hidden: true,
+})
+
+onProjectOpen(async (project, ctx) => {
+  // Scan workspaces to index packages
+  const workspaces = await detectWorkspaces(project, ctx)
+  for (const workspace of workspaces) {
+    await getWorkspacePackages(workspace, ctx)
+  }
 })

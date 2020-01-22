@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import getWorkspaces from '@guijs/get-workspaces'
 import path from 'path'
-import { MetaProjectWorkspace } from './meta-types'
+import { MetaProjectWorkspace, MetaProject } from './meta-types'
 import { Resolvers } from '@/generated/schema'
 import { getProjectTypes } from '../project-type'
 import Context from '@/generated/context'
@@ -22,20 +22,20 @@ extend type Project {
 }
 `
 
-async function detectWorkspaces (cwd: string, projectId: string, ctx: Context): Promise<MetaProjectWorkspace[]> {
+export async function detectWorkspaces (project: MetaProject, ctx: Context): Promise<MetaProjectWorkspace[]> {
   const workspaces = await getWorkspaces({
-    cwd,
+    cwd: project.path,
   })
 
   if (!workspaces.some(w => w.name === 'root')) {
     workspaces.unshift(...await getWorkspaces({
-      cwd,
+      cwd: project.path,
       tools: ['root'],
     }))
   }
 
   const result = workspaces.map(w => {
-    const relativeDir = path.relative(cwd, w.dir)
+    const relativeDir = path.relative(project.path, w.dir)
     return {
       id: !relativeDir ? '__root' : relativeDir,
       name: !w.name ? path.basename(w.dir) : w.name,
@@ -47,7 +47,7 @@ async function detectWorkspaces (cwd: string, projectId: string, ctx: Context): 
 
   // Cache workspaces
   await ctx.db.projects.update({
-    _id: projectId,
+    _id: project._id,
   }, {
     $set: {
       workspaces: result,
@@ -63,11 +63,11 @@ export const resolvers: Resolvers = {
   },
 
   Project: {
-    workspaces: (project, args, ctx) => detectWorkspaces(project.path, project._id, ctx),
+    workspaces: (project, args, ctx) => detectWorkspaces(project, ctx),
 
     workspace: async (project, { id }, ctx) => {
       if (!project.workspaces) {
-        project.workspaces = await detectWorkspaces(project.path, project._id, ctx)
+        project.workspaces = await detectWorkspaces(project, ctx)
       }
       return project.workspaces.find(w => w.id === id)
     },
