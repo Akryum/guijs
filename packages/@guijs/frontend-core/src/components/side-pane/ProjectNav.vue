@@ -35,6 +35,9 @@ export default {
     <VButton
       :to="{
         name: 'project-packages',
+        params: {
+          ...$route.params,
+        },
       }"
       :class="{
         active: $route.fullPath.includes('/packages/'),
@@ -45,6 +48,24 @@ export default {
       align="left"
     >
       {{ $t('guijs.side-pane.packages') }}
+    </VButton>
+
+    <VButton
+      :to="{
+        name: 'project-scripts',
+        params: {
+          ...$route.params,
+        },
+      }"
+      :class="{
+        active: $route.fullPath.includes('/scripts/'),
+      }"
+      iconLeft="assignment"
+      class="flex-1 btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
+      square
+      align="left"
+    >
+      {{ $t('guijs.side-pane.scripts') }}
     </VButton>
   </div>
 </template>

@@ -66,6 +66,19 @@ const routes = [
               },
             ],
           },
+          {
+            path: 'scripts',
+            components: {
+              default: RouterViewOnly,
+            },
+            children: [
+              {
+                path: '',
+                name: 'project-scripts',
+                component: Empty,
+              },
+            ],
+          },
         ],
       },
     ],
