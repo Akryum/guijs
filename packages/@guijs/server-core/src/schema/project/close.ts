@@ -13,6 +13,7 @@ addCommand({
   type: CommandType.Action,
   label: 'Close project',
   icon: 'close',
+  filter: (cmd, ctx) => !!ctx.getProjectId(),
 })
 
 // Redirect from Project commands to 'open-project'

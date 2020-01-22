@@ -14,7 +14,7 @@ const clientId = `${Date.now()}-${Math.round(Math.random() * 100000)}`
 console.log('client id', clientId)
 
 // Scope context to current project
-const getProjectId = () => router.currentRoute.params.projectId
+const getProjectId = () => router.currentRoute.params.projectId || ''
 
 let httpLink = setContext((req, context) => ({
   ...context,

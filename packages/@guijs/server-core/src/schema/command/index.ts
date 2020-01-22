@@ -173,6 +173,16 @@ function filterCommandsOnProject (commands: MetaCommand[], projectId: string) {
   return commands.filter(c => !c.projectId || c.projectId === projectId)
 }
 
+async function filterCommands (list: MetaCommand[], ctx: Context) {
+  const result: MetaCommand[] = []
+  for (const command of list) {
+    if (!command.filter || (await command.filter(command, ctx))) {
+      result.push(command)
+    }
+  }
+  return result
+}
+
 export type OnCommandHandler = (command: MetaCommand, payload: any, ctx: Context) => void | Promise<void>
 
 const runHandlers: { [commandId: string]: OnCommandHandler[] } = {}
@@ -222,10 +232,12 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
-    searchCommands: (root, { text }, ctx) => {
+    searchCommands: async (root, { text }, ctx) => {
       let result = searchCommands(text)
       result = result.filter(r => !!r)
-      return filterCommandsOnProject(result, ctx.getProjectId())
+      result = filterCommandsOnProject(result, ctx.getProjectId())
+      result = await filterCommands(result, ctx)
+      return result
     },
 
     command: (root, { id }) => commands.find(c => c.id === id),
