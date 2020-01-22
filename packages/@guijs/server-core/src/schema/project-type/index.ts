@@ -11,6 +11,10 @@ type ProjectType {
   slug: String!
   logo: String!
 }
+
+extend type Query {
+  projectType (id: ID!): ProjectType
+}
 `
 
 let projectTypes: ProjectType[]
@@ -22,6 +26,10 @@ export function getProjectTypes () {
 export const resolvers: Resolvers = {
   ProjectType: {
     logo: (projectType) => `https://awesomejs.dev${projectType.logo}`,
+  },
+
+  Query: {
+    projectType: (root, { id }) => projectTypes.find(pt => pt.id === id),
   },
 }
 

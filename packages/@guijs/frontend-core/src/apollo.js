@@ -1,12 +1,12 @@
 import { ApolloClient } from 'apollo-client'
 import { split, from } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import { onError } from 'apollo-link-error'
 import { logErrorMessages } from '@vue/apollo-util'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
+import { cache } from './cache'
 import router from './router'
 
 // Client ID to differentiate tabs
@@ -62,9 +62,6 @@ const link = from([
     httpLink
   ),
 ])
-
-// Cache implementation
-const cache = new InMemoryCache()
 
 // Create the apollo client
 export const apolloClient = new ApolloClient({

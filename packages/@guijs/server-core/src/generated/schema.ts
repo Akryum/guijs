@@ -194,6 +194,7 @@ export type Query = {
   command?: Maybe<Command>,
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
+  projectType?: Maybe<ProjectType>,
   projects: Array<Project>,
   project?: Maybe<Project>,
   recentProjectCommands: Array<Command>,
@@ -213,6 +214,11 @@ export type QuerySearchCommandsArgs = {
 
 
 export type QueryCommandArgs = {
+  id: Scalars['ID']
+};
+
+
+export type QueryProjectTypeArgs = {
   id: Scalars['ID']
 };
 
@@ -354,11 +360,11 @@ export type ResolversTypes = {
   CommandType: CommandType,
   Keybinding: ResolverTypeWrapper<Keybinding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  ProjectType: ResolverTypeWrapper<ProjectType>,
   Project: ResolverTypeWrapper<MetaProject>,
   Document: ResolverTypeWrapper<MetaDocument>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
-  ProjectType: ResolverTypeWrapper<ProjectType>,
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
   Setting: ResolverTypeWrapper<MetaSetting>,
@@ -386,11 +392,11 @@ export type ResolversParentTypes = {
   CommandType: CommandType,
   Keybinding: Keybinding,
   Boolean: Scalars['Boolean'],
+  ProjectType: ProjectType,
   Project: MetaProject,
   Document: MetaDocument,
   Date: Scalars['Date'],
   ProjectWorkspace: MetaProjectWorkspace,
-  ProjectType: ProjectType,
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
   Setting: MetaSetting,
@@ -503,6 +509,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   command?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<QueryCommandArgs, 'id'>>,
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
+  projectType?: Resolver<Maybe<ResolversTypes['ProjectType']>, ParentType, ContextType, RequireFields<QueryProjectTypeArgs, 'id'>>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
   recentProjectCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,

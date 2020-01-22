@@ -36,10 +36,17 @@ const routes = [
         children: [
           {
             path: 'packages',
-            component: () => import(
-              /* webpackChunkName: 'PackagesPage' */
-              '../components/pkg/PackagesPage.vue'
-            ),
+            components: {
+              default: () => import(
+                /* webpackChunkName: 'PackagesPage' */
+                '../components/pkg/PackagesPage.vue'
+              ),
+
+              header: () => import(
+                /* webpackChunkName: 'ProjectTypeHeader' */
+                '../components/pkg/ProjectTypeHeader.vue'
+              ),
+            },
             meta: {
               hideAside: true,
             },
