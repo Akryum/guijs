@@ -18,8 +18,8 @@ export default {
 
 <template>
   <div
-    class="bg-gray-100 border-gray-200 border-r w-64
-    dark:bg-gray-900 dark:border-gray-950"
+    class="bg-gray-100 border-gray-200 border-r w-48
+    dark:bg-gray-900 dark:border-gray-950 overflow-hidden"
   >
     <NoProjectOpen v-if="!$route.params.projectId" />
 

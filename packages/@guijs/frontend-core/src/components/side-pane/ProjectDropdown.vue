@@ -17,17 +17,19 @@ export default {
   <VPopper
     v-if="project"
   >
-    <div class="flex">
+    <div class="flex overflow-hidden">
       <VButton
         :iconLeft="project.bookmarked ? 'bookmark' : 'bookmark_border'"
         iconRight="keyboard_arrow_down"
-        class="flex-1 btn-md h-72p hover:bg-primary-100 dark-hover:bg-primary-900
+        class="flex-1 w-full btn-md h-72p hover:bg-primary-100 dark-hover:bg-primary-900
         border-gray-200 dark:border-gray-950 border-b"
         square
         align="left"
         extend
       >
-        {{ project.name }}
+        <div class="flex-1 w-0 truncate leading-normal">
+          {{ project.name }}
+        </div>
       </VButton>
     </div>
 
