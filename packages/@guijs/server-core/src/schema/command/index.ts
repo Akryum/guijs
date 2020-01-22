@@ -104,6 +104,12 @@ export function removeCommand (id: string) {
   }
 }
 
+export function removeCommands (cmds: MetaCommand[]) {
+  for (const cmd of cmds) {
+    removeCommand(cmd.id)
+  }
+}
+
 const typeWords = {
   '?': CommandType.Help,
   '>': CommandType.Action,
@@ -206,6 +212,7 @@ export function runCommand (id: string, payload: any, ctx: Context) {
     },
     clientId: ctx.getClientId(),
   })
+  consola.log('runCommand:', id, 'payload:', payload, 'clientId:', ctx.getClientId())
   return command
 }
 

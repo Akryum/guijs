@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { Resolvers, ProjectPackageType } from '@/generated/schema'
+import { Resolvers, ProjectPackageType, CommandType } from '@/generated/schema'
 import fs from 'fs-extra'
 import path from 'path'
 import { MetaProjectPackage, MetaPackage, FaunaPackage } from './meta-types'
@@ -8,6 +8,7 @@ import ms from 'ms'
 import consola from 'consola'
 import { getProjectTypes } from '../project-type'
 import { MetaDocument } from '../db/meta-types'
+import { removeCommands, commands, addCommand, runCommand } from '../command'
 
 const PACKAGE_CACHE_VERSION = '0.0.1'
 
@@ -54,6 +55,9 @@ export const resolvers: Resolvers = {
     packages: async (workspace, args, ctx) => {
       const project = await ctx.getProject()
 
+      // Clear package commands
+      removeCommands(commands.filter(cmd => cmd.projectId === project._id && cmd.type === CommandType.Package))
+
       const list: MetaProjectPackage[] = []
 
       // Read package.json
@@ -97,6 +101,29 @@ export const resolvers: Resolvers = {
         }
 
         pkg.metadata = metadata
+
+        // Commands
+        addCommand({
+          id: `package-${pkg.id}`,
+          type: CommandType.Package,
+          label: pkg.id,
+          handler: (cmd, payload, ctx) => {
+            let projectTypeId
+            const metadata = pkg.metadata
+            if (metadata && metadata.projectTypeIds.length) {
+              projectTypeId = metadata.projectTypeIds[0]
+            } else {
+              projectTypeId = '__unknown'
+            }
+
+            runCommand('show-package', {
+              projectId: project._id,
+              workspaceId: workspace.id,
+              projectTypeId,
+              packageId: pkg.id,
+            }, ctx)
+          },
+        })
       }
 
       // Get data from awesomejs.dev
@@ -115,7 +142,6 @@ export const resolvers: Resolvers = {
         }
 
         // It should return null for packages not found
-        console.time('fauna')
         const faunaData = await ctx.fauna.query<FaunaPackage[]>(q.Map(
           queries,
           q.Lambda(['item'], q.If(q.Not(q.IsNull(q.Var('item'))), {
@@ -127,8 +153,6 @@ export const resolvers: Resolvers = {
             avatar: q.Select(['data', 'metadata', 'github', 'data', 'owner', 'avatar'], q.Var('item')),
           }, null)),
         ))
-        console.timeEnd('fauna')
-        consola.log(faunaData.length, 'fauna items')
 
         const newMetadata: MetaPackage[] = []
 
@@ -159,3 +183,10 @@ export const resolvers: Resolvers = {
     },
   },
 }
+
+addCommand({
+  id: 'show-package',
+  type: CommandType.Action,
+  label: 'Show package',
+  hidden: true,
+})

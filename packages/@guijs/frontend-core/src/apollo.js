@@ -11,6 +11,7 @@ import router from './router'
 
 // Client ID to differentiate tabs
 const clientId = `${Date.now()}-${Math.round(Math.random() * 100000)}`
+console.log('client id', clientId)
 
 // Scope context to current project
 const getProjectId = () => router.currentRoute.params.projectId

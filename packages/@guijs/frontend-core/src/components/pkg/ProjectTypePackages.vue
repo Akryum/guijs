@@ -1,6 +1,6 @@
 <script>
-import { computed } from '@vue/composition-api'
-import { useRoute } from '@/util/router'
+import { computed, watch, ref } from '@vue/composition-api'
+import { useRoute, useRouter } from '@/util/router'
 import PackageItem from './PackageItem.vue'
 
 export default {
@@ -16,7 +16,10 @@ export default {
   },
 
   setup (props) {
+    const el = ref(null)
+
     const route = useRoute()
+    const router = useRouter()
 
     const projectTypeId = computed(() => route.value.params.projectTypeId)
 
@@ -39,19 +42,49 @@ export default {
         return 0
       }))
 
+    // Scroll into package
+
+    const highlightedId = ref(null)
+
+    watch(() => {
+      if (el.value && list.value.length && route.value.query.packageId) {
+        const item = el.value.querySelector(`[data-id="${route.value.query.packageId}"]`)
+        if (item) {
+          highlightedId.value = route.value.query.packageId
+          router.push({
+            query: {
+              packageId: undefined,
+            },
+          })
+          requestAnimationFrame(() => {
+            item.scrollIntoView()
+          })
+        }
+      }
+    })
+
     return {
+      el,
       sortedList,
+      highlightedId,
     }
   },
 }
 </script>
 
 <template>
-  <div class="m-6">
+  <div
+    ref="el"
+    class="m-6"
+  >
     <PackageItem
       v-for="pkg of sortedList"
       :key="pkg.id"
       :pkg="pkg"
+      :data-id="pkg.id"
+      :class="{
+        'border-primary-500': highlightedId === pkg.id,
+      }"
     />
   </div>
 </template>
