@@ -14,6 +14,7 @@ import Context from '@/generated/context'
 import { onProjectOpen } from '../project/open'
 import { detectWorkspaces } from '../project/workspace'
 import { onProjectClose } from '../project/close'
+import { addKeybinding } from '../keybinding'
 
 const PACKAGE_CACHE_VERSION = '0.0.1'
 
@@ -198,6 +199,19 @@ export const resolvers: Resolvers = {
     packages: async (workspace, args, ctx) => getWorkspacePackages(workspace, ctx),
   },
 }
+
+addCommand({
+  id: 'show-packages',
+  type: CommandType.Action,
+  label: 'Show packages',
+  description: 'guijs.package.show-packages',
+})
+
+addKeybinding({
+  id: 'show-packages',
+  scope: 'root',
+  sequences: ['k'],
+})
 
 addCommand({
   id: 'show-package',

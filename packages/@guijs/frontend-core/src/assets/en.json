@@ -76,7 +76,8 @@
       "workspace": "workspace",
       "improve-metadata": "Help improve metadata",
       "unknown": "Unknown",
-      "all": "All packages"
+      "all": "All packages",
+      "show-packages": "Show packages"
     }
   }
 }

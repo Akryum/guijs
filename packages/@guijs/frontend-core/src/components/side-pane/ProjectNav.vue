@@ -1,13 +1,27 @@
 <script>
-import { runCommand } from '@/util/command'
+import { runCommand, onCommand } from '@/util/command'
+import { useRouter } from '@/util/router'
 import CommandKeybinding from '../command/CommandKeybinding.vue'
+import Keybindings from '../keybinding/Keybindings.vue'
 
 export default {
   components: {
     CommandKeybinding,
+    Keybindings,
   },
 
   setup () {
+    const router = useRouter()
+
+    onCommand('show-packages', () => {
+      router.push({
+        name: 'project-packages',
+        params: {
+          ...router.currentRoute.params,
+        },
+      })
+    })
+
     return {
       runCommand,
     }
@@ -19,7 +33,7 @@ export default {
   <div class="flex flex-col">
     <VButton
       iconLeft="search"
-      class="flex-1 btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
+      class="flex-none btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
       square
       align="left"
       @click="runCommand('find')"
@@ -32,23 +46,37 @@ export default {
       />
     </VButton>
 
-    <VButton
-      :to="{
-        name: 'project-packages',
-        params: {
-          ...$route.params,
-        },
-      }"
-      :class="{
-        active: $route.fullPath.includes('/packages/'),
-      }"
-      iconLeft="extension"
-      class="flex-1 btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
-      square
-      align="left"
+    <VTooltip
+      placement="right"
+      class="flex-none"
     >
-      {{ $t('guijs.side-pane.packages') }}
-    </VButton>
+      <VButton
+        :to="{
+          name: 'project-packages',
+          params: {
+            ...$route.params,
+          },
+        }"
+        :class="{
+          active: $route.fullPath.includes('/packages/'),
+        }"
+        iconLeft="extension"
+        class="btn-md w-full hover:bg-primary-100 dark-hover:bg-primary-900 leading-normal"
+        square
+        align="left"
+      >
+        {{ $t('guijs.side-pane.packages') }}
+      </VButton>
+
+      <template #popper>
+        <div class="flex">
+          <div class="mr-2">
+            {{ $t('guijs.package.show-packages') }}
+          </div>
+          <Keybindings keybindingId="show-packages" />
+        </div>
+      </template>
+    </VTooltip>
 
     <VButton
       :to="{
@@ -61,7 +89,7 @@ export default {
         active: $route.fullPath.includes('/scripts/'),
       }"
       iconLeft="assignment"
-      class="flex-1 btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
+      class="flex-none btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
       square
       align="left"
     >
