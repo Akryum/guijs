@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@guijs/frontend-ui": "^0.1.0",
-    "@vue/apollo-composable": "^4.0.0-alpha.5",
+    "@vue/apollo-composable": "^4.0.0-alpha.6",
     "@vue/apollo-util": "^4.0.0-alpha.1",
     "@vue/composition-api": "^0.3.4",
     "apollo-cache-inmemory": "^1.6.5",
