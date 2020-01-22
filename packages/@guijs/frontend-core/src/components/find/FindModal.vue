@@ -69,9 +69,10 @@ export default {
       ${commandWithKeybindingFragment}
     `, () => ({
       text: searchText.value,
-    }), {
+    }), () => ({
       fetchPolicy: 'no-cache',
-    })
+      enabled: isOpen.value,
+    }))
     const commands = useResult(result, [])
 
     async function selectCommand (id) {
