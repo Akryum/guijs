@@ -83,7 +83,7 @@ export default {
       :pkg="pkg"
       :data-id="pkg.id"
       :class="{
-        'border-primary-500': highlightedId === pkg.id,
+        'border-primary-400 dark:border-primary-700': highlightedId === pkg.id,
       }"
     />
   </div>
