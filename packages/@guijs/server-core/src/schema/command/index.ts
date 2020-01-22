@@ -169,8 +169,8 @@ export function getRecentCommands (type: string = null, maxCount = 20) {
   return list.slice(0, maxCount)
 }
 
-function filterCommandsOnProject (commands: MetaCommand[], ctx: Context) {
-  return commands.filter(c => !c.projectId || c.projectId === ctx.getProjectId())
+function filterCommandsOnProject (commands: MetaCommand[], projectId: string) {
+  return commands.filter(c => !c.projectId || c.projectId === projectId)
 }
 
 export type OnCommandHandler = (command: MetaCommand, payload: any, ctx: Context) => void | Promise<void>
@@ -223,8 +223,9 @@ export const resolvers: Resolvers = {
 
   Query: {
     searchCommands: (root, { text }, ctx) => {
-      const result = searchCommands(text)
-      return filterCommandsOnProject(result, ctx)
+      let result = searchCommands(text)
+      result = result.filter(r => !!r)
+      return filterCommandsOnProject(result, ctx.getProjectId())
     },
 
     command: (root, { id }) => commands.find(c => c.id === id),
