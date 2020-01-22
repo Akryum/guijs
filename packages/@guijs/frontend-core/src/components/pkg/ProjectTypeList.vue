@@ -14,6 +14,13 @@ export default {
     <VButton
       v-for="pt of projectTypes"
       :key="pt.id"
+      :to="{
+        name: 'project-type-packages',
+        params: {
+          ...$route.params,
+          projectTypeId: pt.id,
+        },
+      }"
       align="left"
       square
       extend

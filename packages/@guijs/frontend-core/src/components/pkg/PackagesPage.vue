@@ -80,13 +80,15 @@ export default {
 
 <template>
   <div class="flex-1 flex items-stretch h-full">
-    <div class="w-64 border-gray-200 dark:border-gray-950 border-r pt-4">
+    <div class="flex-none w-64 border-gray-200 dark:border-gray-950 border-r pt-4 overflow-y-auto">
       <ProjectTypeList
         :projectTypes="projectTypes"
       />
     </div>
-    <main>
-      <router-view />
+    <main class="flex-1 overflow-y-auto">
+      <router-view
+        :packages="packages"
+      />
     </main>
   </div>
 </template>

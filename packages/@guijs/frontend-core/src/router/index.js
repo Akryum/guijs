@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const RouterViewOnly = { render: h => h('router-view') }
+const Empty = { render: h => null }
 
 const routes = [
   {
@@ -35,7 +36,6 @@ const routes = [
         children: [
           {
             path: 'packages',
-            name: 'project-packages',
             component: () => import(
               /* webpackChunkName: 'PackagesPage' */
               '../components/pkg/PackagesPage.vue'
@@ -43,6 +43,21 @@ const routes = [
             meta: {
               hideAside: true,
             },
+            children: [
+              {
+                path: '',
+                name: 'project-packages',
+                component: Empty,
+              },
+              {
+                path: 'project-type/:projectTypeId',
+                name: 'project-type-packages',
+                component: () => import(
+                  /* webpackChunkName: 'ProjectTypePackages' */
+                  '../components/pkg/ProjectTypePackages.vue'
+                ),
+              },
+            ],
           },
         ],
       },
