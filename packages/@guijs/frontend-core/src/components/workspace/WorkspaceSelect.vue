@@ -1,13 +1,16 @@
 <script>
-import WorkspaceList from './WorkspaceList.vue'
 import { ref, watch } from '@vue/composition-api'
 import { useRouter, useRoute } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
+import { onKeybind } from '@/util/keybinding'
+import Keybindings from '../keybinding/Keybindings.vue'
+import WorkspaceList from './WorkspaceList.vue'
 
 export default {
   components: {
+    Keybindings,
     WorkspaceList,
   },
 
@@ -67,6 +70,12 @@ export default {
       }
     })
 
+    // Keybindings
+
+    onKeybind('workspace-select', () => {
+      isOpen.value = !isOpen.value
+    })
+
     return {
       isOpen,
       select,
@@ -81,29 +90,41 @@ export default {
     :open.sync="isOpen"
   >
     <div class="overflow-hidden">
-      <VButton
-        iconRight="keyboard_arrow_down"
-        class="w-full btn-md h-72p hover:bg-primary-100 dark-hover:bg-primary-900"
-        square
-        align="left"
-        extend
-      >
-        <template v-if="currentWorkspace">
-          <img
-            :src="currentWorkspace.type.logo"
-            :alt="currentWorkspace.type.name"
-            class="w-6 h-6 rounded mr-4 flex-none"
-          >
-          <div
-            class="flex-1 w-0 truncate text-left leading-normal"
-          >
-            {{ currentWorkspace.name }}
+      <VTooltip>
+        <VButton
+          iconRight="keyboard_arrow_down"
+          class="w-full btn-md h-72p hover:bg-primary-100 dark-hover:bg-primary-900"
+          square
+          align="left"
+          extend
+        >
+          <template v-if="currentWorkspace">
+            <img
+              :src="currentWorkspace.type.logo"
+              :alt="currentWorkspace.type.name"
+              class="w-6 h-6 rounded mr-4 flex-none"
+            >
+            <div
+              class="flex-1 w-0 truncate text-left leading-normal"
+            >
+              {{ currentWorkspace.name }}
+            </div>
+          </template>
+          <template v-else>
+            ...
+          </template>
+        </VButton>
+
+        <template #popper>
+          <div>
+            {{ $t('guijs.workspace.tooltip') }}
+          </div>
+          <div class="flex">
+            <span class="text-gray-500 mr-2">{{ $t('guijs.workspace.action') }}</span>
+            <Keybindings keybindingId="workspace-select" />
           </div>
         </template>
-        <template v-else>
-          ...
-        </template>
-      </VButton>
+      </VTooltip>
     </div>
 
     <template #popper>

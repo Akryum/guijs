@@ -66,7 +66,9 @@
     },
     "workspace": {
       "select-button": "<div>{name}</div><div class=\"text-gray-500\">Type: {type}</div>",
-      "root": "(root)"
+      "root": "(root)",
+      "tooltip": "Current workspace",
+      "action": "Click to change workspace"
     },
     "package": {
       "official": "official",

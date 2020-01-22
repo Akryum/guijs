@@ -5,6 +5,7 @@ import { MetaProjectWorkspace } from './meta-types'
 import { Resolvers } from '@/generated/schema'
 import { getProjectTypes } from '../project-type'
 import Context from '@/generated/context'
+import { addKeybinding } from '../keybinding'
 
 export const typeDefs = gql`
 type ProjectWorkspace {
@@ -72,3 +73,9 @@ export const resolvers: Resolvers = {
     },
   },
 }
+
+addKeybinding({
+  id: 'workspace-select',
+  scope: 'root',
+  sequences: ['w'],
+})
