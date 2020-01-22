@@ -5,7 +5,6 @@ import path from 'path'
 import { MetaProjectPackage, MetaPackage, FaunaPackage } from './meta-types'
 import { query as q } from 'faunadb'
 import ms from 'ms'
-import consola from 'consola'
 import { getProjectTypes } from '../project-type'
 import { MetaDocument } from '../db/meta-types'
 import { removeCommands, commands, addCommand, runCommand } from '../command'
@@ -156,7 +155,6 @@ export async function getWorkspacePackages (
     for (let i = 0; i < faunaData.length; i++) {
       const raw = faunaData[i]
       if (raw) {
-        consola.log(raw)
         const metadata: MetaPackage = {
           id: raw.id,
           name: raw.name,
@@ -207,7 +205,6 @@ addCommand({
 })
 
 onProjectOpen(async (project, ctx) => {
-  console.log(project)
   // Scan workspaces to index packages
   const workspaces = await detectWorkspaces(project, ctx)
   for (const workspace of workspaces) {
