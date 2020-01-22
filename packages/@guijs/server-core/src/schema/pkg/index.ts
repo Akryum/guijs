@@ -5,6 +5,7 @@ import path from 'path'
 import { MetaProjectPackage, MetaPackage, FaunaPackage } from './meta-types'
 import { query as q } from 'faunadb'
 import ms from 'ms'
+import shortid from 'shortid'
 import { getProjectTypes } from '../project-type'
 import { MetaDocument } from '../db/meta-types'
 import { removeCommands, commands, addCommand, runCommand } from '../command'
@@ -95,7 +96,7 @@ export async function getWorkspacePackages (
 
     // Commands
     addCommand({
-      id: `package-${pkg.id}`,
+      id: `package-${shortid()}`,
       type: CommandType.Package,
       label: pkg.id,
       projectId: project._id,
