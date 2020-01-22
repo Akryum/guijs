@@ -8,9 +8,13 @@ fragment projectPackage on ProjectPackage {
   projectTypes {
     id
     name
+    slug
     logo
   }
   versionSelector
   isWorkspace
+  official
+  description
+  defaultLogo
 }
 `

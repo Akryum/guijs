@@ -3,7 +3,7 @@ import { useRoute } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectPackageFragment } from './fragments'
-import { computed } from '@vue/composition-api'
+import { computed, ref, watch } from '@vue/composition-api'
 import ProjectTypeList from './ProjectTypeList.vue'
 
 const unknownProjectType = {
@@ -42,6 +42,7 @@ export default {
     const packages = useResult(result, [], data => data.project.workspace.packages)
 
     // Project types
+
     const projectTypes = computed(() => {
       const list = []
       const map = {}
@@ -70,9 +71,21 @@ export default {
         })
     })
 
+    // Scrolling
+
+    const scroller = ref(null)
+
+    // Scroll to top
+    watch(() => route.value.params.projectTypeId, (value) => {
+      if (scroller.value) {
+        scroller.value.scrollTop = 0
+      }
+    })
+
     return {
       packages,
       projectTypes,
+      scroller,
     }
   },
 }
@@ -85,7 +98,10 @@ export default {
         :projectTypes="projectTypes"
       />
     </div>
-    <main class="flex-1 overflow-y-auto">
+    <main
+      ref="scroller"
+      class="flex-1 overflow-y-auto"
+    >
       <router-view
         :packages="packages"
       />

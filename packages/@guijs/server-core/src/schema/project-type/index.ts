@@ -8,6 +8,7 @@ export const typeDefs = gql`
 type ProjectType {
   id: ID!
   name: String!
+  slug: String!
   logo: String!
 }
 `
@@ -32,7 +33,7 @@ hook('apolloSchema', async (ctx: Context) => {
     ))
     projectTypes = data.map(doc => ({
       id: doc.ref.id,
-      red: doc.red,
+      ref: doc.red,
       ...doc.data,
     }))
   }

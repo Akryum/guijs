@@ -1,7 +1,8 @@
 {
   "guijs": {
     "common": {
-      "search": "Search"
+      "search": "Search",
+      "more-info": "More info"
     },
     "home": {
       "welcome": "Welcome to guijs",
@@ -66,6 +67,11 @@
     "workspace": {
       "select-button": "<div>{name}</div><div class=\"text-gray-500\">Type: {type}</div>",
       "root": "(root)"
+    },
+    "package": {
+      "official": "official",
+      "workspace": "workspace",
+      "improve-metadata": "Help improve metadata"
     }
   }
 }

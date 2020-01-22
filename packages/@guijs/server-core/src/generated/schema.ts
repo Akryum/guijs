@@ -158,6 +158,9 @@ export type ProjectPackage = {
   projectTypes: Array<ProjectType>,
   versionSelector: Scalars['String'],
   isWorkspace?: Maybe<Scalars['Boolean']>,
+  official?: Maybe<Scalars['Boolean']>,
+  description?: Maybe<Scalars['String']>,
+  defaultLogo?: Maybe<Scalars['String']>,
 };
 
 export enum ProjectPackageType {
@@ -169,6 +172,7 @@ export type ProjectType = {
    __typename?: 'ProjectType',
   id: Scalars['ID'],
   name: Scalars['String'],
+  slug: Scalars['String'],
   logo: Scalars['String'],
 };
 
@@ -471,11 +475,15 @@ export type ProjectPackageResolvers<ContextType = Context, ParentType extends Re
   projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
   versionSelector?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   isWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  official?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  defaultLogo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 };
 

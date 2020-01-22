@@ -32,8 +32,15 @@ export default {
       return props.packages
     })
 
+    const sortedList = computed(() => list.value.sort((a, b) => a.id.localeCompare(b.id))
+      .sort((a, b) => {
+        if (a.official && !b.official) return -1
+        if (!a.official && b.official) return 1
+        return 0
+      }))
+
     return {
-      list,
+      sortedList,
     }
   },
 }
@@ -42,7 +49,7 @@ export default {
 <template>
   <div class="m-6">
     <PackageItem
-      v-for="pkg of list"
+      v-for="pkg of sortedList"
       :key="pkg.id"
       :pkg="pkg"
     />

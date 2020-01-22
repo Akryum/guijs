@@ -2,9 +2,14 @@ import gql from 'graphql-tag'
 import { Resolvers, ProjectPackageType } from '@/generated/schema'
 import fs from 'fs-extra'
 import path from 'path'
-import { MetaProjectPackage, MetaPackage } from './meta-types'
-import { query as q, values } from 'faunadb'
+import { MetaProjectPackage, MetaPackage, FaunaPackage } from './meta-types'
+import { query as q } from 'faunadb'
+import ms from 'ms'
+import consola from 'consola'
 import { getProjectTypes } from '../project-type'
+import { MetaDocument } from '../db/meta-types'
+
+const PACKAGE_CACHE_VERSION = '0.0.1'
 
 export const typeDefs = gql`
 type ProjectPackage {
@@ -14,6 +19,9 @@ type ProjectPackage {
   projectTypes: [ProjectType!]!
   versionSelector: String!
   isWorkspace: Boolean
+  official: Boolean
+  description: String
+  defaultLogo: String
 }
 
 enum ProjectPackageType {
@@ -29,6 +37,9 @@ extend type ProjectWorkspace {
 export const resolvers: Resolvers = {
   ProjectPackage: {
     metadataId: pkg => pkg.metadata ? pkg.metadata.id : null,
+    official: pkg => pkg.metadata ? pkg.metadata.official : null,
+    description: pkg => pkg.metadata ? pkg.metadata.description : null,
+    defaultLogo: pkg => pkg.metadata ? pkg.metadata.defaultLogo : null,
 
     projectTypes: pkg => {
       if (pkg.metadata) {
@@ -77,9 +88,11 @@ export const resolvers: Resolvers = {
           pkg.isWorkspace = project.workspaces.some(w => w.name === pkg.id)
         }
 
-        const metadata: MetaPackage = await ctx.db.packages.findOne({ name: pkg.id })
+        const metadata: MetaPackage & MetaDocument = await ctx.db.packages.findOne({ name: pkg.id })
 
-        if (!metadata) {
+        if (!metadata ||
+          metadata.version !== PACKAGE_CACHE_VERSION ||
+          Date.now() - metadata.createdAt.getTime() > ms('7 days')) {
           missingMetadata.push(pkg)
         }
 
@@ -102,25 +115,36 @@ export const resolvers: Resolvers = {
         }
 
         // It should return null for packages not found
-        const data = await ctx.fauna.query<Array<{ id: string, name: string, projectTypes: values.Ref[] }>>(q.Map(
+        console.time('fauna')
+        const faunaData = await ctx.fauna.query<FaunaPackage[]>(q.Map(
           queries,
           q.Lambda(['item'], q.If(q.Not(q.IsNull(q.Var('item'))), {
             id: q.Select(['ref', 'id'], q.Var('item')),
             name: q.Select(['data', 'name'], q.Var('item')),
             projectTypes: q.Select(['data', 'projectTypes'], q.Var('item')),
+            tags: q.Select(['data', 'info', 'tags'], q.Var('item')),
+            description: q.Select(['data', 'metadata', 'npm', 'data', 'description'], q.Var('item')),
+            avatar: q.Select(['data', 'metadata', 'github', 'data', 'owner', 'avatar'], q.Var('item')),
           }, null)),
         ))
+        console.timeEnd('fauna')
+        consola.log(faunaData.length, 'fauna items')
 
         const newMetadata: MetaPackage[] = []
 
-        // Process awesomejs.dev data
-        for (let i = 0; i < data.length; i++) {
-          const raw = data[i]
+        // Create metadata
+        for (let i = 0; i < faunaData.length; i++) {
+          const raw = faunaData[i]
           if (raw) {
-            const metadata = {
+            consola.log(raw)
+            const metadata: MetaPackage = {
               id: raw.id,
               name: raw.name,
+              version: PACKAGE_CACHE_VERSION,
               projectTypeIds: raw.projectTypes.map(ref => ref.id),
+              official: raw.tags.includes('official'),
+              description: raw.description,
+              defaultLogo: raw.avatar,
             }
             newMetadata.push(metadata)
             missingMetadata[i].metadata = metadata
