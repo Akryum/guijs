@@ -38,8 +38,23 @@ export default {
     })
 
     // Dispatch project open (after)
-    runCommand('open-project-apply', {
-      projectId: projectId.value,
+    if (projectId.value) {
+      runCommand('open-project-apply', {
+        projectId: projectId.value,
+      })
+    }
+
+    // Project close
+    window.addEventListener('beforeunload', () => {
+      if (!projectId.value) return
+      runCommand('close-project-apply', {
+        projectId: projectId.value,
+      })
+    })
+
+    onCommand('close-project', () => {
+      if (!projectId.value) return
+      window.location.assign('/')
     })
   },
 }
