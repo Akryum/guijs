@@ -3,9 +3,11 @@
 /* eslint-disable */
 /* tslint:disable */
 
+import ConfigApollo from '@config/apollo'
 import ConfigFauna from '@config/fauna'
 
 export default interface BaseConfig {
+  apollo: typeof ConfigApollo
   fauna: typeof ConfigFauna
 }
 

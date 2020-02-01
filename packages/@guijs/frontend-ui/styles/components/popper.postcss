@@ -1,0 +1,93 @@
+/* purgecss start ignore */
+
+.v-popper {
+  .v-popper__trigger {
+    /* Fix height */
+    line-height: 0;
+  }
+}
+
+.v-popper__popper {
+  &.v-popper--theme-tooltip {
+    .v-popper__inner {
+      .mode-dark & {
+        @apply bg-white text-gray-900;
+      }
+    }
+
+    .v-popper__arrow {
+      .mode-dark & {
+        @apply border-white;
+      }
+    }
+  }
+
+  &.v-popper--theme-dropdown {
+    .v-popper__inner {
+      @apply p-0 text-gray-900;
+      .mode-dark & {
+        box-shadow: 0 42px 64px rgba(0, 0, 0, .3), 0 0 12px rgba(0, 0, 0, .3);
+        @apply text-white bg-gray-900;
+      }
+    }
+
+    .v-popper__arrow {
+      .mode-dark & {
+        @apply border-gray-900;
+      }
+    }
+
+    .v-popper__wrapper {
+      &.animate {
+        animation: dropdown-animation .15s cubic-bezier(0, 1, .5, 1);
+      }
+    }
+  }
+}
+
+
+@keyframes dropdown-animation {
+  0% {
+    transform: scale(.6);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* App backdrop when popper is open */
+
+#app {
+  &::before {
+    @apply fixed inset-0 bg-white pointer-events-none opacity-0;
+    content: '';
+    z-index: 50;
+    transition: opacity .15s linear;
+
+    .mode-dark & {
+      @apply bg-black;
+    }
+  }
+}
+
+.v-popper {
+  transition: z-index 0s 1s;
+  z-index: 1;
+}
+
+body.popper-open {
+  #app {
+    &::before {
+      opacity: .5;
+    }
+  }
+
+  .v-popper {
+    transition: none;
+    &.v-popper--open {
+      z-index: 51;
+    }
+  }
+}
+
+/* purgecss end ignore */

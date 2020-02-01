@@ -10,13 +10,16 @@ export default {
     const { onResult } = useSubscription(gql`
       subscription commandRan {
         commandRan {
-          id
-          type
+          command {
+            id
+            type
+          }
+          payload
         }
       }
     `)
-    onResult(result => {
-      dispatchCommand(result.data.commandRan)
+    onResult(({ data }) => {
+      dispatchCommand(data.commandRan.command, data.commandRan.payload)
     })
 
     // Try Keybinding

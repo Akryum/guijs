@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+const RouterViewOnly = { render: h => h('router-view') }
+const Empty = { render: h => null }
+
 const routes = [
   {
     path: '/',
@@ -13,12 +16,84 @@ const routes = [
     ),
   },
   {
+    path: '/project/:projectId',
+    component: RouterViewOnly,
+    children: [
+      {
+        path: '',
+        name: 'project-home',
+        component: () => import(
+          /* webpackChunkName: 'HomePage' */
+          '../components/HomePage.vue'
+        ),
+      },
+      {
+        path: 'worskpace/:workspaceId?',
+        component: () => import(
+          /* webpackChunkName: 'ProjectMainLayout' */
+          '../components/project/ProjectMainLayout.vue'
+        ),
+        children: [
+          {
+            path: 'packages',
+            components: {
+              default: () => import(
+                /* webpackChunkName: 'PackagesPage' */
+                '../components/pkg/PackagesPage.vue'
+              ),
+
+              header: () => import(
+                /* webpackChunkName: 'ProjectTypeHeader' */
+                '../components/pkg/ProjectTypeHeader.vue'
+              ),
+            },
+            meta: {
+              hideAside: true,
+            },
+            children: [
+              {
+                path: '',
+                name: 'project-packages',
+                component: Empty,
+              },
+              {
+                path: 'project-type/:projectTypeId',
+                name: 'project-type-packages',
+                component: () => import(
+                  /* webpackChunkName: 'ProjectTypePackages' */
+                  '../components/pkg/ProjectTypePackages.vue'
+                ),
+              },
+            ],
+          },
+          {
+            path: 'scripts',
+            components: {
+              default: RouterViewOnly,
+            },
+            children: [
+              {
+                path: '',
+                name: 'project-scripts',
+                component: Empty,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
     path: '/terminals',
     name: 'terminals',
     component: () => import(
       /* webpackChunkName: 'Terminals' */
       '../components/terminal/Terminals.vue'
     ),
+  },
+  {
+    path: '*',
+    redirect: { name: 'home' },
   },
 ]
 

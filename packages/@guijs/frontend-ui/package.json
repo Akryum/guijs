@@ -14,7 +14,8 @@
     "postcss-preset-env": "^6.6.0",
     "tailwindcss": "^1.0.1",
     "tailwindcss-dark-mode": "^1.1.1",
-    "v-tooltip": "^3.0.0-alpha.10",
+    "v-tooltip": "^3.0.0-alpha.13",
+    "vue-observe-visibility": "^0.4.6",
     "vue-resize": "^0.4.5"
   },
   "devDependencies": {

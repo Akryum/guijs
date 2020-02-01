@@ -157,7 +157,7 @@ export default {
           <!-- Close -->
           <VButton
             v-tooltip="$t('guijs.terminals.close-terminal')"
-            icon-left="close"
+            iconLeft="close"
             class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200 dark-hover:text-primary-400 dark-hover:bg-primary-900"
             stop
             @click="removeTerminal({ id: terminal.id })"
@@ -173,7 +173,7 @@ export default {
 
       <VButton
         v-tooltip="$t('guijs.terminals.new-terminal')"
-        icon-left="add"
+        iconLeft="add"
         square
         class="px-3 py-3 hover:bg-primary-100 dark-hover:bg-primary-800"
         @click="newTerminal()"
@@ -181,7 +181,7 @@ export default {
 
       <VButton
         v-tooltip="$t('guijs.terminals.close-terminal-pane')"
-        icon-left="close"
+        iconLeft="close"
         square
         class="px-3 py-3 hover:bg-primary-100 dark-hover:bg-primary-800"
         @click="closeTerminals()"
@@ -194,7 +194,7 @@ export default {
         <Terminal
           v-if="currentTerminalId === terminal.id"
           :key="terminal.id"
-          :terminal-id="terminal.id"
+          :terminalId="terminal.id"
           :cwd="terminal.cwd"
           class="flex-1"
         />

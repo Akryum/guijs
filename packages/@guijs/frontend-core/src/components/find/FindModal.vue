@@ -4,9 +4,10 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { bindScope, onKey } from '@/util/keybinding'
 import { onCommand, onAnyCommand, runCommand } from '@/util/command'
+import { useKeyboardNavigation } from '@/util/navigation'
 import { getSearchType, TYPE_WORDS } from './util'
 import { ICONS } from './icons'
-import { commandWithKeybindingFragment } from './command-fragments'
+import { commandWithKeybindingFragment } from '../command/fragments'
 import FindItem from './FindItem.vue'
 
 export default {
@@ -68,9 +69,10 @@ export default {
       ${commandWithKeybindingFragment}
     `, () => ({
       text: searchText.value,
-    }), {
+    }), () => ({
       fetchPolicy: 'no-cache',
-    })
+      enabled: isOpen.value,
+    }))
     const commands = useResult(result, [])
 
     async function selectCommand (id) {
@@ -79,39 +81,12 @@ export default {
 
     // Keyboard navigation
 
-    const selectedIndex = ref(0)
-    watch(commands, () => {
-      selectedIndex.value = 0
-    })
+    const { selectedIndex, onSelect } = useKeyboardNavigation(commands, 'find-modal')
 
-    onKey('enter', () => {
-      const command = commands.value[selectedIndex.value]
+    onSelect(command => {
       if (command) {
         selectCommand(command.id)
       }
-    }, {
-      scope: 'find-modal',
-      global: true,
-    })
-
-    onKey('up', () => {
-      selectedIndex.value--
-      if (selectedIndex.value < 0) {
-        selectedIndex.value = commands.value.length - 1
-      }
-    }, {
-      scope: 'find-modal',
-      global: true,
-    })
-
-    onKey('down', () => {
-      selectedIndex.value++
-      if (selectedIndex.value > commands.value.length - 1) {
-        selectedIndex.value = 0
-      }
-    }, {
-      scope: 'find-modal',
-      global: true,
     })
 
     // Commands
@@ -171,7 +146,7 @@ export default {
         ref="input"
         v-model="searchText"
         placeholder="guijs.find.placeholder"
-        auto-focus
+        autoFocus
         class="px-4 border-gray-200 dark:border-gray-950 border-r h-full"
       >
         <template #before>

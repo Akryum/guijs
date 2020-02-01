@@ -28,14 +28,25 @@ enum CommandType {
 
 extend type Query {
   searchCommands(text: String!): [Command!]!
+  command (id: ID!): Command
 }
 
 extend type Mutation {
-  runCommand(id: ID!): Command
+  runCommand(input: RunCommandInput!): Command
+}
+
+input RunCommandInput {
+  id: ID!
+  payload: JSON
 }
 
 type Subscription {
-  commandRan: Command
+  commandRan: CommandRan
+}
+
+type CommandRan {
+  command: Command!
+  payload: JSON
 }
 `
 
@@ -62,6 +73,40 @@ export function addCommand (cmd: MetaCommand) {
   if (!cmd.hidden) {
     searchIndexes[cmd.type].addDoc(cmd)
     globalSearchIndex.addDoc(cmd)
+  }
+}
+
+export function updateCommand (id: string, info: Omit<Partial<MetaCommand>, 'id' | 'hidden'>) {
+  const cmd = commands.find(c => c.id === id)
+  if (cmd) {
+    Object.assign(cmd, info)
+    if (!cmd.hidden) {
+      searchIndexes[cmd.type].updateDoc(cmd)
+      globalSearchIndex.updateDoc(cmd)
+    }
+  } else {
+    consola.warn(`Command ${id} not found`)
+  }
+}
+
+export function removeCommand (id: string) {
+  const index = commands.findIndex(c => c.id === id)
+  if (index !== -1) {
+    const cmd = commands[index]
+    commands.splice(index, 1)
+    commandsMap.delete(cmd.id)
+    if (!cmd.hidden) {
+      searchIndexes[cmd.type].removeDocByRef(cmd.id)
+      globalSearchIndex.removeDocByRef(cmd.id)
+    }
+  } else {
+    consola.warn(`Command ${id} not found`)
+  }
+}
+
+export function removeCommands (cmds: MetaCommand[]) {
+  for (const cmd of cmds) {
+    removeCommand(cmd.id)
   }
 }
 
@@ -104,7 +149,7 @@ export function searchCommands (text: string) {
   return results.map(r => commandsMap.get(r.ref))
 }
 
-function getRecentCommands (type: string = null) {
+export function getRecentCommands (type: string = null, maxCount = 20) {
   let list = commands
   if (type) {
     list = list.filter(c => !c.hidden && c.type === type)
@@ -121,22 +166,63 @@ function getRecentCommands (type: string = null) {
     }
     return 0
   })
-  return list.slice(0, 20)
+  return list.slice(0, maxCount)
 }
 
-export function runCommand (id: string, ctx: Context) {
+function filterCommandsOnProject (commands: MetaCommand[], projectId: string) {
+  return commands.filter(c => !c.projectId || c.projectId === projectId)
+}
+
+async function filterCommands (list: MetaCommand[], ctx: Context) {
+  const result: MetaCommand[] = []
+  for (const command of list) {
+    if (!command.filter || (await command.filter(command, ctx))) {
+      result.push(command)
+    }
+  }
+  return result
+}
+
+export type OnCommandHandler = (command: MetaCommand, payload: any, ctx: Context) => void | Promise<void>
+
+const runHandlers: { [commandId: string]: OnCommandHandler[] } = {}
+const globalRunHandlers: OnCommandHandler[] = []
+
+function getOnRunHandlers (commandId: string) {
+  let list = runHandlers[commandId]
+  if (!list) {
+    list = runHandlers[commandId] = []
+  }
+  return list
+}
+
+export function onCommand (id: string, handler: OnCommandHandler) {
+  getOnRunHandlers(id).push(handler)
+}
+
+export function onAnyCommand (handler: OnCommandHandler) {
+  globalRunHandlers.push(handler)
+}
+
+export function runCommand (id: string, payload: any, ctx: Context) {
   const command = commands.find(c => c.id === id)
   if (!command) {
     consola.warn(`Command ${id} not found`)
     return null
   }
   if (command.handler) {
-    command.handler()
+    command.handler(command, payload, ctx)
   }
+  getOnRunHandlers(command.id).forEach(h => h(command, payload, ctx))
+  globalRunHandlers.forEach(h => h(command, payload, ctx))
   ctx.pubsub.publish('commandRan', {
-    commandRan: command,
+    commandRan: {
+      command,
+      payload,
+    },
     clientId: ctx.getClientId(),
   })
+  consola.log('runCommand:', id, 'payload:', payload, 'clientId:', ctx.getClientId())
   return command
 }
 
@@ -146,11 +232,19 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
-    searchCommands: (root, { text }) => searchCommands(text),
+    searchCommands: async (root, { text }, ctx) => {
+      let result = searchCommands(text)
+      result = result.filter(r => !!r)
+      result = filterCommandsOnProject(result, ctx.getProjectId())
+      result = await filterCommands(result, ctx)
+      return result
+    },
+
+    command: (root, { id }) => commands.find(c => c.id === id),
   },
 
   Mutation: {
-    runCommand: (root, { id }, ctx) => runCommand(id, ctx),
+    runCommand: (root, { input }, ctx) => runCommand(input.id, input.payload, ctx),
   },
 
   Subscription: {
@@ -200,7 +294,14 @@ addCommand({
 
 addKeybinding({
   id: 'command',
-  sequences: ['mod+shift+p', 'mod+shift+k'],
+  sequences: ['mod+shift+k', 'mod+shift+p'],
   scope: 'root',
   global: true,
+})
+
+onAnyCommand(async (cmd, payload, ctx) => {
+  // @TODO persist lastUsed
+  updateCommand(cmd.id, {
+    lastUsed: new Date(),
+  })
 })

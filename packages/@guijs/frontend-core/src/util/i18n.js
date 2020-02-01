@@ -9,6 +9,7 @@ const messages = {
 export const i18n = new VueI18n({
   locale: 'en',
   messages,
+  silentTranslationWarn: true,
 })
 
 // Hot updates

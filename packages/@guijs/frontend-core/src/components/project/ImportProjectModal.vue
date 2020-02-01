@@ -2,6 +2,7 @@
 import { ref } from '@vue/composition-api'
 import { bindScope, onKey } from '@/util/keybinding'
 import { onCommand } from '@/util/command'
+import { useGlobalMutationLoading } from '@vue/apollo-composable'
 const ImportProjectForm = () => import(
   /* webpackChunkName: 'ImportProjectForm' */
   './ImportProjectForm.vue'
@@ -15,9 +16,12 @@ export default {
   setup () {
     const isOpen = ref(false)
 
+    const mutating = useGlobalMutationLoading()
+
     bindScope('import-project', isOpen)
 
     onKey('esc', () => {
+      if (mutating.value) return
       isOpen.value = false
     }, {
       scope: 'import-project',
@@ -30,6 +34,7 @@ export default {
 
     return {
       isOpen,
+      mutating,
     }
   },
 }
@@ -38,7 +43,8 @@ export default {
 <template>
   <VModal
     v-if="isOpen"
-    shell-class="max-w-128"
+    :locked="mutating"
+    shellClass="max-w-128"
     @close="isOpen = false"
   >
     <template #title>
@@ -47,6 +53,8 @@ export default {
       </div>
     </template>
 
-    <ImportProjectForm />
+    <ImportProjectForm
+      @close="isOpen = false"
+    />
   </VModal>
 </template>

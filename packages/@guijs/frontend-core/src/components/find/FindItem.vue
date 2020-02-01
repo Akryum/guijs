@@ -35,6 +35,7 @@ export default {
     }"
     align="left"
     square
+    extend
     @click="$emit('select')"
   >
     <i class="material-icons mr-4 text-gray-500 text-2xl">

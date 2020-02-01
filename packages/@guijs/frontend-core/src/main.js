@@ -9,7 +9,7 @@ import { i18n } from './util/i18n'
 
 Vue.config.productionTip = false
 
-new Vue({
+const app = new Vue({
   router,
   i18n,
 
@@ -18,4 +18,8 @@ new Vue({
   },
 
   render: h => h(App),
-}).$mount('#app')
+})
+
+router.onReady(() => {
+  app.$mount('#app')
+})

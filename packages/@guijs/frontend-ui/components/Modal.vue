@@ -34,7 +34,7 @@ export default {
     >
       <!-- Titlebar -->
       <div class="flex items-stretch border-b border-gray-200 dark:border-gray-950">
-        <div class="flex-1">
+        <div class="flex-1 h-72p">
           <slot name="title">
             {{ title }}
           </slot>
@@ -45,7 +45,7 @@ export default {
           class="w-72p h-72p group"
           @click="$emit('close')"
         >
-          <i class="material-icons text-2xl text-gray-500 group-hover:text-gray-800">close</i>
+          <i class="material-icons text-2xl text-gray-500 group-hover:text-gray-800 dark-group-hover:text-gray-200">close</i>
         </VButton>
       </div>
 

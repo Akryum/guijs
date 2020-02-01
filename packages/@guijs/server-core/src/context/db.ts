@@ -1,15 +1,41 @@
-import { onCreate, addProp } from '@nodepack/app-context'
-import Datastore from 'nedb'
+import { onCreate } from '@nodepack/app-context'
+import Datastore from 'nedb-promise'
 import path from 'path'
 import { rcFolder } from '@/util/rc-folder'
+import { ThenType } from '@/util/types'
 
-onCreate(context => {
-  addProp(context, 'db', () => new Datastore({
-    filename: path.resolve(rcFolder, 'main.db'),
+async function collection (name: string, indexes: string[] = []): Promise<Datastore> {
+  const ds = new Datastore({
+    filename: path.resolve(rcFolder, `db/${name}.db`),
     autoload: true,
-  }))
+    timestampData: true,
+  })
+
+  for (const index of indexes) {
+    await ds.ensureIndex({ fieldName: index })
+  }
+
+  return ds
+}
+
+async function createCollections () {
+  return {
+    projects: await collection('projects'),
+    packages: await collection('packages', [
+      'name',
+    ]),
+  }
+}
+
+let collections: ThenType<typeof createCollections>
+
+onCreate(async context => {
+  if (!collections) {
+    collections = await createCollections()
+  }
+  context.db = collections
 })
 
 export default interface DbContext {
-  db: Datastore
+  db: ThenType<typeof createCollections>
 }

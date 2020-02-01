@@ -35,7 +35,7 @@ export default {
   },
 
   setup (props, { emit }) {
-    const { mutate, onDone } = useMutation(gql`
+    const { mutate, loading, onDone } = useMutation(gql`
       mutation selectFile ($input: SelectFileInput!) {
         selectFile (input: $input)
       }
@@ -44,6 +44,7 @@ export default {
     })
 
     function browse () {
+      if (loading.value) return
       return mutate({
         input: {
           cwd: props.value,
@@ -59,6 +60,7 @@ export default {
 
     return {
       browse,
+      loading,
     }
   },
 }
@@ -67,6 +69,9 @@ export default {
 <template>
   <div
     class="flex items-center form-input cursor-pointer group"
+    :class="{
+      'pointer-events-none': loading,
+    }"
     @click="browse"
   >
     <div class="flex-1">

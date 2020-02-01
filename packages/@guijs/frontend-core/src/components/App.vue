@@ -18,7 +18,7 @@ export default {
   <div
     id="app"
     class="w-screen h-screen overflow-hidden flex flex-col items-stretch
-    dark:bg-gray-850 dark:text-gray-100"
+    bg-white dark:bg-gray-850 dark:text-gray-100"
   >
     <div class="flex-1 flex items-stretch overflow-hidden">
       <SidePane class="flex-none" />

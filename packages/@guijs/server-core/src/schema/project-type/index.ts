@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { ProjectType } from '@/generated/schema'
+import { ProjectType, Resolvers } from '@/generated/schema'
 import { hook } from '@nodepack/app-context'
 import Context from '@/generated/context'
 import { query as q } from 'faunadb'
@@ -8,11 +8,30 @@ export const typeDefs = gql`
 type ProjectType {
   id: ID!
   name: String!
+  slug: String!
   logo: String!
+}
+
+extend type Query {
+  projectType (id: ID!): ProjectType
 }
 `
 
 let projectTypes: ProjectType[]
+
+export function getProjectTypes () {
+  return projectTypes
+}
+
+export const resolvers: Resolvers = {
+  ProjectType: {
+    logo: (projectType) => `https://awesomejs.dev${projectType.logo}`,
+  },
+
+  Query: {
+    projectType: (root, { id }) => projectTypes.find(pt => pt.id === id),
+  },
+}
 
 hook('apolloSchema', async (ctx: Context) => {
   if (!projectTypes) {
@@ -22,7 +41,7 @@ hook('apolloSchema', async (ctx: Context) => {
     ))
     projectTypes = data.map(doc => ({
       id: doc.ref.id,
-      red: doc.red,
+      ref: doc.red,
       ...doc.data,
     }))
   }

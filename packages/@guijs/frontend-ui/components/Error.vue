@@ -33,10 +33,10 @@ export default {
 <template>
   <div
     v-if="error"
-    class="flex items-center text-red-500 p-4 my-6 border-red-300 dark:border-red-700 border rounded"
+    class="flex items-center text-red-500 p-4 my-6 border-red-300 dark:border-red-700 border rounded overflow-x-hidden"
   >
     <i class="material-icons mr-3">error</i>
-    <div class="whitespace-pre">
+    <div class="flex-auto whitespace-pre-wrap break-words">
       {{ $t(message) }}
     </div>
   </div>

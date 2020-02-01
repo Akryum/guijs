@@ -1,5 +1,9 @@
 {
   "guijs": {
+    "common": {
+      "search": "Search",
+      "more-info": "More info"
+    },
     "home": {
       "welcome": "Welcome to guijs",
       "quick-actions": "Quick-actions",
@@ -36,7 +40,8 @@
       "error-path-does-not-exist": "Path doesn't exist",
       "error-not-directory": "Path is not a directory",
       "error-no-package-json": "No package.json found",
-      "error-no-package-name": "No name field found in package.json"
+      "error-name-required": "Project name is required",
+      "error-already-exists": "Project already exists in guijs database"
     },
     "file-input": {
       "select-a-file": "Select a file:",
@@ -52,6 +57,30 @@
       "dark-mode": "Dark mode",
       "dark-mode-description": "Use dark colors for the interface",
       "toggle-dark-mode": "Toggle dark mode"
+    },
+    "side-pane": {
+      "no-project-open": "No project open",
+      "project-not-found": "Project not found",
+      "find": "Find",
+      "packages": "Packages",
+      "scripts": "Scripts"
+    },
+    "workspace": {
+      "select-button": "<div>{name}</div><div class=\"text-gray-500\">Type: {type}</div>",
+      "root": "(root)",
+      "tooltip": "Current workspace",
+      "action": "Click to change workspace"
+    },
+    "package": {
+      "official": "official",
+      "workspace": "workspace",
+      "improve-metadata": "Help improve metadata",
+      "unknown": "Unknown",
+      "all": "All packages",
+      "show-packages": "Show packages"
+    },
+    "script": {
+      "show-scripts": "Show scripts"
     }
   }
 }

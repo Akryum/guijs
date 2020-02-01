@@ -12,6 +12,7 @@ type Keybinding {
 
 extend type Query {
   keybindings: [Keybinding!]!
+  keybinding (id: ID!): Keybinding
 }
 `
 
@@ -25,5 +26,7 @@ export function addKeybinding (keybinding: Keybinding) {
 export const resolvers: Resolvers = {
   Query: {
     keybindings: () => keybindings,
+
+    keybinding: (root, { id }) => keybindings.find(k => k.id === id),
   },
 }
