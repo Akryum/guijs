@@ -1,3 +1,4 @@
 node_modules/
 /live
 /live-test
+.DS_Store
