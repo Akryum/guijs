@@ -4,7 +4,11 @@
   "description": "desktop app builder for guijs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-assets": "cd ../server-core && yarn build && cd ../frontend-core && yarn build && cp ../server-core/dist/* ../tauri-app/src-tauri/server",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "build-from-source": "node ../../../../tauri/cli/tauri.js/bin/tauri build"
   },
   "author": "Daniel Thompson-Yvetot",
   "license": "MIT",

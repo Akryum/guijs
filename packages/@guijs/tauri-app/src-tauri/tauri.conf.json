@@ -1,7 +1,7 @@
 {
   "build": {
-    "distDir": "dist",
-    "devPath": "http://localhost:4000"
+    "distDir": "../../frontend-core/dist",
+    "devPath": "http://localhost:8080"
   },
   "ctx": {},
   "tauri": {
@@ -23,7 +23,7 @@
     "edge": {
       "active": true
     },
-    "automaticStart": {
+    "inliner": {
       "active": true
     }
   }
