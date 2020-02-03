@@ -134,6 +134,13 @@ export type MutationUpdateSettingArgs = {
   input: UpdateSettingInput
 };
 
+export type NpmScript = {
+   __typename?: 'NpmScript',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  command: Scalars['String'],
+};
+
 export type Project = Document & {
    __typename?: 'Project',
   id: Scalars['ID'],
@@ -184,6 +191,7 @@ export type ProjectWorkspace = {
   relativePath: Scalars['String'],
   type: ProjectType,
   packages: Array<ProjectPackage>,
+  scripts: Array<NpmScript>,
 };
 
 export type Query = {
@@ -373,6 +381,7 @@ export type ResolversTypes = {
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
+  NpmScript: ResolverTypeWrapper<NpmScript>,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
@@ -405,6 +414,7 @@ export type ResolversParentTypes = {
   ProjectWorkspace: MetaProjectWorkspace,
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
+  NpmScript: NpmScript,
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
@@ -470,6 +480,12 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   updateSetting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<MutationUpdateSettingArgs, 'input'>>,
 };
 
+export type NpmScriptResolvers<ContextType = Context, ParentType extends ResolversParentTypes['NpmScript'] = ResolversParentTypes['NpmScript']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  command?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+};
+
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -506,6 +522,7 @@ export type ProjectWorkspaceResolvers<ContextType = Context, ParentType extends 
   relativePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
   packages?: Resolver<Array<ResolversTypes['ProjectPackage']>, ParentType, ContextType>,
+  scripts?: Resolver<Array<ResolversTypes['NpmScript']>, ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -558,6 +575,7 @@ export type Resolvers<ContextType = Context> = {
   JSON?: GraphQLScalarType,
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
+  NpmScript?: NpmScriptResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
   ProjectPackage?: ProjectPackageResolvers<ContextType>,
   ProjectType?: ProjectTypeResolvers<ContextType>,
