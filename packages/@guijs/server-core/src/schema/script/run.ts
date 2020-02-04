@@ -19,7 +19,7 @@ enum NpmScriptStatus {
 }
 `
 
-function getScriptStatus (script: MetaNpmScript, ctx: Context): NpmScriptStatus {
+export function getScriptStatus (script: MetaNpmScript, ctx: Context): NpmScriptStatus {
   // @TODO script status
   return NpmScriptStatus.Idle
 }

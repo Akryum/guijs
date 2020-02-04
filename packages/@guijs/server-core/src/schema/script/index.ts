@@ -1,5 +1,5 @@
 import { addCommand, removeCommands, commands, runCommand } from '../command'
-import { CommandType, Resolvers } from '@/generated/schema'
+import { CommandType, Resolvers, NpmScriptStatus } from '@/generated/schema'
 import { addKeybinding } from '../keybinding'
 import gql from 'graphql-tag'
 import fs from 'fs-extra'
@@ -11,6 +11,7 @@ import { MetaNpmScript } from './meta-types'
 import { onProjectOpen } from '../project/open'
 import { detectWorkspaces } from '../project/workspace'
 import { onProjectClose } from '../project/close'
+import { getScriptStatus } from './run'
 
 export const typeDefs = gql`
 type NpmScript implements Document {
@@ -94,14 +95,19 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
 
   // Clean old deleted
   for (const [, script] of oldScriptMap) {
-    // @TODO check if running task => if so hard delete script
-    script.deleted = true
-    await ctx.db.scripts.update({
-      _id: script._id,
-    }, {
-      $set: { deleted: true },
-    })
-    result.push(script)
+    if (getScriptStatus(script, ctx) === NpmScriptStatus.Idle) {
+      await ctx.db.scripts.remove({
+        _id: script._id,
+      }, {})
+    } else {
+      script.deleted = true
+      await ctx.db.scripts.update({
+        _id: script._id,
+      }, {
+        $set: { deleted: true },
+      })
+      result.push(script)
+    }
   }
 
   // Commands
