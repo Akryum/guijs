@@ -1,5 +1,11 @@
 <script>
+import ScriptStatusIndicator from './ScriptStatusIndicator.vue'
+
 export default {
+  components: {
+    ScriptStatusIndicator,
+  },
+
   props: {
     script: {
       type: Object,
@@ -26,9 +32,10 @@ export default {
       active: $route.params.scriptId === script.id,
     }"
   >
-    <div class="w-6 mr-4 flex items-center justify-center">
-      <div class="w-3 h-3 bg-gray-500 rounded-full" />
-    </div>
+    <ScriptStatusIndicator
+      :scriptId="script.id"
+      class="mr-4"
+    />
     <div class="flex-1 text-left w-0 truncate">
       {{ script.name }}
     </div>

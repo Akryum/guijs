@@ -1,5 +1,5 @@
 import { addCommand } from '../command'
-import { CommandType, Resolvers } from '@/generated/schema'
+import { CommandType, Resolvers, NpmScriptStatus } from '@/generated/schema'
 import { addKeybinding } from '../keybinding'
 import gql from 'graphql-tag'
 import fs from 'fs-extra'
@@ -14,6 +14,15 @@ type NpmScript implements Document {
   id: ID!
   name: String!
   command: String!
+  status: NpmScriptStatus!
+}
+
+enum NpmScriptStatus {
+  idle
+  running
+  success
+  error
+  killed
 }
 
 extend type ProjectWorkspace {
@@ -98,6 +107,11 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
 }
 
 export const resolvers: Resolvers = {
+  NpmScript: {
+    // @TODO
+    status: () => NpmScriptStatus.Idle,
+  },
+
   ProjectWorkspace: {
     scripts: async (workspace, args, ctx) => loadScripts(workspace, ctx),
   },

@@ -140,7 +140,16 @@ export type NpmScript = Document & {
   id: Scalars['ID'],
   name: Scalars['String'],
   command: Scalars['String'],
+  status: NpmScriptStatus,
 };
+
+export enum NpmScriptStatus {
+  Idle = 'idle',
+  Running = 'running',
+  Success = 'success',
+  Error = 'error',
+  Killed = 'killed'
+}
 
 export type Project = Document & {
    __typename?: 'Project',
@@ -389,6 +398,7 @@ export type ResolversTypes = {
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
   NpmScript: ResolverTypeWrapper<MetaNpmScript>,
+  NpmScriptStatus: NpmScriptStatus,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
@@ -422,6 +432,7 @@ export type ResolversParentTypes = {
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
   NpmScript: MetaNpmScript,
+  NpmScriptStatus: NpmScriptStatus,
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
@@ -491,6 +502,7 @@ export type NpmScriptResolvers<ContextType = Context, ParentType extends Resolve
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   command?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  status?: Resolver<ResolversTypes['NpmScriptStatus'], ParentType, ContextType>,
 };
 
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {

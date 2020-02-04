@@ -3,8 +3,13 @@ import { useRoute } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from './fragments'
+import ScriptStatusIndicator from './ScriptStatusIndicator.vue'
 
 export default {
+  components: {
+    ScriptStatusIndicator,
+  },
+
   setup () {
     const route = useRoute()
 
@@ -34,6 +39,11 @@ export default {
     v-if="$route.params.scriptId && script"
     class="flex items-center h-full px-6"
   >
+    <ScriptStatusIndicator
+      :scriptId="script.id"
+      class="flex-none mr-4"
+    />
+
     <div class="flex-1 text-left w-0 truncate">
       {{ script.name }}
 

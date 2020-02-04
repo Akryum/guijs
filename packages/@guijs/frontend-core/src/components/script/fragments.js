@@ -5,5 +5,6 @@ fragment script on NpmScript {
   id
   name
   command
+  status
 }
 `
