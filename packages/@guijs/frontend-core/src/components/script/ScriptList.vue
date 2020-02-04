@@ -3,8 +3,13 @@ import { useRoute } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from './fragments'
+import ScriptListItem from './ScriptListItem.vue'
 
 export default {
+  components: {
+    ScriptListItem,
+  },
+
   setup () {
     const route = useRoute()
 
@@ -37,31 +42,11 @@ export default {
 
 <template>
   <div class="flex flex-col items-stretch mt-4">
-    <VButton
+    <ScriptListItem
       v-for="script of scripts"
       :key="script.id"
-      :to="{
-        name: 'project-script',
-        params: {
-          ...$route.params,
-          scriptId: script.id,
-        }
-      }"
-      align="left"
-      square
-      extend
-      class="btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
-      :class="{
-        active: $route.params.scriptId === script.id,
-      }"
-    >
-      <div class="w-6 mr-4 flex items-center justify-center">
-        <div class="w-3 h-3 bg-gray-500 rounded-full" />
-      </div>
-      <div class="flex-1 text-left w-0 truncate">
-        {{ script.name }}
-      </div>
-    </VButton>
+      :script="script"
+    />
   </div>
 </template>
 
