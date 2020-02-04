@@ -27,7 +27,7 @@ async function findScripts (workspace: MetaProjectWorkspace, ctx: Context) {
     const result: MetaNpmScript[] = []
     for (const key in pkg.scripts) {
       result.push({
-        _id: shortid,
+        _id: shortid(),
         projectId: ctx.getProjectId(),
         workspaceId: workspace.id,
         name: key,
