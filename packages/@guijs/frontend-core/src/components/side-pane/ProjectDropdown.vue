@@ -27,7 +27,7 @@ export default {
         align="left"
         extend
       >
-        <div class="flex-1 w-0 truncate leading-normal">
+        <div class="flex-1 w-0 truncate leading-normal text-left">
           {{ project.name }}
         </div>
       </VButton>
