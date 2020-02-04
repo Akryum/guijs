@@ -1,5 +1,11 @@
 <script>
+import ScriptToolbar from './ScriptToolbar.vue'
+
 export default {
+  components: {
+    ScriptToolbar,
+  },
+
   setup () {
     return {}
   },
@@ -7,5 +13,7 @@ export default {
 </script>
 
 <template>
-  <div>Script</div>
+  <div class="flex flex-col">
+    <ScriptToolbar />
+  </div>
 </template>
