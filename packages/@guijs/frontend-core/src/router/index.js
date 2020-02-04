@@ -75,6 +75,11 @@ const routes = [
                 /* webpackChunkName: 'ScriptList' */
                 '../components/script/ScriptList.vue'
               ),
+
+              header: () => import(
+                /* webpackChunkName: 'ScriptHeader' */
+                '../components/script/ScriptHeader.vue'
+              ),
             },
             children: [
               {

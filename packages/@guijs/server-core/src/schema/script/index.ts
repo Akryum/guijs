@@ -19,6 +19,10 @@ type NpmScript implements Document {
 extend type ProjectWorkspace {
   scripts: [NpmScript!]!
 }
+
+extend type Query {
+  script (id: ID!): NpmScript
+}
 `
 
 async function findScripts (workspace: MetaProjectWorkspace, ctx: Context) {
@@ -96,6 +100,10 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
 export const resolvers: Resolvers = {
   ProjectWorkspace: {
     scripts: async (workspace, args, ctx) => loadScripts(workspace, ctx),
+  },
+
+  Query: {
+    script: async (root, { id }, ctx) => ctx.db.scripts.findOne<MetaNpmScript>({ _id: id }),
   },
 }
 

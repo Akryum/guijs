@@ -208,6 +208,7 @@ export type Query = {
   projects: Array<Project>,
   project?: Maybe<Project>,
   recentProjectCommands: Array<Command>,
+  script?: Maybe<NpmScript>,
   settings: Array<Setting>,
   setting?: Maybe<Setting>,
 };
@@ -239,6 +240,11 @@ export type QueryProjectTypeArgs = {
 
 
 export type QueryProjectArgs = {
+  id: Scalars['ID']
+};
+
+
+export type QueryScriptArgs = {
   id: Scalars['ID']
 };
 
@@ -538,6 +544,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
   recentProjectCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
+  script?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<QueryScriptArgs, 'id'>>,
   settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
   setting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<QuerySettingArgs, 'id'>>,
 };
