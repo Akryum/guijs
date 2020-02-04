@@ -6,15 +6,13 @@ export default {
   setup () {
     const router = useRouter()
 
-    onCommand('show-package', async (cmd, payload) => {
+    onCommand('toggle-run-script', async (cmd, payload) => {
       router.push({
-        name: 'project-type-packages',
+        name: 'project-script',
         params: {
           workspaceId: payload.workspaceId,
           projectTypeId: payload.projectTypeId,
-        },
-        query: {
-          packageId: payload.packageId,
+          scriptId: payload.scriptId,
         },
       })
     })

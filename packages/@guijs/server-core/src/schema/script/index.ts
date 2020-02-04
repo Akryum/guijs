@@ -1,5 +1,5 @@
-import { addCommand } from '../command'
-import { CommandType, Resolvers, NpmScriptStatus } from '@/generated/schema'
+import { addCommand, removeCommands, commands, runCommand } from '../command'
+import { CommandType, Resolvers } from '@/generated/schema'
 import { addKeybinding } from '../keybinding'
 import gql from 'graphql-tag'
 import fs from 'fs-extra'
@@ -8,21 +8,15 @@ import shortid from 'shortid'
 import { MetaProjectWorkspace } from '../project/meta-types'
 import Context from '@/generated/context'
 import { MetaNpmScript } from './meta-types'
+import { onProjectOpen } from '../project/open'
+import { detectWorkspaces } from '../project/workspace'
+import { onProjectClose } from '../project/close'
 
 export const typeDefs = gql`
 type NpmScript implements Document {
   id: ID!
   name: String!
   command: String!
-  status: NpmScriptStatus!
-}
-
-enum NpmScriptStatus {
-  idle
-  running
-  success
-  error
-  killed
 }
 
 extend type ProjectWorkspace {
@@ -55,8 +49,15 @@ async function findScripts (workspace: MetaProjectWorkspace, ctx: Context) {
 async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
   const result: MetaNpmScript[] = []
 
+  const projectId = ctx.getProjectId()
+
+  // Clear script commands
+  removeCommands(commands.filter(cmd => cmd.projectId === projectId &&
+    cmd.type === CommandType.Script &&
+    cmd.related.workspaceId === workspace.id))
+
   const oldScripts: MetaNpmScript[] = await ctx.db.scripts.find({
-    projectId: ctx.getProjectId(),
+    projectId: projectId,
     workspaceId: workspace.id,
   })
   const oldScriptMap = new Map<string, MetaNpmScript>()
@@ -103,15 +104,32 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
     result.push(script)
   }
 
+  // Commands
+  for (const script of result) {
+    // Commands
+    addCommand({
+      id: `script-${shortid()}`,
+      type: CommandType.Script,
+      label: script.name,
+      description: workspace.name,
+      projectId: projectId,
+      related: {
+        workspaceId: workspace.id,
+      },
+      handler: (cmd, payload, ctx) => {
+        runCommand('toggle-run-script', {
+          projectId: projectId,
+          workspaceId: workspace.id,
+          scriptId: script._id,
+        }, ctx)
+      },
+    })
+  }
+
   return result
 }
 
 export const resolvers: Resolvers = {
-  NpmScript: {
-    // @TODO
-    status: () => NpmScriptStatus.Idle,
-  },
-
   ProjectWorkspace: {
     scripts: async (workspace, args, ctx) => loadScripts(workspace, ctx),
   },
@@ -132,4 +150,18 @@ addKeybinding({
   id: 'show-scripts',
   scope: 'root',
   sequences: ['s'],
+})
+
+onProjectOpen(async (project, ctx) => {
+  // Scan workspaces to index packages
+  const workspaces = await detectWorkspaces(project, ctx)
+  for (const workspace of workspaces) {
+    await loadScripts(workspace, ctx)
+  }
+})
+
+onProjectClose(async (project) => {
+  // Clear package commands
+  removeCommands(commands.filter(cmd => cmd.projectId === project._id &&
+    cmd.type === CommandType.Script))
 })
