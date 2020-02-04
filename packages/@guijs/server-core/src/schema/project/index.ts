@@ -24,9 +24,7 @@ extend type Query {
 
 export const resolvers: Resolvers = {
   Query: {
-    projects: async (root, args, ctx) => {
-      return ctx.db.projects.find<MetaProject>({})
-    },
+    projects: async (root, args, ctx) => ctx.db.projects.find<MetaProject>({}),
 
     project: async (root, { id }, ctx) => ctx.db.projects.findOne<MetaProject>({ _id: id }),
 
