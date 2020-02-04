@@ -8,6 +8,9 @@
         "possibleTypes": [
           {
             "name": "Project"
+          },
+          {
+            "name": "NpmScript"
           }
         ]
       }

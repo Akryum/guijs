@@ -4,9 +4,13 @@ import { addKeybinding } from '../keybinding'
 import gql from 'graphql-tag'
 import fs from 'fs-extra'
 import path from 'path'
+import shortid from 'shortid'
+import { MetaProjectWorkspace } from '../project/meta-types'
+import Context from '@/generated/context'
+import { MetaNpmScript } from './meta-types'
 
 export const typeDefs = gql`
-type NpmScript {
+type NpmScript implements Document {
   id: ID!
   name: String!
   command: String!
@@ -17,23 +21,81 @@ extend type ProjectWorkspace {
 }
 `
 
+async function findScripts (workspace: MetaProjectWorkspace, ctx: Context) {
+  const pkg = await fs.readJson(path.join(workspace.absolutePath, 'package.json'))
+  if (pkg.scripts) {
+    const result: MetaNpmScript[] = []
+    for (const key in pkg.scripts) {
+      result.push({
+        _id: shortid,
+        projectId: ctx.getProjectId(),
+        workspaceId: workspace.id,
+        name: key,
+        command: pkg.scripts[key],
+      })
+    }
+    return result
+  }
+  return []
+}
+
+async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
+  const result: MetaNpmScript[] = []
+
+  const oldScripts: MetaNpmScript[] = await ctx.db.scripts.find({
+    projectId: ctx.getProjectId(),
+    workspaceId: workspace.id,
+  })
+  const oldScriptMap = new Map<string, MetaNpmScript>()
+  for (const script of oldScripts) {
+    oldScriptMap.set(script.name, script)
+  }
+
+  // Compare scanned and old
+  const scannedScripts = await findScripts(workspace, ctx)
+  const newScripts: MetaNpmScript[] = []
+  const updatedScripts: MetaNpmScript[] = []
+  for (const script of scannedScripts) {
+    if (oldScriptMap.has(script.name)) {
+      result.push(oldScriptMap.get(script.name))
+      oldScriptMap.delete(script.name)
+      updatedScripts.push(script)
+    } else {
+      result.push(script)
+      newScripts.push(script)
+    }
+  }
+
+  // Insert new scripts
+  await ctx.db.scripts.insert(newScripts)
+
+  // Update scripts
+  for (const script of updatedScripts) {
+    await ctx.db.scripts.update({
+      _id: script._id,
+    }, {
+      $set: script,
+    })
+  }
+
+  // Clean old deleted
+  for (const [, script] of oldScriptMap) {
+    // @TODO check if running task => if so hard delete script
+    script.deleted = true
+    await ctx.db.scripts.update({
+      _id: script._id,
+    }, {
+      $set: { deleted: true },
+    })
+    result.push(script)
+  }
+
+  return result
+}
+
 export const resolvers: Resolvers = {
   ProjectWorkspace: {
-    scripts: async (workspace) => {
-      const pkg = await fs.readJson(path.join(workspace.absolutePath, 'package.json'))
-      if (pkg.scripts) {
-        const result = []
-        for (const key in pkg.scripts) {
-          result.push({
-            id: `${workspace.absolutePath}:${key}`,
-            name: key,
-            command: pkg.scripts[key],
-          })
-        }
-        return result
-      }
-      return []
-    },
+    scripts: async (workspace, args, ctx) => loadScripts(workspace, ctx),
   },
 }
 

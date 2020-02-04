@@ -24,6 +24,11 @@ async function createCollections () {
     packages: await collection('packages', [
       'name',
     ]),
+    scripts: await collection('scripts', [
+      'name',
+      'projectId',
+      'workspaceId',
+    ]),
   }
 }
 

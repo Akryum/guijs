@@ -13,6 +13,7 @@ generates:
         Project: '@/schema/project/meta-types#MetaProject'
         ProjectWorkspace: '@/schema/project/meta-types#MetaProjectWorkspace'
         ProjectPackage: '@/schema/pkg/meta-types#MetaProjectPackage'
+        NpmScript: '@/schema/script/meta-types#MetaNpmScript'
       optionalResolveType: true
   schema-fragment-matcher.js:
     - fragment-matcher

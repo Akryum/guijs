@@ -4,6 +4,7 @@ import { MetaCommand } from '@/schema/command/meta-types';
 import { MetaSetting } from '@/schema/setting/meta-types';
 import { MetaProject, MetaProjectWorkspace } from '@/schema/project/meta-types';
 import { MetaProjectPackage } from '@/schema/pkg/meta-types';
+import { MetaNpmScript } from '@/schema/script/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -134,7 +135,7 @@ export type MutationUpdateSettingArgs = {
   input: UpdateSettingInput
 };
 
-export type NpmScript = {
+export type NpmScript = Document & {
    __typename?: 'NpmScript',
   id: Scalars['ID'],
   name: Scalars['String'],
@@ -381,7 +382,7 @@ export type ResolversTypes = {
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
-  NpmScript: ResolverTypeWrapper<NpmScript>,
+  NpmScript: ResolverTypeWrapper<MetaNpmScript>,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
@@ -414,7 +415,7 @@ export type ResolversParentTypes = {
   ProjectWorkspace: MetaProjectWorkspace,
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
-  NpmScript: NpmScript,
+  NpmScript: MetaNpmScript,
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
@@ -453,7 +454,7 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type DocumentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Document'] = ResolversParentTypes['Document']> = {
-  __resolveType?: TypeResolveFn<'Project', ParentType, ContextType>,
+  __resolveType?: TypeResolveFn<'Project' | 'NpmScript', ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
 };
 

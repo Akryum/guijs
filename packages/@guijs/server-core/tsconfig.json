@@ -20,7 +20,7 @@
       "node",
       "webpack-env"
     ],
-    "target": "es5",
+    "target": "es6",
     "module": "esnext",
     "importHelpers": true,
     "moduleResolution": "node",
