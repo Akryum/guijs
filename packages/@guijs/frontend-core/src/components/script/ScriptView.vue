@@ -18,10 +18,10 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col h-full">
+  <div class="flex flex-col h-full overflow-hidden">
     <ScriptToolbar class="flex-none" />
 
-    <div class="flex-1 mx-6 mb-6">
+    <div class="flex-1 h-0 mx-6 mb-6">
       <ScriptOutput class="h-full" />
     </div>
   </div>
