@@ -166,6 +166,7 @@ function getPtyEnv () {
   )
 
   delete env.PORT
+  delete env.NODE_ENV
 
   return env
 }
