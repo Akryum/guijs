@@ -87,8 +87,14 @@ export default {
     /** @type {WebSocket} */
     let ws = cached.ws
 
+    let sendQueue = []
+
     function send (type, data) {
-      ws.send(`${type}:${typeof data === 'string' ? data : JSON.stringify(data)}`)
+      if (ws.readyState === ws.OPEN) {
+        ws.send(`${type}:${typeof data === 'string' ? data : JSON.stringify(data)}`)
+      } else {
+        sendQueue.push({ type, data })
+      }
     }
 
     function on (type, handler) {
@@ -121,6 +127,10 @@ export default {
 
       const onOpen = () => {
         send('terminal-attach', { id: props.terminalId })
+        for (const { type, data } of sendQueue) {
+          send(type, data)
+        }
+        sendQueue = []
       }
       ws.addEventListener('open', onOpen)
       listeners.push(() => ws.removeEventListener('open', onOpen))
