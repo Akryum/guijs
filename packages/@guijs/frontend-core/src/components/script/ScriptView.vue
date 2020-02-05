@@ -1,4 +1,5 @@
 <script>
+import { bindScope } from '@/util/keybinding'
 import ScriptToolbar from './ScriptToolbar.vue'
 import ScriptOutput from './ScriptOutput.vue'
 
@@ -9,6 +10,8 @@ export default {
   },
 
   setup () {
+    bindScope('script-view')
+
     return {}
   },
 }

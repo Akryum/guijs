@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import { createTerminal, Terminal, terminals } from '../terminal/server'
 import { MetaProject } from '../project/meta-types'
 import { getProjectWorkspace } from '../project/workspace'
+import { addKeybinding } from '../keybinding'
 
 export const typeDefs = gql`
 extend type NpmScript {
@@ -139,4 +140,10 @@ addCommand({
       await runScript(script, ctx)
     }
   },
+})
+
+addKeybinding({
+  id: 'toggle-run-current-script',
+  scope: 'script-view',
+  sequences: ['space'],
 })

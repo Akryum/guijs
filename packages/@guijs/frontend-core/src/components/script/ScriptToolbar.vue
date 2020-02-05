@@ -4,8 +4,14 @@ import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from './fragments'
 import { terminalFragment } from '../terminal/fragments'
+import { onKeybind } from '@/util/keybinding'
+import Keybindings from '../keybinding/Keybindings.vue'
 
 export default {
+  components: {
+    Keybindings,
+  },
+
   setup () {
     const route = useRoute()
 
@@ -49,6 +55,16 @@ export default {
       ${scriptFragment}
     `)
 
+    // Keybinding
+
+    onKeybind('toggle-run-current-script', () => {
+      if (script.value.status === 'running') {
+        stop({ input: { scriptId: script.value.id } })
+      } else {
+        run({ input: { scriptId: script.value.id } })
+      }
+    })
+
     return {
       script,
       run,
@@ -64,22 +80,36 @@ export default {
     class="flex items-center p-6"
   >
     <!-- Actions -->
-    <VButton
-      v-if="script.status !== 'running'"
-      iconLeft="play_arrow"
-      class="btn-lg btn-primary"
-      @click="run({ input: { scriptId: script.id } })"
+    <VTooltip
+      placement="bottom"
     >
-      {{ $t('guijs.script.run-script') }}
-    </VButton>
-    <VButton
-      v-else
-      iconLeft="stop"
-      class="btn-lg btn-primary"
-      @click="stop({ input: { scriptId: script.id } })"
-    >
-      {{ $t('guijs.script.stop-script') }}
-    </VButton>
+      <VButton
+        v-if="script.status !== 'running'"
+        iconLeft="play_arrow"
+        class="btn-lg btn-primary"
+        @click="run({ input: { scriptId: script.id } })"
+      >
+        {{ $t('guijs.script.run-script') }}
+      </VButton>
+      <VButton
+        v-else
+        iconLeft="stop"
+        class="btn-lg btn-primary"
+        @click="stop({ input: { scriptId: script.id } })"
+      >
+        {{ $t('guijs.script.stop-script') }}
+      </VButton>
+
+      <template #popper>
+        <div class="flex">
+          <span class="mr-2">
+            {{ $t(script.status !== 'running' ? 'guijs.script.run-script' : 'guijs.script.stop-script') }}
+          </span>
+
+          <Keybindings keybindingId="toggle-run-current-script" />
+        </div>
+      </template>
+    </VTooltip>
 
     <VButton
       v-tooltip="$t('guijs.script.edit-script')"
