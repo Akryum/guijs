@@ -41,10 +41,11 @@ export default {
 
 <template>
   <div
-    class="border-gray-200 border rounded"
+    class="border-gray-200 dark:border-gray-950 border rounded"
   >
     <Terminal
       v-if="terminal"
+      :key="terminal.id"
       :terminalId="terminal.id"
       class="w-full h-full"
     />
