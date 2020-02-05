@@ -13,26 +13,58 @@ import { rcFolder } from '@/util/rc-folder'
 
 const terminalsFolder = path.resolve(rcFolder, 'terminals')
 
+export interface TerminalOptions {
+  name: string
+  title: string
+  cwd?: string
+  hidden?: boolean
+}
+
 export class Terminal extends EventEmitter {
   id: string = shortid()
   name: string
   title: string
   cwd: string
   hidden: boolean
+  running = false
   pty: IPty
   batcher: DataBatcher
-  ended: boolean = null
   sockets: ws[] = []
   backupFile: string
   backupStream: fs.WriteStream
 
-  constructor (name: string, title: string, cwd: string, hidden: boolean) {
+  constructor (options: TerminalOptions) {
     super()
 
-    this.name = name
-    this.title = title
-    this.cwd = cwd || process.cwd()
-    this.hidden = hidden
+    this.name = options.name
+    this.title = options.title
+    this.cwd = options.cwd || process.cwd()
+    this.hidden = !!options.hidden
+
+    this.batcher = new DataBatcher()
+
+    this.backupFile = path.resolve(terminalsFolder, `${this.id}.log`)
+    fs.ensureFileSync(this.backupFile)
+    this.backupStream = fs.createWriteStream(this.backupFile, {
+      encoding: 'utf8',
+    })
+
+    this.batcher.on('flush', data => {
+      for (const socket of this.sockets) {
+        send(socket, MESSAGE_TYPE.TerminalDataOut, data)
+      }
+      this.backupStream.write(data)
+      this.emit('data', data)
+    })
+  }
+
+  run (command: string, args: string[]) {
+    if (this.running) {
+      consola.warn('Terminal already running')
+      return
+    }
+
+    this.running = true
 
     const osLocale = require('os-locale') as typeof import('os-locale')
 
@@ -48,48 +80,34 @@ export class Terminal extends EventEmitter {
       },
     )
 
-    const shell = defaultShell
-
-    const args = ['--login']
-
-    const options: IWindowsPtyForkOptions = {
+    const ptyOptions: IWindowsPtyForkOptions = {
       cols: 200,
       rows: 30,
       cwd: this.cwd,
       env: baseEnv,
     }
 
-    this.pty = spawnPty(shell, args, options)
-
-    this.batcher = new DataBatcher()
-
-    this.backupFile = path.resolve(terminalsFolder, `${this.id}.log`)
-    fs.ensureFileSync(this.backupFile)
-    this.backupStream = fs.createWriteStream(this.backupFile, {
-      encoding: 'utf8',
-    })
+    this.pty = spawnPty(command, args, ptyOptions)
 
     this.pty.onData(chunk => {
-      if (this.ended) {
+      if (!this.running) {
         return
       }
       this.batcher.write(chunk as any)
     })
 
-    this.batcher.on('flush', data => {
-      for (const socket of this.sockets) {
-        send(socket, MESSAGE_TYPE.TerminalDataOut, data)
+    this.pty.onExit((event) => {
+      if (this.running) {
+        this.running = false
+        this.emit('exit', event.exitCode, event.signal)
       }
-      this.backupStream.write(data)
     })
+  }
 
-    this.pty.onExit(() => {
-      if (!this.ended) {
-        this.ended = true
-        this.emit('exit')
-        this.clean()
-      }
-    })
+  runShell () {
+    const shell = defaultShell
+    const args = ['--login']
+    this.run(shell, args)
   }
 
   write (data: string) {
@@ -104,9 +122,8 @@ export class Terminal extends EventEmitter {
     }
   }
 
-  destroy () {
+  kill () {
     return new Promise((resolve, reject) => {
-      this.clean()
       try {
         this.pty.on('exit', () => {
           resolve()
@@ -116,6 +133,11 @@ export class Terminal extends EventEmitter {
         reject(e)
       }
     })
+  }
+
+  async destroy () {
+    this.clean()
+    await this.kill()
   }
 
   clean () {
@@ -221,7 +243,7 @@ terminalServer.on('connection', socket => {
 export function createTerminal (
   input: CreateTerminalInput,
 ) {
-  const terminal = new Terminal(input.name, input.title, input.cwd, input.hidden)
+  const terminal = new Terminal(input)
   terminals.push(terminal)
   return terminal
 }

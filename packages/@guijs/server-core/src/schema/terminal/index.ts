@@ -43,7 +43,11 @@ export const resolvers: Resolvers = {
   },
 
   Mutation: {
-    createTerminal: (root, { input }) => createTerminal(input),
+    createTerminal: async (root, { input }) => {
+      const terminal = await createTerminal(input)
+      terminal.runShell()
+      return terminal
+    },
     changeTerminalTitle: (root, { input }) => {
       const terminal = terminals.find(t => t.id === input.id)
       if (terminal) {
