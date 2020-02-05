@@ -41,10 +41,10 @@ export default {
 
 <template>
   <div
-    v-if="terminal"
     class="border-gray-200 border rounded"
   >
     <Terminal
+      v-if="terminal"
       :terminalId="terminal.id"
       class="w-full h-full"
     />
