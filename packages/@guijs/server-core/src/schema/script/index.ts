@@ -26,6 +26,10 @@ extend type ProjectWorkspace {
 extend type Query {
   script (id: ID!): NpmScript
 }
+
+extend type Subscription {
+  npmScriptUpdated: NpmScript
+}
 `
 
 async function findScripts (workspace: MetaProjectWorkspace, ctx: Context) {
@@ -142,6 +146,12 @@ export const resolvers: Resolvers = {
 
   Query: {
     script: async (root, { id }, ctx) => ctx.db.scripts.findOne<MetaNpmScript>({ _id: id }),
+  },
+
+  Subscription: {
+    npmScriptUpdated: {
+      subscribe: (root, args, ctx) => ctx.pubsub.asyncIterator(['scriptUpdated']),
+    },
   },
 }
 

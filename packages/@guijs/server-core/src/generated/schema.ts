@@ -311,6 +311,7 @@ export type StopScriptInput = {
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<CommandRan>,
+  npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
 };
 
@@ -604,6 +605,7 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
+  npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
 };
 

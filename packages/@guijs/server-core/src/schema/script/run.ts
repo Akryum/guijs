@@ -92,6 +92,9 @@ export async function setScriptStatus (script: MetaNpmScript, status: NpmScriptS
       status,
     },
   })
+  await ctx.pubsub.publish('scriptUpdated', {
+    npmScriptUpdated: script,
+  })
 }
 
 export const resolvers: Resolvers = {
