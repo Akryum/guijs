@@ -25,7 +25,7 @@ export default {
 
     <template v-else>
       <ProjectDropdown
-        class="mb-4"
+        class="mb-6"
       />
 
       <ProjectNav />

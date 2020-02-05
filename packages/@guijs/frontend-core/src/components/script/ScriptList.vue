@@ -41,7 +41,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col items-stretch mt-4">
+  <div class="flex flex-col items-stretch mt-6">
     <ScriptListItem
       v-for="script of scripts"
       :key="script.id"
