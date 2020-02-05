@@ -66,25 +66,11 @@ export class Terminal extends EventEmitter {
 
     this.running = true
 
-    const osLocale = require('os-locale') as typeof import('os-locale')
-
-    const baseEnv = Object.assign(
-      {},
-      process.env,
-      {
-        LANG: `${osLocale.sync().replace(/-/, '_')}.UTF-8`,
-        TERM: 'xterm-256color',
-        COLORTERM: 'truecolor',
-        TERM_PROGRAM: projectPackage.productName,
-        TERM_PROGRAM_VERSION: projectPackage.version,
-      },
-    )
-
     const ptyOptions: IWindowsPtyForkOptions = {
       cols: 200,
       rows: 30,
       cwd: this.cwd,
-      env: baseEnv,
+      env: getPtyEnv(),
     }
 
     this.pty = spawnPty(command, args, ptyOptions)
@@ -160,6 +146,26 @@ export class Terminal extends EventEmitter {
     })
     send(socket, MESSAGE_TYPE.TerminalDataOut, data)
   }
+}
+
+function getPtyEnv () {
+  const osLocale = require('os-locale') as typeof import('os-locale')
+
+  const env = Object.assign(
+    {},
+    process.env,
+    {
+      LANG: `${osLocale.sync().replace(/-/, '_')}.UTF-8`,
+      TERM: 'xterm-256color',
+      COLORTERM: 'truecolor',
+      TERM_PROGRAM: projectPackage.productName,
+      TERM_PROGRAM_VERSION: projectPackage.version,
+    },
+  )
+
+  delete env.PORT
+
+  return env
 }
 
 export const terminals: Terminal[] = []
