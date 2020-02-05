@@ -1,4 +1,5 @@
 <script>
+import { useScriptRun } from './useScript'
 import ScriptStatusIndicator from './ScriptStatusIndicator.vue'
 
 export default {
@@ -11,6 +12,14 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  setup () {
+    const { runScript } = useScriptRun()
+
+    return {
+      runScript,
+    }
   },
 }
 </script>
@@ -31,6 +40,7 @@ export default {
     :class="{
       active: $route.params.scriptId === script.id,
     }"
+    @dblclick.native="runScript(script.id)"
   >
     <ScriptStatusIndicator
       :scriptId="script.id"

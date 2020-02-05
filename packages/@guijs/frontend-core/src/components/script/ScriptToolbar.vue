@@ -1,10 +1,10 @@
 <script>
 import { useRoute } from '@/util/router'
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from './fragments'
-import { terminalFragment } from '../terminal/fragments'
 import { onKeybind } from '@/util/keybinding'
+import { useScriptRun } from './useScript'
 import Keybindings from '../keybinding/Keybindings.vue'
 
 export default {
@@ -29,46 +29,24 @@ export default {
     }))
     const script = useResult(result)
 
-    // Run
+    // Actions
 
-    const { mutate: run } = useMutation(gql`
-      mutation runScript ($input: RunScriptInput!) {
-        runScript (input: $input) {
-          ...script
-          terminal {
-            ...terminal
-          }
-        }
-      }
-      ${scriptFragment}
-      ${terminalFragment}
-    `)
-
-    // Stop
-
-    const { mutate: stop } = useMutation(gql`
-      mutation stopScript ($input: StopScriptInput!) {
-        stopScript (input: $input) {
-          ...script
-        }
-      }
-      ${scriptFragment}
-    `)
+    const { runScript, stopScript } = useScriptRun()
 
     // Keybinding
 
     onKeybind('toggle-run-current-script', () => {
       if (script.value.status === 'running') {
-        stop({ input: { scriptId: script.value.id } })
+        stopScript(script.value.id)
       } else {
-        run({ input: { scriptId: script.value.id } })
+        runScript(script.value.id)
       }
     })
 
     return {
       script,
-      run,
-      stop,
+      runScript,
+      stopScript,
     }
   },
 }
@@ -87,7 +65,7 @@ export default {
         v-if="script.status !== 'running'"
         iconLeft="play_arrow"
         class="btn-lg btn-primary"
-        @click="run({ input: { scriptId: script.id } })"
+        @click="runScript(script.id)"
       >
         {{ $t('guijs.script.run-script') }}
       </VButton>
@@ -95,7 +73,7 @@ export default {
         v-else
         iconLeft="stop"
         class="btn-lg btn-primary"
-        @click="stop({ input: { scriptId: script.id } })"
+        @click="stopScript(script.id)"
       >
         {{ $t('guijs.script.stop-script') }}
       </VButton>
