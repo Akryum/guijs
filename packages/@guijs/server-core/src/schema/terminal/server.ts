@@ -109,6 +109,8 @@ export class Terminal extends EventEmitter {
   }
 
   kill () {
+    if (!this.running) return
+
     return new Promise((resolve, reject) => {
       try {
         this.pty.on('exit', () => {
