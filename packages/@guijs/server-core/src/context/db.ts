@@ -4,12 +4,16 @@ import path from 'path'
 import { rcFolder } from '@/util/rc-folder'
 import { ThenType } from '@/util/types'
 
-async function collection (name: string, indexes: string[] = []): Promise<Datastore> {
+async function collection (name: string, indexes: string[] = [], clear = false): Promise<Datastore> {
   const ds = new Datastore({
     filename: path.resolve(rcFolder, `db/${name}.db`),
     autoload: true,
     timestampData: true,
   })
+
+  if (clear) {
+    await ds.remove({}, { multi: true })
+  }
 
   for (const index of indexes) {
     await ds.ensureIndex({ fieldName: index })
@@ -28,7 +32,7 @@ async function createCollections () {
       'name',
       'projectId',
       'workspaceId',
-    ]),
+    ], true),
   }
 }
 

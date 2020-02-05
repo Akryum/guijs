@@ -92,6 +92,8 @@ export type Mutation = {
   selectFile?: Maybe<Scalars['String']>,
   checkImportProject: CheckProjectPayload,
   importProject: Project,
+  runScript?: Maybe<NpmScript>,
+  stopScript?: Maybe<NpmScript>,
   updateSetting?: Maybe<Setting>,
 };
 
@@ -131,6 +133,16 @@ export type MutationImportProjectArgs = {
 };
 
 
+export type MutationRunScriptArgs = {
+  input: RunScriptInput
+};
+
+
+export type MutationStopScriptArgs = {
+  input: StopScriptInput
+};
+
+
 export type MutationUpdateSettingArgs = {
   input: UpdateSettingInput
 };
@@ -141,6 +153,7 @@ export type NpmScript = Document & {
   name: Scalars['String'],
   command: Scalars['String'],
   status: NpmScriptStatus,
+  terminal?: Maybe<Terminal>,
 };
 
 export enum NpmScriptStatus {
@@ -267,6 +280,10 @@ export type RunCommandInput = {
   payload?: Maybe<Scalars['JSON']>,
 };
 
+export type RunScriptInput = {
+  scriptId: Scalars['ID'],
+};
+
 export type SelectFileInput = {
   cwd?: Maybe<Scalars['String']>,
   directory?: Maybe<Scalars['Boolean']>,
@@ -285,6 +302,10 @@ export type SettingCategory = {
    __typename?: 'SettingCategory',
   id: Scalars['ID'],
   label: Scalars['String'],
+};
+
+export type StopScriptInput = {
+  scriptId: Scalars['ID'],
 };
 
 export type Subscription = {
@@ -409,6 +430,8 @@ export type ResolversTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
+  RunScriptInput: RunScriptInput,
+  StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: ResolverTypeWrapper<{}>,
   CommandRan: ResolverTypeWrapper<Omit<CommandRan, 'command'> & { command: ResolversTypes['Command'] }>,
@@ -443,6 +466,8 @@ export type ResolversParentTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
+  RunScriptInput: RunScriptInput,
+  StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: {},
   CommandRan: Omit<CommandRan, 'command'> & { command: ResolversParentTypes['Command'] },
@@ -495,6 +520,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
+  runScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationRunScriptArgs, 'input'>>,
+  stopScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationStopScriptArgs, 'input'>>,
   updateSetting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<MutationUpdateSettingArgs, 'input'>>,
 };
 
@@ -503,6 +530,7 @@ export type NpmScriptResolvers<ContextType = Context, ParentType extends Resolve
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   command?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   status?: Resolver<ResolversTypes['NpmScriptStatus'], ParentType, ContextType>,
+  terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType>,
 };
 
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {

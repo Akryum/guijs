@@ -11,7 +11,6 @@ import { MetaNpmScript } from './meta-types'
 import { onProjectOpen } from '../project/open'
 import { detectWorkspaces } from '../project/workspace'
 import { onProjectClose } from '../project/close'
-import { getScriptStatus } from './run'
 
 export const typeDefs = gql`
 type NpmScript implements Document {
@@ -40,6 +39,7 @@ async function findScripts (workspace: MetaProjectWorkspace, ctx: Context) {
         workspaceId: workspace.id,
         name: key,
         command: pkg.scripts[key],
+        status: NpmScriptStatus.Idle,
       })
     }
     return result
@@ -95,7 +95,7 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
 
   // Clean old deleted
   for (const [, script] of oldScriptMap) {
-    if (getScriptStatus(script, ctx) === NpmScriptStatus.Idle) {
+    if (script.status === NpmScriptStatus.Idle) {
       await ctx.db.scripts.remove({
         _id: script._id,
       }, {})
