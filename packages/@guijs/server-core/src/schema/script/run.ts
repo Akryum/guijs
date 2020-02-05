@@ -72,6 +72,7 @@ export async function runScript (script: MetaNpmScript, ctx: Context) {
   terminal.run('npm', [
     'run',
     script.name,
+    '--scripts-prepend-node-path',
   ])
   await setScriptStatus(script, NpmScriptStatus.Running, ctx)
 }
