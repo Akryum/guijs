@@ -7,7 +7,6 @@ export default {
     const router = useRouter()
 
     onCommand('show-package', async (cmd, payload) => {
-      console.log('show-package', payload)
       router.push({
         name: 'project-type-packages',
         params: {

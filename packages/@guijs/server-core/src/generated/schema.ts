@@ -4,6 +4,7 @@ import { MetaCommand } from '@/schema/command/meta-types';
 import { MetaSetting } from '@/schema/setting/meta-types';
 import { MetaProject, MetaProjectWorkspace } from '@/schema/project/meta-types';
 import { MetaProjectPackage } from '@/schema/pkg/meta-types';
+import { MetaNpmScript } from '@/schema/script/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -91,6 +92,8 @@ export type Mutation = {
   selectFile?: Maybe<Scalars['String']>,
   checkImportProject: CheckProjectPayload,
   importProject: Project,
+  runScript?: Maybe<NpmScript>,
+  stopScript?: Maybe<NpmScript>,
   updateSetting?: Maybe<Setting>,
 };
 
@@ -130,9 +133,36 @@ export type MutationImportProjectArgs = {
 };
 
 
+export type MutationRunScriptArgs = {
+  input: RunScriptInput
+};
+
+
+export type MutationStopScriptArgs = {
+  input: StopScriptInput
+};
+
+
 export type MutationUpdateSettingArgs = {
   input: UpdateSettingInput
 };
+
+export type NpmScript = Document & {
+   __typename?: 'NpmScript',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  command: Scalars['String'],
+  status: NpmScriptStatus,
+  terminal?: Maybe<Terminal>,
+};
+
+export enum NpmScriptStatus {
+  Idle = 'idle',
+  Running = 'running',
+  Success = 'success',
+  Error = 'error',
+  Killed = 'killed'
+}
 
 export type Project = Document & {
    __typename?: 'Project',
@@ -184,6 +214,7 @@ export type ProjectWorkspace = {
   relativePath: Scalars['String'],
   type: ProjectType,
   packages: Array<ProjectPackage>,
+  scripts: Array<NpmScript>,
 };
 
 export type Query = {
@@ -199,6 +230,7 @@ export type Query = {
   projects: Array<Project>,
   project?: Maybe<Project>,
   recentProjectCommands: Array<Command>,
+  script?: Maybe<NpmScript>,
   settings: Array<Setting>,
   setting?: Maybe<Setting>,
 };
@@ -234,6 +266,11 @@ export type QueryProjectArgs = {
 };
 
 
+export type QueryScriptArgs = {
+  id: Scalars['ID']
+};
+
+
 export type QuerySettingArgs = {
   id: Scalars['ID']
 };
@@ -241,6 +278,10 @@ export type QuerySettingArgs = {
 export type RunCommandInput = {
   id: Scalars['ID'],
   payload?: Maybe<Scalars['JSON']>,
+};
+
+export type RunScriptInput = {
+  scriptId: Scalars['ID'],
 };
 
 export type SelectFileInput = {
@@ -263,9 +304,14 @@ export type SettingCategory = {
   label: Scalars['String'],
 };
 
+export type StopScriptInput = {
+  scriptId: Scalars['ID'],
+};
+
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<CommandRan>,
+  npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
 };
 
@@ -373,6 +419,8 @@ export type ResolversTypes = {
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
+  NpmScript: ResolverTypeWrapper<MetaNpmScript>,
+  NpmScriptStatus: NpmScriptStatus,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
@@ -383,6 +431,8 @@ export type ResolversTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
+  RunScriptInput: RunScriptInput,
+  StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: ResolverTypeWrapper<{}>,
   CommandRan: ResolverTypeWrapper<Omit<CommandRan, 'command'> & { command: ResolversTypes['Command'] }>,
@@ -405,6 +455,8 @@ export type ResolversParentTypes = {
   ProjectWorkspace: MetaProjectWorkspace,
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
+  NpmScript: MetaNpmScript,
+  NpmScriptStatus: NpmScriptStatus,
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
@@ -415,6 +467,8 @@ export type ResolversParentTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
+  RunScriptInput: RunScriptInput,
+  StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
   Subscription: {},
   CommandRan: Omit<CommandRan, 'command'> & { command: ResolversParentTypes['Command'] },
@@ -443,7 +497,7 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type DocumentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Document'] = ResolversParentTypes['Document']> = {
-  __resolveType?: TypeResolveFn<'Project', ParentType, ContextType>,
+  __resolveType?: TypeResolveFn<'Project' | 'NpmScript', ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
 };
 
@@ -467,7 +521,17 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
+  runScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationRunScriptArgs, 'input'>>,
+  stopScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationStopScriptArgs, 'input'>>,
   updateSetting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<MutationUpdateSettingArgs, 'input'>>,
+};
+
+export type NpmScriptResolvers<ContextType = Context, ParentType extends ResolversParentTypes['NpmScript'] = ResolversParentTypes['NpmScript']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  command?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  status?: Resolver<ResolversTypes['NpmScriptStatus'], ParentType, ContextType>,
+  terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType>,
 };
 
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
@@ -506,6 +570,7 @@ export type ProjectWorkspaceResolvers<ContextType = Context, ParentType extends 
   relativePath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
   packages?: Resolver<Array<ResolversTypes['ProjectPackage']>, ParentType, ContextType>,
+  scripts?: Resolver<Array<ResolversTypes['NpmScript']>, ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -520,6 +585,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
   recentProjectCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
+  script?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<QueryScriptArgs, 'id'>>,
   settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
   setting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<QuerySettingArgs, 'id'>>,
 };
@@ -539,6 +605,7 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
+  npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
 };
 
@@ -558,6 +625,7 @@ export type Resolvers<ContextType = Context> = {
   JSON?: GraphQLScalarType,
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
+  NpmScript?: NpmScriptResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
   ProjectPackage?: ProjectPackageResolvers<ContextType>,
   ProjectType?: ProjectTypeResolvers<ContextType>,

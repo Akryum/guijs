@@ -119,7 +119,7 @@ export default {
 
 <template>
   <div class="flex-1 flex items-stretch h-full">
-    <div class="flex-none w-64 border-gray-200 dark:border-gray-950 border-r pt-4 overflow-y-auto">
+    <div class="flex-none w-64 border-gray-200 dark:border-gray-950 border-r pt-6 overflow-y-auto">
       <ProjectTypeList
         :projectTypes="projectTypes"
       />

@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 import { rcFolder } from '@/util/rc-folder'
 import { ThenType } from '@/util/types'
 
-async function collection (name: string, indexes: string[] = []): Promise<Datastore> {
+async function collection (name: string, indexes: string[] = [], clear = false): Promise<Datastore> {
   const dbPath = path.resolve(rcFolder, `db/${name}.db`)
   if (!fs.existsSync(dbPath)) {
     fs.ensureDirSync(path.dirname(dbPath))
@@ -16,6 +16,10 @@ async function collection (name: string, indexes: string[] = []): Promise<Datast
     autoload: true,
     timestampData: true,
   })
+
+  if (clear) {
+    await ds.remove({}, { multi: true })
+  }
 
   for (const index of indexes) {
     await ds.ensureIndex({ fieldName: index })
@@ -30,6 +34,11 @@ async function createCollections () {
     packages: await collection('packages', [
       'name',
     ]),
+    scripts: await collection('scripts', [
+      'name',
+      'projectId',
+      'workspaceId',
+    ], true),
   }
 }
 

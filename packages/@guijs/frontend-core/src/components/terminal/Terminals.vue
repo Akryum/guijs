@@ -4,16 +4,8 @@ import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { onKeybind, bindScope } from '@/util/keybinding'
 import { onCommand, runCommand } from '@/util/command'
+import { terminalFragment } from './fragments'
 import Terminal from './Terminal.vue'
-
-const terminalFragment = gql`
-fragment terminal on Terminal {
-  id
-  name
-  title
-  cwd
-}
-`
 
 const TERMINALS = gql`
   query terminals {

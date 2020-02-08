@@ -13,53 +13,33 @@ import { rcFolder } from '@/util/rc-folder'
 
 const terminalsFolder = path.resolve(rcFolder, 'terminals')
 
+export interface TerminalOptions {
+  name: string
+  title: string
+  cwd?: string
+  hidden?: boolean
+}
+
 export class Terminal extends EventEmitter {
   id: string = shortid()
   name: string
   title: string
   cwd: string
   hidden: boolean
+  running = false
   pty: IPty
   batcher: DataBatcher
-  ended: boolean = null
   sockets: ws[] = []
   backupFile: string
   backupStream: fs.WriteStream
 
-  constructor (name: string, title: string, cwd: string, hidden: boolean) {
+  constructor (options: TerminalOptions) {
     super()
 
-    this.name = name
-    this.title = title
-    this.cwd = cwd || process.cwd()
-    this.hidden = hidden
-
-    const osLocale = require('os-locale') as typeof import('os-locale')
-
-    const baseEnv = Object.assign(
-      {},
-      process.env,
-      {
-        LANG: `${osLocale.sync().replace(/-/, '_')}.UTF-8`,
-        TERM: 'xterm-256color',
-        COLORTERM: 'truecolor',
-        TERM_PROGRAM: projectPackage.productName,
-        TERM_PROGRAM_VERSION: projectPackage.version,
-      },
-    )
-
-    const shell = defaultShell
-
-    const args = ['--login']
-
-    const options: IWindowsPtyForkOptions = {
-      cols: 200,
-      rows: 30,
-      cwd: this.cwd,
-      env: baseEnv,
-    }
-
-    this.pty = spawnPty(shell, args, options)
+    this.name = options.name
+    this.title = options.title
+    this.cwd = options.cwd || process.cwd()
+    this.hidden = !!options.hidden
 
     this.batcher = new DataBatcher()
 
@@ -69,27 +49,51 @@ export class Terminal extends EventEmitter {
       encoding: 'utf8',
     })
 
-    this.pty.onData(chunk => {
-      if (this.ended) {
-        return
-      }
-      this.batcher.write(chunk as any)
-    })
-
     this.batcher.on('flush', data => {
       for (const socket of this.sockets) {
         send(socket, MESSAGE_TYPE.TerminalDataOut, data)
       }
       this.backupStream.write(data)
+      this.emit('data', data)
+    })
+  }
+
+  run (command: string, args: string[]) {
+    if (this.running) {
+      consola.warn('Terminal already running')
+      return
+    }
+
+    this.running = true
+
+    const ptyOptions: IWindowsPtyForkOptions = {
+      cols: 200,
+      rows: 30,
+      cwd: this.cwd,
+      env: getPtyEnv(),
+    }
+
+    this.pty = spawnPty(command, args, ptyOptions)
+
+    this.pty.onData(chunk => {
+      if (!this.running) {
+        return
+      }
+      this.batcher.write(chunk as any)
     })
 
-    this.pty.onExit(() => {
-      if (!this.ended) {
-        this.ended = true
-        this.emit('exit')
-        this.clean()
+    this.pty.onExit((event) => {
+      if (this.running) {
+        this.running = false
+        this.emit('exit', event.exitCode, event.signal)
       }
     })
+  }
+
+  runShell () {
+    const shell = defaultShell
+    const args = ['--login']
+    this.run(shell, args)
   }
 
   write (data: string) {
@@ -104,9 +108,10 @@ export class Terminal extends EventEmitter {
     }
   }
 
-  destroy () {
+  kill () {
+    if (!this.running) return
+
     return new Promise((resolve, reject) => {
-      this.clean()
       try {
         this.pty.on('exit', () => {
           resolve()
@@ -116,6 +121,11 @@ export class Terminal extends EventEmitter {
         reject(e)
       }
     })
+  }
+
+  async destroy () {
+    this.clean()
+    await this.kill()
   }
 
   clean () {
@@ -138,6 +148,27 @@ export class Terminal extends EventEmitter {
     })
     send(socket, MESSAGE_TYPE.TerminalDataOut, data)
   }
+}
+
+function getPtyEnv () {
+  const osLocale = require('os-locale') as typeof import('os-locale')
+
+  const env = Object.assign(
+    {},
+    process.env,
+    {
+      LANG: `${osLocale.sync().replace(/-/, '_')}.UTF-8`,
+      TERM: 'xterm-256color',
+      COLORTERM: 'truecolor',
+      TERM_PROGRAM: projectPackage.productName,
+      TERM_PROGRAM_VERSION: projectPackage.version,
+    },
+  )
+
+  delete env.PORT
+  delete env.NODE_ENV
+
+  return env
 }
 
 export const terminals: Terminal[] = []
@@ -221,7 +252,7 @@ terminalServer.on('connection', socket => {
 export function createTerminal (
   input: CreateTerminalInput,
 ) {
-  const terminal = new Terminal(input.name, input.title, input.cwd, input.hidden)
+  const terminal = new Terminal(input)
   terminals.push(terminal)
   return terminal
 }

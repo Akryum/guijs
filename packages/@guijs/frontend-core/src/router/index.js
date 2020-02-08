@@ -70,12 +70,30 @@ const routes = [
             path: 'scripts',
             components: {
               default: RouterViewOnly,
+
+              aside: () => import(
+                /* webpackChunkName: 'ScriptList' */
+                '../components/script/ScriptList.vue'
+              ),
+
+              header: () => import(
+                /* webpackChunkName: 'ScriptHeader' */
+                '../components/script/ScriptHeader.vue'
+              ),
             },
             children: [
               {
                 path: '',
                 name: 'project-scripts',
                 component: Empty,
+              },
+              {
+                path: ':scriptId',
+                name: 'project-script',
+                component: () => import(
+                  /* webpackChunkName: 'ScriptView' */
+                  '../components/script/ScriptView.vue'
+                ),
               },
             ],
           },

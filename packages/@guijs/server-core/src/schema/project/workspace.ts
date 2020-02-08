@@ -57,6 +57,13 @@ export async function detectWorkspaces (project: MetaProject, ctx: Context): Pro
   return result
 }
 
+export async function getProjectWorkspace (project: MetaProject, workspaceId: string, ctx: Context) {
+  if (!project.workspaces) {
+    project.workspaces = await detectWorkspaces(project, ctx)
+  }
+  return project.workspaces.find(w => w.id === workspaceId)
+}
+
 export const resolvers: Resolvers = {
   ProjectWorkspace: {
     type: (workspace) => getProjectTypes().find(pt => pt.id === workspace.typeId),
@@ -65,12 +72,7 @@ export const resolvers: Resolvers = {
   Project: {
     workspaces: (project, args, ctx) => detectWorkspaces(project, ctx),
 
-    workspace: async (project, { id }, ctx) => {
-      if (!project.workspaces) {
-        project.workspaces = await detectWorkspaces(project, ctx)
-      }
-      return project.workspaces.find(w => w.id === id)
-    },
+    workspace: async (project, { id }, ctx) => getProjectWorkspace(project, id, ctx),
   },
 }
 

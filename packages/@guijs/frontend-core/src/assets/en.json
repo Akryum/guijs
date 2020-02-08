@@ -80,7 +80,11 @@
       "show-packages": "Show packages"
     },
     "script": {
-      "show-scripts": "Show scripts"
+      "show-scripts": "Show scripts",
+      "run-script": "Run script",
+      "stop-script": "Stop script",
+      "edit-script": "Edit script",
+      "output": "Output"
     }
   }
 }

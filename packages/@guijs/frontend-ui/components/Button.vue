@@ -184,6 +184,22 @@ export default {
   }
 }
 
+.btn-dim {
+  @apply bg-gray-200;
+
+  &:hover {
+    @apply bg-gray-300;
+  }
+
+  .mode-dark & {
+    @apply bg-gray-800;
+
+    &:hover {
+      @apply bg-gray-700;
+    }
+  }
+}
+
 .btn-sm {
   @apply px-2 py-2;
 }
@@ -193,6 +209,6 @@ export default {
 }
 
 .btn-lg {
-  @apply px-6 py-4;
+  @apply px-6 py-4 leading-none;
 }
 </style>

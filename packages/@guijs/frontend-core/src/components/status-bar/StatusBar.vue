@@ -93,7 +93,7 @@ export default {
     <!-- Pane -->
     <div
       v-if="currentPane"
-      class="relative border-gray-300 border-t dark:bg-gray-850 dark:border-gray-950"
+      class="relative border-gray-400 border-t dark:bg-gray-850 dark:border-gray-750"
       :style="{
         height: `${paneDisplaySize}px`,
       }"
