@@ -36,12 +36,13 @@ export default {
 
     <div
       v-if="status === 'running'"
-      class="w-6 h-6 border-blue-400 dark:border-blue-600 border-4 rounded-full"
+      class="w-5 h-5 border-blue-400 dark:border-blue-600 border-4 rounded-full"
     />
 
     <img
       v-if="status !== 'idle' && status !== 'running'"
       :src="require(`@/assets/script-${status}.svg`)"
+      class="w-5 h-5"
     >
   </div>
 </template>
