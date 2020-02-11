@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
 import { ref, computed } from '@vue/composition-api'
 import { bindScope } from '@/util/keybinding'
-import { useKeyboardNavigation } from '../../util/navigation'
+import { useKeyboardNavigation } from '@guijs/frontend-ui/util/navigation'
 
 export default {
   setup (props, { emit }) {
