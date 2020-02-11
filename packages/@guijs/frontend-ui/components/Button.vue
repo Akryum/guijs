@@ -119,7 +119,7 @@ export default {
     @click="handleClick"
   >
     <div
-      class="flex items-center rounded w-full"
+      class="flex items-center rounded w-full truncate"
       :class="{
         'opacity-0': loading,
         'opacity-50': !loading && ghost,
