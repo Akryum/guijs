@@ -2,7 +2,9 @@
   "guijs": {
     "common": {
       "search": "Search",
-      "more-info": "More info"
+      "more-info": "More info",
+      "save": "Save",
+      "cancel": "Cancel"
     },
     "home": {
       "welcome": "Welcome to guijs",
@@ -69,7 +71,13 @@
       "select-button": "<div>{name}</div><div class=\"text-gray-500\">Type: {type}</div>",
       "root": "(root)",
       "tooltip": "Current workspace",
-      "action": "Click to change workspace"
+      "action": "Click to change workspace",
+      "no-workspace-selected": "No workspace selected"
+    },
+    "edit-workspace": {
+      "edit-current-workspace": "Edit current workspace",
+      "input-name-label": "Workspace name",
+      "input-name-placeholder": "Enter a workspace name"
     },
     "package": {
       "official": "official",
