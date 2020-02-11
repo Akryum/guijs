@@ -1,8 +1,4 @@
 <script>
-import { ref } from '@vue/composition-api'
-import { bindScope, onKey } from '@/util/keybinding'
-import { onCommand } from '@/util/command'
-import { useGlobalMutationLoading } from '@vue/apollo-composable'
 const ImportProjectForm = () => import(
   /* webpackChunkName: 'ImportProjectForm' */
   './ImportProjectForm.vue'
@@ -12,49 +8,19 @@ export default {
   components: {
     ImportProjectForm,
   },
-
-  setup () {
-    const isOpen = ref(false)
-
-    const mutating = useGlobalMutationLoading()
-
-    bindScope('import-project', isOpen)
-
-    onKey('esc', () => {
-      if (mutating.value) return
-      isOpen.value = false
-    }, {
-      scope: 'import-project',
-      global: true,
-    })
-
-    onCommand('import-project', () => {
-      isOpen.value = true
-    })
-
-    return {
-      isOpen,
-      mutating,
-    }
-  },
 }
 </script>
 
 <template>
-  <VModal
-    v-if="isOpen"
-    :locked="mutating"
+  <BaseModal
+    v-slot="{ close }"
+    keyScope="import-project"
+    command="import-project"
     shellClass="max-w-128"
-    @close="isOpen = false"
+    title="guijs.import-project.import-a-project"
   >
-    <template #title>
-      <div class="modal-title">
-        {{ $t('guijs.import-project.import-a-project') }}
-      </div>
-    </template>
-
     <ImportProjectForm
-      @close="isOpen = false"
+      @close="close()"
     />
-  </VModal>
+  </BaseModal>
 </template>

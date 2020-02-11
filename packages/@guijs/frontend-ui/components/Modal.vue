@@ -1,4 +1,6 @@
 <script>
+import { bindScope, onKey } from '../util/keybinding'
+
 export default {
   props: {
     title: {
@@ -15,6 +17,33 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    keyScope: {
+      type: String,
+      default: 'modal',
+    },
+  },
+
+  setup (props, { emit }) {
+    function close () {
+      if (props.locked) return
+      emit('close')
+    }
+
+    // Keyboard
+
+    bindScope(props.keyScope)
+
+    onKey('esc', () => {
+      close()
+    }, {
+      scope: props.keyScope,
+      global: true,
+    })
+
+    return {
+      close,
+    }
   },
 }
 </script>
@@ -24,7 +53,7 @@ export default {
     <!-- Backdrop -->
     <div
       class="bg-white dark:bg-gray-900 opacity-90 absolute inset-0"
-      @click="!locked && $emit('close')"
+      @click="close()"
     />
 
     <!-- Shell -->
@@ -43,7 +72,7 @@ export default {
         <VButton
           v-if="!locked"
           class="w-72p h-72p group"
-          @click="$emit('close')"
+          @click="close()"
         >
           <i class="material-icons text-2xl text-gray-500 group-hover:text-gray-800 dark-group-hover:text-gray-200">close</i>
         </VButton>

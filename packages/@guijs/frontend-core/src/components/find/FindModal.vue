@@ -2,7 +2,6 @@
 import { ref, computed, watch } from '@vue/composition-api'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { bindScope, onKey } from '@/util/keybinding'
 import { onCommand, onAnyCommand, runCommand } from '@/util/command'
 import { useKeyboardNavigation } from '@guijs/frontend-ui/util/navigation'
 import { getSearchType, TYPE_WORDS } from './util'
@@ -25,14 +24,6 @@ export default {
       if (!value) {
         keepOpen = false
       }
-    })
-
-    bindScope('find-modal', isOpen)
-    onKey('esc', () => {
-      isOpen.value = false
-    }, {
-      scope: 'find-modal',
-      global: true,
     })
 
     function openAndKeepOpen () {
@@ -139,6 +130,7 @@ export default {
 <template>
   <VModal
     v-if="isOpen"
+    keyScope="find-modal"
     @close="isOpen = false"
   >
     <template #title>
