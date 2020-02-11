@@ -28,20 +28,87 @@ export default {
 </script>
 
 <template>
-  <div class="w-6 h-6 flex items-center justify-center">
+  <div class="w-6 h-6 flex items-center justify-center relative">
     <div
       v-if="status === 'idle'"
+      key="idle"
       class="w-3 h-3 bg-gray-500 rounded-full"
     />
 
     <div
       v-if="status === 'running'"
+      key="running"
       class="w-5 h-5 border-blue-400 dark:border-blue-600 border-4 rounded-full"
     />
 
     <img
       v-if="status !== 'idle' && status !== 'running'"
       :src="require(`@/assets/script-${status}.svg`)"
+      class="icon"
     >
+
+    <transition duration="150">
+      <div
+        v-if="status !== 'idle' && status !== 'running' && status !== 'killed'"
+        key="icon-bg"
+        class="icon-bg absolute"
+        :class="`status-${status}`"
+      >
+        <div class="animation w-5 h-5 rounded-full" />
+      </div>
+    </transition>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.icon {
+  animation: icon-in 0s .15s backwards;
+}
+
+@keyframes icon-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes icon-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.icon-bg {
+  @apply z-10;
+  animation: icon-out .15s .15s forwards;
+
+  .animation {
+    transition: border .15s;
+    border-width: 10px;
+  }
+
+  &.status-success .animation {
+    @apply border-green-500;
+  }
+
+  &.status-error .animation {
+    @apply border-red-500;
+  }
+
+  &.v-leave-active {
+    animation: none;
+  }
+
+  &.v-enter,
+  &.v-leave-to {
+    .animation {
+      border-width: 4px;
+    }
+  }
+}
+</style>
