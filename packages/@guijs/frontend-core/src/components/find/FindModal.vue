@@ -80,6 +80,17 @@ export default {
       }
     })
 
+    const commandContainer = ref(null)
+
+    watch(selectedIndex, value => {
+      if (commandContainer.value) {
+        const el = commandContainer.value.querySelector(`[data-index="${value}"]`)
+        if (el) {
+          el.scrollIntoViewIfNeeded()
+        }
+      }
+    })
+
     // Commands
     for (const word of Object.keys(TYPE_WORDS)) {
       if (word === '?') continue
@@ -122,6 +133,7 @@ export default {
       commands,
       selectCommand,
       selectedIndex,
+      commandContainer,
     }
   },
 }
@@ -149,12 +161,16 @@ export default {
       </VInput>
     </template>
 
-    <div class="flex flex-col max-h-128 overflow-x-auto">
+    <div
+      ref="commandContainer"
+      class="flex flex-col max-h-128 overflow-x-auto"
+    >
       <FindItem
         v-for="(command, index) of commands"
         :key="command.id"
         :command="command"
         :selected="selectedIndex === index"
+        :data-index="index"
         @select="selectCommand(command.id)"
         @mouseover.native="selectedIndex = index"
       />
