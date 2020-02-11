@@ -87,6 +87,8 @@ export default {
     <ProjectTypeSelect
       v-model="formData.typeId"
       buttonClass="form-input"
+      label="guijs.edit-workspace.input-type-label"
+      placeholder="guijs.edit-workspace.input-type-placeholder"
       class="my-6"
     />
 

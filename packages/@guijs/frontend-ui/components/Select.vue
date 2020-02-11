@@ -23,6 +23,11 @@ export default {
       default: null,
     },
 
+    label: {
+      type: String,
+      default: null,
+    },
+
     buttonClass: {
       type: [Object, Array, String],
       default: null,
@@ -116,7 +121,7 @@ export default {
       name="trigger"
       :option="currentOption"
     >
-      <div class="overflow-hidden">
+      <div class="overflow-hidden leading-normal">
         <VButton
           iconRight="keyboard_arrow_down"
           class="w-full"
@@ -125,18 +130,29 @@ export default {
           extend
           square
         >
-          <slot
-            name="label"
-            :option="currentOption"
-          >
-            <slot
-              v-if="currentOption"
-              :option="currentOption"
-            />
-            <span v-else-if="placeholder">
-              {{ placeholder }}
-            </span>
-          </slot>
+          <div class="flex flex-col">
+            <VLabel
+              v-if="label"
+              class="mb-1"
+            >
+              {{ $t(label) }}
+            </VLabel>
+
+            <div class="flex items-center">
+              <slot
+                name="label"
+                :option="currentOption"
+              >
+                <slot
+                  v-if="currentOption"
+                  :option="currentOption"
+                />
+                <span v-else-if="placeholder">
+                  {{ placeholder }}
+                </span>
+              </slot>
+            </div>
+          </div>
         </VButton>
       </div>
     </slot>

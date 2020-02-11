@@ -77,7 +77,9 @@
     "edit-workspace": {
       "edit-current-workspace": "Edit current workspace",
       "input-name-label": "Workspace name",
-      "input-name-placeholder": "Enter a workspace name"
+      "input-name-placeholder": "Enter a workspace name",
+      "input-type-label": "Workspace type",
+      "input-type-placeholder": "Select a workspace type"
     },
     "package": {
       "official": "official",
