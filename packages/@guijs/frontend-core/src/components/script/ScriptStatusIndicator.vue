@@ -42,7 +42,6 @@ export default {
     <img
       v-if="status !== 'idle' && status !== 'running'"
       :src="require(`@/assets/script-${status}.svg`)"
-      class="w-5 h-5"
     >
   </div>
 </template>
