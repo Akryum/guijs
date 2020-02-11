@@ -36,8 +36,10 @@ export default {
     v-bind="$attrs"
     :options="projectTypes.map(pt => ({
       value: pt.id,
+      searchText: pt.name,
       data: pt,
     }))"
+    searchable
     optionClass="p-2"
     v-on="$listeners"
   >

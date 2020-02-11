@@ -32,6 +32,11 @@ export default {
       type: [Object, Array, String],
       default: null,
     },
+
+    searchable: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup (props, { emit, refs }) {
@@ -59,7 +64,18 @@ export default {
 
     // Search
 
-    const filteredOptions = computed(() => props.options)
+    const searchText = ref('')
+
+    const filteredOptions = computed(() => {
+      const text = searchText.value.trim()
+
+      if (text) {
+        const reg = new RegExp(text.replace(/\s+/g, '|'), 'i')
+        return props.options.filter(option => option.searchText.match(reg))
+      }
+
+      return props.options
+    })
 
     // Keyboard
 
@@ -85,6 +101,7 @@ export default {
       filteredOptions,
       selectedIndex,
       selectOption,
+      searchText,
     }
   },
 }
@@ -101,7 +118,7 @@ export default {
     >
       <div class="overflow-hidden">
         <VButton
-          icon-right="keyboard_arrow_down"
+          iconRight="keyboard_arrow_down"
           class="w-full"
           :class="buttonClass"
           align="left"
@@ -133,6 +150,14 @@ export default {
         }"
       >
         <slot name="popper-start" />
+
+        <VInput
+          v-if="searchable"
+          v-model="searchText"
+          :placeholder="$t('guijs.common.search')"
+          class="p-4 border-gray-200 dark:border-gray-950 border-b"
+          autoFocus
+        />
 
         <VButton
           v-for="(option, index) of filteredOptions"
