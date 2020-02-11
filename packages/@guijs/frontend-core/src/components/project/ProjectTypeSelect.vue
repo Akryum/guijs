@@ -45,7 +45,7 @@ export default {
   >
     <img
       :src="option.data.logo"
-      class="w-5 h-5 mr-2 flex-none"
+      class="w-5 h-5 mr-2 flex-none rounded-sm"
     >
     {{ option.data.name }}
   </VSelect>
