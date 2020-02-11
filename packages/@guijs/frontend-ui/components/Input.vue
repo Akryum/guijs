@@ -42,6 +42,10 @@ export default {
     function focus () {
       if (input.value) {
         input.value.focus()
+        // Make sure the focus is forced
+        setTimeout(() => {
+          input.value.focus()
+        }, 100)
       } else {
         const unwatch = watch(input, () => {
           unwatch()
