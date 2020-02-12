@@ -56,6 +56,7 @@ export async function ensureScriptTerminal (script: MetaNpmScript, ctx: Context)
     })
 
     terminal.on('exit', async (exitCode) => {
+      if (terminal.killed) return
       if (exitCode === 0) {
         await setScriptStatus(script, NpmScriptStatus.Success, ctx)
       } else {
@@ -80,7 +81,7 @@ export async function runScript (script: MetaNpmScript, ctx: Context) {
 export async function stopScript (script: MetaNpmScript, ctx: Context) {
   const terminal = getScriptTerminal(script)
   if (terminal) {
-    await terminal.kill()
+    await terminal.kill(true)
     await setScriptStatus(script, NpmScriptStatus.Killed, ctx)
   }
 }

@@ -40,6 +40,7 @@ export default {
     class="flex items-center h-full px-6"
   >
     <ScriptStatusIndicator
+      :key="script.id"
       :scriptId="script.id"
       class="flex-none mr-4"
     />

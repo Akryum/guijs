@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+
 export default {
   props: {
     scriptId: {
@@ -34,6 +35,7 @@ export default {
     :class="`status-${status}`"
   >
     <div
+      v-if="status !== 'success' && status !== 'error'"
       key="dot"
       class="dot-wrapper absolute z-10"
     >
