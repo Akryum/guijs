@@ -41,6 +41,7 @@ export default {
     `)
 
     async function save () {
+      if (!formData.value.name) return
       await mutate({
         input: {
           projectId: route.value.params.projectId,
@@ -76,12 +77,14 @@ export default {
   <div
     v-else
     class="px-6"
+    @keyup.enter="save()"
   >
     <VInput
       v-model="formData.name"
       label="guijs.edit-workspace.input-name-label"
       placeholder="guijs.edit-workspace.input-name-placeholder"
       class="form-input my-6"
+      autoFocus
     />
 
     <ProjectTypeSelect
