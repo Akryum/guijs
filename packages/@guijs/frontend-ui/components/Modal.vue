@@ -1,5 +1,8 @@
 <script>
 import { bindScope, onKey } from '../util/keybinding'
+import { onUnmounted } from '@vue/composition-api'
+
+let openModals = 0
 
 export default {
   props: {
@@ -30,6 +33,13 @@ export default {
       emit('close')
     }
 
+    // z-index
+
+    const zIndex = 10 + openModals++
+    onUnmounted(() => {
+      openModals--
+    })
+
     // Keyboard
 
     bindScope(props.keyScope)
@@ -43,13 +53,19 @@ export default {
 
     return {
       close,
+      zIndex,
     }
   },
 }
 </script>
 
 <template>
-  <div class="fixed inset-0 flex flex-col items-center py-16 z-10">
+  <div
+    class="fixed inset-0 flex flex-col items-center py-16"
+    :style="{
+      zIndex,
+    }"
+  >
     <!-- Backdrop -->
     <div
       class="bg-white dark:bg-gray-900 opacity-90 absolute inset-0"
