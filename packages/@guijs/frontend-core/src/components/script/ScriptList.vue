@@ -13,7 +13,7 @@ export default {
   setup () {
     const route = useRoute()
 
-    const { result } = useQuery(gql`
+    const { result, loading } = useQuery(gql`
       query workspaceScripts ($projectId: ID!, $workspaceId: ID!) {
         project (id: $projectId) {
           id
@@ -35,6 +35,7 @@ export default {
 
     return {
       scripts,
+      loading,
     }
   },
 }
@@ -47,6 +48,13 @@ export default {
       :key="script.id"
       :script="script"
     />
+
+    <VEmpty
+      v-if="!loading && !scripts.length"
+      icon="assignment"
+    >
+      {{ $t('guijs.script.no-scripts') }}
+    </VEmpty>
   </div>
 </template>
 

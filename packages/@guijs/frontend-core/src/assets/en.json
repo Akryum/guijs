@@ -94,7 +94,8 @@
       "run-script": "Run script",
       "stop-script": "Stop script",
       "edit-script": "Edit script",
-      "output": "Output"
+      "output": "Output",
+      "no-scripts": "No scripts found"
     }
   }
 }
