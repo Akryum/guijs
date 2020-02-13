@@ -151,7 +151,7 @@ export default {
         v-model="searchText"
         placeholder="guijs.find.placeholder"
         autoFocus
-        class="px-4 border-gray-200 dark:border-gray-950 border-r h-full"
+        class="px-4 h-full"
       >
         <template #before>
           <i class="material-icons text-2xl text-gray-500 ml-2 mr-4">

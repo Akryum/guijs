@@ -63,7 +63,7 @@ export default {
     >
       <!-- Titlebar -->
       <div class="flex items-stretch border-b border-gray-200 dark:border-gray-950">
-        <div class="flex-1 h-72p">
+        <div class="flex-1 h-72p border-r border-gray-200 dark:border-gray-950">
           <slot name="title">
             {{ title }}
           </slot>
