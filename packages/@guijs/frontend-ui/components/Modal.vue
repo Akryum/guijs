@@ -86,7 +86,7 @@ export default {
         </div>
 
         <VButton
-          v-if="!locked"
+          :disabled="locked"
           class="w-72p h-72p group"
           @click="close()"
         >
