@@ -3,9 +3,16 @@ import { useScriptQuery } from './useScript'
 import gql from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
 import { ref, watch } from '@vue/composition-api'
-import { runCommand } from '../../util/command'
+import { runCommand } from '@/util/command'
+import shellQuote from 'shell-quote'
+import minimist from 'minimist'
+import ScriptChunksSummary from './ScriptChunksSummary.vue'
 
 export default {
+  components: {
+    ScriptChunksSummary,
+  },
+
   setup () {
     const { script } = useScriptQuery(gql`
       query script ($scriptId: ID!) {
@@ -25,6 +32,62 @@ export default {
     })
 
     const showRawInput = ref(false)
+
+    // Advanced
+
+    const parsingError = ref(null)
+    const chunks = ref([])
+
+    watch(() => formData.value.command, value => {
+      parsingError.value = null
+      try {
+        const parsed = shellQuote.parse(value)
+
+        // Basic raw processing
+        const rawChunks = []
+        let buffer = []
+        for (const part of parsed) {
+          if (part.op) {
+            if (buffer.length) {
+              rawChunks.push({
+                type: 'command',
+                raw: buffer,
+              })
+            }
+            buffer = []
+            rawChunks.push({
+              type: 'operator',
+              raw: [part.op],
+            })
+          } else {
+            buffer.push(part)
+          }
+        }
+        if (buffer.length) {
+          rawChunks.push({
+            type: 'command',
+            raw: buffer,
+          })
+        }
+
+        // Final processing
+        let commandIndex = 0
+        let operatorIndex = 0
+        chunks.value = rawChunks.map(chunk => {
+          const id = chunk.type === 'command' ? String.fromCharCode(97 + commandIndex++) : `op_${operatorIndex++}`
+          const args = minimist(chunk.raw.slice(1))
+          return {
+            ...chunk,
+            id,
+            base: chunk.raw[0],
+            args,
+          }
+        })
+      } catch (e) {
+        console.warn('Parsing error', e)
+        parsingError.value = e.message
+      }
+    })
 
     // Save
 
@@ -62,6 +125,7 @@ export default {
       mutating,
       showRawInput,
       renameScript,
+      chunks,
     }
   },
 }
@@ -77,9 +141,10 @@ export default {
       }"
     >
       <template v-if="!showRawInput">
-        <div class="font-mono flex-1">
-          {{ formData.command }}
-        </div>
+        <ScriptChunksSummary
+          :chunks="chunks"
+          class="flex-1"
+        />
 
         <VButton
           v-tooltip="$t('guijs.edit-script.edit-directly')"
