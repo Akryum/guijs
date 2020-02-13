@@ -1,11 +1,10 @@
 <script>
-import { useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from './fragments'
 import { onKeybind } from '@/util/keybinding'
-import { useScriptRun } from './useScript'
+import { useScriptQuery, useScriptRun } from './useScript'
 import Keybindings from '../keybinding/Keybindings.vue'
+import { runCommand } from '../../util/command'
 
 export default {
   components: {
@@ -13,25 +12,22 @@ export default {
   },
 
   setup () {
-    const route = useRoute()
-
-    const { result } = useQuery(gql`
-      query script ($id: ID!) {
-        script (id: $id) {
+    const { script } = useScriptQuery(gql`
+      query script ($scriptId: ID!) {
+        script (id: $scriptId) {
           ...script
         }
       }
       ${scriptFragment}
-    `, () => ({
-      id: route.value.params.scriptId,
-    }), () => ({
-      enabled: !!route.value.params.scriptId,
-    }))
-    const script = useResult(result)
+    `)
 
     // Actions
 
     const { runScript, stopScript } = useScriptRun()
+
+    function editScript () {
+      runCommand('edit-script')
+    }
 
     // Keybinding
 
@@ -47,6 +43,7 @@ export default {
       script,
       runScript,
       stopScript,
+      editScript,
     }
   },
 }
@@ -92,8 +89,8 @@ export default {
     <VButton
       v-tooltip="$t('guijs.script.edit-script')"
       iconLeft="edit"
-      disabled
       class="p-4 btn-dim ml-4"
+      @click="editScript()"
     />
 
     <!-- Views -->
