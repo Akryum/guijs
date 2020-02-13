@@ -5,9 +5,8 @@ import Context from '@/generated/context'
 import consola from 'consola'
 import gql from 'graphql-tag'
 import { createTerminal, Terminal, terminals } from '../terminal/server'
-import { MetaProject } from '../project/meta-types'
-import { getProjectWorkspace } from '../project/workspace'
 import { addKeybinding } from '../keybinding'
+import { getScriptWorkspace } from '.'
 
 export const typeDefs = gql`
 extend type NpmScript {
@@ -42,8 +41,7 @@ export function getScriptTerminal (script: MetaNpmScript) {
 }
 
 export async function ensureScriptTerminal (script: MetaNpmScript, ctx: Context) {
-  const project = await ctx.db.projects.findOne<MetaProject>({ _id: script.projectId })
-  const workspace = await getProjectWorkspace(project, script.workspaceId, ctx)
+  const workspace = await getScriptWorkspace(script, ctx)
 
   let terminal: Terminal = getScriptTerminal(script)
 

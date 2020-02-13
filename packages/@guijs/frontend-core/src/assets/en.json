@@ -97,6 +97,14 @@
       "edit-script": "Edit script",
       "output": "Output",
       "no-scripts": "No scripts found"
+    },
+    "edit-script": {
+      "edit-script": "Edit script",
+      "rename-script": "Rename script",
+      "rename": "Rename",
+      "input-name-label": "Script name",
+      "input-name-placeholder": "Enter a script name",
+      "edit-directly": "Edit command directly"
     }
   }
 }

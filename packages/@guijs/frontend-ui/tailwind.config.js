@@ -24,7 +24,13 @@ module.exports = {
       maxWidth: theme => ({
         ...theme('width'),
       }),
+      minWidth: theme => ({
+        ...theme('width'),
+      }),
       maxHeight: theme => ({
+        ...theme('width'),
+      }),
+      minHeight: theme => ({
         ...theme('width'),
       }),
       opacity: {

@@ -67,6 +67,11 @@ export type Document = {
   id: Scalars['ID'],
 };
 
+export type EditNpmScriptInput = {
+  scriptId: Scalars['ID'],
+  command: Scalars['String'],
+};
+
 export type EditProjectWorkspaceInput = {
   projectId: Scalars['ID'],
   workspaceId: Scalars['ID'],
@@ -100,6 +105,8 @@ export type Mutation = {
   checkImportProject: CheckProjectPayload,
   importProject: Project,
   editProjectWorkspace?: Maybe<ProjectWorkspace>,
+  editNpmScript: NpmScript,
+  renameNpmScript: NpmScript,
   runScript?: Maybe<NpmScript>,
   stopScript?: Maybe<NpmScript>,
   updateSetting?: Maybe<Setting>,
@@ -143,6 +150,16 @@ export type MutationImportProjectArgs = {
 
 export type MutationEditProjectWorkspaceArgs = {
   input: EditProjectWorkspaceInput
+};
+
+
+export type MutationEditNpmScriptArgs = {
+  input: EditNpmScriptInput
+};
+
+
+export type MutationRenameNpmScriptArgs = {
+  input: RenameNpmScriptInput
 };
 
 
@@ -287,6 +304,11 @@ export type QueryScriptArgs = {
 
 export type QuerySettingArgs = {
   id: Scalars['ID']
+};
+
+export type RenameNpmScriptInput = {
+  scriptId: Scalars['ID'],
+  name: Scalars['String'],
 };
 
 export type RunCommandInput = {
@@ -446,6 +468,8 @@ export type ResolversTypes = {
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
+  EditNpmScriptInput: EditNpmScriptInput,
+  RenameNpmScriptInput: RenameNpmScriptInput,
   RunScriptInput: RunScriptInput,
   StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
@@ -483,6 +507,8 @@ export type ResolversParentTypes = {
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
+  EditNpmScriptInput: EditNpmScriptInput,
+  RenameNpmScriptInput: RenameNpmScriptInput,
   RunScriptInput: RunScriptInput,
   StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
@@ -538,6 +564,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
   editProjectWorkspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<MutationEditProjectWorkspaceArgs, 'input'>>,
+  editNpmScript?: Resolver<ResolversTypes['NpmScript'], ParentType, ContextType, RequireFields<MutationEditNpmScriptArgs, 'input'>>,
+  renameNpmScript?: Resolver<ResolversTypes['NpmScript'], ParentType, ContextType, RequireFields<MutationRenameNpmScriptArgs, 'input'>>,
   runScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationRunScriptArgs, 'input'>>,
   stopScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationStopScriptArgs, 'input'>>,
   updateSetting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<MutationUpdateSettingArgs, 'input'>>,

@@ -200,6 +200,22 @@ export default {
   }
 }
 
+.btn-flat {
+  @apply text-gray-600;
+
+  &:hover {
+    @apply text-gray-900 bg-gray-300;
+  }
+
+  .mode-dark & {
+    @apply text-gray-400;
+
+    &:hover {
+      @apply text-gray-100 bg-gray-700;
+    }
+  }
+}
+
 .btn-sm {
   @apply px-2 py-2;
 }
