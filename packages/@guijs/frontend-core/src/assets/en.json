@@ -87,7 +87,8 @@
       "improve-metadata": "Help improve metadata",
       "unknown": "Unknown",
       "all": "All packages",
-      "show-packages": "Show packages"
+      "show-packages": "Show packages",
+      "no-packages": "No packages found"
     },
     "script": {
       "show-scripts": "Show scripts",

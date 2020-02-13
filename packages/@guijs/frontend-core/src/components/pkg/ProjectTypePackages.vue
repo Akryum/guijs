@@ -86,5 +86,12 @@ export default {
         'border-primary-400 dark:border-primary-700': highlightedId === pkg.id,
       }"
     />
+
+    <VEmpty
+      v-if="!sortedList.length"
+      icon="extension"
+    >
+      {{ $t('guijs.package.no-packages') }}
+    </VEmpty>
   </div>
 </template>
