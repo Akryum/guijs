@@ -1,7 +1,7 @@
 import ws from 'ws'
 import shortid from 'shortid'
 import { CreateTerminalInput } from '@/generated/schema'
-import { spawn as spawnPty, IWindowsPtyForkOptions, IPty } from 'node-pty'
+import { spawn as spawnPty, IWindowsPtyForkOptions, IPty } from 'node-pty-prebuilt-multiarch'
 import defaultShell from 'default-shell'
 import { EventEmitter } from 'events'
 import consola from 'consola'
