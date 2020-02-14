@@ -1,5 +1,7 @@
 /** @type {import('@vue/cli-service').ProjectOptions} */
 module.exports = {
+  productionSourceMap: false,
+
   transpileDependencies: [
     '@guijs/frontend-ui',
   ],
