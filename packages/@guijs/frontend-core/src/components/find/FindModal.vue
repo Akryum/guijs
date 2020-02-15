@@ -143,6 +143,7 @@ export default {
   <VModal
     v-if="isOpen"
     keyScope="find-modal"
+    shellClass="max-w-192"
     @close="isOpen = false"
   >
     <template #title>

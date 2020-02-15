@@ -13,7 +13,7 @@ export default {
 
     shellClass: {
       type: [String, Object, Array],
-      default: 'max-w-192',
+      default: null,
     },
 
     locked: {
@@ -24,6 +24,11 @@ export default {
     keyScope: {
       type: String,
       default: 'modal',
+    },
+
+    fullscreen: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -61,7 +66,11 @@ export default {
 
 <template>
   <div
-    class="fixed inset-0 flex flex-col items-center py-16"
+    class="fixed inset-0 flex flex-col items-center"
+    :class="{
+      'py-16': !fullscreen,
+      'p-6': fullscreen,
+    }"
     :style="{
       zIndex,
     }"
@@ -74,11 +83,17 @@ export default {
 
     <!-- Shell -->
     <div
-      class="relative z-10 w-screen bg-white dark:bg-gray-850 border border-gray-200 dark:border-gray-950 rounded shadow-lg"
-      :class="shellClass"
+      class="relative z-10 bg-white dark:bg-gray-850 border border-gray-200 dark:border-gray-950 rounded shadow-lg flex flex-col"
+      :class="[
+        shellClass,
+        {
+          'w-screen': !fullscreen,
+          'w-full h-full': fullscreen,
+        },
+      ]"
     >
       <!-- Titlebar -->
-      <div class="flex items-stretch border-b border-gray-200 dark:border-gray-950">
+      <div class="flex items-stretch border-b border-gray-200 dark:border-gray-950 relative">
         <div class="flex-1 h-72p border-r border-gray-200 dark:border-gray-950">
           <slot name="title">
             {{ title }}
@@ -95,7 +110,7 @@ export default {
       </div>
 
       <!-- Body -->
-      <div>
+      <div class="flex-1">
         <slot />
       </div>
     </div>

@@ -42,8 +42,11 @@ export default {
 
     const mutating = useGlobalMutationLoading()
 
+    const commandPayload = ref(null)
+
     if (props.command) {
-      onCommand(props.command, () => {
+      onCommand(props.command, (command, payload) => {
+        commandPayload.value = payload
         setOpen(true)
       })
     }
@@ -52,6 +55,7 @@ export default {
       isOpen,
       setOpen,
       mutating,
+      commandPayload,
     }
   },
 }
@@ -72,6 +76,9 @@ export default {
       </slot>
     </template>
 
-    <slot :close="() => setOpen(false)" />
+    <slot
+      :commandPayload="commandPayload"
+      :close="() => setOpen(false)"
+    />
   </VModal>
 </template>

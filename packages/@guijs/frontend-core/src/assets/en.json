@@ -93,6 +93,9 @@
       "latest": "latest",
       "wanted": "Wanted version:"
     },
+    "install-package": {
+      "install-package": "Install package"
+    },
     "script": {
       "show-scripts": "Show scripts",
       "run-script": "Run script",

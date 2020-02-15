@@ -4,6 +4,7 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectPackageFragment } from './fragments'
 import { computed, ref, watch } from '@vue/composition-api'
+import { runCommand } from '@/util/command'
 import ProjectTypeList from './ProjectTypeList.vue'
 
 const allProjectType = {
@@ -108,10 +109,17 @@ export default {
       }
     })
 
+    // Install
+
+    function installPackage () {
+      runCommand('install-package-popup')
+    }
+
     return {
       packages,
       projectTypes,
       scroller,
+      installPackage,
     }
   },
 }
@@ -120,6 +128,19 @@ export default {
 <template>
   <div class="flex-1 flex items-stretch h-full">
     <div class="flex-none w-64 border-gray-200 dark:border-gray-950 border-r pt-6 overflow-y-auto">
+      <VButton
+        align="left"
+        square
+        extend
+        class="btn-md w-full hover:bg-primary-100 dark-hover:bg-primary-900"
+        @click="installPackage()"
+      >
+        <i class="material-icons mr-4 text-gray-600 dark:text-gray-400">add</i>
+        <div class="flex-1 text-left w-0 truncate">
+          {{ $t('guijs.install-package.install-package') }}
+        </div>
+      </VButton>
+
       <ProjectTypeList
         :projectTypes="projectTypes"
       />
