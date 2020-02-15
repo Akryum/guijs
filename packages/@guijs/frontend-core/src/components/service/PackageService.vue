@@ -1,5 +1,5 @@
 <script>
-import { onCommand } from '@/util/command'
+import { onCommand, runCommand } from '@/util/command'
 import { useRouter } from '@/util/router'
 import { useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
@@ -30,6 +30,19 @@ export default {
       }
       ${projectPackageFragment}
     `)
+
+    // Installation
+
+    window.addEventListener('message', event => {
+      if (event.origin === process.env.VUE_APP_AWESOME_URL && event.data) {
+        console.log(event.origin, event.data)
+        if (event.data.awesomeInstall) {
+          runCommand('install-package', {
+            packageName: event.data.awesomeInstall,
+          })
+        }
+      }
+    })
   },
 }
 </script>
