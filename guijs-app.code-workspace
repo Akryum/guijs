@@ -19,6 +19,9 @@
 			"path": "packages/@guijs/native-dialog"
 		},
 		{
+			"path": "packages/@guijs/tauri-app"
+		},
+		{
 			"path": "legacy/server-core-old"
 		},
 		{
