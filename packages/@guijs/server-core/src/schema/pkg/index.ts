@@ -63,6 +63,7 @@ export async function getWorkspacePackages (
         id,
         type: ProjectPackageType.Main,
         versionSelector: pkg.dependencies[id],
+        workspaceId: workspace.id,
       })
     }
   }
@@ -73,6 +74,7 @@ export async function getWorkspacePackages (
         id,
         type: ProjectPackageType.Dev,
         versionSelector: pkg.devDependencies[id],
+        workspaceId: workspace.id,
       })
     }
   }

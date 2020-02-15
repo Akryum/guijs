@@ -221,6 +221,8 @@ export type ProjectPackage = {
   official?: Maybe<Scalars['Boolean']>,
   description?: Maybe<Scalars['String']>,
   defaultLogo?: Maybe<Scalars['String']>,
+  currentVersion?: Maybe<Scalars['String']>,
+  latestVersion?: Maybe<Scalars['String']>,
 };
 
 export enum ProjectPackageType {
@@ -347,6 +349,7 @@ export type StopScriptInput = {
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<CommandRan>,
+  projectPackageUpdated?: Maybe<ProjectPackage>,
   npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
 };
@@ -599,6 +602,8 @@ export type ProjectPackageResolvers<ContextType = Context, ParentType extends Re
   official?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   defaultLogo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  currentVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  latestVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
@@ -651,6 +656,7 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
+  projectPackageUpdated?: SubscriptionResolver<Maybe<ResolversTypes['ProjectPackage']>, "projectPackageUpdated", ParentType, ContextType>,
   npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
 };

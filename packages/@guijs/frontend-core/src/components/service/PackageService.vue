@@ -1,6 +1,9 @@
 <script>
 import { onCommand } from '@/util/command'
 import { useRouter } from '@/util/router'
+import { useSubscription } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+import { projectPackageFragment } from '../pkg/fragments'
 
 export default {
   setup () {
@@ -18,6 +21,15 @@ export default {
         },
       })
     })
+
+    useSubscription(gql`
+      subscription projectPackageUpdated {
+        projectPackageUpdated {
+          ...projectPackage
+        }
+      }
+      ${projectPackageFragment}
+    `)
   },
 }
 </script>

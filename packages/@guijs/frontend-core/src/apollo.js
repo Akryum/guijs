@@ -36,12 +36,13 @@ const wsLink = new WebSocketLink({
   uri: `ws://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/subscriptions`,
   options: {
     reconnect: true,
-    connectionParams: {
+    lazy: true,
+    connectionParams: () => ({
       context: {
         clientId,
         projectId: getProjectId(),
       },
-    },
+    }),
   },
 })
 
