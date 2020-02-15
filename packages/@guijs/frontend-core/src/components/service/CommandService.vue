@@ -19,7 +19,7 @@ export default {
       }
     `)
     onResult(({ data }) => {
-      dispatchCommand(data.commandRan.command, data.commandRan.payload)
+      dispatchCommand(data.commandRan.command, data.commandRan.payload || {})
     })
 
     // Try Keybinding
