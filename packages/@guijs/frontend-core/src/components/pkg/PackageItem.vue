@@ -51,6 +51,44 @@ export default {
       </div>
     </div>
 
+    <!-- Versions -->
+    <VTooltip>
+      <div class="leading-normal mx-4 w-48 overflow-hidden">
+        <div class="truncate">
+          <span class="text-gray-500 mr-2 inline-block w-16 text-right">
+            {{ $t('guijs.package.version') }}
+          </span>
+          <span class="inline-block font-mono text-sm">
+            {{ pkg.currentVersion }}
+          </span>
+        </div>
+        <div class="truncate">
+          <span class="text-gray-500 mr-2 inline-block w-16 text-right">
+            {{ $t('guijs.package.latest') }}
+          </span>
+          <span
+            class="inline-block font-mono text-sm"
+            :class="{
+              'text-primary-500 font-bold': pkg.latestVersion && pkg.latestVersion !== pkg.currentVersion,
+            }"
+          >
+            {{ pkg.latestVersion || '-' }}
+            <i
+              v-if="pkg.latestVersion && pkg.latestVersion !== pkg.currentVersion"
+              class="material-icons text-sm"
+            >warning</i>
+          </span>
+        </div>
+      </div>
+
+      <template #popper>
+        <div>
+          <span>{{ $t('guijs.package.wanted') }}</span>
+          <span class="font-mono font-bold text-sm ml-2">{{ pkg.versionSelector }}</span>
+        </div>
+      </template>
+    </VTooltip>
+
     <!-- Actions -->
     <div class="flex-none flex">
       <VButton

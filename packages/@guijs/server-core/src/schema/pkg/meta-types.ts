@@ -7,6 +7,7 @@ export interface MetaProjectPackage {
   versionSelector: string
   metadata?: MetaPackage
   isWorkspace?: boolean
+  workspaceId: string
 }
 
 export interface MetaPackage {

@@ -10,6 +10,7 @@
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@vue/composition-api": "^0.3.4",
+    "mousetrap": "^1.6.3",
     "postcss-nested": "^4.2.1",
     "postcss-preset-env": "^6.6.0",
     "tailwindcss": "^1.0.1",

@@ -1,7 +1,7 @@
 <script>
-import { useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { useScriptQuery } from './useScript'
 import { scriptFragment } from './fragments'
 import { terminalFragment } from '../terminal/fragments'
 import Terminal from '../terminal/Terminal.vue'
@@ -12,11 +12,9 @@ export default {
   },
 
   setup () {
-    const route = useRoute()
-
-    const { result } = useQuery(gql`
-      query script ($id: ID!) {
-        script (id: $id) {
+    const { script } = useScriptQuery(gql`
+      query script ($scriptId: ID!) {
+        script (id: $scriptId) {
           ...script
           terminal {
             ...terminal
@@ -25,12 +23,8 @@ export default {
       }
       ${scriptFragment}
       ${terminalFragment}
-    `, () => ({
-      id: route.value.params.scriptId,
-    }), () => ({
-      enabled: !!route.value.params.scriptId,
-    }))
-    const terminal = useResult(result, null, data => data.script.terminal)
+    `)
+    const terminal = useResult(script, null, data => data.terminal)
 
     return {
       terminal,

@@ -119,7 +119,7 @@ export default {
     @click="handleClick"
   >
     <div
-      class="flex items-center rounded w-full"
+      class="flex items-center w-full truncate"
       :class="{
         'opacity-0': loading,
         'opacity-50': !loading && ghost,
@@ -196,6 +196,22 @@ export default {
 
     &:hover {
       @apply bg-gray-700;
+    }
+  }
+}
+
+.btn-flat {
+  @apply text-gray-600;
+
+  &:hover {
+    @apply text-gray-900 bg-gray-300;
+  }
+
+  .mode-dark & {
+    @apply text-gray-400;
+
+    &:hover {
+      @apply text-gray-100 bg-gray-700;
     }
   }
 }

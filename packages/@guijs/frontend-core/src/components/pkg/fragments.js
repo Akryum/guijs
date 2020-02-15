@@ -12,6 +12,8 @@ fragment projectPackage on ProjectPackage {
     logo
   }
   versionSelector
+  currentVersion
+  latestVersion
   isWorkspace
   official
   description

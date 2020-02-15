@@ -67,6 +67,18 @@ export type Document = {
   id: Scalars['ID'],
 };
 
+export type EditNpmScriptInput = {
+  scriptId: Scalars['ID'],
+  command: Scalars['String'],
+};
+
+export type EditProjectWorkspaceInput = {
+  projectId: Scalars['ID'],
+  workspaceId: Scalars['ID'],
+  name: Scalars['String'],
+  typeId: Scalars['ID'],
+};
+
 export type ImportProjectInput = {
   path: Scalars['String'],
   name: Scalars['String'],
@@ -92,6 +104,9 @@ export type Mutation = {
   selectFile?: Maybe<Scalars['String']>,
   checkImportProject: CheckProjectPayload,
   importProject: Project,
+  editProjectWorkspace?: Maybe<ProjectWorkspace>,
+  editNpmScript: NpmScript,
+  renameNpmScript: NpmScript,
   runScript?: Maybe<NpmScript>,
   stopScript?: Maybe<NpmScript>,
   updateSetting?: Maybe<Setting>,
@@ -130,6 +145,21 @@ export type MutationCheckImportProjectArgs = {
 
 export type MutationImportProjectArgs = {
   input: ImportProjectInput
+};
+
+
+export type MutationEditProjectWorkspaceArgs = {
+  input: EditProjectWorkspaceInput
+};
+
+
+export type MutationEditNpmScriptArgs = {
+  input: EditNpmScriptInput
+};
+
+
+export type MutationRenameNpmScriptArgs = {
+  input: RenameNpmScriptInput
 };
 
 
@@ -191,6 +221,8 @@ export type ProjectPackage = {
   official?: Maybe<Scalars['Boolean']>,
   description?: Maybe<Scalars['String']>,
   defaultLogo?: Maybe<Scalars['String']>,
+  currentVersion?: Maybe<Scalars['String']>,
+  latestVersion?: Maybe<Scalars['String']>,
 };
 
 export enum ProjectPackageType {
@@ -226,6 +258,7 @@ export type Query = {
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
   keybinding?: Maybe<Keybinding>,
+  projectTypes: Array<ProjectType>,
   projectType?: Maybe<ProjectType>,
   projects: Array<Project>,
   project?: Maybe<Project>,
@@ -275,6 +308,11 @@ export type QuerySettingArgs = {
   id: Scalars['ID']
 };
 
+export type RenameNpmScriptInput = {
+  scriptId: Scalars['ID'],
+  name: Scalars['String'],
+};
+
 export type RunCommandInput = {
   id: Scalars['ID'],
   payload?: Maybe<Scalars['JSON']>,
@@ -311,6 +349,7 @@ export type StopScriptInput = {
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<CommandRan>,
+  projectPackageUpdated?: Maybe<ProjectPackage>,
   npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
 };
@@ -431,6 +470,9 @@ export type ResolversTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
+  EditProjectWorkspaceInput: EditProjectWorkspaceInput,
+  EditNpmScriptInput: EditNpmScriptInput,
+  RenameNpmScriptInput: RenameNpmScriptInput,
   RunScriptInput: RunScriptInput,
   StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
@@ -467,6 +509,9 @@ export type ResolversParentTypes = {
   SelectFileInput: SelectFileInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
+  EditProjectWorkspaceInput: EditProjectWorkspaceInput,
+  EditNpmScriptInput: EditNpmScriptInput,
+  RenameNpmScriptInput: RenameNpmScriptInput,
   RunScriptInput: RunScriptInput,
   StopScriptInput: StopScriptInput,
   UpdateSettingInput: UpdateSettingInput,
@@ -521,6 +566,9 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
+  editProjectWorkspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<MutationEditProjectWorkspaceArgs, 'input'>>,
+  editNpmScript?: Resolver<ResolversTypes['NpmScript'], ParentType, ContextType, RequireFields<MutationEditNpmScriptArgs, 'input'>>,
+  renameNpmScript?: Resolver<ResolversTypes['NpmScript'], ParentType, ContextType, RequireFields<MutationRenameNpmScriptArgs, 'input'>>,
   runScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationRunScriptArgs, 'input'>>,
   stopScript?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<MutationStopScriptArgs, 'input'>>,
   updateSetting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<MutationUpdateSettingArgs, 'input'>>,
@@ -554,6 +602,8 @@ export type ProjectPackageResolvers<ContextType = Context, ParentType extends Re
   official?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   defaultLogo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  currentVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  latestVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
@@ -581,6 +631,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
   keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType, RequireFields<QueryKeybindingArgs, 'id'>>,
+  projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
   projectType?: Resolver<Maybe<ResolversTypes['ProjectType']>, ParentType, ContextType, RequireFields<QueryProjectTypeArgs, 'id'>>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
@@ -605,6 +656,7 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
+  projectPackageUpdated?: SubscriptionResolver<Maybe<ResolversTypes['ProjectPackage']>, "projectPackageUpdated", ParentType, ContextType>,
   npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
 };

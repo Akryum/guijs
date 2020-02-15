@@ -4,6 +4,9 @@
 			"path": "packages/@guijs/frontend-core"
 		},
 		{
+			"path": "packages/@guijs/frontend-tauri"
+		},
+		{
 			"path": "packages/@guijs/frontend-ui"
 		},
 		{

@@ -5,11 +5,11 @@ import gql from 'graphql-tag'
 import fs from 'fs-extra'
 import path from 'path'
 import shortid from 'shortid'
-import { MetaProjectWorkspace } from '../project/meta-types'
+import { MetaProjectWorkspace, MetaProject } from '../project/meta-types'
 import Context from '@/generated/context'
 import { MetaNpmScript } from './meta-types'
 import { onProjectOpen } from '../project/open'
-import { detectWorkspaces } from '../project/workspace'
+import { detectWorkspaces, getProjectWorkspace } from '../project/workspace'
 import { onProjectClose } from '../project/close'
 
 export const typeDefs = gql`
@@ -137,6 +137,12 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
   }
 
   return result
+}
+
+export async function getScriptWorkspace (script: MetaNpmScript, ctx: Context) {
+  const project = await ctx.db.projects.findOne<MetaProject>({ _id: script.projectId })
+  const workspace = await getProjectWorkspace(project, script.workspaceId, ctx)
+  return workspace
 }
 
 export const resolvers: Resolvers = {

@@ -2,7 +2,9 @@
   "guijs": {
     "common": {
       "search": "Search",
-      "more-info": "More info"
+      "more-info": "More info",
+      "save": "Save",
+      "cancel": "Cancel"
     },
     "home": {
       "welcome": "Welcome to guijs",
@@ -69,7 +71,15 @@
       "select-button": "<div>{name}</div><div class=\"text-gray-500\">Type: {type}</div>",
       "root": "(root)",
       "tooltip": "Current workspace",
-      "action": "Click to change workspace"
+      "action": "Click to change workspace",
+      "no-workspace-selected": "No workspace selected"
+    },
+    "edit-workspace": {
+      "edit-current-workspace": "Edit current workspace",
+      "input-name-label": "Workspace name",
+      "input-name-placeholder": "Enter a workspace name",
+      "input-type-label": "Workspace type",
+      "input-type-placeholder": "Select a workspace type"
     },
     "package": {
       "official": "official",
@@ -77,14 +87,27 @@
       "improve-metadata": "Help improve metadata",
       "unknown": "Unknown",
       "all": "All packages",
-      "show-packages": "Show packages"
+      "show-packages": "Show packages",
+      "no-packages": "No packages found",
+      "version": "version",
+      "latest": "latest",
+      "wanted": "Wanted version:"
     },
     "script": {
       "show-scripts": "Show scripts",
       "run-script": "Run script",
       "stop-script": "Stop script",
       "edit-script": "Edit script",
-      "output": "Output"
+      "output": "Output",
+      "no-scripts": "No scripts found"
+    },
+    "edit-script": {
+      "edit-script": "Edit script",
+      "rename-script": "Rename script",
+      "rename": "Rename",
+      "input-name-label": "Script name",
+      "input-name-placeholder": "Enter a script name",
+      "edit-directly": "Edit command directly"
     }
   }
 }

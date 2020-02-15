@@ -1,7 +1,7 @@
 import ws from 'ws'
 import shortid from 'shortid'
 import { CreateTerminalInput } from '@/generated/schema'
-import { spawn as spawnPty, IWindowsPtyForkOptions, IPty } from 'node-pty'
+import { spawn as spawnPty, IWindowsPtyForkOptions, IPty } from 'node-pty-prebuilt-multiarch'
 import defaultShell from 'default-shell'
 import { EventEmitter } from 'events'
 import consola from 'consola'
@@ -27,6 +27,7 @@ export class Terminal extends EventEmitter {
   cwd: string
   hidden: boolean
   running = false
+  killed = false
   pty: IPty
   batcher: DataBatcher
   sockets: ws[] = []
@@ -65,6 +66,7 @@ export class Terminal extends EventEmitter {
     }
 
     this.running = true
+    this.killed = false
 
     const ptyOptions: IWindowsPtyForkOptions = {
       cols: 200,
@@ -108,8 +110,10 @@ export class Terminal extends EventEmitter {
     }
   }
 
-  kill () {
+  kill (markAsKilled = false) {
     if (!this.running) return
+
+    this.killed = markAsKilled
 
     return new Promise((resolve, reject) => {
       try {

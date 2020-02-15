@@ -13,6 +13,7 @@ type ProjectType {
 }
 
 extend type Query {
+  projectTypes: [ProjectType!]!
   projectType (id: ID!): ProjectType
 }
 `
@@ -29,6 +30,8 @@ export const resolvers: Resolvers = {
   },
 
   Query: {
+    projectTypes: () => projectTypes,
+
     projectType: (root, { id }) => projectTypes.find(pt => pt.id === id),
   },
 }
@@ -36,8 +39,8 @@ export const resolvers: Resolvers = {
 hook('apolloSchema', async (ctx: Context) => {
   if (!projectTypes) {
     const { data } = await ctx.fauna.query(q.Map(
-      q.Paginate(q.Match(q.Index('all_projecttypes')), { size: 10000 }),
-      q.Lambda(['ref'], q.Get(q.Var('ref'))),
+      q.Paginate(q.Match(q.Index('projecttypes_sort_by_name_asc')), { size: 10000 }),
+      q.Lambda(['name', 'ref'], q.Get(q.Var('ref'))),
     ))
     projectTypes = data.map(doc => ({
       id: doc.ref.id,
