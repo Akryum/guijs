@@ -1,0 +1,39 @@
+[package]
+name = "guijs"
+version = "0.1.0"
+description = "A Tauri App"
+author = [ "guijs" ]
+license = "MIT"
+repository = "https://github.com/Akryum/guijs"
+default-run = "guijs"
+edition = "2018"
+build = "src/build.rs"
+
+[package.metadata.bundle]
+identifier = "guijs"
+icon = [
+  "icons/32x32.png",
+  "icons/128x128.png",
+  "icons/128x128@2x.png",
+  "icons/icon.icns",
+  "icons/icon.ico"
+]
+resources = [ "server" ]
+
+[dependencies]
+serde_json = "1.0.44"
+serde = "1.0.104"
+serde_derive = "1.0.104"
+tauri = { path = "../../../../../tauri/tauri", features = [ "edge" ] }
+
+[target."cfg(windows)".build-dependencies]
+winres = "0.1"
+
+[features]
+dev-server = [ "tauri/dev-server" ]
+embedded-server = [ "tauri/embedded-server" ]
+no-server = [ "tauri/no-server" ]
+
+[[bin]]
+name = "guijs"
+path = "src/main.rs"

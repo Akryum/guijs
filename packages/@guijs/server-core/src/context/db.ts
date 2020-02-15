@@ -1,12 +1,18 @@
 import { onCreate } from '@nodepack/app-context'
 import Datastore from 'nedb-promise'
 import path from 'path'
+import fs from 'fs-extra'
 import { rcFolder } from '@/util/rc-folder'
 import { ThenType } from '@/util/types'
 
 async function collection (name: string, indexes: string[] = [], clear = false): Promise<Datastore> {
+  const dbPath = path.resolve(rcFolder, `db/${name}.db`)
+  if (!fs.existsSync(dbPath)) {
+    fs.ensureDirSync(path.dirname(dbPath))
+    fs.writeFileSync(dbPath, '')
+  }
   const ds = new Datastore({
-    filename: path.resolve(rcFolder, `db/${name}.db`),
+    filename: dbPath,
     autoload: true,
     timestampData: true,
   })
