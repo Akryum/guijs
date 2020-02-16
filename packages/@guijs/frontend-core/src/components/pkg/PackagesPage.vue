@@ -28,7 +28,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
 
-    const { result, onResult } = useQuery(gql`
+    const { result, onResult, refetch } = useQuery(gql`
       query projectPackages ($projectId: ID!, $workspaceId: ID!) {
         project (id: $projectId) {
           id
@@ -49,6 +49,11 @@ export default {
       enabled: !!route.value.params.projectId && !!route.value.params.workspaceId,
     }))
     const packages = useResult(result, [], data => data.project.workspace.packages)
+
+    // @TODO remove when apollo client 3 is used
+    setTimeout(() => {
+      refetch()
+    }, 1500)
 
     // Project types
 
