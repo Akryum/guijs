@@ -6,10 +6,16 @@ export default {
     Error,
   },
 
+  props: {
+    payload: { // current version
+      type: String,
+      required: true,
+    },
+  },
+
   data () {
     return {
       requiredVersion: '12',
-      currentVersion: '10.0.0',
     }
   },
 }
@@ -17,7 +23,7 @@ export default {
 
 <template>
   <Error
-    :label="`Node.js v${requiredVersion} or more is required, found v${currentVersion}`"
+    :label="`Node.js v${requiredVersion} or more is required, found v${payload}`"
   >
     Please update Node at <a
       href="https://nodejs.org"
