@@ -7,4 +7,19 @@ export const cache = new InMemoryCache({
       script: (_, { id }, { getCacheKey }) => getCacheKey({ __typename: 'NpmScript', id }),
     },
   },
+
+  typePolicies: {
+    PackageMetadata: {
+      fields: {
+        latestVersion: {
+          merge (existing = null, incoming) {
+            if (incoming != null) {
+              return incoming
+            }
+            return existing
+          },
+        },
+      },
+    },
+  },
 })
