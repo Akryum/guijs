@@ -1,6 +1,6 @@
 <script>
 import { onCommand, runCommand } from '@/util/command'
-import { useRouter, useRoute } from '@/util/router'
+import { useRouter } from '@/util/router'
 import { useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { packageMetadataFragment } from '../pkg/fragments'
@@ -8,7 +8,6 @@ import { packageMetadataFragment } from '../pkg/fragments'
 export default {
   setup () {
     const router = useRouter()
-    const route = useRoute()
 
     onCommand('show-package', async (cmd, payload) => {
       router.push({
@@ -40,7 +39,6 @@ export default {
         if (event.data.awesomeInstall) {
           runCommand('install-package', {
             packageName: event.data.awesomeInstall,
-            workspaceId: route.value.params.workspaceId,
           })
         }
       }

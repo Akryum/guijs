@@ -69,7 +69,10 @@ export default {
     @close="setOpen(false)"
   >
     <template #title>
-      <slot name="title">
+      <slot
+        name="title"
+        :commandPayload="commandPayload"
+      >
         <div class="modal-title">
           {{ $t(title) }}
         </div>

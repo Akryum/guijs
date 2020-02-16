@@ -96,7 +96,8 @@
       "tooltip-latest": "Latest version:"
     },
     "install-package": {
-      "install-package": "Install package"
+      "install-package": "Install package",
+      "install-package-with-name": "Install package {name}"
     },
     "script": {
       "show-scripts": "Show scripts",
