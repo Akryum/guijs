@@ -91,7 +91,9 @@
       "no-packages": "No packages found",
       "version": "version",
       "latest": "latest",
-      "wanted": "Wanted version:"
+      "tooltip-wanted": "Wanted version:",
+      "tooltip-installed": "Installed version:",
+      "tooltip-latest": "Latest version:"
     },
     "install-package": {
       "install-package": "Install package"

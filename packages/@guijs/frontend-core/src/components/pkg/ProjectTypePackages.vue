@@ -27,9 +27,9 @@ export default {
       if (projectTypeId.value && projectTypeId.value !== '__all') {
         return props.packages.filter(p => {
           if (projectTypeId.value !== '__unknown') {
-            return p.projectTypes.some(pt => pt.id === projectTypeId.value)
+            return p.metadata.projectTypes.some(pt => pt.id === projectTypeId.value)
           }
-          return !p.projectTypes.length
+          return !p.metadata.projectTypes.length
         })
       }
       return props.packages
@@ -37,8 +37,8 @@ export default {
 
     const sortedList = computed(() => list.value.sort((a, b) => a.id.localeCompare(b.id))
       .sort((a, b) => {
-        if (a.official && !b.official) return -1
-        if (!a.official && b.official) return 1
+        if (a.metadata.official && !b.metadata.official) return -1
+        if (!a.metadata.official && b.metadata.official) return 1
         return 0
       }))
 

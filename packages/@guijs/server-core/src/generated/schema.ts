@@ -3,7 +3,7 @@ import { MetaDocument } from '@/schema/db/meta-types';
 import { MetaCommand } from '@/schema/command/meta-types';
 import { MetaSetting } from '@/schema/setting/meta-types';
 import { MetaProject, MetaProjectWorkspace } from '@/schema/project/meta-types';
-import { MetaProjectPackage } from '@/schema/pkg/meta-types';
+import { MetaProjectPackage, MetaPackageMetadata } from '@/schema/pkg/meta-types';
 import { MetaNpmScript } from '@/schema/script/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
@@ -194,6 +194,25 @@ export enum NpmScriptStatus {
   Killed = 'killed'
 }
 
+export type PackageMetadata = {
+   __typename?: 'PackageMetadata',
+  id: Scalars['ID'],
+  awesomejsId?: Maybe<Scalars['ID']>,
+  projectTypes: Array<ProjectType>,
+  official?: Maybe<Scalars['Boolean']>,
+  description?: Maybe<Scalars['String']>,
+  defaultLogo?: Maybe<Scalars['String']>,
+  latestVersion?: Maybe<Scalars['String']>,
+  versionTags: Array<PackageVersionTag>,
+  versions: Array<Scalars['String']>,
+};
+
+export type PackageVersionTag = {
+   __typename?: 'PackageVersionTag',
+  tag: Scalars['String'],
+  version: Scalars['String'],
+};
+
 export type Project = Document & {
    __typename?: 'Project',
   id: Scalars['ID'],
@@ -213,16 +232,11 @@ export type ProjectWorkspaceArgs = {
 export type ProjectPackage = {
    __typename?: 'ProjectPackage',
   id: Scalars['ID'],
-  metadataId?: Maybe<Scalars['ID']>,
   type: ProjectPackageType,
-  projectTypes: Array<ProjectType>,
   versionSelector: Scalars['String'],
+  metadata: PackageMetadata,
   isWorkspace?: Maybe<Scalars['Boolean']>,
-  official?: Maybe<Scalars['Boolean']>,
-  description?: Maybe<Scalars['String']>,
-  defaultLogo?: Maybe<Scalars['String']>,
   currentVersion?: Maybe<Scalars['String']>,
-  latestVersion?: Maybe<Scalars['String']>,
 };
 
 export enum ProjectPackageType {
@@ -349,7 +363,7 @@ export type StopScriptInput = {
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<CommandRan>,
-  projectPackageUpdated?: Maybe<ProjectPackage>,
+  packageMetadataUpdated?: Maybe<PackageMetadata>,
   npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
 };
@@ -458,6 +472,8 @@ export type ResolversTypes = {
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
+  PackageMetadata: ResolverTypeWrapper<MetaPackageMetadata>,
+  PackageVersionTag: ResolverTypeWrapper<PackageVersionTag>,
   NpmScript: ResolverTypeWrapper<MetaNpmScript>,
   NpmScriptStatus: NpmScriptStatus,
   Setting: ResolverTypeWrapper<MetaSetting>,
@@ -497,6 +513,8 @@ export type ResolversParentTypes = {
   ProjectWorkspace: MetaProjectWorkspace,
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
+  PackageMetadata: MetaPackageMetadata,
+  PackageVersionTag: PackageVersionTag,
   NpmScript: MetaNpmScript,
   NpmScriptStatus: NpmScriptStatus,
   Setting: MetaSetting,
@@ -582,6 +600,23 @@ export type NpmScriptResolvers<ContextType = Context, ParentType extends Resolve
   terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType>,
 };
 
+export type PackageMetadataResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PackageMetadata'] = ResolversParentTypes['PackageMetadata']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  awesomejsId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
+  official?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  defaultLogo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  latestVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  versionTags?: Resolver<Array<ResolversTypes['PackageVersionTag']>, ParentType, ContextType>,
+  versions?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type PackageVersionTagResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PackageVersionTag'] = ResolversParentTypes['PackageVersionTag']> = {
+  tag?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+};
+
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -594,16 +629,11 @@ export type ProjectResolvers<ContextType = Context, ParentType extends Resolvers
 
 export type ProjectPackageResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectPackage'] = ResolversParentTypes['ProjectPackage']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  metadataId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   type?: Resolver<ResolversTypes['ProjectPackageType'], ParentType, ContextType>,
-  projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
   versionSelector?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  metadata?: Resolver<ResolversTypes['PackageMetadata'], ParentType, ContextType>,
   isWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  official?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  defaultLogo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   currentVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  latestVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
@@ -656,7 +686,7 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
-  projectPackageUpdated?: SubscriptionResolver<Maybe<ResolversTypes['ProjectPackage']>, "projectPackageUpdated", ParentType, ContextType>,
+  packageMetadataUpdated?: SubscriptionResolver<Maybe<ResolversTypes['PackageMetadata']>, "packageMetadataUpdated", ParentType, ContextType>,
   npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
 };
@@ -678,6 +708,8 @@ export type Resolvers<ContextType = Context> = {
   Keybinding?: KeybindingResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   NpmScript?: NpmScriptResolvers<ContextType>,
+  PackageMetadata?: PackageMetadataResolvers<ContextType>,
+  PackageVersionTag?: PackageVersionTagResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
   ProjectPackage?: ProjectPackageResolvers<ContextType>,
   ProjectType?: ProjectTypeResolvers<ContextType>,

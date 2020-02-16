@@ -4,18 +4,29 @@ import LRU from 'lru-cache'
 import ms from 'ms'
 import { resolveModule } from '@nodepack/module'
 import fs from 'fs-extra'
+import consola from 'consola'
 import { getProjectWorkspace } from '../project/workspace'
 import Context from '@/generated/context'
-import { MetaProjectPackage } from './meta-types'
+import { MetaPackageMetadata } from './meta-types'
 
 export const typeDefs = gql`
 extend type ProjectPackage {
   currentVersion: String
+}
+
+extend type PackageMetadata {
   latestVersion: String
+  versionTags: [PackageVersionTag!]!
+  versions: [String!]!
+}
+
+type PackageVersionTag {
+  tag: String!
+  version: String!
 }
 
 extend type Subscription {
-  projectPackageUpdated: ProjectPackage
+  packageMetadataUpdated: PackageMetadata
 }
 `
 
@@ -30,27 +41,38 @@ const packageVersionCache = new LRU<string, PackageVersionData>({
   maxAge: ms('2h'),
 })
 
-async function updateLatestVersion (pkg: MetaProjectPackage, ctx: Context) {
-  const data = await ctx.npm(`/${encodeURIComponent(pkg.id)}`)
+async function updateLatestVersion (metadata: MetaPackageMetadata, ctx: Context) {
+  try {
+    const data = await ctx.npm(`/${encodeURIComponent(metadata.id)}`)
 
-  let latest: string
-  if (data['dist-tags']) {
-    latest = data['dist-tags'].latest
+    let latest: string
+    if (data['dist-tags']) {
+      latest = data['dist-tags'].latest
+    }
+
+    const versionData: PackageVersionData = {
+      latest,
+      tags: data['dist-tags'] || {},
+      versions: Object.keys(data.versions),
+    }
+
+    packageVersionCache.set(metadata.id, versionData)
+
+    ctx.pubsub.publish('packageMetadataUpdated', {
+      packageMetadataUpdated: metadata,
+    })
+  } catch (e) {
+    consola.warn(e.message)
   }
+}
 
-  const versionData: PackageVersionData = {
-    latest,
-    tags: data['dist-tags'],
-    versions: Object.keys(data.versions),
+function getVersionData (metadata: MetaPackageMetadata, ctx: Context) {
+  const versionData = packageVersionCache.get(metadata.id)
+  if (!versionData) {
+    // Update version in the background
+    updateLatestVersion(metadata, ctx)
   }
-
-  packageVersionCache.set(pkg.id, versionData)
-
-  ctx.pubsub.publish('projectPackageUpdated', {
-    projectPackageUpdated: pkg,
-  })
-
-  return data
+  return versionData
 }
 
 export const resolvers: Resolvers = {
@@ -62,21 +84,29 @@ export const resolvers: Resolvers = {
       const pkgData = await fs.readJson(pkgFile)
       return pkgData.version
     },
+  },
 
-    latestVersion: (pkg, args, ctx) => {
-      const version = packageVersionCache.get(pkg.id)
-      if (!version) {
-        // Update version in the background
-        updateLatestVersion(pkg, ctx)
-        return null
+  PackageMetadata: {
+    latestVersion: (metadata, args, ctx) => {
+      const version = getVersionData(metadata, ctx)
+      return version ? version.latest : null
+    },
+
+    versionTags: (metadata, args, ctx) => {
+      const version = getVersionData(metadata, ctx)
+      if (version) {
+        return Object.keys(version.tags).map(key => ({
+          tag: key,
+          version: version.tags[key],
+        }))
       }
-      return version.latest
+      return []
     },
   },
 
   Subscription: {
-    projectPackageUpdated: {
-      subscribe: (root, args, ctx) => ctx.pubsub.asyncIterator(['projectPackageUpdated']),
+    packageMetadataUpdated: {
+      subscribe: (root, args, ctx) => ctx.pubsub.asyncIterator(['packageMetadataUpdated']),
     },
   },
 }

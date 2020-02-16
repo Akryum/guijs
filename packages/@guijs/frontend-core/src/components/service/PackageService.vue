@@ -3,7 +3,7 @@ import { onCommand, runCommand } from '@/util/command'
 import { useRouter, useRoute } from '@/util/router'
 import { useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { projectPackageFragment } from '../pkg/fragments'
+import { packageMetadataFragment } from '../pkg/fragments'
 
 export default {
   setup () {
@@ -24,12 +24,12 @@ export default {
     })
 
     useSubscription(gql`
-      subscription projectPackageUpdated {
-        projectPackageUpdated {
-          ...projectPackage
+      subscription packageMetadataUpdated {
+        packageMetadataUpdated {
+          ...packageMetadata
         }
       }
-      ${projectPackageFragment}
+      ${packageMetadataFragment}
     `)
 
     // Installation

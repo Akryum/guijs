@@ -59,14 +59,14 @@ export default {
       const map = {}
 
       for (const pkg of packages.value) {
-        if (!pkg.projectTypes.length) {
+        if (!pkg.metadata.projectTypes.length) {
           if (!map[unknownProjectType.id]) {
             map[unknownProjectType.id] = true
             list.push(unknownProjectType)
           }
         }
 
-        for (const pt of pkg.projectTypes) {
+        for (const pt of pkg.metadata.projectTypes) {
           if (!map[pt.id]) {
             map[pt.id] = true
             list.push(pt)
