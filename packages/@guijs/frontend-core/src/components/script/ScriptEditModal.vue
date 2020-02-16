@@ -1,5 +1,5 @@
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { useScriptQuery } from './useScript'
 const ScriptEditForm = () => import(
   /* webpackChunkName: 'ScriptEditForm' */

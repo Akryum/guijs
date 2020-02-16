@@ -1,6 +1,6 @@
 import { onUnmounted, onActivated } from '@vue/composition-api'
 import { apolloClient } from '@/apollo'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 
 const handlers = {}
 const anyHandlers = []

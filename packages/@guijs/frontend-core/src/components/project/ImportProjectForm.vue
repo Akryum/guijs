@@ -2,7 +2,7 @@
 import { watch, reactive, ref } from '@vue/composition-api'
 import FileInput from '../form/FileInput.vue'
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { runCommand } from '../../util/command'
 
 export default {

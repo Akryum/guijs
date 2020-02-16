@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 
 export const projectWorkspaceFragment = gql`
 fragment projectWorkspace on ProjectWorkspace {

@@ -3,7 +3,7 @@ import { ref, watch, computed } from '@vue/composition-api'
 import { onDrag } from '@guijs/frontend-ui/util/drag'
 import { onCommand, runCommand } from '@/util/command'
 import { useQuery, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { commandWithKeybindingFragment } from '../command/fragments'
 const Terminals = () => import(
   /* webpackChunkName: 'Terminals' */

@@ -1,5 +1,5 @@
 <script>
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { scriptFragment } from './fragments'
 import { onKeybind } from '@/util/keybinding'
 import { useScriptQuery, useScriptRun } from './useScript'

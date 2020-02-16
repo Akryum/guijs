@@ -2,7 +2,7 @@
 import { onAnyKeybind } from '@/util/keybinding'
 import { runCommand, dispatchCommand } from '@/util/command'
 import { useSubscription } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {

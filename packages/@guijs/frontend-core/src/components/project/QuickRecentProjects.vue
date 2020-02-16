@@ -1,7 +1,7 @@
 <script>
 import { useQuery, useResult } from '@vue/apollo-composable'
 import { runCommand } from '@/util/command'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 
 export default {
   setup () {

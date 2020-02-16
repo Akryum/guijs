@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 
 export const packageMetadataFragment = gql`
 fragment packageMetadata on PackageMetadata {

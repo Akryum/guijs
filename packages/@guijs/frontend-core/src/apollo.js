@@ -1,11 +1,14 @@
-import { ApolloClient } from 'apollo-client'
-import { split, from } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { onError } from 'apollo-link-error'
+import {
+  ApolloClient,
+  createHttpLink,
+  from,
+  split,
+} from '@apollo/client/core'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { setContext } from '@apollo/link-context'
+import { WebSocketLink } from '@apollo/link-ws'
+import { onError } from '@apollo/link-error'
 import { logErrorMessages } from '@vue/apollo-util'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
-import { setContext } from 'apollo-link-context'
 import { cache } from './cache'
 import router from './router'
 

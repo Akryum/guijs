@@ -2,7 +2,7 @@
 import { useCurrentWorkspace } from './useWorkspace'
 import { ref, watch } from '@vue/composition-api'
 import { useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { projectWorkspaceFragment } from './fragments'
 import { useRoute } from '@/util/router'
 import ProjectTypeSelect from '../project/ProjectTypeSelect.vue'

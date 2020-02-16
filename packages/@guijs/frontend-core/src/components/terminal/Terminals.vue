@@ -1,7 +1,7 @@
 <script>
 import { ref, watch } from '@vue/composition-api'
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { onKeybind, bindScope } from '@/util/keybinding'
 import { onCommand, runCommand } from '@/util/command'
 import { terminalFragment } from './fragments'

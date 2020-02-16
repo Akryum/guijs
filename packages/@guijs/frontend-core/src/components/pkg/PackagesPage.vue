@@ -1,7 +1,7 @@
 <script>
 import { useRoute, useRouter } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { projectPackageFragment } from './fragments'
 import { computed, ref, watch } from '@vue/composition-api'
 import { runCommand } from '@/util/command'
