@@ -187,7 +187,7 @@ export async function getWorkspacePackages (
 
 async function getCachedMetadata (id: string, ctx: Context) {
   let expired = false
-  const metadata: MetaPackageMetadata & MetaDocument = await ctx.db.packages.findOne({ name: id })
+  const metadata: MetaPackageMetadata & MetaDocument = await ctx.db.packages.findOne({ id })
 
   if (metadata && (
     metadata.cacheVersion !== PACKAGE_CACHE_VERSION ||
