@@ -65,7 +65,7 @@ export default {
 
     // Reset selection if workspace doesn't exist
     onResult(result => {
-      if (!result.loading && !currentWorkspace.value) {
+      if (!result.loading && !result.stale && !currentWorkspace.value) {
         resetWorkspaceSelection()
       }
     })
