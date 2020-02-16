@@ -272,6 +272,7 @@ export type Query = {
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
   keybinding?: Maybe<Keybinding>,
+  packageMetadata?: Maybe<PackageMetadata>,
   projectTypes: Array<ProjectType>,
   projectType?: Maybe<ProjectType>,
   projects: Array<Project>,
@@ -299,6 +300,11 @@ export type QueryCommandArgs = {
 
 
 export type QueryKeybindingArgs = {
+  id: Scalars['ID']
+};
+
+
+export type QueryPackageMetadataArgs = {
   id: Scalars['ID']
 };
 
@@ -465,15 +471,15 @@ export type ResolversTypes = {
   CommandType: CommandType,
   Keybinding: ResolverTypeWrapper<Keybinding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  PackageMetadata: ResolverTypeWrapper<MetaPackageMetadata>,
   ProjectType: ResolverTypeWrapper<ProjectType>,
+  PackageVersionTag: ResolverTypeWrapper<PackageVersionTag>,
   Project: ResolverTypeWrapper<MetaProject>,
   Document: ResolverTypeWrapper<MetaDocument>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
-  PackageMetadata: ResolverTypeWrapper<MetaPackageMetadata>,
-  PackageVersionTag: ResolverTypeWrapper<PackageVersionTag>,
   NpmScript: ResolverTypeWrapper<MetaNpmScript>,
   NpmScriptStatus: NpmScriptStatus,
   Setting: ResolverTypeWrapper<MetaSetting>,
@@ -506,15 +512,15 @@ export type ResolversParentTypes = {
   CommandType: CommandType,
   Keybinding: Keybinding,
   Boolean: Scalars['Boolean'],
+  PackageMetadata: MetaPackageMetadata,
   ProjectType: ProjectType,
+  PackageVersionTag: PackageVersionTag,
   Project: MetaProject,
   Document: MetaDocument,
   Date: Scalars['Date'],
   ProjectWorkspace: MetaProjectWorkspace,
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
-  PackageMetadata: MetaPackageMetadata,
-  PackageVersionTag: PackageVersionTag,
   NpmScript: MetaNpmScript,
   NpmScriptStatus: NpmScriptStatus,
   Setting: MetaSetting,
@@ -661,6 +667,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
   keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType, RequireFields<QueryKeybindingArgs, 'id'>>,
+  packageMetadata?: Resolver<Maybe<ResolversTypes['PackageMetadata']>, ParentType, ContextType, RequireFields<QueryPackageMetadataArgs, 'id'>>,
   projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
   projectType?: Resolver<Maybe<ResolversTypes['ProjectType']>, ParentType, ContextType, RequireFields<QueryProjectTypeArgs, 'id'>>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
