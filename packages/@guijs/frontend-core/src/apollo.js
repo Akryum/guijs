@@ -11,6 +11,7 @@ import router from './router'
 
 // Client ID to differentiate tabs
 const clientId = `${Date.now()}-${Math.round(Math.random() * 100000)}`
+// eslint-disable-next-line no-console
 console.log('client id', clientId)
 
 // Scope context to current project
@@ -27,13 +28,14 @@ let httpLink = setContext((req, context) => ({
 
 // HTTP connection to the API
 httpLink = httpLink.concat(createHttpLink({
-  // You should use an absolute URL here
-  uri: `http://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/graphql`,
+  // @TODO better endpoint handling (dynamic ports)
+  uri: process.env.VUE_APP_GRAPHQL_BASE_URL,
 }))
 
 // Create the subscription websocket link
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:${process.env.VUE_APP_GRAPHQL_PORT}/subscriptions`,
+  // @TODO better endpoint handling (dynamic ports)
+  uri: process.env.VUE_APP_GRAPHQL_WS_URL,
   options: {
     reconnect: true,
     lazy: true,
