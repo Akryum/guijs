@@ -66,11 +66,15 @@ async function updateLatestVersion (metadata: MetaPackageMetadata, ctx: Context)
   }
 }
 
-function getVersionData (metadata: MetaPackageMetadata, ctx: Context) {
-  const versionData = packageVersionCache.get(metadata.id)
+async function getVersionData (metadata: MetaPackageMetadata, wait: boolean, ctx: Context) {
+  let versionData = packageVersionCache.get(metadata.id)
   if (!versionData) {
     // Update version in the background
-    updateLatestVersion(metadata, ctx)
+    const p = updateLatestVersion(metadata, ctx)
+    if (wait) {
+      await p
+      versionData = packageVersionCache.get(metadata.id)
+    }
   }
   return versionData
 }
@@ -87,13 +91,13 @@ export const resolvers: Resolvers = {
   },
 
   PackageMetadata: {
-    latestVersion: (metadata, args, ctx) => {
-      const version = getVersionData(metadata, ctx)
+    latestVersion: async (metadata, args, ctx) => {
+      const version = await getVersionData(metadata, false, ctx)
       return version ? version.latest : null
     },
 
-    versionTags: (metadata, args, ctx) => {
-      const version = getVersionData(metadata, ctx)
+    versionTags: async (metadata, args, ctx) => {
+      const version = await getVersionData(metadata, true, ctx)
       if (version) {
         return Object.keys(version.tags).map(key => ({
           tag: key,
@@ -103,8 +107,8 @@ export const resolvers: Resolvers = {
       return []
     },
 
-    versions: (metadata, args, ctx) => {
-      const version = getVersionData(metadata, ctx)
+    versions: async (metadata, args, ctx) => {
+      const version = await getVersionData(metadata, true, ctx)
       if (version) {
         return version.versions
       }
