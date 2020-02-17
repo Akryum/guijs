@@ -2,7 +2,7 @@
   <div
     id="app"
   >
-    <splashscreen v-if="state === 'splashscreen'" />
+    <splashscreen v-if="state.name === 'splashscreen'" />
     <div
       v-else
       class="w-screen h-screen overflow-hidden flex flex-col items-center justify-center p-16
@@ -26,6 +26,7 @@ import UpdatePrompt from './UpdatePrompt.vue'
 import NodeNotFound from './NodeNotFound.vue'
 import NodeWrongVersion from './NodeWrongVersion.vue'
 import Splashscreen from './Splashscreen.vue'
+import tauri from 'tauri/api'
 
 export default {
   components: {
@@ -63,11 +64,9 @@ export default {
   },
 
   beforeCreate () {
-    window.onTauriInit = () => {
-      window.tauri.listen('state', ({ payload }) => {
-        this.state = payload
-      })
-    }
+    tauri.listen('state', ({ payload }) => {
+      this.state = payload
+    })
   },
 }
 

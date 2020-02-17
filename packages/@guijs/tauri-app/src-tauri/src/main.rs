@@ -41,33 +41,36 @@ fn main() {
               .stdout(Stdio::piped())
               .spawn()
               .is_ok();
+
+            let handle2 = webview.handle();
             std::thread::spawn(move || {
               if guijs_server_exists {
-                notify_state(&handle, String::from("state"), String::from("splashscreen"));
-                spawn_guijs_server(&handle);
-              } else {
-                notify_state(&handle, String::from("state"), String::from("first-download"));
-                let guijs_install_stdout = Command::new("npm")
-                  .args(vec!("i", "-g", "--path", "../server-core")) // TODO change this to be the published guijs server
-                  .stdout(Stdio::piped())
-                  .spawn().expect("failed to install guijs server package")
-                  .stdout.expect("failed to get guijs install stdout");
-                let guijs_install_reader = BufReader::new(guijs_install_stdout);
-                guijs_install_reader
-                  .lines()
-                  .filter_map(|line| line.ok())
-                  .for_each(|line| {
-                    println!("{}", line);
+                notify_state(&handle, String::from("splashscreen"));
+                if guijs_outdated() {
+                  notify_state(&handle, String::from("update-available"));
+                  tauri::event::listen(String::from("skip-update"), move |_| {
+                    spawn_guijs_server(&handle);
                   });
-                notify_state(&handle, String::from("state"), String::from("splashscreen"));
+                  tauri::event::listen(String::from("update"), move |_| {
+                    notify_state(&handle2, String::from("downloading-update"));
+                    update_guijs_server();
+                    spawn_guijs_server(&handle2);
+                  });
+                } else {
+                  spawn_guijs_server(&handle);
+                }
+              } else {
+                notify_state(&handle, String::from("first-download"));
+                install_guijs_server();
+                notify_state(&handle, String::from("splashscreen"));
                 spawn_guijs_server(&handle);
               }
             });
           } else {
-            notify_state(&handle, String::from("node-wrong-version"), node_version);
+            notify_state_with_payload(&handle, String::from("node-wrong-version"), node_version);
           }
         } else {
-          notify_state(&handle, String::from("state"), String::from("node-not-found"));
+          notify_state(&handle, String::from("node-not-found"));
         }
       }
     })
@@ -75,7 +78,36 @@ fn main() {
     .run();
 }
 
-fn notify_state<T: 'static>(handle:  &Handle<T>, name: String, payload: String) {
+fn run_npm_install_guijs_server(exists: bool) {
+  let command = if exists { "update" } else { "install" };
+  let guijs_stdout = Command::new("npm")
+    .args(vec!("i", "-g", "--path", "../server-core")) // TODO change this to be the published guijs server
+    .stdout(Stdio::piped())
+    .spawn().expect(&format!("failed to {} guijs server package", command))
+    .stdout.expect(&format!("failed to get guijs {} stdout", command));
+  let guijs_reader = BufReader::new(guijs_stdout);
+  guijs_reader
+    .lines()
+    .filter_map(|line| line.ok())
+    .for_each(|line| {
+      // TODO parse progress
+      println!("{}", line);
+    });
+}
+
+fn install_guijs_server() {
+  run_npm_install_guijs_server(false);
+}
+
+fn update_guijs_server() {
+  run_npm_install_guijs_server(true);
+}
+
+fn notify_state<T: 'static>(handle: &Handle<T>, name: String) {
+  notify_state_with_payload(handle, name, String::from(""))
+}
+
+fn notify_state_with_payload<T: 'static>(handle:  &Handle<T>, name: String, payload: String) {
   let reply = State {
     name: name,
     payload: payload,
@@ -86,6 +118,28 @@ fn notify_state<T: 'static>(handle:  &Handle<T>, name: String, payload: String) 
     String::from("state"),
     serde_json::to_string(&reply).unwrap(),
   );
+}
+
+fn guijs_outdated() -> bool {
+  let stdout = Command::new("npm")
+    .args(vec!("outdated", "-g"))
+    .stdout(Stdio::piped())
+    .spawn()
+    .expect("Failed to guijs server")
+    .stdout.expect("Failed to get guijs server stdout");
+  let reader = BufReader::new(stdout);
+
+  let mut guijs_outdated = false;
+  reader
+    .lines()
+    .filter_map(|line| line.ok())
+    .for_each(|line| {
+      if line.contains("guijs-server") {
+        guijs_outdated = true;
+      }
+    });
+
+  guijs_outdated
 }
 
 fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
