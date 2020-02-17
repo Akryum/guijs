@@ -1,66 +1,37 @@
 <template>
-  <div class="flex items-center justify-center">
-    <div class="lds-ellipsis">
-      <div /><div /><div /><div />
+  <div class="loading-animation flex items-center justify-center">
+    <div class="bg w-20 h-2 rounded-full overflow-hidden">
+      <div class="bar w-12 h-full rounded-full" />
     </div>
   </div>
 </template>
 
 <style lang="postcss" scoped>
-/* https://loading.io/css/ */
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 64px;
-  height: 64px;
+.bg {
+  background: rgba(0, 0, 0, .25);
+
+  .loading-animation.dark & {
+    background: rgba(255, 255, 225, .25);
+  }
 }
-.lds-ellipsis div {
-  position: absolute;
-  top: 27px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: #fff;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+
+.bar {
+  background: theme('colors.white');
+  opacity: 0.9;
+  animation: bar-move 1s linear infinite;
+
+  .loading-animation.dark & {
+    background: theme('colors.black');
+    opacity: 0.8;
+  }
 }
-.lds-ellipsis div:nth-child(1) {
-  left: 6px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 6px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 26px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 45px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
+
+@keyframes bar-move {
   0% {
-    transform: scale(0);
+    transform: translateX(-100%);
   }
   100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(19px, 0);
+    transform: translateX(200%);
   }
 }
 </style>
