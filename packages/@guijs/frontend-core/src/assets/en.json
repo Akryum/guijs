@@ -99,6 +99,7 @@
     "install-package": {
       "install-package": "Install package",
       "install-with-name": "Install {name}",
+      "install-as-dev-dependency": "Install as development dependency",
       "input-version-label": "Package version",
       "input-version-placeholder": "Select a version",
       "input-selector-type-label": "Version range type",

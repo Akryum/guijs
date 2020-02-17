@@ -43,6 +43,10 @@ export default {
 
     const metadata = useResult(result)
 
+    // Dep type
+
+    const devDep = ref(false)
+
     // Version
 
     const selectedVersion = ref()
@@ -132,6 +136,7 @@ export default {
       close,
       metadata,
       loading,
+      devDep,
       selectedVersion,
       versions,
       isVersionTag,
@@ -179,6 +184,14 @@ export default {
         </div>
       </div>
     </div>
+
+    <!--  Dep type -->
+
+    <VSwitch
+      v-model="devDep"
+      label="guijs.install-package.install-as-dev-dependency"
+      class="form-input my-6"
+    />
 
     <!-- Version -->
     <VSelect
