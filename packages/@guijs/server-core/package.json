@@ -8,7 +8,8 @@
     "lint": "nodepack-service lint --no-maintenance",
     "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done",
     "schema-gen": "graphql-codegen --config gql-codegen.yml",
-    "start": "node ./dist/app.js"
+    "start": "node ./dist/app.js",
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "@guijs/get-workspaces": "^0.1.0",

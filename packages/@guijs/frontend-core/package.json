@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done"
+    "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done",
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "@guijs/frontend-ui": "^0.1.0",

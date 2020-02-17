@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "yarn build --watch",
     "build": "rimraf ./dist && tsc --outDir dist -d",
-    "prepublishOnly": "build"
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "@changesets/types": "^0.4.0",
