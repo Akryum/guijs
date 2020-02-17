@@ -166,7 +166,7 @@ export default {
     &:focus-within {
       &::after {
         content: '';
-        @apply block absolute inset-0 border border-primary-500 rounded;
+        @apply block absolute inset-0 border border-primary-500 rounded pointer-events-none;
       }
 
       &.btn-primary::after {
