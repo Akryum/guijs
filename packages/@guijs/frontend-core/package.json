@@ -2,7 +2,6 @@
   "name": "@guijs/frontend-core",
   "version": "0.1.0",
   "author": "Guillaume Chau",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -50,6 +49,9 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "vue-template-compiler": "^2.6.10"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",

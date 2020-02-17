@@ -2,7 +2,6 @@
   "name": "@guijs/frontend-ui",
   "version": "0.1.0",
   "author": "Guillaume Chau",
-  "private": true,
   "main": "index.js",
   "scripts": {
     "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done"
@@ -27,6 +26,9 @@
   },
   "peerDependencies": {
     "vue": "^2.6.11"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
