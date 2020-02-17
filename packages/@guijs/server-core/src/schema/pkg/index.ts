@@ -215,7 +215,6 @@ async function fetchPackageMetadata (id: string, ctx: Context) {
   ))
   if (faunaData.data.length) {
     const raw = faunaData.data[0]
-    console.log(raw)
     const metadata: MetaPackageMetadata = {
       id: raw.name,
       awesomejsId: raw.id,
