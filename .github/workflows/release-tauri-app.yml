@@ -17,12 +17,15 @@ jobs:
       fail-fast: false
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
-        binary:
-          - releaseFolder: target/release/bundle/deb
+        include:
+          - platform: ubuntu-latest
+            releaseFolder: target/release/bundle/deb
             ext: _0.1.0_amd64.deb
-          - releaseFolder: target/release/bundle/osx
+          - platform: macos-latest
+            releaseFolder: target/release/bundle/osx
             ext: .app
-          - releaseFolder: target/release
+          - platform: windows-latest
+            releaseFolder: target/release
             ext: .x64.msi
 
     steps:
