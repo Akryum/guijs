@@ -84,6 +84,7 @@
     "package": {
       "official": "official",
       "workspace": "workspace",
+      "tooltip-workspace": "This package is a workspace referenced locally in your project",
       "improve-metadata": "Help improve metadata",
       "unknown": "Unknown",
       "all": "All packages",
