@@ -102,6 +102,14 @@ export const resolvers: Resolvers = {
       }
       return []
     },
+
+    versions: (metadata, args, ctx) => {
+      const version = getVersionData(metadata, ctx)
+      if (version) {
+        return version.versions
+      }
+      return []
+    },
   },
 
   Subscription: {

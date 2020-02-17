@@ -19,7 +19,7 @@ export default {
   >
     <template #title="{ commandPayload }">
       <div class="modal-title">
-        {{ $t('guijs.install-package.install-package-with-name', { name: commandPayload.packageName }) }}
+        {{ $t('guijs.install-package.install-with-name', { name: commandPayload.packageName }) }}
       </div>
     </template>
 

@@ -1,8 +1,10 @@
 <script>
 import gql from 'graphql-tag'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { packageMetadataFragment, projectPackageFragment } from './fragments'
+import { computed, ref, watch } from '@vue/composition-api'
+import { compare } from 'semver'
 import PackageLogo from './PackageLogo.vue'
-import { packageMetadataFragment } from './fragments'
 
 export default {
   components: {
@@ -16,11 +18,22 @@ export default {
     },
   },
 
-  setup (props) {
-    const { result, loading, refetch } = useQuery(gql`
+  setup (props, { emit }) {
+    function close () {
+      emit('close')
+    }
+
+    // Metadata
+
+    const { result, loading } = useQuery(gql`
       query packageMetadata ($id: ID!) {
         packageMetadata (id: $id) {
           ...packageMetadata
+          versionTags {
+            tag
+            version
+          }
+          versions
         }
       }
       ${packageMetadataFragment}
@@ -30,18 +43,114 @@ export default {
 
     const metadata = useResult(result)
 
-    window.refetch = refetch
+    // Version
+
+    const selectedVersion = ref()
+
+    const versions = computed(() => metadata.value ? metadata.value.versionTags.map(tag => ({
+      value: `#${tag.tag}`,
+      searchText: `${tag.tag} ${tag.version}`,
+      type: 'tag',
+      ...tag,
+    })).concat(metadata.value.versions.sort((a, b) => -compare(a, b)).map(version => ({
+      value: version,
+      searchText: version,
+      type: 'version',
+    }))) : [])
+
+    const isVersionTag = computed(() => selectedVersion.value && selectedVersion.value.startsWith('#'))
+    const actualVersion = computed(() => {
+      if (isVersionTag.value) {
+        const tag = selectedVersion.value.substr(1)
+        const item = metadata.value.versionTags.find(t => t.tag === tag)
+        if (item) return item.version
+      }
+      return selectedVersion.value
+    })
+
+    watch(metadata, value => {
+      if (value && !selectedVersion.value) {
+        if (value.versionTags) {
+          const latest = value.versionTags.find(t => t.tag === 'latest')
+          if (latest) {
+            selectedVersion.value = '#latest'
+            return
+          }
+        }
+
+        selectedVersion.value = value.versions[0]
+      }
+    })
+
+    const useTagAsSelector = ref(false)
+
+    // Selector type
+
+    const selectorType = ref('caret')
+
+    const selectorTypes = [
+      {
+        value: 'greater-equal',
+        label: 'Greater or equal',
+        operator: '>=',
+      },
+      {
+        value: 'caret',
+        label: 'Minor updates only',
+        operator: '^',
+      },
+      {
+        value: 'tilde',
+        label: 'Patch updates only',
+        operator: '~',
+      },
+      {
+        value: 'exact',
+        label: 'Pinned exact version',
+        operator: '',
+      },
+    ]
+
+    // Install
+
+    const { mutate, loading: mutating } = useMutation(gql`
+      mutation installPackage ($input: InstallPackageInput!) {
+        installPackage (input: $input) {
+          ...projectPackage
+        }
+      }
+      ${projectPackageFragment}
+    `)
+
+    async function install () {
+      // @TODO
+      await mutate()
+      close()
+    }
 
     return {
+      close,
       metadata,
       loading,
+      selectedVersion,
+      versions,
+      isVersionTag,
+      actualVersion,
+      useTagAsSelector,
+      selectorType,
+      selectorTypes,
+      install,
+      mutating,
     }
   },
 }
 </script>
 
 <template>
-  <div class="p-6">
+  <div
+    v-if="metadata"
+    class="p-6"
+  >
     <div class="border border-gray-200 dark:border-gray-950 rounded p-6 flex">
       <PackageLogo
         :pkg="metadata"
@@ -69,6 +178,86 @@ export default {
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Version -->
+    <VSelect
+      v-model="selectedVersion"
+      :options="versions"
+      searchable
+      label="guijs.install-package.input-version-label"
+      placeholder="guijs.install-package.input-version-placeholder"
+      buttonClass="form-input"
+      optionClass="p-2"
+      class="mt-6"
+    >
+      <template #default="{ option }">
+        <span v-if="option.type === 'version'">
+          <span class="text-gray-500">
+            {{ $t('guijs.install-package.version') }}
+          </span>
+          <span class="font-mono text-sm">{{ option.value }}</span>
+        </span>
+
+        <span v-if="option.type === 'tag'">
+          <span class="text-primary-500">
+            <i class="material-icons text-lg">local_offer</i>
+            {{ option.tag }}
+          </span>
+          <span class="text-gray-700 dark:text-gray-300 font-mono text-sm">
+            {{ option.version }}
+          </span>
+        </span>
+      </template>
+    </VSelect>
+
+    <VSwitch
+      v-if="isVersionTag"
+      v-model="useTagAsSelector"
+      label="guijs.install-package.use-tag-as-selector"
+      class="form-input my-6"
+    />
+
+    <!-- Selector type -->
+    <VSelect
+      v-if="!isVersionTag || !useTagAsSelector"
+      v-model="selectorType"
+      :options="selectorTypes"
+      label="guijs.install-package.input-selector-type-label"
+      placeholder="guijs.install-package.input-selector-type-placeholder"
+      buttonClass="form-input"
+      optionClass="p-2"
+      class="mt-6"
+    >
+      <template #default="{ option }">
+        <span>
+          {{ option.label }}
+          <span class="ml-2 text-gray-700 dark:text-gray-300 font-mono text-sm">
+            {{ option.operator }}{{ actualVersion }}
+          </span>
+        </span>
+      </template>
+    </VSelect>
+
+    <!-- Actions -->
+    <div class="flex mt-6">
+      <VButton
+        :disabled="mutating"
+        iconLeft="close"
+        class="flex-1 btn-lg btn-dim mr-6"
+        @click="close()"
+      >
+        {{ $t('guijs.common.cancel') }}
+      </VButton>
+
+      <VButton
+        :loading="mutating"
+        iconLeft="get_app"
+        class="flex-1 btn-lg btn-primary"
+        @click="install()"
+      >
+        {{ $t('guijs.install-package.install-with-name', { name: packageName }) }}
+      </VButton>
     </div>
   </div>
 </template>

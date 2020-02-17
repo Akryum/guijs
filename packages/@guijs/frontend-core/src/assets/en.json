@@ -97,7 +97,13 @@
     },
     "install-package": {
       "install-package": "Install package",
-      "install-package-with-name": "Install package {name}"
+      "install-with-name": "Install {name}",
+      "input-version-label": "Package version",
+      "input-version-placeholder": "Select a version",
+      "input-selector-type-label": "Version range type",
+      "input-selector-type-placeholder": "Select a range type",
+      "version": "version",
+      "use-tag-as-selector": "Use tag as version selector"
     },
     "script": {
       "show-scripts": "Show scripts",
