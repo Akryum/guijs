@@ -2,6 +2,7 @@ import VTooltip from 'v-tooltip'
 import 'v-tooltip/dist/v-tooltip.css'
 import VueResize from 'vue-resize'
 import './util/scroll'
+import 'focus-visible'
 
 export const DEFAULT_OPTIONS = {
   componentsPrefix: 'V',
