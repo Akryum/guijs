@@ -1,4 +1,5 @@
 import ws from 'ws'
+import http from 'http'
 import shortid from 'shortid'
 import { CreateTerminalInput } from '@/generated/schema'
 import { spawn as spawnPty, IWindowsPtyForkOptions, IPty } from 'node-pty-prebuilt-multiarch'
@@ -10,6 +11,7 @@ import path from 'path'
 import projectPackage from '../../../package.json'
 import { DataBatcher } from './data-batcher'
 import { rcFolder } from '@/util/rc-folder'
+import { hook } from '@nodepack/app-context'
 
 const terminalsFolder = path.resolve(rcFolder, 'terminals')
 
@@ -187,8 +189,29 @@ export enum MESSAGE_TYPE {
   TerminalDestroyed = 'terminal-destroyed',
 }
 
-export const terminalServer = new ws.Server({
-  port: parseInt(process.env.GUIJS_TERMINAL_WS_PORT || '4010'),
+// @TODO WS path https://github.com/apollographql/apollo-server/pull/2314
+// export const terminalServer = new ws.Server({ noServer: true })
+
+// hook('apolloSchema', (ctx: Context) => {
+//   const { httpServer } = ctx
+//   httpServer.on('upgrade', (req, socket, head) => {
+//     if (req.url === '/terminal') {
+//       terminalServer.handleUpgrade(req, socket, head, function done (ws) {
+//         terminalServer.emit('connection', ws, req)
+//       })
+//     }
+//   })
+// })
+
+const server = http.createServer()
+export const terminalServer = new ws.Server({ server })
+
+hook('expressListen', () => {
+  server.listen(process.env.GUIJS_TERMINAL_WS_PORT || 5010)
+})
+
+terminalServer.on('error', error => {
+  consola.error(error)
 })
 
 function send (socket: ws, type: MESSAGE_TYPE, data: any) {
@@ -199,6 +222,10 @@ function send (socket: ws, type: MESSAGE_TYPE, data: any) {
 
 terminalServer.on('connection', socket => {
   const attachedTerminals: Terminal[] = []
+
+  socket.on('error', error => {
+    consola.error('socket error', error)
+  })
 
   socket.on('message', message => {
     if (typeof message === 'string') {
@@ -243,7 +270,8 @@ terminalServer.on('connection', socket => {
     }
   })
 
-  socket.on('close', () => {
+  socket.on('close', (code, reason) => {
+    consola.log('close', code, reason)
     for (const terminal of attachedTerminals) {
       const index = terminal.sockets.indexOf(socket)
       if (index !== -1) {

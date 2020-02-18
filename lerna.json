@@ -3,6 +3,7 @@
   "useWorkspaces": true,
   "version": "0.1.0",
   "packages": [
-    "packages/@guijs/*"
+    "packages/@guijs/*",
+    "packages/guijs-version-marker"
   ]
 }

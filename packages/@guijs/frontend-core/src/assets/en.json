@@ -84,6 +84,7 @@
     "package": {
       "official": "official",
       "workspace": "workspace",
+      "tooltip-workspace": "This package is a workspace referenced locally in your project",
       "improve-metadata": "Help improve metadata",
       "unknown": "Unknown",
       "all": "All packages",
@@ -91,10 +92,21 @@
       "no-packages": "No packages found",
       "version": "version",
       "latest": "latest",
-      "wanted": "Wanted version:"
+      "tooltip-wanted": "Wanted version:",
+      "tooltip-installed": "Installed version:",
+      "tooltip-latest": "Latest version:"
     },
     "install-package": {
-      "install-package": "Install package"
+      "install-package": "Install package",
+      "install-package-with-type": "Install {type} package",
+      "install-with-name": "Install {name}",
+      "install-as-dev-dependency": "Install as development dependency",
+      "input-version-label": "Package version",
+      "input-version-placeholder": "Select a version",
+      "input-selector-type-label": "Version range type",
+      "input-selector-type-placeholder": "Select a range type",
+      "version": "version",
+      "use-tag-as-selector": "Use tag as version selector"
     },
     "script": {
       "show-scripts": "Show scripts",

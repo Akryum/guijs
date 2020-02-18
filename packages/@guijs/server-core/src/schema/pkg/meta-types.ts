@@ -5,19 +5,19 @@ export interface MetaProjectPackage {
   id: string
   type: ProjectPackageType
   versionSelector: string
-  metadata?: MetaPackage
+  metadata?: MetaPackageMetadata
   isWorkspace?: boolean
   workspaceId: string
 }
 
-export interface MetaPackage {
+export interface MetaPackageMetadata {
   id: string
-  name: string
-  version: string
+  awesomejsId?: string
+  cacheVersion?: string
   projectTypeIds: string[]
-  official: boolean
+  official?: boolean
   description: string
-  defaultLogo: string
+  defaultLogo?: string
 }
 
 export interface FaunaPackage {

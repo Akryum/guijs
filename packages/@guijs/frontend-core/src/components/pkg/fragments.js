@@ -1,22 +1,32 @@
 import gql from 'graphql-tag'
 
-export const projectPackageFragment = gql`
-fragment projectPackage on ProjectPackage {
+export const packageMetadataFragment = gql`
+fragment packageMetadata on PackageMetadata {
   id
-  metadataId
-  type
+  awesomejsId
   projectTypes {
     id
     name
     slug
     logo
   }
-  versionSelector
-  currentVersion
   latestVersion
-  isWorkspace
   official
   description
   defaultLogo
 }
+`
+
+export const projectPackageFragment = gql`
+fragment projectPackage on ProjectPackage {
+  id
+  type
+  versionSelector
+  currentVersion
+  isWorkspace
+  metadata {
+    ...packageMetadata
+  }
+}
+${packageMetadataFragment}
 `

@@ -40,7 +40,7 @@ export async function detectWorkspaces (project: MetaProject, ctx: Context) {
     cwd: project.path,
   })
 
-  if (!workspaces.some(w => w.name === 'root')) {
+  if (!workspaces.some(w => w.root)) {
     workspaces.unshift(...await getWorkspaces({
       cwd: project.path,
       tools: ['root'],

@@ -11,6 +11,7 @@ import { MetaNpmScript } from './meta-types'
 import { onProjectOpen } from '../project/open'
 import { detectWorkspaces, getProjectWorkspace } from '../project/workspace'
 import { onProjectClose } from '../project/close'
+import { hook } from '@nodepack/app-context'
 
 export const typeDefs = gql`
 type NpmScript implements Document {
@@ -186,4 +187,15 @@ onProjectClose(async (project) => {
   // Clear package commands
   removeCommands(commands.filter(cmd => cmd.projectId === project._id &&
     cmd.type === CommandType.Script))
+})
+
+hook('apolloSchema', async (ctx: Context) => {
+  // Reset scripts
+  await ctx.db.scripts.update({}, {
+    $set: {
+      status: NpmScriptStatus.Idle,
+    },
+  }, {
+    multi: true,
+  })
 })
