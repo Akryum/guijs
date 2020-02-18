@@ -1,22 +1,21 @@
 {
   "build": {
-    "distDir": "../../frontend-core/dist",
-    "devPath": "http://localhost:8080"
+    "distDir": "../dist",
+    "devPath": "http://localhost:4000"
   },
   "ctx": {},
   "tauri": {
     "embeddedServer": {
-      "active": true
+      "active": false
     },
     "bundle": {
-      "active": true
+      "active": false
     },
     "whitelist": {
-      "all": false,
-      "event": true
+      "all": true
     },
     "window": {
-      "title": "guijs"
+      "title": "Tauri App"
     },
     "security": {
       "csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline'"

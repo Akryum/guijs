@@ -10,6 +10,8 @@
     "autoinstall": "lerna run autoinstall --stream --parallel"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
     "eslint": "^5.16.0",
     "eslint-plugin-graphql": "^3.0.3",
     "eslint-plugin-node": "^9.1.0",

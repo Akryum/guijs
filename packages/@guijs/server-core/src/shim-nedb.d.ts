@@ -51,6 +51,7 @@ declare module 'nedb-promise' {
      * await datastore.find({ ... }).sort({ ... })
      */
     find<T>(query: any, projection?: T): Nedb.Cursor<(T & Document)[]>
+    cfind<T>(query: any, projection?: T): Nedb.Cursor<(T & Document)[]>
 
     /**
      * Find a document that matches a query.
