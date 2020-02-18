@@ -125,7 +125,7 @@ fn guijs_outdated() -> bool {
     .args(vec!("outdated", "-g"))
     .stdout(Stdio::piped())
     .spawn()
-    .expect("Failed to guijs server")
+    .expect("Failed to check if guijs server is outdated")
     .stdout.expect("Failed to get guijs server stdout");
   let reader = BufReader::new(stdout);
 
@@ -147,7 +147,7 @@ fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
     .env("PORT", "4000")
     .stdout(Stdio::piped())
     .spawn()
-    .expect("Failed to guijs server")
+    .expect("Failed to start guijs server")
     .stdout.expect("Failed to get guijs server stdout");
   let reader = BufReader::new(stdout);
 
