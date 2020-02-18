@@ -16,9 +16,9 @@ export default {
 
     // Src
 
-    const src = `${process.env.VUE_APP_AWESOME_URL}/`
+    let src = `${process.env.VUE_APP_AWESOME_URL}/`
     if (props.projectTypeSlug) {
-      src.value += `for/${props.projectTypeSlug}`
+      src += `for/${props.projectTypeSlug}`
     }
 
     const [, domain] = /^https?:\/\/(\w+(:\d+)?)/.exec(src)

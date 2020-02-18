@@ -161,7 +161,6 @@ export default {
     const { running, onSuccess } = useTask(taskId)
 
     onSuccess(() => {
-      console.log('success')
       close()
     })
 

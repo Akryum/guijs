@@ -98,6 +98,7 @@
     },
     "install-package": {
       "install-package": "Install package",
+      "install-package-with-type": "Install {type} package",
       "install-with-name": "Install {name}",
       "install-as-dev-dependency": "Install as development dependency",
       "input-version-label": "Package version",
