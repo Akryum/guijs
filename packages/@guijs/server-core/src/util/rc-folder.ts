@@ -1,6 +1,5 @@
 import fs from 'fs-extra'
 import path from 'path'
-import consola from 'consola'
 import { getRcPath } from '@nodepack/utils'
 
 let folder: string
@@ -26,16 +25,17 @@ ensureFolder()
 export const rcFolder = folder
 
 function migrateRcFolder () {
-  const oldFolder = process.env.VUE_CLI_UI_DB_PATH ||
-    getRcPath('.vue-cli-ui', { xdgFolder: 'vue' })
+  // @TODO migrate vue-cli-ui data
 
-  if (fs.existsSync(oldFolder) && !fs.existsSync(folder)) {
-    consola.log(`Migrating config folder from ${oldFolder} to ${folder}...`)
-    ensureFolder()
-    fs.copySync(oldFolder, folder, {
-      recursive: true,
-    })
-  }
+  // const oldFolder = process.env.VUE_CLI_UI_DB_PATH ||
+  //   getRcPath('.vue-cli-ui', { xdgFolder: 'vue' })
+
+  // if (fs.existsSync(oldFolder) && !fs.existsSync(folder)) {
+  //   ensureFolder()
+  //   fs.copySync(oldFolder, folder, {
+  //     recursive: true,
+  //   })
+  // }
 }
 
 export function getRcFile (filePath: string) {

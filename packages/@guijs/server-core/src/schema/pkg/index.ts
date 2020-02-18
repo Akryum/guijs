@@ -45,7 +45,20 @@ enum ProjectPackageType {
 extend type ProjectWorkspace {
   packages: [ProjectPackage!]!
 }
+
+extend type Query {
+  packageMetadata (id: ID!): PackageMetadata
+}
 `
+
+const SELECTION = {
+  id: q.Select(['ref', 'id'], q.Var('item')),
+  name: q.Select(['data', 'name'], q.Var('item')),
+  projectTypes: q.Select(['data', 'projectTypes'], q.Var('item')),
+  tags: q.Select(['data', 'info', 'tags'], q.Var('item')),
+  description: q.Select(['data', 'metadata', 'npm', 'data', 'description'], q.Var('item')),
+  avatar: q.Select(['data', 'metadata', 'github', 'data', 'owner', 'avatar'], q.Var('item')),
+}
 
 export async function getWorkspacePackages (
   workspace: MetaProjectWorkspace,
@@ -148,14 +161,7 @@ export async function getWorkspacePackages (
     // It should return null for packages not found
     const faunaData = await ctx.fauna.query<FaunaPackage[]>(q.Map(
       queries,
-      q.Lambda(['item'], q.If(q.Not(q.IsNull(q.Var('item'))), {
-        id: q.Select(['ref', 'id'], q.Var('item')),
-        name: q.Select(['data', 'name'], q.Var('item')),
-        projectTypes: q.Select(['data', 'projectTypes'], q.Var('item')),
-        tags: q.Select(['data', 'info', 'tags'], q.Var('item')),
-        description: q.Select(['data', 'metadata', 'npm', 'data', 'description'], q.Var('item')),
-        avatar: q.Select(['data', 'metadata', 'github', 'data', 'owner', 'avatar'], q.Var('item')),
-      }, null)),
+      q.Lambda(['item'], q.If(q.Not(q.IsNull(q.Var('item'))), SELECTION, null)),
     ))
 
     const newMetadata: MetaPackageMetadata[] = []
@@ -187,7 +193,7 @@ export async function getWorkspacePackages (
 
 async function getCachedMetadata (id: string, ctx: Context) {
   let expired = false
-  const metadata: MetaPackageMetadata & MetaDocument = await ctx.db.packages.findOne({ name: id })
+  const metadata: MetaPackageMetadata & MetaDocument = await ctx.db.packages.findOne({ id })
 
   if (metadata && (
     metadata.cacheVersion !== PACKAGE_CACHE_VERSION ||
@@ -199,6 +205,31 @@ async function getCachedMetadata (id: string, ctx: Context) {
   return {
     metadata,
     expired,
+  }
+}
+
+async function fetchPackageMetadata (id: string, ctx: Context) {
+  const faunaData = await ctx.fauna.query<{ data: FaunaPackage[] }>(q.Map(
+    q.Paginate(q.Match(q.Index('packages_by_name'), id)),
+    q.Lambda(['ref'], q.If(q.Exists(q.Var('ref')), q.Let({ item: q.Get(q.Var('ref')) }, SELECTION), null)),
+  ))
+  if (faunaData.data.length) {
+    const raw = faunaData.data[0]
+    const metadata: MetaPackageMetadata = {
+      id: raw.name,
+      awesomejsId: raw.id,
+      cacheVersion: PACKAGE_CACHE_VERSION,
+      projectTypeIds: raw.projectTypes.map(ref => ref.id),
+      official: raw.tags.includes('official'),
+      description: raw.description,
+      defaultLogo: raw.avatar,
+    }
+    await ctx.db.packages.update({
+      id: metadata.id,
+    }, metadata, {
+      upsert: true,
+    })
+    return metadata
   }
 }
 
@@ -244,6 +275,25 @@ export const resolvers: Resolvers = {
 
   ProjectWorkspace: {
     packages: async (workspace, args, ctx) => getWorkspacePackages(workspace, ctx),
+  },
+
+  Query: {
+    packageMetadata: async (root, { id }, ctx) => {
+      const { metadata, expired } = await getCachedMetadata(id, ctx)
+
+      if (!metadata || expired) {
+        const newMetadata = await fetchPackageMetadata(id, ctx)
+        if (newMetadata) {
+          return newMetadata
+        }
+      }
+
+      if (metadata) {
+        return metadata
+      }
+
+      return getFallbackMetadata(id, ctx)
+    },
   },
 }
 

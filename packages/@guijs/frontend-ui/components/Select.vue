@@ -133,7 +133,7 @@ export default {
           <div class="flex flex-col">
             <VLabel
               v-if="label"
-              class="mb-1"
+              class="mb-1 text-left"
             >
               {{ $t(label) }}
             </VLabel>
@@ -148,7 +148,7 @@ export default {
                   :option="currentOption"
                 />
                 <span v-else-if="placeholder">
-                  {{ placeholder }}
+                  {{ $t(placeholder) }}
                 </span>
               </slot>
             </div>
@@ -177,7 +177,7 @@ export default {
 
         <VButton
           v-for="(option, index) of filteredOptions"
-          :key="option.value"
+          :key="option.key || option.value"
           :class="[
             optionClass,
             {

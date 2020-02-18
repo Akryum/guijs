@@ -12,7 +12,8 @@
       "active": true
     },
     "whitelist": {
-      "all": false
+      "all": false,
+      "event": true
     },
     "window": {
       "title": "guijs"

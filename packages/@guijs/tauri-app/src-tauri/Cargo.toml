@@ -18,13 +18,13 @@ icon = [
   "icons/icon.icns",
   "icons/icon.ico"
 ]
-resources = [ "server" ]
 
 [dependencies]
 serde_json = "1.0.44"
 serde = "1.0.104"
 serde_derive = "1.0.104"
-tauri = { path = "../../../../../tauri/tauri", features = [ "edge" ] }
+tauri = { path = "../../../../../tauri/tauri", features = [ "event", "edge" ] }
+reqwest = { version = "0.10", features = [ "blocking", "json" ] }
 
 [target."cfg(windows)".build-dependencies]
 winres = "0.1"

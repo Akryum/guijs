@@ -1,12 +1,14 @@
 <script>
+import tauri from 'tauri/api'
+
 export default {
   methods: {
     update () {
-      // @TODO
+      tauri.emit('update')
     },
 
     skip () {
-      // @TODO
+      tauri.emit('skip-update')
     },
   },
 }

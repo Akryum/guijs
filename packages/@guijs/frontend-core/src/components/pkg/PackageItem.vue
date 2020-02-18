@@ -44,6 +44,7 @@ export default {
 
         <div
           v-if="pkg.isWorkspace"
+          v-tooltip="$t('guijs.package.tooltip-workspace')"
           class="flex-none text-sm text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-800 rounded-full px-2 mr-4"
         >
           {{ $t('guijs.package.workspace') }}

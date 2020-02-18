@@ -17,6 +17,7 @@ export interface Workspace {
   config: PackageJSON
   name: string
   dir: string
+  root?: boolean
 }
 
 export default async function getWorkspaces (
@@ -51,7 +52,7 @@ export default async function getWorkspaces (
 
   if (!workspaces) {
     if (tools.includes('root')) {
-      return [{ config: pkg, dir: cwd, name: pkg.name }]
+      return [{ config: pkg, dir: cwd, name: pkg.name, root: true }]
     }
     return null
   }

@@ -1,6 +1,6 @@
 {
   "name": "@guijs/native-dialog",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Native dialogs for nodejs apps",
   "author": "Guillaume Chau",
   "main": "dist/index.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "yarn build --watch",
     "build": "rimraf ./dist && tsc --outDir dist -d",
-    "prepublishOnly": "build"
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "execa": "^4.0.0",

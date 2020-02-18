@@ -38,7 +38,7 @@ async function createCollections () {
       'name',
       'projectId',
       'workspaceId',
-    ], true),
+    ], false),
   }
 }
 

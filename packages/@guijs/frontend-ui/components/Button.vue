@@ -110,7 +110,7 @@ export default {
     :tabindex="ghost ? -1 : 0"
     role="button"
     :aria-disabled="ghost"
-    class="inline-block cursor-pointer relative select-none outline-none group"
+    class="btn inline-block cursor-pointer relative select-none outline-none group"
     :class="{
       'pointer-events-none opacity-75': ghost,
       'text-center': align === 'center',
@@ -160,6 +160,26 @@ export default {
 </template>
 
 <style lang="postcss">
+.btn {
+  &:not(.form-input) {
+    &:focus,
+    &:focus-within {
+      &.focus-visible::after {
+        content: '';
+        @apply block absolute inset-0 border border-primary-500 rounded pointer-events-none;
+      }
+
+      &.btn-primary::after {
+        @apply border-black;
+
+        .mode-dark & {
+          @apply border-white;
+        }
+      }
+    }
+  }
+}
+
 .btn-primary {
   @apply text-white bg-primary-500;
 

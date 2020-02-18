@@ -85,6 +85,13 @@ export type ImportProjectInput = {
   bookmarked?: Maybe<Scalars['Boolean']>,
 };
 
+export type InstallPackageInput = {
+  packageName: Scalars['String'],
+  workspaceId: Scalars['String'],
+  dev: Scalars['Boolean'],
+  versionSelector?: Maybe<Scalars['String']>,
+};
+
 
 export type Keybinding = {
    __typename?: 'Keybinding',
@@ -102,6 +109,7 @@ export type Mutation = {
   removeTerminal?: Maybe<Terminal>,
   runCommand?: Maybe<Command>,
   selectFile?: Maybe<Scalars['String']>,
+  installPackage?: Maybe<Task>,
   checkImportProject: CheckProjectPayload,
   importProject: Project,
   editProjectWorkspace?: Maybe<ProjectWorkspace>,
@@ -135,6 +143,11 @@ export type MutationRunCommandArgs = {
 
 export type MutationSelectFileArgs = {
   input: SelectFileInput
+};
+
+
+export type MutationInstallPackageArgs = {
+  input: InstallPackageInput
 };
 
 
@@ -272,14 +285,19 @@ export type Query = {
   commandShortcuts: Array<Command>,
   keybindings: Array<Keybinding>,
   keybinding?: Maybe<Keybinding>,
+  packageMetadata?: Maybe<PackageMetadata>,
   projectTypes: Array<ProjectType>,
   projectType?: Maybe<ProjectType>,
   projects: Array<Project>,
   project?: Maybe<Project>,
+  recentProjects: Array<Project>,
+  bookmarkedProjects: Array<Project>,
   recentProjectCommands: Array<Command>,
   script?: Maybe<NpmScript>,
   settings: Array<Setting>,
   setting?: Maybe<Setting>,
+  task?: Maybe<Task>,
+  tasks: Array<Task>,
 };
 
 
@@ -303,6 +321,11 @@ export type QueryKeybindingArgs = {
 };
 
 
+export type QueryPackageMetadataArgs = {
+  id: Scalars['ID']
+};
+
+
 export type QueryProjectTypeArgs = {
   id: Scalars['ID']
 };
@@ -319,6 +342,11 @@ export type QueryScriptArgs = {
 
 
 export type QuerySettingArgs = {
+  id: Scalars['ID']
+};
+
+
+export type QueryTaskArgs = {
   id: Scalars['ID']
 };
 
@@ -363,15 +391,40 @@ export type StopScriptInput = {
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<CommandRan>,
+  projectPackageAdded: ProjectPackage,
   packageMetadataUpdated?: Maybe<PackageMetadata>,
   npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
+  taskAdded: Task,
+  taskUpdated: Task,
+};
+
+
+export type SubscriptionProjectPackageAddedArgs = {
+  projectId?: Maybe<Scalars['ID']>,
+  workspaceId?: Maybe<Scalars['ID']>
 };
 
 
 export type SubscriptionSettingUpdatedArgs = {
   id: Scalars['ID']
 };
+
+export type Task = {
+   __typename?: 'Task',
+  id: Scalars['ID'],
+  type: Scalars['ID'],
+  payload?: Maybe<Scalars['JSON']>,
+  status: TaskStatus,
+  progress?: Maybe<Scalars['Float']>,
+  message?: Maybe<Scalars['String']>,
+};
+
+export enum TaskStatus {
+  Running = 'running',
+  Success = 'success',
+  Error = 'error'
+}
 
 export type Terminal = {
    __typename?: 'Terminal',
@@ -445,6 +498,8 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes>;
 
+export type isTypeOfResolverFn<T = {}> = (obj: T, info: GraphQLResolveInfo) => boolean;
+
 export type NextResolverFn<T> = () => Promise<T>;
 
 export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
@@ -465,25 +520,29 @@ export type ResolversTypes = {
   CommandType: CommandType,
   Keybinding: ResolverTypeWrapper<Keybinding>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  PackageMetadata: ResolverTypeWrapper<MetaPackageMetadata>,
   ProjectType: ResolverTypeWrapper<ProjectType>,
+  PackageVersionTag: ResolverTypeWrapper<PackageVersionTag>,
   Project: ResolverTypeWrapper<MetaProject>,
   Document: ResolverTypeWrapper<MetaDocument>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   ProjectWorkspace: ResolverTypeWrapper<MetaProjectWorkspace>,
   ProjectPackage: ResolverTypeWrapper<MetaProjectPackage>,
   ProjectPackageType: ProjectPackageType,
-  PackageMetadata: ResolverTypeWrapper<MetaPackageMetadata>,
-  PackageVersionTag: ResolverTypeWrapper<PackageVersionTag>,
   NpmScript: ResolverTypeWrapper<MetaNpmScript>,
   NpmScriptStatus: NpmScriptStatus,
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
+  Task: ResolverTypeWrapper<Task>,
+  TaskStatus: TaskStatus,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
+  InstallPackageInput: InstallPackageInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -506,25 +565,29 @@ export type ResolversParentTypes = {
   CommandType: CommandType,
   Keybinding: Keybinding,
   Boolean: Scalars['Boolean'],
+  PackageMetadata: MetaPackageMetadata,
   ProjectType: ProjectType,
+  PackageVersionTag: PackageVersionTag,
   Project: MetaProject,
   Document: MetaDocument,
   Date: Scalars['Date'],
   ProjectWorkspace: MetaProjectWorkspace,
   ProjectPackage: MetaProjectPackage,
   ProjectPackageType: ProjectPackageType,
-  PackageMetadata: MetaPackageMetadata,
-  PackageVersionTag: PackageVersionTag,
   NpmScript: MetaNpmScript,
   NpmScriptStatus: NpmScriptStatus,
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
+  Task: Task,
+  TaskStatus: TaskStatus,
+  Float: Scalars['Float'],
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
+  InstallPackageInput: InstallPackageInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -539,6 +602,7 @@ export type ResolversParentTypes = {
 
 export type CheckProjectPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CheckProjectPayload'] = ResolversParentTypes['CheckProjectPayload']> = {
   packageName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type CommandResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Command'] = ResolversParentTypes['Command']> = {
@@ -548,11 +612,13 @@ export type CommandResolvers<ContextType = Context, ParentType extends Resolvers
   icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type CommandRanResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CommandRan'] = ResolversParentTypes['CommandRan']> = {
   command?: Resolver<ResolversTypes['Command'], ParentType, ContextType>,
   payload?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -574,6 +640,7 @@ export type KeybindingResolvers<ContextType = Context, ParentType extends Resolv
   sequences?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
   scope?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   global?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -582,6 +649,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   removeTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationRemoveTerminalArgs, 'id'>>,
   runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'input'>>,
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
+  installPackage?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationInstallPackageArgs, 'input'>>,
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
   editProjectWorkspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<MutationEditProjectWorkspaceArgs, 'input'>>,
@@ -598,6 +666,7 @@ export type NpmScriptResolvers<ContextType = Context, ParentType extends Resolve
   command?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   status?: Resolver<ResolversTypes['NpmScriptStatus'], ParentType, ContextType>,
   terminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type PackageMetadataResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PackageMetadata'] = ResolversParentTypes['PackageMetadata']> = {
@@ -610,11 +679,13 @@ export type PackageMetadataResolvers<ContextType = Context, ParentType extends R
   latestVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   versionTags?: Resolver<Array<ResolversTypes['PackageVersionTag']>, ParentType, ContextType>,
   versions?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type PackageVersionTagResolvers<ContextType = Context, ParentType extends ResolversParentTypes['PackageVersionTag'] = ResolversParentTypes['PackageVersionTag']> = {
   tag?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
@@ -625,6 +696,7 @@ export type ProjectResolvers<ContextType = Context, ParentType extends Resolvers
   lastOpen?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>,
   workspaces?: Resolver<Array<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType>,
   workspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<ProjectWorkspaceArgs, 'id'>>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ProjectPackageResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectPackage'] = ResolversParentTypes['ProjectPackage']> = {
@@ -634,6 +706,7 @@ export type ProjectPackageResolvers<ContextType = Context, ParentType extends Re
   metadata?: Resolver<ResolversTypes['PackageMetadata'], ParentType, ContextType>,
   isWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   currentVersion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ProjectTypeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectType'] = ResolversParentTypes['ProjectType']> = {
@@ -641,6 +714,7 @@ export type ProjectTypeResolvers<ContextType = Context, ParentType extends Resol
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ProjectWorkspaceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectWorkspace'] = ResolversParentTypes['ProjectWorkspace']> = {
@@ -651,6 +725,7 @@ export type ProjectWorkspaceResolvers<ContextType = Context, ParentType extends 
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
   packages?: Resolver<Array<ResolversTypes['ProjectPackage']>, ParentType, ContextType>,
   scripts?: Resolver<Array<ResolversTypes['NpmScript']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -661,14 +736,19 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   commandShortcuts?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
   keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType, RequireFields<QueryKeybindingArgs, 'id'>>,
+  packageMetadata?: Resolver<Maybe<ResolversTypes['PackageMetadata']>, ParentType, ContextType, RequireFields<QueryPackageMetadataArgs, 'id'>>,
   projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
   projectType?: Resolver<Maybe<ResolversTypes['ProjectType']>, ParentType, ContextType, RequireFields<QueryProjectTypeArgs, 'id'>>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectArgs, 'id'>>,
+  recentProjects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
+  bookmarkedProjects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
   recentProjectCommands?: Resolver<Array<ResolversTypes['Command']>, ParentType, ContextType>,
   script?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<QueryScriptArgs, 'id'>>,
   settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
   setting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<QuerySettingArgs, 'id'>>,
+  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'id'>>,
+  tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>,
 };
 
 export type SettingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Setting'] = ResolversParentTypes['Setting']> = {
@@ -677,18 +757,33 @@ export type SettingResolvers<ContextType = Context, ParentType extends Resolvers
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   category?: Resolver<ResolversTypes['SettingCategory'], ParentType, ContextType>,
   value?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type SettingCategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SettingCategory'] = ResolversParentTypes['SettingCategory']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
+  projectPackageAdded?: SubscriptionResolver<ResolversTypes['ProjectPackage'], "projectPackageAdded", ParentType, ContextType, SubscriptionProjectPackageAddedArgs>,
   packageMetadataUpdated?: SubscriptionResolver<Maybe<ResolversTypes['PackageMetadata']>, "packageMetadataUpdated", ParentType, ContextType>,
   npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
+  taskAdded?: SubscriptionResolver<ResolversTypes['Task'], "taskAdded", ParentType, ContextType>,
+  taskUpdated?: SubscriptionResolver<ResolversTypes['Task'], "taskUpdated", ParentType, ContextType>,
+};
+
+export type TaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  payload?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>,
+  status?: Resolver<ResolversTypes['TaskStatus'], ParentType, ContextType>,
+  progress?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type TerminalResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Terminal'] = ResolversParentTypes['Terminal']> = {
@@ -696,6 +791,7 @@ export type TerminalResolvers<ContextType = Context, ParentType extends Resolver
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   cwd?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type Resolvers<ContextType = Context> = {
@@ -718,6 +814,7 @@ export type Resolvers<ContextType = Context> = {
   Setting?: SettingResolvers<ContextType>,
   SettingCategory?: SettingCategoryResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
+  Task?: TaskResolvers<ContextType>,
   Terminal?: TerminalResolvers<ContextType>,
 };
 

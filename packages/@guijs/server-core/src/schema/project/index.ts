@@ -18,6 +18,8 @@ type Project implements Document {
 extend type Query {
   projects: [Project!]!
   project (id: ID!): Project
+  recentProjects: [Project!]!
+  bookmarkedProjects: [Project!]!
   recentProjectCommands: [Command!]!
 }
 `
@@ -27,6 +29,10 @@ export const resolvers: Resolvers = {
     projects: async (root, args, ctx) => ctx.db.projects.find<MetaProject>({}),
 
     project: async (root, { id }, ctx) => ctx.db.projects.findOne<MetaProject>({ _id: id }),
+
+    recentProjects: async (root, args, ctx) => ctx.db.projects.cfind<MetaProject>({ bookmarked: false }).sort({ lastOpen: -1 }).limit(3).exec(),
+
+    bookmarkedProjects: async (root, args, ctx) => ctx.db.projects.cfind<MetaProject>({ bookmarked: true }).sort({ lastOpen: -1 }).limit(7).exec(),
 
     recentProjectCommands: () => getRecentCommands(CommandType.Project, 5),
   },

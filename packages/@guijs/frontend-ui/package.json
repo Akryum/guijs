@@ -1,8 +1,7 @@
 {
   "name": "@guijs/frontend-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Guillaume Chau",
-  "private": true,
   "main": "index.js",
   "scripts": {
     "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done"
@@ -10,6 +9,7 @@
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@vue/composition-api": "^0.3.4",
+    "focus-visible": "^5.0.2",
     "mousetrap": "^1.6.3",
     "postcss-nested": "^4.2.1",
     "postcss-preset-env": "^6.6.0",
@@ -27,6 +27,9 @@
   },
   "peerDependencies": {
     "vue": "^2.6.11"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",

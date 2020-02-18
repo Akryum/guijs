@@ -3,6 +3,7 @@ import { useRoute } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import { gql } from '@apollo/client/core'
 import { computed } from '@vue/composition-api'
+import { runCommand } from '../../util/command'
 
 export default {
   setup () {
@@ -28,10 +29,17 @@ export default {
 
     const projectType = useResult(result)
 
+    function installPackage () {
+      runCommand('install-package-popup', {
+        projectTypeSlug: projectType.value.slug,
+      })
+    }
+
     return {
       projectType,
       projectTypeId,
       isSpecial,
+      installPackage,
     }
   },
 }
@@ -50,5 +58,12 @@ export default {
     <div class="flex-1 text-left w-0 truncate">
       {{ $t(projectType.name) }}
     </div>
+
+    <VButton
+      v-tooltip="$t('guijs.install-package.install-package-with-type', { type: projectType.name })"
+      iconLeft="add"
+      class="w-10 h-10 btn-flat"
+      @click="installPackage()"
+    />
   </div>
 </template>

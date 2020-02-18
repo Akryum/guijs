@@ -37,7 +37,7 @@ export default {
     <span
       v-for="(arg, index) of args"
       :key="index"
-      class="inline-flex"
+      class="inline-flex mr-2"
     >
       <span class="text-teal-500">
         {{ arg.name }}
