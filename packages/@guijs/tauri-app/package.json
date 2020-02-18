@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-assets": "cd ../server-core && yarn build && cd ../frontend-core && yarn build && cp ../server-core/dist/* ../tauri-app/src-tauri/server",
+    "build-assets": "cd ../frontend-tauri && yarn build && yarn tauri build && cd ../frontend-core && yarn build",
     "dev": "tauri dev",
     "build": "tauri build",
     "build-from-source": "node ../../../../tauri/cli/tauri.js/bin/tauri build"

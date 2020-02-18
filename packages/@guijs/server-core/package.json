@@ -77,5 +77,8 @@
     "type": "git",
     "url": "git+https://github.com/github.com/Akryum/guijs.git",
     "directory": "packages/@guijs/server-core"
+  },
+  "bin": {
+    "guijs-server": "./dist/app.js"
   }
 }

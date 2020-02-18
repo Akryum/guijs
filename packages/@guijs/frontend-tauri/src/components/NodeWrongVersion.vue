@@ -6,18 +6,27 @@ export default {
     Error,
   },
 
-  data () {
-    return {
-      requiredVersion: '12',
-      currentVersion: '10.0.0',
-    }
+  props: {
+    payload: { // ${foundVersion}|${requiredVersion}
+      type: String,
+      required: true,
+    },
+  },
+
+  computed: {
+    requiredVersion () {
+      return this.payload.split('|')[1]
+    },
+    foundVersion () {
+      return this.payload.split('|')[0]
+    },
   },
 }
 </script>
 
 <template>
   <Error
-    :label="`Node.js v${requiredVersion} or more is required, found v${currentVersion}`"
+    :label="`Node.js v${requiredVersion} or more is required, found v${foundVersion}`"
   >
     Please update Node at <a
       href="https://nodejs.org"
