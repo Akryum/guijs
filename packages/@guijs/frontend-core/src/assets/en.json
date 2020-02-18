@@ -67,6 +67,9 @@
       "packages": "Packages",
       "scripts": "Scripts"
     },
+    "project-dropdown": {
+      "no-recent-projects": "No recent projects"
+    },
     "workspace": {
       "select-button": "<div>{name}</div><div class=\"text-gray-500\">Type: {type}</div>",
       "root": "(root)",

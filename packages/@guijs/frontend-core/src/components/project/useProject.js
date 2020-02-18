@@ -1,6 +1,6 @@
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { useRoute } from './router'
+import { useRoute } from '@/util/router'
 import { computed } from '@vue/composition-api'
 
 export function useCurrentProject (fragment = '') {

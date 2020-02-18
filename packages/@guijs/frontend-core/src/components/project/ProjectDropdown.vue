@@ -1,7 +1,12 @@
 <script>
-import { useCurrentProject } from '@/util/project'
+import { useCurrentProject } from './useProject'
+import ProjectDropdownItems from './ProjectDropdownItems.vue'
 
 export default {
+  components: {
+    ProjectDropdownItems,
+  },
+
   setup () {
     const { project, loading } = useCurrentProject()
 
@@ -35,7 +40,7 @@ export default {
 
     <template #popper>
       <div class="w-64">
-        No recent project
+        <ProjectDropdownItems />
       </div>
     </template>
   </VPopper>

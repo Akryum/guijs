@@ -30,9 +30,15 @@ export const resolvers: Resolvers = {
 
     project: async (root, { id }, ctx) => ctx.db.projects.findOne<MetaProject>({ _id: id }),
 
-    recentProjects: async (root, args, ctx) => ctx.db.projects.cfind<MetaProject>({ bookmarked: false }).sort({ lastOpen: -1 }).limit(3).exec(),
+    recentProjects: async (root, args, ctx) => {
+      const projectId = ctx.getProjectId()
+      return ctx.db.projects.cfind<MetaProject>({ $not: { _id: projectId }, bookmarked: false }).sort({ lastOpen: -1 }).limit(3).exec()
+    },
 
-    bookmarkedProjects: async (root, args, ctx) => ctx.db.projects.cfind<MetaProject>({ bookmarked: true }).sort({ lastOpen: -1 }).limit(7).exec(),
+    bookmarkedProjects: async (root, args, ctx) => {
+      const projectId = ctx.getProjectId()
+      return ctx.db.projects.cfind<MetaProject>({ $not: { _id: projectId }, bookmarked: true }).sort({ lastOpen: -1 }).limit(7).exec()
+    },
 
     recentProjectCommands: () => getRecentCommands(CommandType.Project, 5),
   },
