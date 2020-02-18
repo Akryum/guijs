@@ -8,5 +8,8 @@
   "devDependencies": {
     "@guijs/frontend-core": "^0.1.0",
     "@guijs/server-core": "^0.1.0"
+  },
+  "custom": {
+    "minNodeVersion": "12"
   }
 }
