@@ -85,6 +85,13 @@ export type ImportProjectInput = {
   bookmarked?: Maybe<Scalars['Boolean']>,
 };
 
+export type InstallPackageInput = {
+  packageName: Scalars['String'],
+  workspaceId: Scalars['String'],
+  dev: Scalars['Boolean'],
+  versionSelector?: Maybe<Scalars['String']>,
+};
+
 
 export type Keybinding = {
    __typename?: 'Keybinding',
@@ -102,6 +109,7 @@ export type Mutation = {
   removeTerminal?: Maybe<Terminal>,
   runCommand?: Maybe<Command>,
   selectFile?: Maybe<Scalars['String']>,
+  installPackage?: Maybe<Task>,
   checkImportProject: CheckProjectPayload,
   importProject: Project,
   editProjectWorkspace?: Maybe<ProjectWorkspace>,
@@ -135,6 +143,11 @@ export type MutationRunCommandArgs = {
 
 export type MutationSelectFileArgs = {
   input: SelectFileInput
+};
+
+
+export type MutationInstallPackageArgs = {
+  input: InstallPackageInput
 };
 
 
@@ -281,6 +294,8 @@ export type Query = {
   script?: Maybe<NpmScript>,
   settings: Array<Setting>,
   setting?: Maybe<Setting>,
+  task?: Maybe<Task>,
+  tasks: Array<Task>,
 };
 
 
@@ -328,6 +343,11 @@ export type QuerySettingArgs = {
   id: Scalars['ID']
 };
 
+
+export type QueryTaskArgs = {
+  id: Scalars['ID']
+};
+
 export type RenameNpmScriptInput = {
   scriptId: Scalars['ID'],
   name: Scalars['String'],
@@ -369,15 +389,40 @@ export type StopScriptInput = {
 export type Subscription = {
    __typename?: 'Subscription',
   commandRan?: Maybe<CommandRan>,
+  projectPackageAdded: ProjectPackage,
   packageMetadataUpdated?: Maybe<PackageMetadata>,
   npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
+  taskAdded: Task,
+  taskUpdated: Task,
+};
+
+
+export type SubscriptionProjectPackageAddedArgs = {
+  projectId?: Maybe<Scalars['ID']>,
+  workspaceId?: Maybe<Scalars['ID']>
 };
 
 
 export type SubscriptionSettingUpdatedArgs = {
   id: Scalars['ID']
 };
+
+export type Task = {
+   __typename?: 'Task',
+  id: Scalars['ID'],
+  type: Scalars['ID'],
+  payload?: Maybe<Scalars['JSON']>,
+  status: TaskStatus,
+  progress?: Maybe<Scalars['Float']>,
+  message?: Maybe<Scalars['String']>,
+};
+
+export enum TaskStatus {
+  Running = 'running',
+  Success = 'success',
+  Error = 'error'
+}
 
 export type Terminal = {
    __typename?: 'Terminal',
@@ -487,11 +532,15 @@ export type ResolversTypes = {
   Setting: ResolverTypeWrapper<MetaSetting>,
   SettingCategory: ResolverTypeWrapper<SettingCategory>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
+  Task: ResolverTypeWrapper<Task>,
+  TaskStatus: TaskStatus,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
+  InstallPackageInput: InstallPackageInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -528,11 +577,15 @@ export type ResolversParentTypes = {
   Setting: MetaSetting,
   SettingCategory: SettingCategory,
   JSON: Scalars['JSON'],
+  Task: Task,
+  TaskStatus: TaskStatus,
+  Float: Scalars['Float'],
   Mutation: {},
   CreateTerminalInput: CreateTerminalInput,
   ChangeTerminalTitleInput: ChangeTerminalTitleInput,
   RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
+  InstallPackageInput: InstallPackageInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -594,6 +647,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   removeTerminal?: Resolver<Maybe<ResolversTypes['Terminal']>, ParentType, ContextType, RequireFields<MutationRemoveTerminalArgs, 'id'>>,
   runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'input'>>,
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
+  installPackage?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationInstallPackageArgs, 'input'>>,
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
   editProjectWorkspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<MutationEditProjectWorkspaceArgs, 'input'>>,
@@ -689,6 +743,8 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   script?: Resolver<Maybe<ResolversTypes['NpmScript']>, ParentType, ContextType, RequireFields<QueryScriptArgs, 'id'>>,
   settings?: Resolver<Array<ResolversTypes['Setting']>, ParentType, ContextType>,
   setting?: Resolver<Maybe<ResolversTypes['Setting']>, ParentType, ContextType, RequireFields<QuerySettingArgs, 'id'>>,
+  task?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryTaskArgs, 'id'>>,
+  tasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>,
 };
 
 export type SettingResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Setting'] = ResolversParentTypes['Setting']> = {
@@ -708,9 +764,22 @@ export type SettingCategoryResolvers<ContextType = Context, ParentType extends R
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
+  projectPackageAdded?: SubscriptionResolver<ResolversTypes['ProjectPackage'], "projectPackageAdded", ParentType, ContextType, SubscriptionProjectPackageAddedArgs>,
   packageMetadataUpdated?: SubscriptionResolver<Maybe<ResolversTypes['PackageMetadata']>, "packageMetadataUpdated", ParentType, ContextType>,
   npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
+  taskAdded?: SubscriptionResolver<ResolversTypes['Task'], "taskAdded", ParentType, ContextType>,
+  taskUpdated?: SubscriptionResolver<ResolversTypes['Task'], "taskUpdated", ParentType, ContextType>,
+};
+
+export type TaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  payload?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>,
+  status?: Resolver<ResolversTypes['TaskStatus'], ParentType, ContextType>,
+  progress?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type TerminalResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Terminal'] = ResolversParentTypes['Terminal']> = {
@@ -741,6 +810,7 @@ export type Resolvers<ContextType = Context> = {
   Setting?: SettingResolvers<ContextType>,
   SettingCategory?: SettingCategoryResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
+  Task?: TaskResolvers<ContextType>,
   Terminal?: TerminalResolvers<ContextType>,
 };
 
