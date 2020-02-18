@@ -55,9 +55,9 @@ export function applyKeybindings (keybindings) {
     const handlers = getKeyHandlers(scope)
     for (const h of handlers) {
       if (h.global) {
-        mousetrap.bindGlobal(h.keys, h.handler)
+        mousetrap.bindGlobal(h.keys, h.handler, h.action)
       } else {
-        mousetrap.bind(h.keys, h.handler)
+        mousetrap.bind(h.keys, h.handler, h.action)
       }
     }
   }
@@ -144,12 +144,13 @@ export function onKey (keys, handler, options = {}) {
     keys,
     handler,
     global: options.global,
+    action: options.action,
   }
   getKeyHandlers(scope).push(h)
   if (options.global) {
-    getScopedMousetrap(scope).bindGlobal(keys, handler)
+    getScopedMousetrap(scope).bindGlobal(keys, handler, options.action)
   } else {
-    getScopedMousetrap(scope).bind(keys, handler)
+    getScopedMousetrap(scope).bind(keys, handler, options.action)
   }
 
   const off = () => {
