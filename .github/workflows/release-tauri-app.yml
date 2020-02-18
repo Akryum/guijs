@@ -34,10 +34,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn
-      - name: build guijs for tauri-app
-        working-directory: ./packages/@guijs/tauri-app
-        run: yarn build-assets
       - name: install rust stable
         uses: actions-rs/toolchain@v1
         with:
@@ -48,14 +44,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
+      - run: yarn
+      - name: build guijs for tauri app
+        run: yarn workspace @guijs/tauri-app build-assets
       - run: cargo install tauri-bundler --force
-      - name: yarn tauri build
-        working-directory: ./packages/@guijs/tauri-app
-        run: yarn tauri build
+      - name: build tauri app
+        run: yarn workspace @guijs/tauri-app build
       - name: get version
         working-directory: ./packages/@guijs/tauri-app
         run: echo ::set-env name=PACKAGE_VERSION::$(node -p "require('./package.json').version")
-      - name: Create Release
+      - name: create release
         id: create_tauri_release
         uses: jbolda/create-release@v1.1.0
         env:
@@ -66,7 +64,7 @@ jobs:
           body: "See the assets to download this version and install."
           draft: true
           prerelease: false
-      - name: Upload Release Asset
+      - name: upload release asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1.0.2
         env:
