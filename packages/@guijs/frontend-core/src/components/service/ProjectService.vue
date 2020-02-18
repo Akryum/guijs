@@ -27,9 +27,12 @@ export default {
 
     const projectId = computed(() => route.value.params.projectId)
 
+    let isOpening = false
+
     // On open project, reload the page
     watch(projectId, value => {
       if (value) {
+        isOpening = true
         // @TODO find a better way?
         location.reload()
       }
@@ -53,7 +56,7 @@ export default {
     })
 
     onCommand('close-project', () => {
-      if (!projectId.value) return
+      if (!projectId.value || isOpening) return
       window.location.assign('/')
     })
   },
