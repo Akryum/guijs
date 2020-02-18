@@ -32,6 +32,7 @@ export function useKeyboardNavigation (itemsRef, scope, direction = 'vertical') 
   }, {
     scope,
     global: true,
+    action: 'keyup',
   })
 
   onKey(directionKeys.previous, () => {
