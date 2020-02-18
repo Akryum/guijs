@@ -164,7 +164,7 @@ export default {
   &:not(.form-input) {
     &:focus,
     &:focus-within {
-      &::after {
+      &.focus-visible::after {
         content: '';
         @apply block absolute inset-0 border border-primary-500 rounded pointer-events-none;
       }

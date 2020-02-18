@@ -117,7 +117,8 @@ export default {
     const attached = ref(cached.attached)
 
     if (!ws) {
-      ws = cached.ws = new WebSocket(`ws://localhost:${process.env.VUE_APP_TERMINAL_WS_PORT}`)
+      // @TODO better endpoint handling (dynamic ports)
+      ws = cached.ws = new WebSocket(process.env.VUE_APP_TERMINAL_WS_URL)
 
       // Attach to terminal
 

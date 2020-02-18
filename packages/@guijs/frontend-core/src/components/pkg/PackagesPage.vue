@@ -28,7 +28,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
 
-    const { result, onResult, refetch } = useQuery(gql`
+    const { result, onResult, refetch, subscribeToMore } = useQuery(gql`
       query projectPackages ($projectId: ID!, $workspaceId: ID!) {
         project (id: $projectId) {
           id
@@ -54,6 +54,25 @@ export default {
     setTimeout(() => {
       refetch()
     }, 1500)
+
+    subscribeToMore(() => ({
+      document: gql`
+        subscription projectPackageAdded ($projectId: ID, $workspaceId: ID) {
+          projectPackageAdded (projectId: $projectId, workspaceId: $workspaceId) {
+            ...projectPackage
+          }
+        }
+        ${projectPackageFragment}
+      `,
+      variables: {
+        projectId: route.value.params.projectId,
+        workspaceId: route.value.params.workspaceId,
+      },
+      updateQuery: (previousResult, { subscriptionData: { data } }) => {
+        previousResult.project.workspace.packages.push(data.projectPackageAdded)
+        return previousResult
+      },
+    }))
 
     // Project types
 

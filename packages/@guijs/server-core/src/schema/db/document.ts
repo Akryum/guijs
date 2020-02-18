@@ -9,6 +9,9 @@ interface Document {
 
 export const resolvers: Resolvers = {
   Document: {
+    __resolveType () {
+      return null
+    },
     id: doc => doc._id,
   },
 }

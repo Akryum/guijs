@@ -1,9 +1,12 @@
 <script>
 import gql from 'graphql-tag'
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
-import { packageMetadataFragment, projectPackageFragment } from './fragments'
+import { packageMetadataFragment } from './fragments'
 import { computed, ref, watch } from '@vue/composition-api'
 import { compare } from 'semver'
+import { useTask } from '../task/useTask'
+import { taskFragment } from '../task/fragments'
+import { useRoute } from '@/util/router'
 import PackageLogo from './PackageLogo.vue'
 
 export default {
@@ -19,6 +22,8 @@ export default {
   },
 
   setup (props, { emit }) {
+    const route = useRoute()
+
     function close () {
       emit('close')
     }
@@ -42,6 +47,10 @@ export default {
     }))
 
     const metadata = useResult(result)
+
+    // Dep type
+
+    const devDep = ref(false)
 
     // Version
 
@@ -113,25 +122,53 @@ export default {
 
     // Install
 
+    const taskId = ref()
+
     const { mutate, loading: mutating } = useMutation(gql`
       mutation installPackage ($input: InstallPackageInput!) {
-        installPackage (input: $input) {
-          ...projectPackage
+        task: installPackage (input: $input) {
+          ...task
         }
       }
-      ${projectPackageFragment}
+      ${taskFragment}
     `)
 
     async function install () {
-      // @TODO
-      await mutate()
-      close()
+      let versionSelector
+
+      if (selectedVersion.value) {
+        if (isVersionTag.value && useTagAsSelector.value) {
+          versionSelector = selectedVersion.value.substr(1)
+        } else {
+          const { operator } = selectorTypes.find(t => t.value === selectorType.value)
+          versionSelector = `${operator}${actualVersion.value}`
+        }
+      }
+
+      const { data } = await mutate({
+        input: {
+          packageName: props.packageName,
+          workspaceId: route.value.params.workspaceId,
+          dev: devDep.value,
+          versionSelector,
+        },
+      })
+      taskId.value = data.task.id
     }
+
+    // Task
+
+    const { running, onSuccess } = useTask(taskId)
+
+    onSuccess(() => {
+      close()
+    })
 
     return {
       close,
       metadata,
       loading,
+      devDep,
       selectedVersion,
       versions,
       isVersionTag,
@@ -141,6 +178,7 @@ export default {
       selectorTypes,
       install,
       mutating,
+      running,
     }
   },
 }
@@ -179,6 +217,14 @@ export default {
         </div>
       </div>
     </div>
+
+    <!--  Dep type -->
+
+    <VSwitch
+      v-model="devDep"
+      label="guijs.install-package.install-as-dev-dependency"
+      class="form-input my-6"
+    />
 
     <!-- Version -->
     <VSelect
@@ -242,7 +288,7 @@ export default {
     <!-- Actions -->
     <div class="flex mt-6">
       <VButton
-        :disabled="mutating"
+        :disabled="mutating || running"
         iconLeft="close"
         class="flex-1 btn-lg btn-dim mr-6"
         @click="close()"
@@ -251,7 +297,7 @@ export default {
       </VButton>
 
       <VButton
-        :loading="mutating"
+        :loading="mutating || running"
         iconLeft="get_app"
         class="flex-1 btn-lg btn-primary"
         @click="install()"
