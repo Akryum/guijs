@@ -1,20 +1,19 @@
 
-      export default {
-  "__schema": {
-    "types": [
+export default {
+  '__schema': {
+    'types': [
       {
-        "kind": "INTERFACE",
-        "name": "Document",
-        "possibleTypes": [
+        'kind': 'INTERFACE',
+        'name': 'Document',
+        'possibleTypes': [
           {
-            "name": "Project"
+            'name': 'Project',
           },
           {
-            "name": "NpmScript"
-          }
-        ]
-      }
-    ]
-  }
+            'name': 'NpmScript',
+          },
+        ],
+      },
+    ],
+  },
 }
-    
