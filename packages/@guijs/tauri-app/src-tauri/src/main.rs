@@ -52,20 +52,22 @@ fn main() {
             .expect("failed to read server package.json")
             .json::<PackageJson>()
             .expect("failed to parse server package.json");
-          let version_compare = tauri::api::version::compare(&node_version, &server_package_json.custom.min_node_version);
+          let node_version_compare = tauri::api::version::compare(&node_version, &server_package_json.custom.min_node_version);
           
-          if version_compare.is_ok() && version_compare.expect("failed to compare node versions") <= 0 {
-             let guijs_server_exists = Command::new("guijs-server")
+          if node_version_compare.is_ok() && node_version_compare.expect("failed to compare node versions") <= 0 {
+             let guijs_server_output = Command::new("guijs-server")
               .args(vec!("--version"))
               .stdout(Stdio::piped())
-              .spawn()
-              .is_ok();
+              .output();
 
             let handle2 = webview.handle();
             std::thread::spawn(move || {
-              if guijs_server_exists {
+              if guijs_server_output.is_ok() {
                 notify_state(&handle, String::from("splashscreen"));
-                if guijs_outdated() {
+                let guijs_server_stdout = guijs_server_output.expect("failed to get guijs-server version output").stdout;
+                let guijs_server_version = String::from_utf8_lossy(&guijs_server_stdout);
+                let guijs_server_version_compare = tauri::api::version::compare(&guijs_server_version, &server_package_json.version);
+                if guijs_server_version_compare.is_ok() && guijs_server_version_compare.expect("failed to compare guijs server versions") == 1 {
                   notify_state(&handle, String::from("update-available"));
                   tauri::event::listen(String::from("skip-update"), move |_| {
                     spawn_guijs_server(&handle);
@@ -137,28 +139,6 @@ fn notify_state_with_payload<T: 'static>(handle:  &Handle<T>, name: String, payl
     String::from("state"),
     serde_json::to_string(&reply).unwrap(),
   );
-}
-
-fn guijs_outdated() -> bool {
-  let stdout = Command::new("npm")
-    .args(vec!("outdated", "-g"))
-    .stdout(Stdio::piped())
-    .spawn()
-    .expect("Failed to check if guijs server is outdated")
-    .stdout.expect("Failed to get guijs server stdout");
-  let reader = BufReader::new(stdout);
-
-  let mut guijs_outdated = false;
-  reader
-    .lines()
-    .filter_map(|line| line.ok())
-    .for_each(|line| {
-      if line.contains("guijs-server") {
-        guijs_outdated = true;
-      }
-    });
-
-  guijs_outdated
 }
 
 fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
