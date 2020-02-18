@@ -84,6 +84,7 @@ export default {
           }
         })
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.warn('Parsing error', e)
         parsingError.value = e.message
       }
