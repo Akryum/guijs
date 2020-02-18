@@ -1,6 +1,6 @@
 <script>
 import { useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { useScriptQuery } from './useScript'
 import { scriptFragment } from './fragments'
 import { terminalFragment } from '../terminal/fragments'

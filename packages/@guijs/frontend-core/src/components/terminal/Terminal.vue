@@ -9,7 +9,7 @@ import { onWindowEvent } from '@guijs/frontend-ui/util/window'
 import { useMutation } from '@vue/apollo-composable'
 import { pushScope, popScope } from '@/util/keybinding'
 import { useSetting } from '@/util/setting'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 
 const isWindows = ['Windows', 'Win16', 'Win32', 'WinCE'].includes(navigator.platform)
 

@@ -2,7 +2,7 @@
 import { ref, watch } from '@vue/composition-api'
 import { useRouter, useRoute } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { projectWorkspaceFragment } from './fragments'
 import { onKeybind } from '@/util/keybinding'
 import Keybindings from '../keybinding/Keybindings.vue'
@@ -65,7 +65,7 @@ export default {
 
     // Reset selection if workspace doesn't exist
     onResult(result => {
-      if (!result.loading && !currentWorkspace.value) {
+      if (!result.loading && !result.stale && !currentWorkspace.value) {
         resetWorkspaceSelection()
       }
     })

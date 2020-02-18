@@ -2,7 +2,7 @@
 import { onCommand } from '@/util/command'
 import { useRouter } from '@/util/router'
 import { useSubscription } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { scriptFragment } from '../script/fragments'
 
 export default {

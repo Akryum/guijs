@@ -1,5 +1,5 @@
 import { apolloClient } from '../apollo'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { applyKeybindings } from '@guijs/frontend-ui/util/keybinding'
 
 export * from '@guijs/frontend-ui/util/keybinding'

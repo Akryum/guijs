@@ -1,6 +1,6 @@
 <script>
 import { useQuery, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 export default {
   props: {
     keybindingId: {

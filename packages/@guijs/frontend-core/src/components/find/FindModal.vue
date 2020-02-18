@@ -1,7 +1,7 @@
 <script>
 import { ref, computed, watch } from '@vue/composition-api'
 import { useQuery, useResult } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { onCommand, onAnyCommand, runCommand } from '@/util/command'
 import { useKeyboardNavigation } from '@guijs/frontend-ui/util/navigation'
 import { getSearchType, TYPE_WORDS } from './util'

@@ -1,5 +1,5 @@
 import { apolloClient } from '@/apollo'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { useSubscription, useQuery, useResult } from '@vue/apollo-composable'
 
 export async function updateSetting (id, value) {

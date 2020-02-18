@@ -1,5 +1,5 @@
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { useRoute } from '@/util/router'
 import { scriptFragment } from './fragments'
 import { terminalFragment } from '../terminal/fragments'

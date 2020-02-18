@@ -1,6 +1,6 @@
 <script>
 import { useScriptQuery } from './useScript'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client/core'
 import { useMutation } from '@vue/apollo-composable'
 import { ref, watch } from '@vue/composition-api'
 import { runCommand } from '@/util/command'
