@@ -1,3 +1,5 @@
 node_modules/
 @nodepack/
 generated/
+schema-fragment-matcher
+shim-*
