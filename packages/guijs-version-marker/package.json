@@ -1,13 +1,13 @@
 {
   "name": "guijs-version-marker",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "version marker for guijs",
   "author": "Guillaume Chau",
   "license": "MIT",
   "main": "package.json",
   "devDependencies": {
     "@guijs/frontend-core": "^0.1.1",
-    "@guijs/server-core": "^0.1.3"
+    "@guijs/server-core": "^0.1.4"
   },
   "custom": {
     "minNodeVersion": "12.0.0"

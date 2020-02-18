@@ -1,6 +1,6 @@
 {
   "name": "@guijs/server-core",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "Guillaume Chau",
   "scripts": {
     "dev": "nodepack-service dev",
@@ -16,10 +16,10 @@
     "@guijs/native-dialog": "^0.1.1",
     "@nodepack/app": "^0.8.0",
     "@nodepack/app-context": "^0.8.0",
+    "@nodepack/module": "^0.8.0",
     "@nodepack/plugin-apollo": "^0.8.5",
     "@nodepack/plugin-db-fauna": "^0.8.3",
     "@nodepack/plugin-express": "^0.8.0",
-    "@nodepack/module": "^0.8.0",
     "@nodepack/utils": "^0.8.3",
     "consola": "^2.11.3",
     "default-shell": "^1.0.1",
