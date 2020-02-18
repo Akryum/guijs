@@ -13,6 +13,21 @@ use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use tauri::Handle;
 
+use serde::Deserialize;
+
+#[derive(PartialEq, Deserialize, Clone, Debug)]
+#[serde(tag = "engines", rename_all = "camelCase")]
+pub struct PackageJsonCustom {
+  min_node_version: String
+}
+
+#[derive(PartialEq, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct PackageJson {
+  custom: PackageJsonCustom,
+  version: String
+}
+
  #[derive(Serialize)]
 pub struct State {
   pub name: String,
@@ -33,7 +48,11 @@ fn main() {
           .output();
         if node_output.is_ok() {
           let node_version = String::from_utf8_lossy(&node_output.expect("failed to get node output").stdout).replace("v", "");
-          let version_compare = tauri::api::version::compare(&node_version, "12.0.0");
+          let server_package_json: PackageJson = reqwest::blocking::get("https://registry.npmjs.org/guijs-version-marker/latest")
+            .expect("failed to read server package.json")
+            .json::<PackageJson>()
+            .expect("failed to parse server package.json");
+          let version_compare = tauri::api::version::compare(&node_version, &server_package_json.custom.min_node_version);
           
           if version_compare.is_ok() && version_compare.expect("failed to compare node versions") <= 0 {
              let guijs_server_exists = Command::new("guijs-server")
@@ -67,7 +86,7 @@ fn main() {
               }
             });
           } else {
-            notify_state_with_payload(&handle, String::from("node-wrong-version"), node_version);
+            notify_state_with_payload(&handle, String::from("node-wrong-version"), format!("{}|{}", node_version, server_package_json.custom.min_node_version));
           }
         } else {
           notify_state(&handle, String::from("node-not-found"));
@@ -81,7 +100,7 @@ fn main() {
 fn run_npm_install_guijs_server(exists: bool) {
   let command = if exists { "update" } else { "install" };
   let guijs_stdout = Command::new("npm")
-    .args(vec!("i", "-g", "--path", "../server-core")) // TODO change this to be the published guijs server
+    .args(vec!("i", "-g", "@guijs/server-core"))
     .stdout(Stdio::piped())
     .spawn().expect(&format!("failed to {} guijs server package", command))
     .stdout.expect(&format!("failed to get guijs {} stdout", command));
