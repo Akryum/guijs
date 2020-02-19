@@ -12,6 +12,7 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
+    "@guijs/frontend-core": "^0.1.1",
     "@guijs/get-workspaces": "^0.1.1",
     "@guijs/native-dialog": "^0.1.1",
     "@nodepack/app": "^0.8.0",

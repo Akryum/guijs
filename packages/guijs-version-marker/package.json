@@ -6,7 +6,6 @@
   "license": "MIT",
   "main": "package.json",
   "devDependencies": {
-    "@guijs/frontend-core": "^0.1.1",
     "@guijs/server-core": "^0.1.4"
   },
   "custom": {
