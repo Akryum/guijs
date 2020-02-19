@@ -35,10 +35,11 @@ pub struct State {
 }
 
 fn main() {
+  let mut setup = false;
   tauri::AppBuilder::new()
-    .splashscreen_html(include_str!("../../../frontend-tauri/dist/index.tauri.html"))
-    .setup(|webview, source| {
-      if source == "splashscreen" {
+    .setup(move |webview, _| {
+      if !setup {
+        setup = true;
         let handle = webview.handle();
 
         // check if node exists & matches the minimum version
@@ -55,7 +56,7 @@ fn main() {
           let node_version_compare = tauri::api::version::compare(&node_version, &server_package_json.custom.min_node_version);
           
           if node_version_compare.is_ok() && node_version_compare.expect("failed to compare node versions") <= 0 {
-             let guijs_server_output = Command::new("guijs-server")
+            let guijs_server_output = Command::new("guijs-server")
               .args(vec!("--version"))
               .stdout(Stdio::piped())
               .output();
@@ -111,7 +112,6 @@ fn run_npm_install_guijs_server(exists: bool) {
     .lines()
     .filter_map(|line| line.ok())
     .for_each(|line| {
-      // TODO parse progress
       println!("{}", line);
     });
 }
@@ -143,7 +143,6 @@ fn notify_state_with_payload<T: 'static>(handle:  &Handle<T>, name: String, payl
 
 fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
   let stdout = Command::new("guijs-server")
-    .env("PORT", "4000")
     .stdout(Stdio::piped())
     .spawn()
     .expect("Failed to start guijs server")
@@ -155,10 +154,17 @@ fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
     .lines()
     .filter_map(|line| line.ok())
     .for_each(|line| {
-      println!("SERVER: {}", line);
       if !webview_started {
         webview_started = true;
-        tauri::close_splashscreen(&handle).expect("failed to close splashscreen");
+        handle.dispatch(move |webview| {
+          webview.eval(&format!("window.location.replace('http://localhost:{}')", line))
+        }).expect("failed to initialize app");
+        // wait for location to be replaced
+        let ten_millis = std::time::Duration::from_millis(300);
+        std::thread::sleep(ten_millis);
+        handle.dispatch(|webview| {
+           webview.eval(include_str!(concat!(env!("TAURI_DIR"), "/tauri.js")))
+        }).expect("failed to eval tauri entry point");
       }
     });
 }

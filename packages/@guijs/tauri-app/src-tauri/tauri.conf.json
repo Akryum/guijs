@@ -1,6 +1,6 @@
 {
   "build": {
-    "distDir": "../../frontend-core/dist",
+    "distDir": "../../frontend-tauri/dist",
     "devPath": "http://localhost:8080"
   },
   "ctx": {},
@@ -13,7 +13,8 @@
     },
     "whitelist": {
       "all": false,
-      "event": true
+      "event": true,
+      "open": true
     },
     "window": {
       "title": "guijs"
