@@ -66,7 +66,7 @@ export default {
 
 <template>
   <div
-    class="fixed inset-0 flex flex-col items-center"
+    class="fixed inset-0 flex flex-col items-center overflow-y-auto"
     :class="{
       'py-16': !fullscreen,
       'p-6': fullscreen,
@@ -77,7 +77,7 @@ export default {
   >
     <!-- Backdrop -->
     <div
-      class="bg-white dark:bg-gray-900 opacity-90 absolute inset-0"
+      class="bg-white dark:bg-gray-900 opacity-90 fixed inset-0"
       @click="close()"
     />
 
