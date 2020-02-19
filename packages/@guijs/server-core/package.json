@@ -81,5 +81,8 @@
   },
   "bin": {
     "guijs-server": "./dist/app.js"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
