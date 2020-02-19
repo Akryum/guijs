@@ -6,11 +6,13 @@ import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
 import { onKeybind } from '@/util/keybinding'
 import Keybindings from '../keybinding/Keybindings.vue'
+import ProjectTypeLogo from '../project/ProjectTypeLogo.vue'
 import WorkspaceList from './WorkspaceList.vue'
 
 export default {
   components: {
     Keybindings,
+    ProjectTypeLogo,
     WorkspaceList,
   },
 
@@ -99,11 +101,10 @@ export default {
           extend
         >
           <template v-if="currentWorkspace">
-            <img
-              :src="currentWorkspace.type.logo"
-              :alt="currentWorkspace.type.name"
+            <ProjectTypeLogo
+              :projectType="currentWorkspace.type"
               class="w-6 h-6 rounded mr-4 flex-none"
-            >
+            />
             <div
               class="flex-1 w-0 truncate text-left leading-normal"
             >
