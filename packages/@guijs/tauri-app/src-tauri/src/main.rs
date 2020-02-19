@@ -14,6 +14,10 @@ use std::process::{Command, Stdio};
 use tauri::Handle;
 
 use serde::Deserialize;
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+use regex::Regex;
+use lazy_static::lazy_static;
 
 #[derive(PartialEq, Deserialize, Clone, Debug)]
 #[serde(tag = "engines", rename_all = "camelCase")]
@@ -25,13 +29,39 @@ pub struct PackageJsonCustom {
 #[serde(rename_all = "camelCase")]
 pub struct PackageJson {
   custom: PackageJsonCustom,
-  version: String
+  dev_dependencies: HashMap<String, String>
 }
 
  #[derive(Serialize)]
 pub struct State {
   pub name: String,
   pub payload: String,
+}
+
+fn get_current_version(dependency: String) -> Option<String> {
+  println!("getting {} version", dependency);
+  let output = Command::new("npm")
+    .args(vec!("ls", "--depth=0", "-global", dependency.as_str()))
+    .stdout(Stdio::piped())
+    .output();
+  if output.is_ok() {
+    let stdout = &output.unwrap().stdout;
+    let output_str = String::from_utf8_lossy(stdout);
+    lazy_static! {
+      static ref RE: Regex = Regex::new(r"@(\d+).(\d+).(\d+)").unwrap();
+    }
+    let caps = RE.captures(&output_str).unwrap();
+    let version = format!("{}.{}.{}",
+      caps.get(1).unwrap().as_str(),
+      caps.get(2).unwrap().as_str(),
+      caps.get(3).unwrap().as_str()
+    );
+    println!("{} v{}", dependency, version);
+    Some(version.to_string())
+  } else {
+    println!("{} not installed", dependency);
+    None
+  }
 }
 
 fn main() {
@@ -56,36 +86,48 @@ fn main() {
           let node_version_compare = tauri::api::version::compare(&node_version, &server_package_json.custom.min_node_version);
           
           if node_version_compare.is_ok() && node_version_compare.expect("failed to compare node versions") <= 0 {
-            let guijs_server_output = Command::new("guijs-server")
-              .args(vec!("--version"))
-              .stdout(Stdio::piped())
-              .output();
-
             let handle2 = webview.handle();
+            notify_state(&handle, String::from("splashscreen"));
             std::thread::spawn(move || {
-              if guijs_server_output.is_ok() {
-                notify_state(&handle, String::from("splashscreen"));
-                let guijs_server_stdout = guijs_server_output.expect("failed to get guijs-server version output").stdout;
-                let guijs_server_version = String::from_utf8_lossy(&guijs_server_stdout);
-                let guijs_server_version_compare = tauri::api::version::compare(&guijs_server_version, &server_package_json.version);
-                if guijs_server_version_compare.is_ok() && guijs_server_version_compare.expect("failed to compare guijs server versions") == 1 {
-                  notify_state(&handle, String::from("update-available"));
-                  tauri::event::listen(String::from("skip-update"), move |_| {
-                    spawn_guijs_server(&handle);
-                  });
-                  tauri::event::listen(String::from("update"), move |_| {
-                    notify_state(&handle2, String::from("downloading-update"));
-                    update_guijs_server();
-                    spawn_guijs_server(&handle2);
-                  });
+              let update_deps = Arc::new(Mutex::new(Vec::new()));
+              let mut install_deps = Vec::new();
+              for (dependency, latest_version) in server_package_json.dev_dependencies.iter() {
+                let current_version = get_current_version(dependency.to_string());
+                if current_version.is_some() {
+                  let current_version_value = current_version.unwrap().replace(">", "").replace("=", "");
+                  let version_compare = tauri::api::version::compare(&current_version_value, &latest_version);
+                  if version_compare.is_ok() && version_compare.expect("failed to compare versions") == 1 {
+                    let mut deps = update_deps
+                      .lock()
+                      .expect("Failed to lock update_deps");
+                    deps.push(dependency.clone());
+                  }
                 } else {
-                  spawn_guijs_server(&handle);
+                  install_deps.push(dependency.clone());
                 }
-              } else {
+              }
+
+              if install_deps.len() > 0 {
                 notify_state(&handle, String::from("first-download"));
-                install_guijs_server();
-                notify_state(&handle, String::from("splashscreen"));
-                spawn_guijs_server(&handle);
+                for dep in install_deps {
+                  install_dependency(dep.to_string());
+                }
+              }
+              if update_deps.lock().expect("Failed to lock update_deps").len() > 0 {
+                notify_state(&handle, String::from("update-available"));
+                tauri::event::listen(String::from("skip-update"), move |_| {
+                  spawn_guijs_server(&handle);
+                });
+                tauri::event::listen(String::from("update"), move |_| {
+                  notify_state(&handle2, String::from("downloading-update"));
+                  for dep in update_deps.lock().expect("Failed to lock update_deps").iter() {
+                    update_dependency(dep.to_string());
+                  }
+                  
+                  spawn_guijs_server(&handle2);
+                });
+              } else {
+                spawn_guijs_server(&handle2);
               }
             });
           } else {
@@ -100,10 +142,11 @@ fn main() {
     .run();
 }
 
-fn run_npm_install_guijs_server(exists: bool) {
+fn run_npm_install(dependency: String, exists: bool) {
   let command = if exists { "update" } else { "install" };
+  println!("{} {}", command, dependency);
   let guijs_stdout = Command::new("npm")
-    .args(vec!("i", "-g", "@guijs/server-core"))
+    .args(vec!("i", "-g", dependency.as_str()))
     .stdout(Stdio::piped())
     .spawn().expect(&format!("failed to {} guijs server package", command))
     .stdout.expect(&format!("failed to get guijs {} stdout", command));
@@ -116,12 +159,12 @@ fn run_npm_install_guijs_server(exists: bool) {
     });
 }
 
-fn install_guijs_server() {
-  run_npm_install_guijs_server(false);
+fn install_dependency(dependency: String) {
+  run_npm_install(dependency, false);
 }
 
-fn update_guijs_server() {
-  run_npm_install_guijs_server(true);
+fn update_dependency(dependency: String) {
+  run_npm_install(dependency, true);
 }
 
 fn notify_state<T: 'static>(handle: &Handle<T>, name: String) {
