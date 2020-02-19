@@ -7,7 +7,8 @@ import Context from './generated/context'
 
 const CACHE_CONTROL = 'no-store, no-cache, must-revalidate, private'
 
-let distPath = resolveModule('@guijs/frontend-core/package.json', process.cwd())
+// eslint-disable-next-line no-eval
+let distPath = resolveModule('@guijs/frontend-core/package.json', eval('__dirname'))
 distPath = path.join(path.dirname(distPath), 'dist')
 
 hook('expressHttp', (ctx: Context) => {
