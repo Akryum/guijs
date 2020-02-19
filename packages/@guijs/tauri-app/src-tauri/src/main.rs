@@ -142,11 +142,18 @@ fn notify_state_with_payload<T: 'static>(handle:  &Handle<T>, name: String, payl
 }
 
 fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
-  let stdout = Command::new("guijs-server")
+  let guijs_server_spawn = Command::new("guijs-server")
     .stdout(Stdio::piped())
     .spawn()
-    .expect("Failed to start guijs server")
-    .stdout.expect("Failed to get guijs server stdout");
+    .expect("Failed to start guijs server");
+
+  tauri::api::command::spawn_relative_command(
+    tauri::api::command::binary_command("guijs-orchestrator".to_string()).expect("failed to get binary command"),
+    vec!(format!("{}", std::process::id()), format!("{}", guijs_server_spawn.id())),
+    std::process::Stdio::piped()
+  ).expect("failed to spawn orchestrator");
+
+  let stdout = guijs_server_spawn.stdout.expect("Failed to get guijs server stdout");
   let reader = BufReader::new(stdout);
 
   let mut webview_started = false;

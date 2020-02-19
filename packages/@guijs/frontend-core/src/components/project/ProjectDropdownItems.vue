@@ -37,7 +37,7 @@ export default {
     const { selectedIndex, onSelect } = useKeyboardNavigation(projects, 'project-dropdown')
 
     onSelect(project => {
-      console.log(project)
+      // console.log(project)
       selectProject(project)
     })
 
