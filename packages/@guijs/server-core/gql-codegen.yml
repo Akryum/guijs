@@ -15,6 +15,7 @@ generates:
         ProjectPackage: '@/schema/pkg/meta-types#MetaProjectPackage'
         PackageMetadata: '@/schema/pkg/meta-types#MetaPackageMetadata'
         NpmScript: '@/schema/script/meta-types#MetaNpmScript'
+        ProjectGenerator: '@/schema/project-type/meta-types#MetaProjectGenerator'
       optionalResolveType: true
   schema-fragment-matcher.js:
     - fragment-matcher

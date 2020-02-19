@@ -4,7 +4,8 @@
       "search": "Search",
       "more-info": "More info",
       "save": "Save",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "proceed": "Proceed"
     },
     "home": {
       "welcome": "Welcome to guijs",
@@ -44,6 +45,17 @@
       "error-no-package-json": "No package.json found",
       "error-name-required": "Project name is required",
       "error-already-exists": "Project already exists in guijs database"
+    },
+    "create-project": {
+      "create-a-project": "Create a project",
+      "simple-project": "Simple project",
+      "simple-project-description": "Project with no workspaces, only a single level.",
+      "mono-repo": "Mono-repository project",
+      "mono-repo-description": "Project with workspaces. Each workspace is a separate sub-project.",
+      "input-name-label": "Project name",
+      "input-name-placeholder": "Enter a project name",
+      "input-generator-label": "Project generator",
+      "input-generator-placeholder": "Select a project generator"
     },
     "file-input": {
       "select-a-file": "Select a file:",

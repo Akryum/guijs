@@ -3,6 +3,11 @@ import { ProjectType, Resolvers } from '@/generated/schema'
 import { hook } from '@nodepack/app-context'
 import Context from '@/generated/context'
 import { query as q } from 'faunadb'
+import { parseJSON } from 'faunadb/src/_json'
+import path from 'path'
+import fs from 'fs-extra'
+import { rcFolder } from '@/util/rc-folder'
+import consola from 'consola'
 
 export const typeDefs = gql`
 type ProjectType {
@@ -17,6 +22,9 @@ extend type Query {
   projectType (id: ID!): ProjectType
 }
 `
+
+const backupFile = path.resolve(rcFolder, 'db/projectTypes.json')
+fs.ensureDirSync(path.dirname(backupFile))
 
 let projectTypes: ProjectType[]
 
@@ -38,14 +46,23 @@ export const resolvers: Resolvers = {
 
 hook('apolloSchema', async (ctx: Context) => {
   if (!projectTypes) {
-    const { data } = await ctx.fauna.query(q.Map(
-      q.Paginate(q.Match(q.Index('projecttypes_sort_by_name_asc')), { size: 10000 }),
-      q.Lambda(['name', 'ref'], q.Get(q.Var('ref'))),
-    ))
-    projectTypes = data.map(doc => ({
-      id: doc.ref.id,
-      ref: doc.red,
-      ...doc.data,
-    }))
+    try {
+      const { data } = await ctx.fauna.query(q.Map(
+        q.Paginate(q.Match(q.Index('projecttypes_sort_by_name_asc')), { size: 10000 }),
+        q.Lambda(['name', 'ref'], q.Get(q.Var('ref'))),
+      ))
+      projectTypes = data.map(doc => ({
+        id: doc.ref.id,
+        ref: doc.ref,
+        ...doc.data,
+      }))
+      await fs.writeJson(backupFile, projectTypes)
+    } catch (e) {
+      if (!fs.existsSync(backupFile)) {
+        throw e
+      }
+      consola.warn(e.message)
+      projectTypes = parseJSON(await fs.readFile(backupFile, { encoding: 'utf8' }))
+    }
   }
 })
