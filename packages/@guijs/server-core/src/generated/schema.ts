@@ -60,7 +60,7 @@ export type CreateProjectInput = {
   monorepo: Scalars['Boolean'],
   name: Scalars['String'],
   baseFolder: Scalars['String'],
-  simpleProject?: Maybe<CreateProjectInput>,
+  simpleProject?: Maybe<CreateSimpleProjectInput>,
 };
 
 export type CreateSimpleProjectInput = {
@@ -572,6 +572,7 @@ export type ResolversTypes = {
   SelectFileInput: SelectFileInput,
   InstallPackageInput: InstallPackageInput,
   CreateProjectInput: CreateProjectInput,
+  CreateSimpleProjectInput: CreateSimpleProjectInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -582,7 +583,6 @@ export type ResolversTypes = {
   UpdateSettingInput: UpdateSettingInput,
   Subscription: ResolverTypeWrapper<{}>,
   CommandRan: ResolverTypeWrapper<Omit<CommandRan, 'command'> & { command: ResolversTypes['Command'] }>,
-  CreateSimpleProjectInput: CreateSimpleProjectInput,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -620,6 +620,7 @@ export type ResolversParentTypes = {
   SelectFileInput: SelectFileInput,
   InstallPackageInput: InstallPackageInput,
   CreateProjectInput: CreateProjectInput,
+  CreateSimpleProjectInput: CreateSimpleProjectInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -630,7 +631,6 @@ export type ResolversParentTypes = {
   UpdateSettingInput: UpdateSettingInput,
   Subscription: {},
   CommandRan: Omit<CommandRan, 'command'> & { command: ResolversParentTypes['Command'] },
-  CreateSimpleProjectInput: CreateSimpleProjectInput,
 };
 
 export type CheckProjectPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CheckProjectPayload'] = ResolversParentTypes['CheckProjectPayload']> = {

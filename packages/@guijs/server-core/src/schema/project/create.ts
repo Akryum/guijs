@@ -11,7 +11,7 @@ input CreateProjectInput {
   monorepo: Boolean!
   name: String!
   baseFolder: String!
-  simpleProject: CreateProjectInput
+  simpleProject: CreateSimpleProjectInput
 }
 
 input CreateSimpleProjectInput {

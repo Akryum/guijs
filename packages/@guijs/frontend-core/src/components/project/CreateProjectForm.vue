@@ -2,6 +2,10 @@
 import { ref } from '@vue/composition-api'
 import FileInput from '../form/FileInput.vue'
 import ProjectGeneratorSelect from './ProjectGeneratorSelect.vue'
+import { useMutation } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
+import { taskFragment } from '../task/fragments'
+import { useTask } from '../task/useTask'
 
 export default {
   components: {
@@ -9,17 +13,64 @@ export default {
     ProjectGeneratorSelect,
   },
 
-  setup () {
+  setup (props, { emit }) {
+    function close () {
+      emit('close')
+    }
+
     const monorepo = ref(null)
     const name = ref('')
     const baseFolder = ref('')
     const projectGeneratorId = ref(null)
+
+    // Submit
+
+    const taskId = ref()
+
+    const { mutate, loading: mutating } = useMutation(gql`
+      mutation createProject ($input: CreateProjectInput!) {
+        task: createProject (input: $input) {
+          ...task
+        }
+      }
+      ${taskFragment}
+    `)
+
+    async function submit () {
+      const { data } = await mutate({
+        input: {
+          monorepo: monorepo.value,
+          name: name.value,
+          baseFolder: baseFolder.value,
+          simpleProject: monorepo.value ? null : {
+            projectGeneratorId: projectGeneratorId.value,
+          },
+        },
+      })
+
+      if (data.task) {
+        taskId.value = data.task.id
+      } else {
+        close()
+      }
+    }
+
+    // Task
+
+    const { running, onSuccess } = useTask(taskId)
+
+    onSuccess(() => {
+      close()
+    })
 
     return {
       monorepo,
       name,
       baseFolder,
       projectGeneratorId,
+      submit,
+      mutating,
+      running,
     }
   },
 }
@@ -101,8 +152,10 @@ export default {
       <div class="flex mt-6">
         <VButton
           :disabled="!baseFolder || !name || (!monorepo && !projectGeneratorId)"
+          :loading="mutating || running"
           iconLeft="done"
           class="flex-1 btn-lg btn-primary"
+          @click="submit()"
         >
           {{ $t('guijs.common.proceed') }}
         </VButton>
