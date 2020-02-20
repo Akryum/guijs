@@ -2,7 +2,6 @@
 
 mode=$1
 target=$2
-
 if [ "$1" = "run" ]; then
   ${2} &
   proc_pid=$!
@@ -23,3 +22,5 @@ function finish {
   kill -9 $tauri_pid
   exit 0
 }
+
+trap finish EXIT
