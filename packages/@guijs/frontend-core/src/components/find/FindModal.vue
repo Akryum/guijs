@@ -164,7 +164,7 @@ export default {
 
     <div
       ref="commandContainer"
-      class="flex flex-col max-h-128 overflow-x-auto"
+      class="flex flex-col"
     >
       <FindItem
         v-for="(command, index) of commands"
@@ -172,6 +172,7 @@ export default {
         :command="command"
         :selected="selectedIndex === index"
         :data-index="index"
+        class="flex-none"
         @select="selectCommand(command.id)"
         @mouseover.native="selectedIndex = index"
       />

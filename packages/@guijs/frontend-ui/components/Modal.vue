@@ -93,7 +93,7 @@ export default {
       ]"
     >
       <!-- Titlebar -->
-      <div class="flex items-stretch border-b border-gray-200 dark:border-gray-950 relative">
+      <div class="flex-none flex items-stretch border-b border-gray-200 dark:border-gray-950 relative">
         <div class="flex-1 h-72p border-r border-gray-200 dark:border-gray-950">
           <slot name="title">
             {{ title }}
@@ -110,7 +110,7 @@ export default {
       </div>
 
       <!-- Body -->
-      <div class="flex-1">
+      <div class="flex-1 overflow-y-auto">
         <slot />
       </div>
     </div>
