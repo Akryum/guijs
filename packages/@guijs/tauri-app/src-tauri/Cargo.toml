@@ -27,8 +27,7 @@ serde = "1.0.104"
 serde_derive = "1.0.104"
 tauri = { path = "../../../../../tauri/tauri", features = [ "event", "open", "edge" ] }
 reqwest = { version = "0.10", features = [ "blocking", "json" ] }
-regex = "1"
-lazy_static = { version = "1.4" }
+which = "3.1"
 
 [target."cfg(windows)".build-dependencies]
 winres = "0.1"
