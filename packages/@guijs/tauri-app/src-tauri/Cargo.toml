@@ -19,6 +19,7 @@ icon = [
   "icons/icon.ico"
 ]
 exception_domain = "localhost"
+external_bin = [ "bin/guijs-orchestrator" ]
 
 [dependencies]
 serde_json = "1.0.44"

@@ -38,32 +38,6 @@ pub struct State {
   pub payload: String,
 }
 
-fn get_current_version(dependency: String) -> Option<String> {
-  println!("getting {} version", dependency);
-  let output = Command::new("npm")
-    .args(vec!("ls", "--depth=0", "-global", dependency.as_str()))
-    .stdout(Stdio::piped())
-    .output();
-  if output.is_ok() {
-    let stdout = &output.unwrap().stdout;
-    let output_str = String::from_utf8_lossy(stdout);
-    lazy_static! {
-      static ref RE: Regex = Regex::new(r"@(\d+).(\d+).(\d+)").unwrap();
-    }
-    let caps = RE.captures(&output_str).unwrap();
-    let version = format!("{}.{}.{}",
-      caps.get(1).unwrap().as_str(),
-      caps.get(2).unwrap().as_str(),
-      caps.get(3).unwrap().as_str()
-    );
-    println!("{} v{}", dependency, version);
-    Some(version.to_string())
-  } else {
-    println!("{} not installed", dependency);
-    None
-  }
-}
-
 fn main() {
   let mut setup = false;
   tauri::AppBuilder::new()
@@ -73,12 +47,12 @@ fn main() {
         let handle = webview.handle();
 
         // check if node exists & matches the minimum version
-        let node_output = Command::new("node")
-          .args(vec!("--version"))
+        let node_version_output = Command::new(orchestrator_command())
+          .args(vec!("version", "node"))
           .stdout(Stdio::piped())
           .output();
-        if node_output.is_ok() {
-          let node_version = String::from_utf8_lossy(&node_output.expect("failed to get node output").stdout).replace("v", "");
+        if node_version_output.is_ok() {
+          let node_version = String::from_utf8_lossy(&node_version_output.expect("failed to get node output").stdout).replace("v", "");
           let server_package_json: PackageJson = reqwest::blocking::get("https://registry.npmjs.org/guijs-version-marker/latest")
             .expect("failed to read server package.json")
             .json::<PackageJson>()
@@ -142,11 +116,43 @@ fn main() {
     .run();
 }
 
+fn orchestrator_command() -> String {
+  tauri::api::command::relative_command(
+    tauri::api::command::binary_command("guijs-orchestrator".to_string()).expect("failed to get binary command")
+  ).expect("failed to get relative command")
+}
+
+fn get_current_version(dependency: String) -> Option<String> {
+  println!("getting {} version", dependency);
+  let output = Command::new(dependency.clone())
+    .args(vec!("--version"))
+    .stdout(Stdio::piped())
+    .output();
+  if output.is_ok() {
+    let stdout = &output.unwrap().stdout;
+    let output_str = String::from_utf8_lossy(stdout);
+    lazy_static! {
+      static ref RE: Regex = Regex::new(r"@(\d+).(\d+).(\d+)").unwrap();
+    }
+    let caps = RE.captures(&output_str).unwrap();
+    let version = format!("{}.{}.{}",
+      caps.get(1).unwrap().as_str(),
+      caps.get(2).unwrap().as_str(),
+      caps.get(3).unwrap().as_str()
+    );
+    println!("{} v{}", dependency, version);
+    Some(version.to_string())
+  } else {
+    println!("{} not installed", dependency);
+    None
+  }
+}
+
 fn run_npm_install(dependency: String, exists: bool) {
   let command = if exists { "update" } else { "install" };
   println!("{} {}", command, dependency);
-  let guijs_stdout = Command::new("npm")
-    .args(vec!("i", "-g", dependency.as_str()))
+  let guijs_stdout = Command::new(orchestrator_command())
+    .args(vec!("install", dependency.as_str()))
     .stdout(Stdio::piped())
     .spawn().expect(&format!("failed to {} guijs server package", command))
     .stdout.expect(&format!("failed to get guijs {} stdout", command));
@@ -185,7 +191,8 @@ fn notify_state_with_payload<T: 'static>(handle:  &Handle<T>, name: String, payl
 }
 
 fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
-  let stdout = Command::new("guijs-server")
+  let stdout = Command::new(orchestrator_command())
+    .args(vec!("run", "guijs-server"))
     .stdout(Stdio::piped())
     .spawn()
     .expect("Failed to start guijs server")
