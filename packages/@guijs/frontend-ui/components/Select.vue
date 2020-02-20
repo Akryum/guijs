@@ -171,13 +171,14 @@ export default {
           v-if="searchable"
           v-model="searchText"
           :placeholder="$t('guijs.common.search')"
-          class="p-4 border-gray-200 dark:border-gray-950 border-b"
+          class="flex-none p-4 border-gray-200 dark:border-gray-950 border-b"
           autoFocus
         />
 
         <VButton
           v-for="(option, index) of filteredOptions"
           :key="option.key || option.value"
+          class="flex-none"
           :class="[
             optionClass,
             {
