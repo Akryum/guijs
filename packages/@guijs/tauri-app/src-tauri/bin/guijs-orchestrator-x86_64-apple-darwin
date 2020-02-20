@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+
+mode=$1
+target=$2
+if [ "$1" = "run" ]; then
+  ${2} &
+  proc_pid=$!
+  tauri_pid=$PPID
+  while true
+  do
+    check=$(ps -p ${tauri_pid})
+    if [ "$check" = "" ]
+    then
+      finish
+    fi
+    sleep 1
+  done
+fi
+
+function finish {
+  kill -9 $proc_pid
+  kill -9 $tauri_pid
+  exit 0
+}
+
+trap finish EXIT
