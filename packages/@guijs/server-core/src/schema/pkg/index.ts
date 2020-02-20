@@ -243,29 +243,39 @@ const fallbackMetadataCache = new LRU<string, MetaPackageMetadata>({
   maxAge: ms('1d'),
 })
 
-async function getFallbackMetadata (id: string, ctx: Context): Promise<MetaPackageMetadata> {
+async function fetchFallbackMetadata (id: string, ctx: Context): Promise<MetaPackageMetadata> {
+  const data = await ctx.npm(`/${encodeURIComponent(id)}`)
+  const metadata = {
+    id,
+    projectTypeIds: [],
+    description: data.description,
+  }
+  fallbackMetadataCache.set(id, metadata)
+  ctx.pubsub.publish('packageMetadataUpdated', {
+    packageMetadataUpdated: metadata,
+  })
+  return metadata
+}
+
+async function getFallbackMetadata (id: string, wait: boolean, ctx: Context): Promise<MetaPackageMetadata> {
   try {
     const cached = fallbackMetadataCache.get(id)
     if (cached) {
       return cached
     }
 
-    const data = await ctx.npm(`/${encodeURIComponent(id)}`)
-
-    const metadata = {
-      id,
-      projectTypeIds: [],
-      description: data.description,
+    const p = fetchFallbackMetadata(id, ctx)
+    if (wait) {
+      const result = await p
+      return result
     }
-    fallbackMetadataCache.set(id, metadata)
-    return metadata
   } catch (e) {
     consola.warn(e.message)
-    return {
-      id,
-      projectTypeIds: [],
-      description: '',
-    }
+  }
+  return {
+    id,
+    projectTypeIds: [],
+    description: '',
   }
 }
 
@@ -286,7 +296,7 @@ export const resolvers: Resolvers = {
         return metadata
       }
 
-      return getFallbackMetadata(pkg.id, ctx)
+      return getFallbackMetadata(pkg.id, false, ctx)
     },
   },
 
@@ -309,7 +319,7 @@ export const resolvers: Resolvers = {
         return metadata
       }
 
-      return getFallbackMetadata(id, ctx)
+      return getFallbackMetadata(id, true, ctx)
     },
   },
 }
