@@ -43,6 +43,17 @@ fn main() {
       if !setup {
         setup = true;
         let handle = webview.handle();
+
+        let reload_handle = webview.handle();
+        tauri::event::listen("reload".to_string(), move |_| {
+          let reload_handle_clone = reload_handle.clone();
+          std::thread::spawn(move || {
+            let ten_millis = std::time::Duration::from_millis(1000);
+            std::thread::sleep(ten_millis);
+            startup_eval(&reload_handle_clone);
+          });
+        });
+
         let update_deps: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
         let update_deps_clone = update_deps.clone();
 
@@ -226,9 +237,20 @@ fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
         // wait for location to be replaced
         let ten_millis = std::time::Duration::from_millis(300);
         std::thread::sleep(ten_millis);
-        handle.dispatch(|webview| {
-           webview.eval(include_str!(concat!(env!("TAURI_DIR"), "/tauri.js")))
-        }).expect("failed to eval tauri entry point");
+        startup_eval(handle);
       }
     });
+}
+
+fn startup_eval<T: 'static>(handle: &Handle<T>) {
+  handle.dispatch(|webview| {
+    webview.eval("
+      window.__GUIJS_RELOAD = function () {
+        alert(`k`)
+        window.tauri.emit('reload')
+        window.location.reload()
+      }
+    ").expect("failed to eval location.replace rewrite");
+    webview.eval(include_str!(concat!(env!("TAURI_DIR"), "/tauri.js")))
+  }).expect("failed to eval tauri entry point");
 }
