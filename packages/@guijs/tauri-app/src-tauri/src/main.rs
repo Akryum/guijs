@@ -43,6 +43,30 @@ fn main() {
       if !setup {
         setup = true;
         let handle = webview.handle();
+        let update_deps: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
+        let update_deps_clone = update_deps.clone();
+
+        let handle2 = webview.handle();
+        let handle3 = webview.handle();
+        tauri::event::listen(String::from("skip-update"), move |_| {
+          let handle_clone = handle2.clone();
+          notify_state(&handle_clone, String::from("splashscreen"));
+          std::thread::spawn(move || {
+            spawn_guijs_server(&handle_clone);
+          });
+        });
+
+        tauri::event::listen(String::from("update"), move |_| {
+          notify_state(&handle3, String::from("downloading-update"));
+          let handle_clone = handle3.clone();
+          let deps_do_update = update_deps_clone.clone();
+          std::thread::spawn(move || {
+            for dep in deps_do_update.lock().expect("Failed to lock update_deps").iter() {
+              update_dependency(dep.to_string());
+            }
+            spawn_guijs_server(&handle_clone);
+          });
+        });
 
         let node_path = which::which("node");
         if node_path.is_ok() {
@@ -60,16 +84,14 @@ fn main() {
             let node_version_compare = tauri::api::version::compare(&node_version, &server_package_json.custom.min_node_version);
             
             if node_version_compare.is_ok() && node_version_compare.expect("failed to compare node versions") <= 0 {
-              let handle2 = webview.handle();
               notify_state(&handle, String::from("splashscreen"));
               std::thread::spawn(move || {
-                let update_deps = Arc::new(Mutex::new(Vec::new()));
                 let mut install_deps = Vec::new();
                 for (dependency, latest_version) in server_package_json.dev_dependencies.iter() {
                   let current_version = get_current_version(dependency.to_string());
                   if current_version.is_some() {
                     let current_version_value = current_version.unwrap().replace(">", "").replace("=", "");
-                    let version_compare = tauri::api::version::compare(&current_version_value, &latest_version);
+                    let version_compare = tauri::api::version::compare(&current_version_value, &latest_version.replace("^", ""));
                     if version_compare.is_ok() && version_compare.expect("failed to compare versions") == 1 {
                       println!("found update from {} to {}", current_version_value, latest_version);
                       let mut deps = update_deps
@@ -90,19 +112,8 @@ fn main() {
                 }
                 if update_deps.lock().expect("Failed to lock update_deps").len() > 0 {
                   notify_state(&handle, String::from("update-available"));
-                  tauri::event::listen(String::from("skip-update"), move |_| {
-                    spawn_guijs_server(&handle);
-                  });
-                  tauri::event::listen(String::from("update"), move |_| {
-                    notify_state(&handle2, String::from("downloading-update"));
-                    for dep in update_deps.lock().expect("Failed to lock update_deps").iter() {
-                      update_dependency(dep.to_string());
-                    }
-                    
-                    spawn_guijs_server(&handle2);
-                  });
                 } else {
-                  spawn_guijs_server(&handle2);
+                  spawn_guijs_server(&handle);
                 }
               });
             } else {
