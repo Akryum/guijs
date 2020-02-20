@@ -1,6 +1,6 @@
 {
   "name": "@guijs/frontend-core",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "author": "Guillaume Chau",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,7 +10,7 @@
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
-    "@guijs/frontend-ui": "^0.1.5",
+    "@guijs/frontend-ui": "^0.1.9",
     "@ky-is/vue-cli-plugin-tailwind": "^2.0.0",
     "@vue/apollo-composable": "^4.0.0-alpha.6",
     "@vue/apollo-util": "^4.0.0-alpha.1",
