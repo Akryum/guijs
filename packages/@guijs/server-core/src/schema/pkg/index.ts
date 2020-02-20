@@ -16,6 +16,7 @@ import { onProjectOpen } from '../project/open'
 import { detectWorkspaces } from '../project/workspace'
 import { onProjectClose } from '../project/close'
 import { addKeybinding } from '../keybinding'
+import LRU from 'lru-cache'
 
 const PACKAGE_CACHE_VERSION = '0.0.1'
 
@@ -146,46 +147,50 @@ export async function getWorkspacePackages (
   // Get data from awesomejs.dev
 
   if (missingMetadata.length) {
-    const queries = []
-    // Get packages by name
-    for (const pkg of missingMetadata) {
-      queries.push(q.Let({
-        ref: q.Match(q.Index('packages_by_name'), pkg.id),
-      },
-      q.If(q.Exists(q.Var('ref')),
-        q.Get(q.Var('ref')),
-        null,
-      )))
-    }
-
-    // It should return null for packages not found
-    const faunaData = await ctx.fauna.query<FaunaPackage[]>(q.Map(
-      queries,
-      q.Lambda(['item'], q.If(q.Not(q.IsNull(q.Var('item'))), SELECTION, null)),
-    ))
-
-    const newMetadata: MetaPackageMetadata[] = []
-
-    // Create metadata
-    for (let i = 0; i < faunaData.length; i++) {
-      const raw = faunaData[i]
-      if (raw) {
-        const metadata: MetaPackageMetadata = {
-          id: raw.name,
-          awesomejsId: raw.id,
-          cacheVersion: PACKAGE_CACHE_VERSION,
-          projectTypeIds: raw.projectTypes.map(ref => ref.id),
-          official: raw.tags.includes('official'),
-          description: raw.description,
-          defaultLogo: raw.avatar,
-        }
-        newMetadata.push(metadata)
-        missingMetadata[i].metadata = metadata
+    try {
+      const queries = []
+      // Get packages by name
+      for (const pkg of missingMetadata) {
+        queries.push(q.Let({
+          ref: q.Match(q.Index('packages_by_name'), pkg.id),
+        },
+        q.If(q.Exists(q.Var('ref')),
+          q.Get(q.Var('ref')),
+          null,
+        )))
       }
-    }
 
-    // Save to cache
-    await ctx.db.packages.insert(newMetadata)
+      // It should return null for packages not found
+      const faunaData = await ctx.fauna.query<FaunaPackage[]>(q.Map(
+        queries,
+        q.Lambda(['item'], q.If(q.Not(q.IsNull(q.Var('item'))), SELECTION, null)),
+      ))
+
+      const newMetadata: MetaPackageMetadata[] = []
+
+      // Create metadata
+      for (let i = 0; i < faunaData.length; i++) {
+        const raw = faunaData[i]
+        if (raw) {
+          const metadata: MetaPackageMetadata = {
+            id: raw.name,
+            awesomejsId: raw.id,
+            cacheVersion: PACKAGE_CACHE_VERSION,
+            projectTypeIds: raw.projectTypes.map(ref => ref.id),
+            official: raw.tags.includes('official'),
+            description: raw.description,
+            defaultLogo: raw.avatar,
+          }
+          newMetadata.push(metadata)
+          missingMetadata[i].metadata = metadata
+        }
+      }
+
+      // Save to cache
+      await ctx.db.packages.insert(newMetadata)
+    } catch (e) {
+      consola.warn(`Couldn't fetch package metadata`, e.message)
+    }
   }
 
   return list as MetaProjectPackage[]
@@ -233,22 +238,44 @@ async function fetchPackageMetadata (id: string, ctx: Context) {
   }
 }
 
-async function getFallbackMetadata (id: string, ctx: Context): Promise<MetaPackageMetadata> {
-  try {
-    const data = await ctx.npm(`/${encodeURIComponent(id)}`)
+const fallbackMetadataCache = new LRU<string, MetaPackageMetadata>({
+  max: 1000,
+  maxAge: ms('1d'),
+})
 
-    return {
-      id,
-      projectTypeIds: [],
-      description: data.description,
+async function fetchFallbackMetadata (id: string, ctx: Context): Promise<MetaPackageMetadata> {
+  const data = await ctx.npm(`/${encodeURIComponent(id)}`)
+  const metadata = {
+    id,
+    projectTypeIds: [],
+    description: data.description,
+  }
+  fallbackMetadataCache.set(id, metadata)
+  ctx.pubsub.publish('packageMetadataUpdated', {
+    packageMetadataUpdated: metadata,
+  })
+  return metadata
+}
+
+async function getFallbackMetadata (id: string, wait: boolean, ctx: Context): Promise<MetaPackageMetadata> {
+  try {
+    const cached = fallbackMetadataCache.get(id)
+    if (cached) {
+      return cached
+    }
+
+    const p = fetchFallbackMetadata(id, ctx)
+    if (wait) {
+      const result = await p
+      return result
     }
   } catch (e) {
     consola.warn(e.message)
-    return {
-      id,
-      projectTypeIds: [],
-      description: '',
-    }
+  }
+  return {
+    id,
+    projectTypeIds: [],
+    description: '',
   }
 }
 
@@ -269,7 +296,7 @@ export const resolvers: Resolvers = {
         return metadata
       }
 
-      return getFallbackMetadata(pkg.id, ctx)
+      return getFallbackMetadata(pkg.id, false, ctx)
     },
   },
 
@@ -292,7 +319,7 @@ export const resolvers: Resolvers = {
         return metadata
       }
 
-      return getFallbackMetadata(id, ctx)
+      return getFallbackMetadata(id, true, ctx)
     },
   },
 }

@@ -6,8 +6,13 @@ import { projectWorkspaceFragment } from './fragments'
 import { ref, computed } from '@vue/composition-api'
 import { bindScope } from '@/util/keybinding'
 import { useKeyboardNavigation } from '@guijs/frontend-ui/util/navigation'
+import ProjectTypeLogo from '../project/ProjectTypeLogo.vue'
 
 export default {
+  components: {
+    ProjectTypeLogo,
+  },
+
   setup (props, { emit }) {
     const route = useRoute()
 
@@ -86,11 +91,10 @@ export default {
         @mouseover.native="selectedIndex = index"
         @click="$emit('select', w.id)"
       >
-        <img
-          :src="w.type.logo"
-          :alt="w.type.name"
+        <ProjectTypeLogo
+          :projectType="w.type"
           class="w-6 h-6 rounded mr-4 flex-none"
-        >
+        />
         <div class="text-left flex-1 overflow-hidden w-0">
           <div class="truncate">
             {{ w.name }}

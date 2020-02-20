@@ -13,6 +13,18 @@ import gql from 'graphql-tag'
 
 const isWindows = ['Windows', 'Win16', 'Win32', 'WinCE'].includes(navigator.platform)
 
+const isWebgl2Supported = (() => {
+  let isSupported = window.WebGL2RenderingContext ? undefined : false
+  return () => {
+    if (isSupported === undefined) {
+      const canvas = document.createElement('canvas')
+      const gl = canvas.getContext('webgl2', { depth: false, antialias: false })
+      isSupported = gl instanceof window.WebGL2RenderingContext
+    }
+    return isSupported
+  }
+})()
+
 const terminalCache = {}
 
 const defaultTheme = {
@@ -193,7 +205,9 @@ export default {
 
         term.open(cached.targetEl)
 
-        term.loadAddon(new WebglAddon())
+        if (isWebgl2Supported()) {
+          term.loadAddon(new WebglAddon())
+        }
 
         // Data
 

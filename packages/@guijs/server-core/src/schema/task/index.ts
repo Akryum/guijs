@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import { Task, TaskStatus, Resolvers } from '@/generated/schema'
 import Context from '@/generated/context'
 import shortid from 'shortid'
+import consola from 'consola'
 
 export const typeDefs = gql`
 type Task {
@@ -92,6 +93,7 @@ export function executeTask (options: TaskOptions, func: (api?: TaskApi) => Prom
       })
       setStatus(TaskStatus.Success)
     } catch (e) {
+      consola.error(`Task ${options.type} failed`, e.message)
       setStatus(TaskStatus.Error, e.message)
     }
   })()
