@@ -229,6 +229,7 @@ fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
     .lines()
     .filter_map(|line| line.ok())
     .for_each(|line| {
+      println!("{}", line);
       if !webview_started {
         webview_started = true;
         handle.dispatch(move |webview| {
