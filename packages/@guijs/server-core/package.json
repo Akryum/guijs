@@ -1,6 +1,6 @@
 {
   "name": "@guijs/server-core",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": "Guillaume Chau",
   "scripts": {
     "dev": "nodepack-service dev",
@@ -12,9 +12,9 @@
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
-    "@guijs/frontend-core": "^0.1.7",
+    "@guijs/frontend-core": "^0.1.8",
     "@guijs/get-workspaces": "^0.1.1",
-    "@guijs/native-dialog": "^0.1.1",
+    "@guijs/native-dialog": "^0.1.8",
     "@nodepack/app": "^0.8.0",
     "@nodepack/app-context": "^0.8.0",
     "@nodepack/module": "^0.8.0",
