@@ -16,6 +16,7 @@ import { onProjectOpen } from '../project/open'
 import { detectWorkspaces } from '../project/workspace'
 import { onProjectClose } from '../project/close'
 import { addKeybinding } from '../keybinding'
+import LRU from 'lru-cache'
 
 const PACKAGE_CACHE_VERSION = '0.0.1'
 
@@ -237,15 +238,27 @@ async function fetchPackageMetadata (id: string, ctx: Context) {
   }
 }
 
+const fallbackMetadataCache = new LRU<string, MetaPackageMetadata>({
+  max: 1000,
+  maxAge: ms('1d'),
+})
+
 async function getFallbackMetadata (id: string, ctx: Context): Promise<MetaPackageMetadata> {
   try {
+    const cached = fallbackMetadataCache.get(id)
+    if (cached) {
+      return cached
+    }
+
     const data = await ctx.npm(`/${encodeURIComponent(id)}`)
 
-    return {
+    const metadata = {
       id,
       projectTypeIds: [],
       description: data.description,
     }
+    fallbackMetadataCache.set(id, metadata)
+    return metadata
   } catch (e) {
     consola.warn(e.message)
     return {
