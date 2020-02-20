@@ -21,7 +21,7 @@ export interface Workspace {
 }
 
 export default async function getWorkspaces (
-  opts: Options = {}
+  opts: Options = {},
 ): Promise<Array<Workspace> | null> {
   const cwd = opts.cwd || process.cwd()
   const tools = opts.tools || ['yarn', 'bolt', 'lerna', 'root']
@@ -44,8 +44,8 @@ export default async function getWorkspaces (
     const lernaFile = path.resolve(cwd, 'lerna.json')
     if (fs.existsSync(lernaFile)) {
       const lernaFolders = (await getPackages(cwd)).map(pkg => pkg.location)
-      return await Promise.all(
-        lernaFolders.map(folder => mapWorkspace(cwd, folder, []))
+      return Promise.all(
+        lernaFolders.map(folder => mapWorkspace(cwd, folder, [])),
       )
     }
   }
@@ -71,15 +71,15 @@ export default async function getWorkspaces (
       .sort()
       .filter(dir => fs.existsSync(path.join(dir, 'package.json')))
       .map(async dir =>
-        mapWorkspace(cwd, dir, pkgJsonsMissingNameField)
-      )
+        mapWorkspace(cwd, dir, pkgJsonsMissingNameField),
+      ),
   )
   if (pkgJsonsMissingNameField.length !== 0) {
     pkgJsonsMissingNameField.sort()
     throw new Error(
       `The following package.jsons are missing the 'name' field:\n${pkgJsonsMissingNameField.join(
-        '\n'
-      )}`
+        '\n',
+      )}`,
     )
   }
   return results
@@ -89,7 +89,7 @@ async function mapWorkspace (cwd: string, dir: string, pkgJsonsMissingNameField:
   const config = await fs.readJson(path.join(dir, 'package.json'))
   if (!config.name) {
     pkgJsonsMissingNameField.push(
-      path.relative(cwd, path.join(dir, 'package.json'))
+      path.relative(cwd, path.join(dir, 'package.json')),
     )
   }
   return { config, name: config.name, dir }
