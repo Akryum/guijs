@@ -1,6 +1,6 @@
 {
   "name": "@guijs/frontend-tauri",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "author": "Guillaume Chau",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
     "autoinstall": "while inotifywait -e close_write ./package.json; do yarn; done"
   },
   "dependencies": {
-    "@guijs/frontend-ui": "^0.1.9",
+    "@guijs/frontend-ui": "^0.1.10",
     "core-js": "^3.4.4",
     "tauri": "^0.4.1",
     "vue": "^2.6.10",
