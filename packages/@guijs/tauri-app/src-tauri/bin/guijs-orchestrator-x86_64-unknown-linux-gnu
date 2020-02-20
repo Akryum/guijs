@@ -3,6 +3,12 @@
 mode=$1
 target=$2
 
+if [ "$1" = "debug" ]
+then
+  printf "%s\n" $PATH
+  exit 
+fi
+
 if [ "$1" = "version" ]
 then
   echo "$(${2} --version)"
@@ -35,3 +41,5 @@ function finish {
   kill -9 $tauri_pid
   exit 0
 }
+
+trap finish EXIT
