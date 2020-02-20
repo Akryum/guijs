@@ -8,7 +8,7 @@ export default {
 
   data () {
     return {
-      progress: 0,
+      progress: -1,
     }
   },
 }
