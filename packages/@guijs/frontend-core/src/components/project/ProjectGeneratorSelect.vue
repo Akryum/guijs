@@ -69,7 +69,10 @@ export default {
         </span>
       </div>
 
-      <div class="text-gray-500">
+      <div
+        v-if="option.data.packageName"
+        class="text-gray-500"
+      >
         <i class="material-icons text-sm">extension</i>
         {{ option.data.packageName }}
       </div>

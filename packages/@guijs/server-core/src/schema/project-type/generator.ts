@@ -16,7 +16,7 @@ type ProjectGenerator {
   id: ID!
   name: String!
   projectType: ProjectType!
-  packageName: String!
+  packageName: String
 }
 
 extend type Query {

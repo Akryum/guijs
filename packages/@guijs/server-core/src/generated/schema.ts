@@ -265,7 +265,7 @@ export type ProjectGenerator = {
   id: Scalars['ID'],
   name: Scalars['String'],
   projectType: ProjectType,
-  packageName: Scalars['String'],
+  packageName?: Maybe<Scalars['String']>,
 };
 
 export type ProjectPackage = {
@@ -737,7 +737,7 @@ export type ProjectGeneratorResolvers<ContextType = Context, ParentType extends 
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   projectType?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
-  packageName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  packageName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
