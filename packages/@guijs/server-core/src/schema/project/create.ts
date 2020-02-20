@@ -89,7 +89,7 @@ export const resolvers: Resolvers = {
           projectPath,
         }, ctx)
         if (input.monorepo) {
-          api.customOptions.worspaces = [
+          api.customOptions.workspaces = [
             'packages/*',
           ]
         }

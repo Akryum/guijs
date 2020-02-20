@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs-extra'
 
 interface CustomOptions {
-  worskpaces: string[]
+  workspaces: string[]
 }
 
 export async function vanillaJsGenerator (api: ProjectGeneratorAPI<CustomOptions>) {
@@ -19,17 +19,21 @@ export async function vanillaJsGenerator (api: ProjectGeneratorAPI<CustomOptions
       private: true,
     }
 
-    if (api.customOptions.worskpaces) {
-      pkg.workspaces = api.customOptions.worskpaces
+    if (api.customOptions.workspaces) {
+      pkg.workspaces = api.customOptions.workspaces
       await fs.writeJson(path.join(api.options.projectPath, 'lerna.json'), {
         npmClient: 'yarn',
         useWorkspaces: true,
         version: '0.0.0',
-        packages: api.customOptions.worskpaces,
+        packages: api.customOptions.workspaces,
+      }, {
+        spaces: 2,
       })
     }
 
-    await fs.writeJson(path.join(api.options.projectPath, 'package.json'), pkg)
+    await fs.writeJson(path.join(api.options.projectPath, 'package.json'), pkg, {
+      spaces: 2,
+    })
 
     await fs.writeFile(path.join(api.options.projectPath, '.gitignore'), gitignore)
   })
