@@ -8,6 +8,10 @@ import path from 'path'
 import { ProjectGeneratorAPI, ProjectGeneratorAPIOptions } from '@/api/ProjectGenerator'
 import { vanillaJsGenerator } from '@/util/generator-js'
 import { executeTask } from '../task'
+import { isPluginInstalled, installPlugin, pluginFolder } from '../global-plugin'
+import { getProjectGenerators } from '../project-type/generator'
+import { loadModule } from '@nodepack/module'
+import { addProjectWorkspace } from './workspace'
 
 export const typeDefs = gql`
 extend type Mutation {
@@ -54,7 +58,7 @@ async function setupProjectGenerator (generator: ProjectGeneratorSetup, options:
   return api
 }
 
-async function runGenerateor (api: ProjectGeneratorAPI, ctx: Context) {
+async function runGenerator (api: ProjectGeneratorAPI, ctx: Context) {
   // Requirements
   for (const requirement of api.requirementCheckHandlers) {
     consola.log(`Checking requirement ${requirement.name}...`)
@@ -77,8 +81,8 @@ export const resolvers: Resolvers = {
       type: 'create-project',
       payload: input,
     }, async () => {
+      const projectPath = path.join(input.baseFolder, input.name)
       if (input.monorepo || (input.simpleProject && input.simpleProject.projectGeneratorId === JS_GENERATOR_ID)) {
-        const projectPath = path.join(input.baseFolder, input.name)
         const api = await setupProjectGenerator(vanillaJsGenerator, {
           projectName: input.name,
           baseFolder: input.baseFolder,
@@ -89,10 +93,41 @@ export const resolvers: Resolvers = {
             'packages/*',
           ]
         }
-        await runGenerateor(api, ctx)
+        await runGenerator(api, ctx)
         await addNewProject({
           name: input.name,
           path: projectPath,
+        }, ctx)
+      } else if (input.simpleProject) {
+        // Resolve generator
+        const projectGenerator = getProjectGenerators().find(g => g.id === input.simpleProject.projectGeneratorId)
+        if (!isPluginInstalled(projectGenerator.packageName)) {
+          await installPlugin(projectGenerator.packageName)
+        }
+        let generatorModule = loadModule(`${projectGenerator.packageName}${projectGenerator.module ? `/${projectGenerator.module}` : ''}`, pluginFolder, true)
+        if (generatorModule.default) {
+          generatorModule = generatorModule.default
+        }
+
+        // Execute generator
+        const api = await setupProjectGenerator(generatorModule, {
+          projectName: input.name,
+          baseFolder: input.baseFolder,
+          projectPath,
+        }, ctx)
+        await runGenerator(api, ctx)
+
+        // Create project item
+        const project = await addNewProject({
+          name: input.name,
+          path: projectPath,
+        }, ctx)
+        await addProjectWorkspace(project, {
+          id: '__root',
+          name: input.name,
+          absolutePath: projectPath,
+          relativePath: '',
+          typeId: projectGenerator.projectType.id,
         }, ctx)
       }
     }, ctx),

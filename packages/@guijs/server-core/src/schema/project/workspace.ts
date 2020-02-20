@@ -87,6 +87,20 @@ export async function getProjectWorkspace (project: MetaProject, workspaceId: st
   return project.workspaces.find(w => w.id === workspaceId)
 }
 
+export async function addProjectWorkspace (project: MetaProject, workspace: MetaProjectWorkspace, ctx: Context) {
+  if (project.workspaces) {
+    project.workspaces.push(workspace)
+  }
+  await ctx.db.projects.update({
+    _id: project._id,
+  }, {
+    $push: {
+      workspaces: workspace,
+    },
+  })
+  return project
+}
+
 export const resolvers: Resolvers = {
   ProjectWorkspace: {
     type: (workspace) => getProjectTypes().find(pt => pt.id === workspace.typeId),
