@@ -15,6 +15,7 @@ import { loadModule } from '@nodepack/module'
 import { addProjectWorkspace } from './workspace'
 import { MetaProjectWorkspace } from './meta-types'
 import { withFilter } from 'apollo-server-express'
+import { MetaProjectGenerator } from '../project-type/meta-types'
 
 export const typeDefs = gql`
 extend type Mutation {
@@ -64,6 +65,23 @@ async function addNewProject (options: AddProjectOptions, ctx: Context) {
 }
 
 type ProjectGeneratorSetup = (api: ProjectGeneratorAPI) => Promise<void> | void
+
+async function loadGenerator (projectGenerator: MetaProjectGenerator) {
+  if (!isPluginInstalled(projectGenerator.packageName)) {
+    await installPlugin(projectGenerator.packageName)
+  }
+  const query = `${projectGenerator.packageName}${projectGenerator.module ? `/${projectGenerator.module}` : ''}`
+  let generatorModule = loadModule(query, pluginFolder, true)
+
+  if (!generatorModule) {
+    throw new Error(`Couldn't load project generator ${query}`)
+  }
+
+  if (generatorModule.default) {
+    generatorModule = generatorModule.default
+  }
+  return generatorModule
+}
 
 async function setupProjectGenerator (generator: ProjectGeneratorSetup, options: ProjectGeneratorAPIOptions, ctx: Context) {
   const api = new ProjectGeneratorAPI(options, ctx)
@@ -115,13 +133,7 @@ export const resolvers: Resolvers = {
       } else if (input.simpleProject) {
         // Resolve generator
         const projectGenerator = getProjectGenerators().find(g => g.id === input.simpleProject.projectGeneratorId)
-        if (!isPluginInstalled(projectGenerator.packageName)) {
-          await installPlugin(projectGenerator.packageName)
-        }
-        let generatorModule = loadModule(`${projectGenerator.packageName}${projectGenerator.module ? `/${projectGenerator.module}` : ''}`, pluginFolder, true)
-        if (generatorModule.default) {
-          generatorModule = generatorModule.default
-        }
+        const generatorModule = await loadGenerator(projectGenerator)
 
         // Execute generator
         const api = await setupProjectGenerator(generatorModule, {
@@ -167,13 +179,7 @@ export const resolvers: Resolvers = {
       if (projectGenerator.id === JS_GENERATOR_ID) {
         generatorModule = vanillaJsGenerator
       } else {
-        if (!isPluginInstalled(projectGenerator.packageName)) {
-          await installPlugin(projectGenerator.packageName)
-        }
-        let generatorModule = loadModule(`${projectGenerator.packageName}${projectGenerator.module ? `/${projectGenerator.module}` : ''}`, pluginFolder, true)
-        if (generatorModule.default) {
-          generatorModule = generatorModule.default
-        }
+        generatorModule = await loadGenerator(projectGenerator)
       }
 
       // Execute generator
