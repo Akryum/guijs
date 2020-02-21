@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="240"
+   height="136"
+   viewBox="0 0 63.499998 35.983334"
+   version="1.1"
+   id="svg8"
+>
+  <g
+     id="layer1"
+     transform="translate(0,-261.01665)">
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 10.583337,284.29999 v -12.7 H 2.1166666 v 12.7 h 8.4666704 v 2.11667 c 0,4.23333 -2.1166704,8.46666 -8.4666704,8.46666"
+       id="path936"/>
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 19.050002,271.59999 v 12.75443 l 8.46667,-0.0544 v -12.7"
+       id="path938"/>
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 35.983332,271.59999 v 12.7"
+       id="path940"/>
+    <path
+       style="fill:none;stroke:#f7df1e;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 44.450002,271.59999 v 14.81667 c 0,4.23333 -2.11667,8.46666 -8.46667,8.46666"
+       id="path942"/>
+    <path
+       style="fill:none;stroke:#f7df1e;stroke-width:4.23333311;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 61.383332,271.59999 h -8.46667 v 6.35 h 8.46667 c 0,3.175 0,6.35 -5.29167,6.35 h -3.175"
+       id="path944"/>
+    <path
+       style="fill:none;stroke:#f7df1e;stroke-width:4.23333311;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 33.866672,263.13333 h 12.7"
+       id="path946"/>
+  </g>
+</svg>
