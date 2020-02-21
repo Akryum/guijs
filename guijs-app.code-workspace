@@ -28,6 +28,9 @@
 			"path": "legacy/builtin-plugin"
 		},
 		{
+			"path": "../../.guijs-dev"
+		},
+		{
 			"path": "."
 		},
 	]
