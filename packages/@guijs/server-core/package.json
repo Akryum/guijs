@@ -22,6 +22,7 @@
     "@nodepack/plugin-db-fauna": "^0.8.3",
     "@nodepack/plugin-express": "^0.8.0",
     "@nodepack/utils": "^0.8.3",
+    "clear-module": "^4.0.0",
     "consola": "^2.11.3",
     "default-shell": "^1.0.1",
     "elasticlunr": "^0.9.5",
