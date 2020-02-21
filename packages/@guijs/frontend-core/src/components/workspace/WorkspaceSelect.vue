@@ -1,16 +1,18 @@
 <script>
 import { ref, watch } from '@vue/composition-api'
 import { useRouter, useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery, useResult, useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
 import { onKeybind } from '@/util/keybinding'
 import Keybindings from '../keybinding/Keybindings.vue'
+import ProjectTypeLogo from '../project/ProjectTypeLogo.vue'
 import WorkspaceList from './WorkspaceList.vue'
 
 export default {
   components: {
     Keybindings,
+    ProjectTypeLogo,
     WorkspaceList,
   },
 
@@ -70,6 +72,23 @@ export default {
       }
     })
 
+    // New workspace
+
+    const { onResult: onNewWorkspace } = useSubscription(gql`
+      subscription projectWorkspaceAdded ($projectId: ID) {
+        projectWorkspaceAdded (projectId: $projectId) {
+          ...projectWorkspace
+        }
+      }
+      ${projectWorkspaceFragment}
+    `, () => ({
+      projectId: route.value.params.projectId,
+    }))
+
+    onNewWorkspace(result => {
+      select(result.data.projectWorkspaceAdded.id)
+    })
+
     // Keybindings
 
     onKeybind('workspace-select', () => {
@@ -99,11 +118,10 @@ export default {
           extend
         >
           <template v-if="currentWorkspace">
-            <img
-              :src="currentWorkspace.type.logo"
-              :alt="currentWorkspace.type.name"
+            <ProjectTypeLogo
+              :projectType="currentWorkspace.type"
               class="w-6 h-6 rounded mr-4 flex-none"
-            >
+            />
             <div
               class="flex-1 w-0 truncate text-left leading-normal"
             >

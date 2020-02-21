@@ -43,7 +43,7 @@ export default {
         class="dot rounded-full"
         :class="{
           'w-3 h-3 border-gray-500': status === 'idle' || status === 'killed',
-          'w-5 h-5 border-teal-400 dark:border-teal-600': status === 'running',
+          'w-5 h-5 border-teal-400 dark:border-teal-600 text-teal-400 dark:text-teal-600': status === 'running',
         }"
       />
     </div>

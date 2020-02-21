@@ -34,7 +34,11 @@ export default {
       if (value) {
         isOpening = true
         // @TODO find a better way?
-        location.reload()
+        if (window.__GUIJS_RELOAD) {
+          window.__GUIJS_RELOAD()
+        } else {
+          location.reload()
+        }
       }
     }, {
       lazy: true,

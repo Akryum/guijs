@@ -26,6 +26,9 @@ export default {
         shownUids.add(vm._uid)
         document.body.classList.add('popper-open')
         animate()
+        setTimeout(() => {
+          popper.value.$refs.popperContent.$refs.popover.focus()
+        }, 50)
       } else {
         triggerHide()
       }

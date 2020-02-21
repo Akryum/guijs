@@ -4,7 +4,8 @@
       "search": "Search",
       "more-info": "More info",
       "save": "Save",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "proceed": "Proceed"
     },
     "home": {
       "welcome": "Welcome to guijs",
@@ -45,6 +46,17 @@
       "error-name-required": "Project name is required",
       "error-already-exists": "Project already exists in guijs database"
     },
+    "create-project": {
+      "create-a-project": "Create a project",
+      "simple-project": "Simple project",
+      "simple-project-description": "Project with no workspaces, only a single level.",
+      "mono-repo": "Mono-repository project",
+      "mono-repo-description": "Project with workspaces. Each workspace is a separate sub-project.",
+      "input-name-label": "Project name",
+      "input-name-placeholder": "Enter a project name",
+      "input-generator-label": "Project generator",
+      "input-generator-placeholder": "Select a project generator"
+    },
     "file-input": {
       "select-a-file": "Select a file:",
       "select-a-folder": "Select a folder:",
@@ -67,6 +79,9 @@
       "packages": "Packages",
       "scripts": "Scripts"
     },
+    "project-dropdown": {
+      "no-recent-projects": "No recent projects"
+    },
     "workspace": {
       "select-button": "<div>{name}</div><div class=\"text-gray-500\">Type: {type}</div>",
       "root": "(root)",
@@ -80,6 +95,14 @@
       "input-name-placeholder": "Enter a workspace name",
       "input-type-label": "Workspace type",
       "input-type-placeholder": "Select a workspace type"
+    },
+    "create-workspace": {
+      "create-workspace": "Create workspace",
+      "create-a-workspace": "Create a workspace",
+      "input-name-label": "Workspace name",
+      "input-name-placeholder": "Enter a workspace name",
+      "input-generator-label": "Project generator",
+      "input-generator-placeholder": "Select a project generator"
     },
     "package": {
       "official": "official",

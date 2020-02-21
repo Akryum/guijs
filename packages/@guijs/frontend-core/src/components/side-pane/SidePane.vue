@@ -1,6 +1,6 @@
 <script>
 import NoProjectOpen from './NoProjectOpen.vue'
-import ProjectDropdown from './ProjectDropdown.vue'
+import ProjectDropdown from '../project/ProjectDropdown.vue'
 import ProjectNav from './ProjectNav.vue'
 
 export default {

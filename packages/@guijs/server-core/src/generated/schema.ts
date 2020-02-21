@@ -5,6 +5,7 @@ import { MetaSetting } from '@/schema/setting/meta-types';
 import { MetaProject, MetaProjectWorkspace } from '@/schema/project/meta-types';
 import { MetaProjectPackage, MetaPackageMetadata } from '@/schema/pkg/meta-types';
 import { MetaNpmScript } from '@/schema/script/meta-types';
+import { MetaProjectGenerator } from '@/schema/project-type/meta-types';
 import { Context } from '@context';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -54,6 +55,22 @@ export enum CommandType {
   Config = 'config',
   Script = 'script'
 }
+
+export type CreateProjectInput = {
+  monorepo: Scalars['Boolean'],
+  name: Scalars['String'],
+  baseFolder: Scalars['String'],
+  simpleProject?: Maybe<CreateSimpleProjectInput>,
+};
+
+export type CreateProjectWorkspaceInput = {
+  name: Scalars['String'],
+  projectGeneratorId: Scalars['ID'],
+};
+
+export type CreateSimpleProjectInput = {
+  projectGeneratorId: Scalars['ID'],
+};
 
 export type CreateTerminalInput = {
   name: Scalars['String'],
@@ -110,6 +127,8 @@ export type Mutation = {
   runCommand?: Maybe<Command>,
   selectFile?: Maybe<Scalars['String']>,
   installPackage?: Maybe<Task>,
+  createProject?: Maybe<Task>,
+  createProjectWorkspace?: Maybe<Task>,
   checkImportProject: CheckProjectPayload,
   importProject: Project,
   editProjectWorkspace?: Maybe<ProjectWorkspace>,
@@ -148,6 +167,16 @@ export type MutationSelectFileArgs = {
 
 export type MutationInstallPackageArgs = {
   input: InstallPackageInput
+};
+
+
+export type MutationCreateProjectArgs = {
+  input: CreateProjectInput
+};
+
+
+export type MutationCreateProjectWorkspaceArgs = {
+  input: CreateProjectWorkspaceInput
 };
 
 
@@ -242,6 +271,14 @@ export type ProjectWorkspaceArgs = {
   id: Scalars['ID']
 };
 
+export type ProjectGenerator = {
+   __typename?: 'ProjectGenerator',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  projectType: ProjectType,
+  packageName?: Maybe<Scalars['String']>,
+};
+
 export type ProjectPackage = {
    __typename?: 'ProjectPackage',
   id: Scalars['ID'],
@@ -286,6 +323,7 @@ export type Query = {
   keybindings: Array<Keybinding>,
   keybinding?: Maybe<Keybinding>,
   packageMetadata?: Maybe<PackageMetadata>,
+  projectGenerators: Array<ProjectGenerator>,
   projectTypes: Array<ProjectType>,
   projectType?: Maybe<ProjectType>,
   projects: Array<Project>,
@@ -393,6 +431,7 @@ export type Subscription = {
   commandRan?: Maybe<CommandRan>,
   projectPackageAdded: ProjectPackage,
   packageMetadataUpdated?: Maybe<PackageMetadata>,
+  projectWorkspaceAdded: ProjectWorkspace,
   npmScriptUpdated?: Maybe<NpmScript>,
   settingUpdated?: Maybe<Setting>,
   taskAdded: Task,
@@ -403,6 +442,11 @@ export type Subscription = {
 export type SubscriptionProjectPackageAddedArgs = {
   projectId?: Maybe<Scalars['ID']>,
   workspaceId?: Maybe<Scalars['ID']>
+};
+
+
+export type SubscriptionProjectWorkspaceAddedArgs = {
+  projectId?: Maybe<Scalars['ID']>
 };
 
 
@@ -523,6 +567,7 @@ export type ResolversTypes = {
   PackageMetadata: ResolverTypeWrapper<MetaPackageMetadata>,
   ProjectType: ResolverTypeWrapper<ProjectType>,
   PackageVersionTag: ResolverTypeWrapper<PackageVersionTag>,
+  ProjectGenerator: ResolverTypeWrapper<MetaProjectGenerator>,
   Project: ResolverTypeWrapper<MetaProject>,
   Document: ResolverTypeWrapper<MetaDocument>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
@@ -543,6 +588,9 @@ export type ResolversTypes = {
   RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
   InstallPackageInput: InstallPackageInput,
+  CreateProjectInput: CreateProjectInput,
+  CreateSimpleProjectInput: CreateSimpleProjectInput,
+  CreateProjectWorkspaceInput: CreateProjectWorkspaceInput,
   CheckProjectPayload: ResolverTypeWrapper<CheckProjectPayload>,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -568,6 +616,7 @@ export type ResolversParentTypes = {
   PackageMetadata: MetaPackageMetadata,
   ProjectType: ProjectType,
   PackageVersionTag: PackageVersionTag,
+  ProjectGenerator: MetaProjectGenerator,
   Project: MetaProject,
   Document: MetaDocument,
   Date: Scalars['Date'],
@@ -588,6 +637,9 @@ export type ResolversParentTypes = {
   RunCommandInput: RunCommandInput,
   SelectFileInput: SelectFileInput,
   InstallPackageInput: InstallPackageInput,
+  CreateProjectInput: CreateProjectInput,
+  CreateSimpleProjectInput: CreateSimpleProjectInput,
+  CreateProjectWorkspaceInput: CreateProjectWorkspaceInput,
   CheckProjectPayload: CheckProjectPayload,
   ImportProjectInput: ImportProjectInput,
   EditProjectWorkspaceInput: EditProjectWorkspaceInput,
@@ -650,6 +702,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   runCommand?: Resolver<Maybe<ResolversTypes['Command']>, ParentType, ContextType, RequireFields<MutationRunCommandArgs, 'input'>>,
   selectFile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSelectFileArgs, 'input'>>,
   installPackage?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationInstallPackageArgs, 'input'>>,
+  createProject?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>,
+  createProjectWorkspace?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationCreateProjectWorkspaceArgs, 'input'>>,
   checkImportProject?: Resolver<ResolversTypes['CheckProjectPayload'], ParentType, ContextType, RequireFields<MutationCheckImportProjectArgs, 'path'>>,
   importProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationImportProjectArgs, 'input'>>,
   editProjectWorkspace?: Resolver<Maybe<ResolversTypes['ProjectWorkspace']>, ParentType, ContextType, RequireFields<MutationEditProjectWorkspaceArgs, 'input'>>,
@@ -699,6 +753,14 @@ export type ProjectResolvers<ContextType = Context, ParentType extends Resolvers
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type ProjectGeneratorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectGenerator'] = ResolversParentTypes['ProjectGenerator']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  projectType?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>,
+  packageName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type ProjectPackageResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ProjectPackage'] = ResolversParentTypes['ProjectPackage']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   type?: Resolver<ResolversTypes['ProjectPackageType'], ParentType, ContextType>,
@@ -737,6 +799,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   keybindings?: Resolver<Array<ResolversTypes['Keybinding']>, ParentType, ContextType>,
   keybinding?: Resolver<Maybe<ResolversTypes['Keybinding']>, ParentType, ContextType, RequireFields<QueryKeybindingArgs, 'id'>>,
   packageMetadata?: Resolver<Maybe<ResolversTypes['PackageMetadata']>, ParentType, ContextType, RequireFields<QueryPackageMetadataArgs, 'id'>>,
+  projectGenerators?: Resolver<Array<ResolversTypes['ProjectGenerator']>, ParentType, ContextType>,
   projectTypes?: Resolver<Array<ResolversTypes['ProjectType']>, ParentType, ContextType>,
   projectType?: Resolver<Maybe<ResolversTypes['ProjectType']>, ParentType, ContextType, RequireFields<QueryProjectTypeArgs, 'id'>>,
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>,
@@ -770,6 +833,7 @@ export type SubscriptionResolvers<ContextType = Context, ParentType extends Reso
   commandRan?: SubscriptionResolver<Maybe<ResolversTypes['CommandRan']>, "commandRan", ParentType, ContextType>,
   projectPackageAdded?: SubscriptionResolver<ResolversTypes['ProjectPackage'], "projectPackageAdded", ParentType, ContextType, SubscriptionProjectPackageAddedArgs>,
   packageMetadataUpdated?: SubscriptionResolver<Maybe<ResolversTypes['PackageMetadata']>, "packageMetadataUpdated", ParentType, ContextType>,
+  projectWorkspaceAdded?: SubscriptionResolver<ResolversTypes['ProjectWorkspace'], "projectWorkspaceAdded", ParentType, ContextType, SubscriptionProjectWorkspaceAddedArgs>,
   npmScriptUpdated?: SubscriptionResolver<Maybe<ResolversTypes['NpmScript']>, "npmScriptUpdated", ParentType, ContextType>,
   settingUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Setting']>, "settingUpdated", ParentType, ContextType, RequireFields<SubscriptionSettingUpdatedArgs, 'id'>>,
   taskAdded?: SubscriptionResolver<ResolversTypes['Task'], "taskAdded", ParentType, ContextType>,
@@ -807,6 +871,7 @@ export type Resolvers<ContextType = Context> = {
   PackageMetadata?: PackageMetadataResolvers<ContextType>,
   PackageVersionTag?: PackageVersionTagResolvers<ContextType>,
   Project?: ProjectResolvers<ContextType>,
+  ProjectGenerator?: ProjectGeneratorResolvers<ContextType>,
   ProjectPackage?: ProjectPackageResolvers<ContextType>,
   ProjectType?: ProjectTypeResolvers<ContextType>,
   ProjectWorkspace?: ProjectWorkspaceResolvers<ContextType>,

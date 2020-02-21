@@ -3,9 +3,14 @@ import { useRoute } from '@/util/router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { computed } from '@vue/composition-api'
-import { runCommand } from '../../util/command'
+import { runCommand } from '@/util/command'
+import ProjectTypeLogo from '../project/ProjectTypeLogo.vue'
 
 export default {
+  components: {
+    ProjectTypeLogo,
+  },
+
   setup () {
     const route = useRoute()
 
@@ -50,11 +55,10 @@ export default {
     v-if="projectTypeId && !isSpecial && projectType"
     class="flex items-center h-full px-6"
   >
-    <img
-      :src="projectType.logo"
-      alt="Logo"
+    <ProjectTypeLogo
+      :projectType="projectType"
       class="w-6 h-6 rounded mr-4 flex-none"
-    >
+    />
     <div class="flex-1 text-left w-0 truncate">
       {{ $t(projectType.name) }}
     </div>

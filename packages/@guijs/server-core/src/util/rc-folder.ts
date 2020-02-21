@@ -13,7 +13,7 @@ if (process.env.GUIJS_TEST) {
   // Clean DB
   fs.removeSync(folder)
 } else if (process.env.GUIJS_DEV) {
-  folder = path.resolve(process.cwd(), '../../../live')
+  folder = getRcPath('.guijs-dev', { xdgFolder: 'guijs-dev' })
 } else {
   // rc folder in user home
   folder = process.env.GUIJS_DB_PATH ||

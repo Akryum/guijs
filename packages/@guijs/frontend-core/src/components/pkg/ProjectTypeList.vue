@@ -1,5 +1,11 @@
 <script>
+import ProjectTypeLogo from '../project/ProjectTypeLogo.vue'
+
 export default {
+  components: {
+    ProjectTypeLogo,
+  },
+
   props: {
     projectTypes: {
       type: Array,
@@ -35,12 +41,11 @@ export default {
       >
         {{ pt.icon }}
       </i>
-      <img
+      <ProjectTypeLogo
         v-else
-        :src="pt.logo"
-        alt="Logo"
+        :projectType="pt"
         class="w-6 h-6 rounded mr-4 flex-none"
-      >
+      />
       <div class="flex-1 text-left w-0 truncate">
         {{ $t(pt.name) }}
       </div>

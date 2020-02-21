@@ -64,7 +64,11 @@ const implementation = implement<(options: SelectFileOptions) => Promise<string[
       })
       return stdout.split(',').map(result => {
         result = result.replace('alias ', '')
-        return result.split(':').slice(1).join('/')
+        result = result.split(':').slice(1).join('/')
+        if (!result.startsWith('/')) {
+          result = `/${result}`
+        }
+        return result
       })
     } catch (e) {
       return []

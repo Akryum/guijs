@@ -1,8 +1,13 @@
 <script>
 import { useQuery, useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import ProjectTypeLogo from './ProjectTypeLogo.vue'
 
 export default {
+  components: {
+    ProjectTypeLogo,
+  },
+
   inheritAttrs: false,
 
   model: {
@@ -43,10 +48,10 @@ export default {
     optionClass="p-2"
     v-on="$listeners"
   >
-    <img
-      :src="option.data.logo"
+    <ProjectTypeLogo
+      :projectType="option.data"
       class="w-5 h-5 mr-2 flex-none rounded-sm"
-    >
+    />
     {{ option.data.name }}
   </VSelect>
 </template>

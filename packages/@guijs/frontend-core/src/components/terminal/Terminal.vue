@@ -3,7 +3,7 @@ import { ref, onMounted, watch, onUnmounted, onActivated, computed } from '@vue/
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { SearchAddon } from 'xterm-addon-search'
-import { WebLinksAddon } from 'xterm-addon-web-links'
+import { WebLinksAddon } from '../../util/xterm-addon-web-links/lib/xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
 import { onWindowEvent } from '@guijs/frontend-ui/util/window'
 import { useMutation } from '@vue/apollo-composable'
@@ -12,6 +12,18 @@ import { useSetting } from '@/util/setting'
 import gql from 'graphql-tag'
 
 const isWindows = ['Windows', 'Win16', 'Win32', 'WinCE'].includes(navigator.platform)
+
+const isWebgl2Supported = (() => {
+  let isSupported = window.WebGL2RenderingContext ? undefined : false
+  return () => {
+    if (isSupported === undefined) {
+      const canvas = document.createElement('canvas')
+      const gl = canvas.getContext('webgl2', { depth: false, antialias: false })
+      isSupported = gl instanceof window.WebGL2RenderingContext
+    }
+    return isSupported
+  }
+})()
 
 const terminalCache = {}
 
@@ -193,7 +205,9 @@ export default {
 
         term.open(cached.targetEl)
 
-        term.loadAddon(new WebglAddon())
+        if (isWebgl2Supported()) {
+          term.loadAddon(new WebglAddon())
+        }
 
         // Data
 
