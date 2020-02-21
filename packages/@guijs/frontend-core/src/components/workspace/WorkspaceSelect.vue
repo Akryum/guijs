@@ -1,7 +1,7 @@
 <script>
 import { ref, watch } from '@vue/composition-api'
 import { useRouter, useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery, useResult, useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
 import { onKeybind } from '@/util/keybinding'
@@ -70,6 +70,23 @@ export default {
       if (!result.loading && !currentWorkspace.value) {
         resetWorkspaceSelection()
       }
+    })
+
+    // New workspace
+
+    const { onResult: onNewWorkspace } = useSubscription(gql`
+      subscription projectWorkspaceAdded ($projectId: ID) {
+        projectWorkspaceAdded (projectId: $projectId) {
+          ...projectWorkspace
+        }
+      }
+      ${projectWorkspaceFragment}
+    `, () => ({
+      projectId: route.value.params.projectId,
+    }))
+
+    onNewWorkspace(result => {
+      select(result.data.projectWorkspaceAdded.id)
     })
 
     // Keybindings
