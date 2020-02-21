@@ -1,6 +1,6 @@
 {
   "name": "@guijs/server-core",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "author": "Guillaume Chau",
   "scripts": {
     "dev": "nodepack-service dev",
