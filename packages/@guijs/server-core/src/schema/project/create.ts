@@ -16,6 +16,7 @@ import { addProjectWorkspace } from './workspace'
 import { MetaProjectWorkspace } from './meta-types'
 import { withFilter } from 'apollo-server-express'
 import { MetaProjectGenerator } from '../project-type/meta-types'
+import clearModule from 'clear-module'
 
 export const typeDefs = gql`
 extend type Mutation {
@@ -71,6 +72,7 @@ async function loadGenerator (projectGenerator: MetaProjectGenerator) {
     await installPlugin(projectGenerator.packageName)
   }
   const query = `${projectGenerator.packageName}${projectGenerator.module ? `/${projectGenerator.module}` : ''}`
+  clearModule(query)
   let generatorModule = loadModule(query, pluginFolder, true)
 
   if (!generatorModule) {

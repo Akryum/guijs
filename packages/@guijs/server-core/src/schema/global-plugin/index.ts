@@ -14,6 +14,5 @@ export function isPluginInstalled (id: string) {
 }
 
 export async function installPlugin (id: string) {
-  clearModule(id)
   await installPackage(pluginFolder, 'npm', null, id, false)
 }
