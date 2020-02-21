@@ -22,9 +22,6 @@
 			"path": "packages/@guijs/tauri-app"
 		},
 		{
-			"path": "packages/@guijs/landing-website"
-		},
-		{
 			"path": "legacy/server-core-old"
 		},
 		{
