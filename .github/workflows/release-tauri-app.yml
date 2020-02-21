@@ -62,7 +62,7 @@ jobs:
       - run: echo "${{ steps.create_tauri_release.outputs.upload_url }}" > release-url.txt
       - uses: actions/upload-artifact@v1
         with:
-          name: release-url.txt
+          name: release-url
           path: ./release-url.txt
 
   create-and-upload-assets:
@@ -90,9 +90,9 @@ jobs:
       - name: download file with upload url
         uses: actions/download-artifact@v1
         with:
-          name: release-url.txt
+          name: release-url
       - name: pull upload url
-        run: echo ::set-env name=RELEASE_UPLOAD_URL::$(cat release-url.txt)
+        run: echo ::set-env name=RELEASE_UPLOAD_URL::$(cat ./release-url/release-url.txt)
       - name: setup node
         uses: actions/setup-node@v1
         with:
