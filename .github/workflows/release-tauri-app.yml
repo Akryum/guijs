@@ -92,7 +92,7 @@ jobs:
         with:
           name: release-url.txt
       - name: pull upload url
-        run: echo ::set-env name=RELEASE_UPLOAD_URL::$(`cat release-url.txt`)
+        run: echo ::set-env name=RELEASE_UPLOAD_URL::$(cat release-url.txt)
       - name: setup node
         uses: actions/setup-node@v1
         with:
