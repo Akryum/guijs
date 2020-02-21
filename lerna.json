@@ -1,7 +1,7 @@
 {
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "0.1.11",
+  "version": "0.1.12",
   "packages": [
     "packages/@guijs/*",
     "packages/guijs-version-marker"
