@@ -120,6 +120,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ env.RELEASE_UPLOAD_URL }}
-          asset_path: ${{ format('./packages/@guijs/tauri-app/src-tauri/{0}/guijs{1}', matrix.releaseFolder, matrix.ext ) }}
+          asset_path: ${{ format('./packages/@guijs/tauri-app/src-tauri/{0}', matrix.releaseFolder ) }}
           asset_name: ${{ format('guijs{0}', matrix.ext ) }}
           asset_content_type: application/x-gtar
