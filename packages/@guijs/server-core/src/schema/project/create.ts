@@ -11,7 +11,7 @@ import { vanillaJsGenerator } from '@/util/generator-js'
 import { executeTask } from '../task'
 import { isPluginInstalled, installPlugin, pluginFolder } from '../global-plugin'
 import { getProjectGenerators } from '../project-type/generator'
-import { loadModule } from '@nodepack/module'
+import { loadModule, resolveModule } from '@nodepack/module'
 import { addProjectWorkspace } from './workspace'
 import { MetaProjectWorkspace } from './meta-types'
 import { withFilter } from 'apollo-server-express'
@@ -71,8 +71,11 @@ async function loadGenerator (projectGenerator: MetaProjectGenerator) {
   if (!isPluginInstalled(projectGenerator.packageName)) {
     await installPlugin(projectGenerator.packageName)
   }
-  const query = `${projectGenerator.packageName}${projectGenerator.module ? `/${projectGenerator.module}` : ''}`
-  clearModule(query)
+  let query = projectGenerator.packageName
+  if (projectGenerator.module) {
+    query = path.join(query, projectGenerator.module)
+  }
+  clearModule.all()
   let generatorModule = loadModule(query, pluginFolder, true)
 
   if (!generatorModule) {
