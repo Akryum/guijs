@@ -96,6 +96,14 @@
       "input-type-label": "Workspace type",
       "input-type-placeholder": "Select a workspace type"
     },
+    "create-workspace": {
+      "create-workspace": "Create workspace",
+      "create-a-workspace": "Create a workspace",
+      "input-name-label": "Workspace name",
+      "input-name-placeholder": "Enter a workspace name",
+      "input-generator-label": "Project generator",
+      "input-generator-placeholder": "Select a project generator"
+    },
     "package": {
       "official": "official",
       "workspace": "workspace",

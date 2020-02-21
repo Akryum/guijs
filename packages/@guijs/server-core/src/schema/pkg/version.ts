@@ -84,9 +84,14 @@ export const resolvers: Resolvers = {
     currentVersion: async (pkg, args, ctx) => {
       const project = await ctx.getProject()
       const workspace = await getProjectWorkspace(project, pkg.workspaceId, ctx)
-      const pkgFile = resolveModule(`${pkg.id}/package.json`, workspace.absolutePath)
-      const pkgData = await fs.readJson(pkgFile)
-      return pkgData.version
+      try {
+        const pkgFile = resolveModule(`${pkg.id}/package.json`, workspace.absolutePath)
+        const pkgData = await fs.readJson(pkgFile)
+        return pkgData.version
+      } catch (e) {
+        consola.warn(`Couldn't get current version for ${pkg.id} in ${workspace.absolutePath}`)
+        return ''
+      }
     },
   },
 

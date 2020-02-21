@@ -46,9 +46,9 @@ export function useTask (id = null) {
   watch(task, value => {
     if (value) {
       if (value.status === 'success') {
-        onSuccessHandlers.forEach(h => h())
+        onSuccessHandlers.forEach(h => h(value))
       } else if (value.status === 'error') {
-        onErrorHandlers.forEach(h => h(value.message))
+        onErrorHandlers.forEach(h => h(value, value.message))
       }
     }
   })
