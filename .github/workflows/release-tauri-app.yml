@@ -9,7 +9,60 @@ on:
       - '**/tauri-app/package.json'
 
 jobs:
-  release:
+  check-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+      - name: install webkit2gtk (ubuntu only)
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webkit2gtk-4.0
+      - run: yarn
+      - name: build guijs for tauri app
+        run: yarn workspace @guijs/tauri-app build-assets
+      - run: cargo install tauri-bundler --force
+      - name: build tauri app
+        run: yarn workspace @guijs/tauri-app build
+
+  create-release:
+    needs: check-build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: get version
+        working-directory: ./packages/@guijs/tauri-app
+        run: echo ::set-env name=PACKAGE_VERSION::$(node -p "require('./package.json').version")
+      - name: create release
+        id: create_tauri_release
+        uses: jbolda/create-release@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ matrix.package.name }}-v${{ env.PACKAGE_VERSION }}
+          release_name: "Release guijs app v${{ env.PACKAGE_VERSION }}"
+          body: "See the assets to download this version and install."
+          draft: true
+          prerelease: false
+
+  create-and-upload-assets:
+    needs: create-release
     runs-on: ${{ matrix.platform }}
     timeout-minutes: 20
 
@@ -53,17 +106,6 @@ jobs:
       - name: get version
         working-directory: ./packages/@guijs/tauri-app
         run: echo ::set-env name=PACKAGE_VERSION::$(node -p "require('./package.json').version")
-      - name: create release
-        id: create_tauri_release
-        uses: jbolda/create-release@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ matrix.package.name }}-v${{ env.PACKAGE_VERSION }}
-          release_name: "Release guijs app v${{ env.PACKAGE_VERSION }}"
-          body: "See the assets to download this version and install."
-          draft: true
-          prerelease: false
       - name: upload release asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1.0.2
