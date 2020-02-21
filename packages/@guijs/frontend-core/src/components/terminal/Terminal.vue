@@ -3,7 +3,7 @@ import { ref, onMounted, watch, onUnmounted, onActivated, computed } from '@vue/
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { SearchAddon } from 'xterm-addon-search'
-import { WebLinksAddon } from 'xterm-addon-web-links'
+import { WebLinksAddon } from '../../util/xterm-addon-web-links/lib/xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
 import { onWindowEvent } from '@guijs/frontend-ui/util/window'
 import { useMutation } from '@vue/apollo-composable'
