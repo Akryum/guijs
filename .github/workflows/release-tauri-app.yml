@@ -123,4 +123,4 @@ jobs:
           upload_url: ${{ env.RELEASE_UPLOAD_URL }}
           asset_path: ${{ format('./packages/@guijs/tauri-app/src-tauri/{0}/guijs{1}', matrix.releaseFolder, matrix.ext ) }}
           asset_name: ${{ format('guijs{0}', matrix.ext ) }}
-          asset_content_type: application/x-gtar
+          asset_content_type: application/zip
