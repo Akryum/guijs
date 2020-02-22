@@ -41,10 +41,19 @@ export default {
           <!-- Suggested project actions -->
           <div class="mt-6">
             <VButton
+              iconLeft="unarchive"
               class="text-secondary-600"
               @click="runCommand('import-project')"
             >
               {{ $t('guijs.import-project.import-a-project') }}
+            </VButton>
+
+            <VButton
+              iconLeft="add"
+              class="text-secondary-600 ml-6"
+              @click="runCommand('create-project')"
+            >
+              {{ $t('guijs.create-project.create-a-project') }}
             </VButton>
           </div>
         </div>

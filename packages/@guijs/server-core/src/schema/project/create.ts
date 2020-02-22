@@ -71,8 +71,11 @@ async function loadGenerator (projectGenerator: MetaProjectGenerator) {
   if (!isPluginInstalled(projectGenerator.packageName)) {
     await installPlugin(projectGenerator.packageName)
   }
-  const query = `${projectGenerator.packageName}${projectGenerator.module ? `/${projectGenerator.module}` : ''}`
-  clearModule(query)
+  let query = projectGenerator.packageName
+  if (projectGenerator.module) {
+    query = path.join(query, projectGenerator.module)
+  }
+  clearModule.all()
   let generatorModule = loadModule(query, pluginFolder, true)
 
   if (!generatorModule) {

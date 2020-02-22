@@ -247,7 +247,6 @@ fn startup_eval<T: 'static>(handle: &Handle<T>) {
   handle.dispatch(|webview| {
     webview.eval("
       window.__GUIJS_RELOAD = function () {
-        alert(`k`)
         window.tauri.emit('reload')
         window.location.reload()
       }
