@@ -13,3 +13,15 @@ guijs (stands for *Graphical User Interface for JS projects*) is an app that hel
 - [Website](https://guijs.dev/)
 - [Twitter account](https://twitter.com/guijs_official)
 - [Contributing guidelines](./CONTRIBUTING.md)
+- Related: [awesomejs.dev](https://awesomejs.dev/)
+
+## Stack
+
+guijs is made possible thanks to those amazing technologies:
+- [Tauri](https://tauri.studio/)
+- [Vue](https://vuejs.org/)
+- [GraphQL](https://graphql.org/)
+- [Apollo](https://www.apollographql.com/)
+- [Tailwind](https://tailwindcss.com/)
+- [Nodepack](https://nodepackjs.com/)
+- And many others!
