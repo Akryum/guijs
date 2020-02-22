@@ -2,18 +2,12 @@
   <img src="./res/guijs-full-black.svg" alt="gui.js">
 </p>
 
-### Local development
+# guijs (stands for Graphical User Interface for JS projects)
 
-Then in another terminal, you should serve the ui web app:
+**guijs is an app that helps you manage JS projects with a Graphical User Interface.**
 
-```bash
-cd packages/@guijs/frontend-core
-yarn run serve
-```
+## Links
 
-And then you start the ui server (based on Apollo):
-
-```bash
-cd packages/@guijs/server-core
-yarn run dev
-```
+- [Website](https://guijs.dev/)
+- [Twitter account](https://twitter.com/guijs_official)
+- [Contributing guidelines](./CONTRIBUTING.md)
