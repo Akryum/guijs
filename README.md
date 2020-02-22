@@ -2,9 +2,11 @@
   <img src="./res/guijs-full-black.svg" alt="gui.js">
 </p>
 
-# guijs (stands for Graphical User Interface for JS projects)
+# guijs
 
-**guijs is an app that helps you manage JS projects with a Graphical User Interface.**
+guijs (stands for *Graphical User Interface for JS projects*) is an app that helps you manage JS projects with a Graphical User Interface.
+
+![screenshot](https://guijs.dev/_nuxt/img/324e974.png)
 
 ## Links
 
