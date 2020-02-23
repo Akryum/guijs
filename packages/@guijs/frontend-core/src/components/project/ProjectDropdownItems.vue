@@ -55,8 +55,8 @@ export default {
     ref="el"
     class="flex flex-col items-stretch"
   >
-    <div>
-      {{ $t('') }}
+    <div class="text-gray-500 pl-4 py-2">
+      {{ $t('guijs.project-dropdown.recent-projects') }}
     </div>
 
     <VButton
