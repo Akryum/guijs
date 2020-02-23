@@ -73,7 +73,7 @@ export default {
       <VInput
         v-model="searchText"
         :placeholder="$t('guijs.common.search')"
-        class="p-4 border-gray-200 dark:border-gray-950 border-b"
+        class="p-4 border-gray-200 dark:border-gray-950 border-b flex-none"
         autoFocus
       />
 
@@ -81,7 +81,7 @@ export default {
         v-for="(w, index) of filteredList"
         :key="w.id"
         v-tooltip.right="$t('guijs.workspace.select-button', { name: w.name, type: w.type.name })"
-        class="p-4"
+        class="p-4 flex-none"
         :class="{
           'bg-primary-100 dark:bg-primary-900': index === selectedIndex,
         }"
