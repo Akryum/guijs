@@ -84,12 +84,13 @@ fn main() {
         });
 
         if let Ok(node_path) = which::which("node") {
-          // check if node exists & matches the minimum version
+          // check if node exists
           if let Ok(node_version_output) = Command::new(node_path)
             .args(vec!["--version"])
             .stdout(Stdio::piped())
             .output()
           {
+            // check if node version matches the minimum version
             let node_version =
               String::from_utf8_lossy(&node_version_output.stdout).replace("v", "");
             let server_package_json: PackageJson =
@@ -184,7 +185,7 @@ fn get_current_version(dependency: String) -> Option<String> {
       .stdout(Stdio::piped())
       .output()
     {
-      let stdout = &output.unwrap().stdout;
+      let stdout = &output.stdout;
       let version = String::from_utf8_lossy(stdout);
       println!("{} v{}", dependency, version);
       Some(version.to_string())
