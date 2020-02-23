@@ -125,7 +125,7 @@ export default {
     class="h-full flex flex-col overflow-hidden"
   >
     <!-- Tabs -->
-    <div class="flex border-gray-200 border-b dark:border-gray-950">
+    <div class="flex-none flex border-gray-200 border-b dark:border-gray-950">
       <div class="flex flex-1">
         <VButton
           v-for="terminal of terminals"
