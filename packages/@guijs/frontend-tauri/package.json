@@ -1,6 +1,6 @@
 {
   "name": "@guijs/frontend-tauri",
-  "version": "0.1.13",
+  "version": "0.1.18",
   "author": "Guillaume Chau",
   "private": true,
   "scripts": {
