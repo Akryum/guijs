@@ -178,14 +178,13 @@ fn orchestrator_command() -> String {
 fn get_current_version(dependency: String) -> Option<String> {
   let binary = dependency.replace("@guijs/", "guijs-").replace("-core", "");
   println!("getting {} version, binary {}", dependency, binary);
-  let dependency_binary_path = which::which(binary.clone());
-  if dependency_binary_path.is_ok() {
+  if let Ok(dependency_binary_path) = which::which(binary.clone()) {
     println!("{:?}", which::which(binary.clone()).unwrap());
-    let output = Command::new(dependency_binary_path.unwrap())
+    if let Ok(output) = Command::new(dependency_binary_path)
       .args(vec!["--version"])
       .stdout(Stdio::piped())
-      .output();
-    if output.is_ok() {
+      .output()
+    {
       let stdout = &output.unwrap().stdout;
       let version = String::from_utf8_lossy(stdout);
       println!("{} v{}", dependency, version);
