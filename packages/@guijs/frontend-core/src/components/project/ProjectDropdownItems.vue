@@ -62,7 +62,7 @@ export default {
     <VButton
       v-for="(project, index) of projects"
       :key="project.id"
-      class="p-4"
+      class="p-4 flex-none"
       :class="{
         'bg-primary-100 dark:bg-primary-900': index === selectedIndex,
       }"
