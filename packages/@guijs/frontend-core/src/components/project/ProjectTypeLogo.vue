@@ -18,6 +18,16 @@ export default {
       loaded.value = false
     })
 
+    watch(error, value => {
+      if (value) {
+        const img = new Image()
+        img.src = props.projectType.logo
+        img.onload = () => {
+          error.value = false
+        }
+      }
+    })
+
     return {
       error,
       loaded,
