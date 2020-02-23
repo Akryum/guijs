@@ -110,19 +110,18 @@ fn main() {
                     if current_version.is_some() {
                       let current_version_value =
                         current_version.unwrap().replace(">", "").replace("=", "");
-                      let version_compare = tauri::api::version::compare(
+                      if let Ok(version_compare) = tauri::api::version::compare(
                         &current_version_value,
                         &latest_version.replace("^", ""),
-                      );
-                      if version_compare.is_ok()
-                        && version_compare.expect("failed to compare versions") == 1
-                      {
-                        println!(
-                          "found update from {} to {}",
-                          current_version_value, latest_version
-                        );
-                        let mut deps = update_deps.lock().expect("Failed to lock update_deps");
-                        deps.push(dependency.clone());
+                      ) {
+                        if version_compare == 1 {
+                          println!(
+                            "found update from {} to {}",
+                            current_version_value, latest_version
+                          );
+                          let mut deps = update_deps.lock().expect("Failed to lock update_deps");
+                          deps.push(dependency.clone());
+                        }
                       }
                     } else {
                       install_deps.push(dependency.clone());
