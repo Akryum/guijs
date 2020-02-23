@@ -12,6 +12,12 @@ Install the dependencies by running yarn (only tested with yarn v1) in the root 
 yarn
 ```
 
+Then build the packages:
+
+```bash
+lerna run build
+```
+
 Then serve the ui web app:
 
 ```bash
