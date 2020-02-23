@@ -173,6 +173,10 @@ function getPtyEnv () {
 
   delete env.PORT
   delete env.NODE_ENV
+  delete env.GUIJS_TERMINAL_WS_PORT
+  delete env.GUIJS_TEST
+  delete env.GUIJS_DEV
+  delete env.GUIJS_DB_PATH
 
   return env
 }
