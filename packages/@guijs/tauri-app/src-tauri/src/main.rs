@@ -97,67 +97,65 @@ fn main() {
                 .expect("failed to read server package.json")
                 .json::<PackageJson>()
                 .expect("failed to parse server package.json");
-            let node_version_compare = tauri::api::version::compare(
+            if let Ok(node_version_compare) = tauri::api::version::compare(
               &node_version,
               &server_package_json.custom.min_node_version,
-            );
-
-            if node_version_compare.is_ok()
-              && node_version_compare.expect("failed to compare node versions") <= 0
-            {
-              notify_state(&handle, String::from("splashscreen"));
-              std::thread::spawn(move || {
-                let mut install_deps = Vec::new();
-                for (dependency, latest_version) in server_package_json.dev_dependencies.iter() {
-                  let current_version = get_current_version(dependency.to_string());
-                  if current_version.is_some() {
-                    let current_version_value =
-                      current_version.unwrap().replace(">", "").replace("=", "");
-                    let version_compare = tauri::api::version::compare(
-                      &current_version_value,
-                      &latest_version.replace("^", ""),
-                    );
-                    if version_compare.is_ok()
-                      && version_compare.expect("failed to compare versions") == 1
-                    {
-                      println!(
-                        "found update from {} to {}",
-                        current_version_value, latest_version
+            ) {
+              if node_version_compare <= 0 {
+                notify_state(&handle, String::from("splashscreen"));
+                std::thread::spawn(move || {
+                  let mut install_deps = Vec::new();
+                  for (dependency, latest_version) in server_package_json.dev_dependencies.iter() {
+                    let current_version = get_current_version(dependency.to_string());
+                    if current_version.is_some() {
+                      let current_version_value =
+                        current_version.unwrap().replace(">", "").replace("=", "");
+                      let version_compare = tauri::api::version::compare(
+                        &current_version_value,
+                        &latest_version.replace("^", ""),
                       );
-                      let mut deps = update_deps.lock().expect("Failed to lock update_deps");
-                      deps.push(dependency.clone());
+                      if version_compare.is_ok()
+                        && version_compare.expect("failed to compare versions") == 1
+                      {
+                        println!(
+                          "found update from {} to {}",
+                          current_version_value, latest_version
+                        );
+                        let mut deps = update_deps.lock().expect("Failed to lock update_deps");
+                        deps.push(dependency.clone());
+                      }
+                    } else {
+                      install_deps.push(dependency.clone());
                     }
-                  } else {
-                    install_deps.push(dependency.clone());
                   }
-                }
 
-                if install_deps.len() > 0 {
-                  notify_state(&handle, String::from("first-download"));
-                  for dep in install_deps {
-                    install_dependency(dep.to_string());
+                  if install_deps.len() > 0 {
+                    notify_state(&handle, String::from("first-download"));
+                    for dep in install_deps {
+                      install_dependency(dep.to_string());
+                    }
                   }
-                }
-                if update_deps
-                  .lock()
-                  .expect("Failed to lock update_deps")
-                  .len()
-                  > 0
-                {
-                  notify_state(&handle, String::from("update-available"));
-                } else {
-                  spawn_guijs_server(&handle);
-                }
-              });
-            } else {
-              notify_state_with_payload(
-                &handle,
-                String::from("node-wrong-version"),
-                format!(
-                  "{}|{}",
-                  node_version, server_package_json.custom.min_node_version
-                ),
-              );
+                  if update_deps
+                    .lock()
+                    .expect("Failed to lock update_deps")
+                    .len()
+                    > 0
+                  {
+                    notify_state(&handle, String::from("update-available"));
+                  } else {
+                    spawn_guijs_server(&handle);
+                  }
+                });
+              } else {
+                notify_state_with_payload(
+                  &handle,
+                  String::from("node-wrong-version"),
+                  format!(
+                    "{}|{}",
+                    node_version, server_package_json.custom.min_node_version
+                  ),
+                );
+              }
             }
           }
         } else {
