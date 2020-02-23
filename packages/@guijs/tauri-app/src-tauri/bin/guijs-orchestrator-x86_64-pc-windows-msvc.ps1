@@ -9,4 +9,5 @@ if ($mode -eq "run") {
     
     Get-Process -Name $appName, msiexec -ErrorAction SilentlyContinue | Wait-Process  
     Stop-Process -Id $path_id
+    stop-process -Id $PID
 }
