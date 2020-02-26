@@ -11,7 +11,7 @@ on:
 jobs:
   check-build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v2
@@ -68,7 +68,7 @@ jobs:
   create-and-upload-assets:
     needs: create-release
     runs-on: ${{ matrix.platform }}
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     strategy:
       fail-fast: false
@@ -137,7 +137,7 @@ jobs:
         if: matrix.platform == 'macos-latest'
         working-directory: ${{ format('./packages/@guijs/tauri-app/src-tauri/{0}', matrix.releaseFolder ) }}
         run: tar -czf ${{ format('guijs{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('guijs{0}', matrix.ext ) }}
-      - name: upload release asset with debug mode
+      - name: upload release asset with debug mode on
         id: upload-release-asset-debug-mode
         uses: actions/upload-release-asset@v1.0.2
         env:
