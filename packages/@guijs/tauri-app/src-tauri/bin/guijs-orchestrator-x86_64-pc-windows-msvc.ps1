@@ -8,6 +8,9 @@ $path = $args[1]
 $appName = "guijs"
 $webviewProcessName = "Win32WebViewHost"
 
+# enable loopback
+CheckNetIsolation.exe LoopbackExempt -a -n="Microsoft.Win32WebViewHost_cw5n1h2txyewy"
+
 # if argument mode equals run
 if ($mode -eq "run") {
     # start the server process without opening a new window
