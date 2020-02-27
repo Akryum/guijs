@@ -10,7 +10,7 @@ on:
 jobs:
   check-build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v2
@@ -67,7 +67,7 @@ jobs:
   create-and-upload-assets:
     needs: create-release
     runs-on: ${{ matrix.platform }}
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     strategy:
       fail-fast: false
@@ -75,15 +75,15 @@ jobs:
         platform: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - platform: ubuntu-latest
-            releaseFolder: target/release/bundle/deb
+            buildFolder: bundle/deb
             ext: _0.1.0_amd64.deb
             compressed: ''
           - platform: macos-latest
-            releaseFolder: target/release/bundle/osx
+            buildFolder: bundle/osx
             ext: .app
             compressed: .tgz
           - platform: windows-latest
-            releaseFolder: target/release
+            buildFolder: ''
             ext: .x64.msi
             compressed: ''
 
@@ -118,7 +118,7 @@ jobs:
         run: yarn workspace @guijs/tauri-app build
       - name: compress (macos only)
         if: matrix.platform == 'macos-latest'
-        working-directory: ${{ format('./packages/@guijs/tauri-app/src-tauri/{0}', matrix.releaseFolder ) }}
+        working-directory: ${{ format('./packages/@guijs/tauri-app/src-tauri/target/release/{0}', matrix.buildFolder ) }}
         run: tar -czf ${{ format('guijs{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('guijs{0}', matrix.ext ) }}
       - name: upload release asset
         id: upload-release-asset
@@ -127,6 +127,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ env.RELEASE_UPLOAD_URL }}
-          asset_path: ${{ format('./packages/@guijs/tauri-app/src-tauri/{0}/guijs{1}{2}', matrix.releaseFolder, matrix.ext, matrix.compressed ) }}
+          asset_path: ${{ format('./packages/@guijs/tauri-app/src-tauri/target/release/{0}/guijs{1}{2}', matrix.buildFolder, matrix.ext, matrix.compressed ) }}
           asset_name: ${{ format('guijs{0}{1}', matrix.ext, matrix.compressed ) }}
+          asset_content_type: application/zip
+      - name: build tauri app in debug mode
+        run: yarn workspace @guijs/tauri-app build --debug
+      - name: compress (macos only)
+        if: matrix.platform == 'macos-latest'
+        working-directory: ${{ format('./packages/@guijs/tauri-app/src-tauri/target/debug/{0}', matrix.buildFolder ) }}
+        run: tar -czf ${{ format('guijs{0}{1}', matrix.ext, matrix.compressed ) }} ${{ format('guijs{0}', matrix.ext ) }}
+      - name: upload release asset with debug mode on
+        id: upload-release-asset-debug-mode
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ env.RELEASE_UPLOAD_URL }}
+          asset_path: ${{ format('./packages/@guijs/tauri-app/src-tauri/target/debug/{0}/guijs{1}{2}', matrix.buildFolder, matrix.ext, matrix.compressed ) }}
+          asset_name: ${{ format('guijs-debug{0}{1}', matrix.ext, matrix.compressed ) }}
           asset_content_type: application/zip
