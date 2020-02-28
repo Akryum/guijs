@@ -9,13 +9,20 @@ mod cmd;
 extern crate serde_derive;
 extern crate serde_json;
 
+use std::ffi::OsStr;
 use std::io::{BufRead, BufReader};
-use std::process::{Command, Stdio};
+use std::process::{Child, Command, Output, Stdio};
 use tauri::Handle;
 
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
+
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
+#[cfg(target_os = "windows")]
+const CREATE_NO_WINDOW: u32 = 0x08000000;
 
 #[derive(PartialEq, Deserialize, Clone, Debug)]
 #[serde(tag = "engines", rename_all = "camelCase")]
@@ -85,11 +92,7 @@ fn main() {
 
         if let Ok(node_path) = which::which("node") {
           // check if node exists
-          if let Ok(node_version_output) = Command::new(node_path)
-            .args(vec!["--version"])
-            .stdout(Stdio::piped())
-            .output()
-          {
+          if let Ok(node_version_output) = command_output(node_path, vec!["--version"]) {
             // check if node version matches the minimum version
             let node_version =
               String::from_utf8_lossy(&node_version_output.stdout).replace("v", "");
@@ -180,11 +183,7 @@ fn get_current_version(dependency: String) -> Option<String> {
   println!("getting {} version, binary {}", dependency, binary);
   if let Ok(dependency_binary_path) = which::which(binary.clone()) {
     println!("{:?}", which::which(binary.clone()).unwrap());
-    if let Ok(output) = Command::new(dependency_binary_path)
-      .args(vec!["--version"])
-      .stdout(Stdio::piped())
-      .output()
-    {
+    if let Ok(output) = command_output(dependency_binary_path, vec!["--version"]) {
       let stdout = &output.stdout;
       let version = String::from_utf8_lossy(stdout);
       println!("{} v{}", dependency, version);
@@ -203,10 +202,7 @@ fn run_npm_install(dependency: String, exists: bool) {
   let command = if exists { "update" } else { "install" };
   println!("{} {}", command, dependency);
   let npm_path = which::which("npm").expect("failed to get npm path");
-  let guijs_stdout = Command::new(npm_path)
-    .args(vec!["install", "-g", dependency.as_str()])
-    .stdout(Stdio::piped())
-    .spawn()
+  let guijs_stdout = spawn_command(npm_path, vec!["install", "-g", dependency.as_str()])
     .expect(&format!("failed to {} guijs server package", command))
     .stdout
     .expect(&format!("failed to get guijs {} stdout", command));
@@ -246,18 +242,18 @@ fn notify_state_with_payload<T: 'static>(handle: &Handle<T>, name: String, paylo
 
 fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
   let guijs_server_path = which::which("guijs-server").unwrap();
-  let stdout = Command::new(orchestrator_command())
-    .args(vec![
+  let stdout = spawn_command(
+    orchestrator_command(),
+    vec![
       "run",
       guijs_server_path
         .to_str()
         .expect("guijs server path is not utf-8"),
-    ])
-    .stdout(Stdio::piped())
-    .spawn()
-    .expect("Failed to start guijs server")
-    .stdout
-    .expect("Failed to get guijs server stdout");
+    ],
+  )
+  .expect("Failed to start guijs server")
+  .stdout
+  .expect("Failed to get guijs server stdout");
   let reader = BufReader::new(stdout);
 
   let mut webview_started = false;
@@ -300,4 +296,38 @@ fn startup_eval<T: 'static>(handle: &Handle<T>) {
       webview.eval(include_str!(concat!(env!("TAURI_DIR"), "/tauri.js")))
     })
     .expect("failed to eval tauri entry point");
+}
+
+#[cfg(target_os = "windows")]
+fn command_output<S: AsRef<OsStr>>(command: S, args: Vec<&str>) -> std::io::Result<Output> {
+  Command::new(command)
+    .args(args)
+    .stdout(Stdio::piped())
+    .creation_flags(CREATE_NO_WINDOW)
+    .output()
+}
+
+#[cfg(not(target_os = "windows"))]
+fn command_output<S: AsRef<OsStr>>(command: S, args: Vec<&str>) -> std::io::Result<Output> {
+  Command::new(command)
+    .args(args)
+    .stdout(Stdio::piped())
+    .output()
+}
+
+#[cfg(target_os = "windows")]
+fn spawn_command<S: AsRef<OsStr>>(command: S, args: Vec<&str>) -> std::io::Result<Child> {
+  Command::new(command)
+    .args(args)
+    .stdout(Stdio::piped())
+    .creation_flags(CREATE_NO_WINDOW)
+    .spawn()
+}
+
+#[cfg(not(target_os = "windows"))]
+fn spawn_command<S: AsRef<OsStr>>(command: S, args: Vec<&str>) -> std::io::Result<Child> {
+  Command::new(command)
+    .args(args)
+    .stdout(Stdio::piped())
+    .spawn()
 }
