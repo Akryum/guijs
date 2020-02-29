@@ -29,6 +29,8 @@ export default {
 }
 </script>
 
+<!-- Text styles used to workaround issue in webkit -->
+
 <template>
   <div
     class="w-6 h-6 flex items-center justify-center relative"
@@ -42,7 +44,7 @@ export default {
       <div
         class="dot rounded-full"
         :class="{
-          'w-3 h-3 border-gray-500': status === 'idle' || status === 'killed',
+          'w-3 h-3 border-gray-500 text-gray-500': status === 'idle' || status === 'killed',
           'w-5 h-5 border-teal-400 dark:border-teal-600 text-teal-400 dark:text-teal-600': status === 'running',
         }"
       />
@@ -108,14 +110,15 @@ export default {
   .animation {
     transition: border .15s;
     border-width: 10px;
+    @apply border-teal-500 text-teal-500;
   }
 
   .status-success & .animation {
-    @apply border-green-500;
+    @apply border-green-500 text-green-500;
   }
 
   .status-error & .animation {
-    @apply border-red-500;
+    @apply border-red-500 text-red-500;
   }
 
   &.v-leave-active {
