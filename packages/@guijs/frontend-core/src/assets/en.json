@@ -22,7 +22,9 @@
     "terminals": {
       "new-terminal": "New terminal",
       "no-terminal": "No terminal open",
-      "close-terminal": "Close terminal","close-terminal-pane": "Close terminal pane"
+      "close-terminal": "Close terminal","close-terminal-pane": "Close terminal pane",
+      "copy": "Copy selection",
+      "paste": "Paste"
     },
     "find": {
       "placeholder": "Type '?' to get help",

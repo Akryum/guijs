@@ -5,11 +5,11 @@ import { FitAddon } from 'xterm-addon-fit'
 import { SearchAddon } from 'xterm-addon-search'
 import { WebLinksAddon } from '@/util/xterm-addon-web-links/lib/xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
-import { onWindowEvent } from '@guijs/frontend-ui/util/window'
 import { useMutation } from '@vue/apollo-composable'
-import { pushScope, popScope } from '@/util/keybinding'
+import { pushScope, popScope, onKeybind } from '@/util/keybinding'
 import { useSetting } from '@/util/setting'
 import gql from 'graphql-tag'
+import { onCommand } from '@/util/command'
 
 const isWindows = ['Windows', 'Win16', 'Win32', 'WinCE'].includes(navigator.platform)
 
@@ -345,16 +345,16 @@ export default {
 
     listeners.push(on('terminal-destroyed', destroy))
 
-    // Paste
-    onWindowEvent('paste', event => {
+    // Copy & paste
+
+    onKeybind('terminal-copy', () => {
+      document.execCommand('copy')
+    })
+
+    onCommand('terminal-paste-apply', (cmd, payload) => {
       if (term) {
-        const data = (event.clipboardData || window.clipboardData).getData('text')
-        event.preventDefault()
-        event.stopPropagation()
-        write(data)
+        term.paste(payload.content)
       }
-    }, {
-      capture: true,
     })
 
     // Element resize

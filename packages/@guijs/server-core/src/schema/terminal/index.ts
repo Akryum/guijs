@@ -1,7 +1,8 @@
 import gql from 'graphql-tag'
+import clipboard from 'clipboardy'
 import { Resolvers, CommandType } from '@/generated/schema'
 import { terminals, createTerminal, removeTerminal } from './server'
-import { addCommand } from '../command'
+import { addCommand, runCommand } from '../command'
 import { addKeybinding } from '../keybinding'
 
 export const typeDefs = gql`
@@ -96,5 +97,41 @@ addKeybinding({
   description: 'guijs.terminals.close-terminal',
   sequences: ['mod+shift+w', 'mod+shift+x'],
   scope: 'terminals',
+  global: true,
+})
+
+addKeybinding({
+  id: 'terminal-copy',
+  description: 'guijs.terminals.copy',
+  sequences: ['mod+shift+c'],
+  scope: 'terminals.terminal',
+  global: true,
+})
+
+addCommand({
+  id: 'terminal-paste',
+  type: CommandType.Action,
+  label: 'Terminal: Paste',
+  hidden: true,
+  handler: (cmd, payload, ctx) => {
+    const content = clipboard.readSync()
+    runCommand('terminal-paste-apply', {
+      content,
+    }, ctx)
+  },
+})
+
+addCommand({
+  id: 'terminal-paste-apply',
+  type: CommandType.Action,
+  label: 'Terminal: Paste apply',
+  hidden: true,
+})
+
+addKeybinding({
+  id: 'terminal-paste',
+  description: 'guijs.terminals.paste',
+  sequences: ['mod+shift+v'],
+  scope: 'terminals.terminal',
   global: true,
 })
