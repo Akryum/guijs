@@ -5,6 +5,9 @@ import gql from 'graphql-tag'
 const handlers = {}
 const anyHandlers = []
 
+/**
+ * @returns {Function[]}
+ */
 function getHandlers (id) {
   let result = handlers[id]
   if (!result) {
@@ -17,7 +20,10 @@ let lastCommand = null
 
 export function onCommand (id, handler) {
   const add = () => {
-    getHandlers(id).push(handler)
+    const list = getHandlers(id)
+    if (!list.includes(handler)) {
+      list.push(handler)
+    }
     if (lastCommand && lastCommand.id === id) {
       handler()
     }
