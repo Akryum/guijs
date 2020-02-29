@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import { onKeybind, bindScope } from '@/util/keybinding'
 import { onCommand, runCommand } from '@/util/command'
 import { terminalFragment } from './fragments'
+import { useCurrentWorkspace } from '../workspace/useWorkspace'
 import Terminal from './Terminal.vue'
 
 const TERMINALS = gql`
@@ -55,12 +56,20 @@ export default {
       currentTerminalId.value = result.data.createTerminal.id
     })
 
+    const { workspace } = useCurrentWorkspace()
+
     function newTerminal () {
+      let cwd
+      if (workspace.value) {
+        cwd = workspace.value.absolutePath
+      }
+
       return createTerminal({
         input: {
           name: '~',
           title: '',
           hidden: false,
+          cwd,
         },
       })
     }
