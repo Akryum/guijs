@@ -86,7 +86,7 @@ addCommand({
 addKeybinding({
   id: 'new-terminal',
   description: 'guijs.terminals.new-terminal',
-  sequences: ['mod+shift+c'],
+  sequences: ['ctrl+alt+c'],
   scope: 'root',
   global: true,
 })
