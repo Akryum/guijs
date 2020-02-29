@@ -32,7 +32,7 @@ const defaultTheme = {
   background: '#fff',
   cursor: '#ccc',
   cursorAccent: '#ddd',
-  selection: '#ccc',
+  selection: '#00000040',
   black: '#000000',
   red: '#e83030',
   brightRed: '#e83030',
@@ -56,7 +56,7 @@ const darkTheme = {
   foreground: '#fff',
   background: '#212935',
   cursor: '#A0AEC0',
-  selection: '#4A5568',
+  selection: '#ffffff40',
   magenta: '#e83030',
   brightMagenta: '#e83030',
 }
