@@ -65,11 +65,11 @@ export default {
 </script>
 
 <template>
-  <div class="flex items-center justify-center">
+  <div>
     <img
       :src="src || pkg.defaultLogo ? proxy(src || pkg.defaultLogo) : genericLogo"
       :alt="`${pkg.id} logo`"
-      class="max-w-full max-h-full rounded overflow-hidden text-transparent"
+      class="w-full h-full rounded overflow-hidden text-transparent"
       @error="onError()"
     >
   </div>
