@@ -40,3 +40,11 @@ no-server = [ "tauri/no-server" ]
 [[bin]]
 name = "guijs"
 path = "src/main.rs"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+incremental = false
+opt-level = "z"
+
