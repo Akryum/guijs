@@ -1,6 +1,6 @@
 {
   "name": "@guijs/tauri-app",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "desktop app builder for guijs",
   "main": "index.js",
   "private": true,
