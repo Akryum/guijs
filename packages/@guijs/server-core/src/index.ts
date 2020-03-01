@@ -4,6 +4,7 @@ import { spawn } from 'child_process'
 import portfinder from 'portfinder'
 import './express'
 import { version } from '../package.json'
+import os from 'os'
 
 if (process.argv.length === 3 && process.argv[2] === '--version') {
   console.log(version)
@@ -16,7 +17,7 @@ if (process.argv.length === 3 && process.argv[2] === '--version') {
     }
   })
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production' && os.platform() !== 'win32') {
     // Auto-generate schema code
     hook('apolloListen', () => {
       spawn('yarn', ['schema-gen'], {
