@@ -19,17 +19,21 @@ export default {
   <div class="mb-6 border border-gray-200 dark:border-gray-950 rounded p-6 flex items-center overflow-hidden">
     <PackageLogo
       :pkg="pkg.metadata"
-      class="w-12 h-12 mr-6"
+      class="w-12 h-12 mr-6 hidden lg:block"
     />
 
     <!-- Info -->
     <div class="flex-1 overflow-hidden">
-      <div class="truncate">
+      <div
+        v-tooltip="pkg.id"
+        class="truncate"
+      >
         {{ pkg.id }}
       </div>
       <div class="flex items-baseline truncate">
         <div
           v-if="pkg.metadata.description"
+          v-tooltip="pkg.metadata.description"
           class="text-gray-500 truncate pr-4"
         >
           {{ pkg.metadata.description }}
@@ -54,9 +58,9 @@ export default {
 
     <!-- Versions -->
     <VTooltip>
-      <div class="leading-normal mx-4 w-48 overflow-hidden">
+      <div class="leading-normal mx-4 w-24 lg:w-48 overflow-hidden">
         <div class="truncate">
-          <span class="text-gray-500 inline-block w-16 text-right">
+          <span class="text-gray-500 hidden lg:inline-block w-16 text-right">
             {{ $t('guijs.package.version') }}
           </span>
           <span class="font-mono text-sm">
@@ -64,7 +68,7 @@ export default {
           </span>
         </div>
         <div class="truncate">
-          <span class="text-gray-500 inline-block w-16 text-right">
+          <span class="text-gray-500 hidden lg:inline-block w-16 text-right">
             {{ $t('guijs.package.latest') }}
           </span>
           <span
