@@ -8,6 +8,7 @@ import { EventEmitter } from 'events'
 import consola from 'consola'
 import fs from 'fs-extra'
 import path from 'path'
+import shellEnv from 'shell-env'
 import projectPackage from '../../../package.json'
 import { DataBatcher } from './data-batcher'
 import { rcFolder } from '@/util/rc-folder'
@@ -159,9 +160,12 @@ export class Terminal extends EventEmitter {
 function getPtyEnv () {
   const osLocale = require('os-locale') as typeof import('os-locale')
 
+  delete process.env.npm_config_prefix
+
   const env = Object.assign(
     {},
     process.env,
+    shellEnv.sync(),
     {
       LANG: `${osLocale.sync().replace(/-/, '_')}.UTF-8`,
       TERM: 'xterm-256color',
