@@ -14010,7 +14010,7 @@ request@2.88.0:
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
 
-request@^2.87.0, request@^2.88.0:
+request@^2.87.0, request@^2.88.0, request@^2.88.2:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
@@ -15248,10 +15248,10 @@ tar@^6.0.0, tar@^6.0.1:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
-tauri@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/tauri/-/tauri-0.4.2.tgz#b90664c3e314e8c578f98bb0f534c6b4064fe13c"
-  integrity sha512-zDu3rirrxi6QgA+WJfJpkWwcPqTNolW/XQt3PUh5coaR+0lxq3wz1GDT7K3FcTTsHhK1B05SJU4DdNWUBwMLDA==
+tauri@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/tauri/-/tauri-0.4.4.tgz#3ee842b6a9ec0ad4ccba49b0c86993d9df9db966"
+  integrity sha512-52Q3c7H76LGzWwg/OgqjCm1m24kqnpgqNl+I91biET3R5bH1o8LzHgvZAzZLgZGj06hquswzdaRVQUZxxIlLTw==
   dependencies:
     "@tauri-apps/tauri-inliner" "1.14.0"
     "@tauri-apps/toml" "2.2.4"

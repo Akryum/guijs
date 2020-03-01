@@ -1,6 +1,7 @@
 <script>
 import { ref, watch } from '@vue/composition-api'
 import genericLogo from '@/assets/package.png'
+import { proxy } from '@/util/proxy'
 
 const cache = {}
 
@@ -57,6 +58,7 @@ export default {
       src,
       genericLogo,
       onError,
+      proxy,
     }
   },
 }
@@ -65,9 +67,9 @@ export default {
 <template>
   <div class="flex items-center justify-center">
     <img
-      :src="src || pkg.defaultLogo || genericLogo"
+      :src="src || pkg.defaultLogo ? proxy(src || pkg.defaultLogo) : genericLogo"
       :alt="`${pkg.id} logo`"
-      class="max-w-full max-h-full rounded overflow-hidden"
+      class="max-w-full max-h-full rounded overflow-hidden text-transparent"
       @error="onError()"
     >
   </div>

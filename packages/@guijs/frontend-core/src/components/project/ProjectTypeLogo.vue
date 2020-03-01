@@ -1,5 +1,6 @@
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, computed } from '@vue/composition-api'
+import { proxy } from '@/util/proxy'
 
 export default {
   props: {
@@ -18,10 +19,16 @@ export default {
       loaded.value = false
     })
 
+    const url = computed(() => {
+      const logo = props.projectType.logo
+      if (props.projectType.id.startsWith('__')) return logo
+      return proxy(logo)
+    })
+
     watch(error, value => {
       if (value) {
         const img = new Image()
-        img.src = props.projectType.logo
+        img.src = url.value
         img.onload = () => {
           error.value = false
         }
@@ -31,6 +38,7 @@ export default {
     return {
       error,
       loaded,
+      url,
     }
   },
 }
@@ -39,9 +47,9 @@ export default {
 <template>
   <img
     :key="projectType.logo"
-    :src="error ? require('@/assets/box.svg') : projectType.logo"
+    :src="error ? require('@/assets/box.svg') : url"
     :class="{
-      'bg-gray-200 dark:bg-gray-950 rounded': !loaded,
+      'bg-gray-200 dark:bg-gray-950 rounded text-transparent': !loaded,
     }"
     alt="Logo"
     @error="error = true"
