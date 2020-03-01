@@ -1,9 +1,10 @@
-import { addCommand } from '../command'
-import { CommandType, NpmScriptStatus, Resolvers } from '@/generated/schema'
-import { MetaNpmScript } from './meta-types'
-import Context from '@/generated/context'
+import path from 'path'
 import consola from 'consola'
 import gql from 'graphql-tag'
+import { CommandType, NpmScriptStatus, Resolvers } from '@/generated/schema'
+import Context from '@/generated/context'
+import { addCommand } from '../command'
+import { MetaNpmScript } from './meta-types'
 import { createTerminal, Terminal, terminals } from '../terminal/server'
 import { addKeybinding } from '../keybinding'
 import { getScriptWorkspace } from '.'
@@ -41,7 +42,7 @@ export function getScriptTerminal (script: MetaNpmScript) {
 }
 
 export async function ensureScriptTerminal (script: MetaNpmScript, ctx: Context) {
-  const workspace = await getScriptWorkspace(script, ctx)
+  const { project, workspace } = await getScriptWorkspace(script, ctx)
 
   let terminal: Terminal = getScriptTerminal(script)
 
@@ -52,6 +53,9 @@ export async function ensureScriptTerminal (script: MetaNpmScript, ctx: Context)
       cwd: workspace.absolutePath,
       hidden: true,
     })
+
+    // Add monorepo root node binaries
+    terminal.envPath.push(path.resolve(project.path, 'node_modules/.bin'))
 
     terminal.on('exit', async (exitCode) => {
       if (terminal.killed) return

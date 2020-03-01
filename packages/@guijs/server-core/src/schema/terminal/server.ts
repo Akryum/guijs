@@ -9,12 +9,15 @@ import consola from 'consola'
 import fs from 'fs-extra'
 import path from 'path'
 import shellEnv from 'shell-env'
+import os from 'os'
 import projectPackage from '../../../package.json'
 import { DataBatcher } from './data-batcher'
 import { rcFolder } from '@/util/rc-folder'
 import { hook } from '@nodepack/app-context'
 
 const terminalsFolder = path.resolve(rcFolder, 'terminals')
+
+const envPathDelimiter = os.platform() === 'win32' ? ';' : ':'
 
 export interface TerminalOptions {
   name: string
@@ -28,6 +31,7 @@ export class Terminal extends EventEmitter {
   name: string
   title: string
   cwd: string
+  envPath: string[] = []
   hidden: boolean
   running = false
   killed = false
@@ -71,11 +75,15 @@ export class Terminal extends EventEmitter {
     this.running = true
     this.killed = false
 
+    // ENV
+    const env = getPtyEnv()
+    env.PATH = this.envPath.concat(env.PATH).join(envPathDelimiter)
+
     const ptyOptions: IWindowsPtyForkOptions = {
       cols: 200,
       rows: 30,
       cwd: this.cwd,
-      env: getPtyEnv(),
+      env,
     }
 
     this.pty = spawnPty(command, args, ptyOptions)
@@ -163,7 +171,9 @@ function getPtyEnv () {
   delete process.env.npm_config_prefix
 
   const env = Object.assign(
-    {},
+    {
+      PATH: '',
+    },
     process.env,
     shellEnv.sync(),
     {

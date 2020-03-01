@@ -143,7 +143,10 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
 export async function getScriptWorkspace (script: MetaNpmScript, ctx: Context) {
   const project = await ctx.db.projects.findOne<MetaProject>({ _id: script.projectId })
   const workspace = await getProjectWorkspace(project, script.workspaceId, ctx)
-  return workspace
+  return {
+    project,
+    workspace,
+  }
 }
 
 export const resolvers: Resolvers = {

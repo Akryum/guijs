@@ -32,7 +32,7 @@ export const resolvers: Resolvers = {
       }
 
       // Update script on disk
-      const workspace = await getScriptWorkspace(script, ctx)
+      const { workspace } = await getScriptWorkspace(script, ctx)
       const pkgFile = path.resolve(workspace.absolutePath, 'package.json')
       const pkg = await fs.readJson(pkgFile)
       pkg.scripts[script.name] = input.command
@@ -58,7 +58,7 @@ export const resolvers: Resolvers = {
       }
 
       // Update script on disk
-      const workspace = await getScriptWorkspace(script, ctx)
+      const { workspace } = await getScriptWorkspace(script, ctx)
       const pkgFile = path.resolve(workspace.absolutePath, 'package.json')
       const pkg = await fs.readJson(pkgFile)
       delete pkg.scripts[script.name]
