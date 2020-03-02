@@ -147,28 +147,32 @@ export default {
           @click.native.middle="removeTerminal({ id: terminal.id })"
           @click.native.left="currentTerminalId = terminal.id"
         >
-          <div
-            v-tooltip="`${terminal.name} ${terminal.title}`"
-            class="flex-1 truncate"
-          >
-            {{ terminal.name }}
-            {{ terminal.title }}
-          </div>
+          <template #content>
+            <div class="flex items-center w-full">
+              <div
+                v-tooltip="`${terminal.name} ${terminal.title}`"
+                class="flex-1 truncate"
+              >
+                {{ terminal.name }}
+                {{ terminal.title }}
+              </div>
 
-          <!-- Close -->
-          <VButton
-            v-tooltip="$t('guijs.terminals.close-terminal')"
-            iconLeft="close"
-            class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200 dark-hover:text-primary-400 dark-hover:bg-primary-900"
-            stop
-            @click="removeTerminal({ id: terminal.id })"
-          />
+              <!-- Close -->
+              <VButton
+                v-tooltip="$t('guijs.terminals.close-terminal')"
+                iconLeft="close"
+                class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200 dark-hover:text-primary-400 dark-hover:bg-primary-900"
+                stop
+                @click="removeTerminal({ id: terminal.id })"
+              />
 
-          <!-- Selected border -->
-          <div
-            v-if="currentTerminalId === terminal.id"
-            class="selected-border absolute left-0 right-0 border-primary-300 dark:border-primary-600 border-b"
-          />
+              <!-- Selected border -->
+              <div
+                v-if="currentTerminalId === terminal.id"
+                class="selected-border absolute left-0 right-0 border-primary-300 dark:border-primary-600 border-b"
+              />
+            </div>
+          </template>
         </VButton>
       </div>
 

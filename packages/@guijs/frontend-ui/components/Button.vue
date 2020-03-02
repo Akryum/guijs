@@ -134,14 +134,16 @@ export default {
         }"
       >{{ iconLeft }}</i>
 
-      <div
-        class="flex items-center"
-        :class="{
-          'flex-1': extend,
-        }"
-      >
-        <slot />
-      </div>
+      <slot name="content">
+        <div
+          class="flex items-center"
+          :class="{
+            'flex-1': extend,
+          }"
+        >
+          <slot />
+        </div>
+      </slot>
 
       <i
         v-if="iconRight"
