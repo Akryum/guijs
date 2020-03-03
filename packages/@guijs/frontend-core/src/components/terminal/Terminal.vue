@@ -262,9 +262,6 @@ export default {
       term.focus()
       // Initial size is undefined on the server
 
-      if (!term.getOption('cursorBlink')) {
-        term.setOption('cursorBlink', true)
-      }
       term.setOption('theme', currentTheme.value)
 
       // https://github.com/xtermjs/xterm.js/issues/291
