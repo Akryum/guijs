@@ -29,7 +29,9 @@ export default {
     `, () => ({
       projectId: route.value.params.projectId,
       workspaceId: route.value.params.workspaceId,
-    }))
+    }), {
+      fetchPolicy: 'cache-and-network',
+    })
 
     const scripts = useResult(result, [], data => data.project.workspace.scripts)
 

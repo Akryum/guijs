@@ -77,7 +77,9 @@ async function loadScripts (workspace: MetaProjectWorkspace, ctx: Context) {
   const updatedScripts: MetaNpmScript[] = []
   for (const script of scannedScripts) {
     if (oldScriptMap.has(script.name)) {
-      result.push(oldScriptMap.get(script.name))
+      const oldScript = oldScriptMap.get(script.name)
+      result.push(oldScript)
+      oldScript.command = script.command
       oldScriptMap.delete(script.name)
       updatedScripts.push(script)
     } else {
