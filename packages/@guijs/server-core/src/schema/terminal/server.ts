@@ -40,6 +40,8 @@ export class Terminal extends EventEmitter {
   sockets: ws[] = []
   backupFile: string
   backupStream: fs.WriteStream
+  cols = 200
+  rows = 30
 
   constructor (options: TerminalOptions) {
     super()
@@ -86,8 +88,8 @@ export class Terminal extends EventEmitter {
     env.PATH = this.envPath.concat(env.PATH).join(envPathDelimiter)
 
     const ptyOptions: IWindowsPtyForkOptions = {
-      cols: 200,
-      rows: 30,
+      cols: this.cols,
+      rows: this.rows,
       cwd: this.cwd,
       env,
     }
@@ -120,6 +122,10 @@ export class Terminal extends EventEmitter {
   }
 
   resize (columns: number, rows: number) {
+    this.cols = columns
+    this.rows = rows
+
+    if (!this.running) return
     try {
       this.pty.resize(columns, rows)
     } catch (err) {
