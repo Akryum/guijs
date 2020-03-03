@@ -6,6 +6,7 @@ import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { taskFragment } from '../task/fragments'
 import { useTask } from '../task/useTask'
+import { pathDelimiter } from '@/util/env'
 
 export default {
   components: {
@@ -71,6 +72,7 @@ export default {
       submit,
       mutating,
       running,
+      pathDelimiter,
     }
   },
 }
@@ -136,7 +138,7 @@ export default {
       />
 
       <div class="border border-gray-200 dark:border-gray-950 rounded px-6 py-4 mt-6">
-        {{ baseFolder }}/<b class="text-primary-500">{{ name }}</b>
+        {{ baseFolder }}{{ pathDelimiter }}<b class="text-primary-500">{{ name }}</b>
       </div>
 
       <ProjectGeneratorSelect
