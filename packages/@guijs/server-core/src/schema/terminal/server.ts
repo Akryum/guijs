@@ -75,6 +75,12 @@ export class Terminal extends EventEmitter {
     this.running = true
     this.killed = false
 
+    // Fix windows
+    if (os.platform() === 'win32' && command !== defaultShell) {
+      args.unshift('/c', command)
+      command = defaultShell
+    }
+
     // ENV
     const env = getPtyEnv()
     env.PATH = this.envPath.concat(env.PATH).join(envPathDelimiter)
