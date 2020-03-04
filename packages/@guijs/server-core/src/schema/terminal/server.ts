@@ -183,9 +183,6 @@ function getPtyEnv () {
   delete process.env.npm_config_prefix
 
   const env = Object.assign(
-    {
-      PATH: '',
-    },
     process.env,
     shellEnv.sync(),
     {
