@@ -28,6 +28,7 @@ serde_derive = "1.0.104"
 tauri = { version = "0.4.2", features = [ "event", "open", "edge" ] }
 reqwest = { version = "0.10", features = [ "blocking", "json" ] }
 which = "3.1"
+dirs = "2.0"
 
 [target."cfg(windows)".build-dependencies]
 winres = "0.1"
