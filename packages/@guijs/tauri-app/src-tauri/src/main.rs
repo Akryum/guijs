@@ -6,6 +6,7 @@
 mod cmd;
 mod command;
 mod npm;
+mod file_system;
 
 #[macro_use]
 extern crate serde_derive;
@@ -77,10 +78,9 @@ fn main() {
               String::from_utf8_lossy(&node_version_output.stdout).replace("v", "");
 
             let server_package_json: npm::PackageJson =
-              reqwest::blocking::get("https://registry.npmjs.org/guijs-version-marker/latest")
-                .expect("failed to read server package.json")
-                .json()
-                .expect("failed to parse server package.json");
+              serde_json::from_str(
+                &cached_request("https://registry.npmjs.org/guijs-version-marker/latest", "marker-package.json")
+              ).expect("failed to get marker package.json");
             if let Ok(node_version_compare) = tauri::api::version::compare(
               &node_version,
               &server_package_json.custom.min_node_version,
@@ -150,12 +150,13 @@ fn main() {
     .run();
 }
 
-fn orchestrator_command() -> String {
-  tauri::api::command::relative_command(
-    tauri::api::command::binary_command("guijs-orchestrator".to_string())
-      .expect("failed to get binary command"),
-  )
-  .expect("failed to get relative command")
+fn cached_request(url: &str, file_name: &str) -> String {
+  if let Ok(response) = reqwest::blocking::get(url) {
+    let response_text = response.text().expect("failed to read response text");
+    file_system::write_to_cache(file_name, response_text.clone());
+    return response_text;
+  }
+  return file_system::read_cache(file_name).expect("failed to read from cache");
 }
 
 fn notify_state<T: 'static>(handle: &Handle<T>, name: String) {
@@ -173,6 +174,14 @@ fn notify_state_with_payload<T: 'static>(handle: &Handle<T>, name: String, paylo
     String::from("state"),
     serde_json::to_string(&reply).unwrap(),
   );
+}
+
+fn orchestrator_command() -> String {
+  tauri::api::command::relative_command(
+    tauri::api::command::binary_command("guijs-orchestrator".to_string())
+      .expect("failed to get binary command"),
+  )
+  .expect("failed to get relative command")
 }
 
 fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
