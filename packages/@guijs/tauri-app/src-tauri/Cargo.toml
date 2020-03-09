@@ -2,7 +2,7 @@
 name = "guijs"
 version = "0.1.0"
 description = "A Tauri App"
-author = [ "guijs" ]
+authors = [ "guijs" ]
 license = "MIT"
 repository = "https://github.com/Akryum/guijs"
 default-run = "guijs"
