@@ -26,7 +26,7 @@ export default {
 
 <template>
   <Error
-    :label="`Node.js v${requiredVersion} or more is required, found v${foundVersion}`"
+    :label="`Node.js v${requiredVersion} or later is required, found v${foundVersion}`"
   >
     Please update Node at <a
       href="https://nodejs.org"
