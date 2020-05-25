@@ -15,6 +15,10 @@ guijs (stands for *Graphical User Interface for JS projects*) is an app that hel
 - [Contributing guidelines](./CONTRIBUTING.md)
 - Related: [awesomejs.dev](https://awesomejs.dev/)
 
+## Sponsors
+
+[![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
+
 ## Stack
 
 guijs is made possible thanks to those amazing technologies:
