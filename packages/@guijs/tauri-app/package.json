@@ -8,12 +8,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-assets": "cd ../frontend-tauri && yarn build",
     "dev": "tauri dev",
-    "build": "tauri build",
-    "build-from-source": "node ../../../../tauri/cli/tauri.js/bin/tauri build"
+    "build": "tauri build"
   },
   "author": "Daniel Thompson-Yvetot",
   "license": "MIT",
   "dependencies": {
-    "tauri": "^0.4.4"
+    "@tauri-apps/api": "1.0.0-beta-rc.3"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "1.0.0-beta-rc.4"
   }
 }

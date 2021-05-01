@@ -26,7 +26,7 @@ import UpdatePrompt from './UpdatePrompt.vue'
 import NodeNotFound from './NodeNotFound.vue'
 import NodeWrongVersion from './NodeWrongVersion.vue'
 import Splashscreen from './Splashscreen.vue'
-import tauri from 'tauri/api'
+import { listen } from '@tauri-apps/api/event'
 
 export default {
   components: {
@@ -36,7 +36,7 @@ export default {
   data () {
     return {
       state: {
-        name: null,
+        name: 'splashscreen',
         payload: null,
       },
     }
@@ -64,7 +64,7 @@ export default {
   },
 
   beforeCreate () {
-    tauri.listen('state', ({ payload }) => {
+    listen('state', ({ payload }) => {
       this.state = payload
     })
   },

@@ -1,14 +1,14 @@
 <script>
-import tauri from 'tauri/api'
+import { emit } from '@tauri-apps/api/event'
 
 export default {
   methods: {
     update () {
-      tauri.emit('update')
+      emit('update')
     },
 
     skip () {
-      tauri.emit('skip-update')
+      emit('skip-update')
     },
   },
 }
