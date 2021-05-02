@@ -12,7 +12,7 @@ serde_json = "1.0"
 serde = "1.0"
 serde_derive = "1.0"
 # tauri = { version = "1.0.0-beta-rc.4" }
-tauri = { git = "https://github.com/tauri-apps/tauri", rev = "5c1fe52c2bd74e2a8f6c99c2870af967e6309e8d", features = ["shell-open", "notification-all"] }
+tauri = { git = "https://github.com/tauri-apps/tauri", rev = "5cc4b11f5d00a1e7e580e31785b31c491c06d8d7", features = ["shell-open", "notification-all"] }
 reqwest = { version = "0.11", features = [ "blocking", "json" ] }
 which = "4.1"
 dirs-next = "2.0"

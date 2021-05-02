@@ -13,7 +13,7 @@ extern crate serde_json;
 
 use std::{thread, time::Duration};
 use tauri::{
-  api::command::{Command, CommandEvent},
+  api::process::{Command, CommandEvent},
   Manager, Params, Window,
 };
 
