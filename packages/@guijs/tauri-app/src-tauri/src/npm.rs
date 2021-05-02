@@ -1,6 +1,6 @@
-use std::io::{BufRead, BufReader};
 use serde::Deserialize;
 use std::collections::HashMap;
+use std::io::{BufRead, BufReader};
 
 #[derive(PartialEq, Deserialize, Clone, Debug)]
 #[serde(tag = "engines", rename_all = "camelCase")]
@@ -19,7 +19,7 @@ fn run_npm_install(dependency: String, exists: bool) {
   let command = if exists { "update" } else { "install" };
   println!("{} {}", command, dependency);
   let npm_path = which::which("npm").expect("failed to get npm path");
-  let guijs_stdout = super::command::spawn_command(npm_path, vec!["install", "-g", dependency.as_str()])
+  let guijs_stdout = super::command::spawn(npm_path, vec!["install", "-g", dependency.as_str()])
     .expect(&format!("failed to {} guijs server package", command))
     .stdout
     .expect(&format!("failed to get guijs {} stdout", command));
@@ -45,7 +45,7 @@ pub fn get_current_version(dependency: String) -> Option<String> {
   println!("getting {} version, binary {}", dependency, binary);
   if let Ok(dependency_binary_path) = which::which(binary.clone()) {
     println!("{:?}", which::which(binary.clone()).unwrap());
-    if let Ok(output) = super::command::command_output(dependency_binary_path, vec!["--version"]) {
+    if let Ok(output) = super::command::get_output(dependency_binary_path, vec!["--version"]) {
       let stdout = &output.stdout;
       let version = String::from_utf8_lossy(stdout);
       println!("{} v{}", dependency, version);

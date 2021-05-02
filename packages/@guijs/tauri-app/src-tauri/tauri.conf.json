@@ -3,30 +3,45 @@
     "distDir": "../../frontend-tauri/dist",
     "devPath": "http://localhost:8080"
   },
-  "ctx": {},
   "tauri": {
-    "embeddedServer": {
-      "active": true
-    },
     "bundle": {
-      "active": true
+      "active": true,
+      "identifier": "guijs",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "deb": {
+        "depends": [
+          "zenity"
+        ]
+      },
+      "macOS": {
+        "exceptionDomain": "localhost"
+      },
+      "externalBin": [
+        "bin/guijs-orchestrator"
+      ]
     },
-    "whitelist": {
+    "allowlist": {
       "all": false,
-      "event": true,
-      "open": true
+      "shell": {
+        "open": true
+      },
+      "notification": {
+        "all": true
+      }
     },
-    "window": {
-      "title": "guijs"
-    },
+    "windows": [
+      {
+        "title": "guijs"
+      }
+    ],
     "security": {
       "csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline'"
-    },
-    "edge": {
-      "active": true
-    },
-    "inliner": {
-      "active": true
     }
   }
 }
