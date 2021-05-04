@@ -14,7 +14,7 @@
     "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "md5": "^2.2.1",
-    "node-notifier": "^6.0.0"
+    "node-notifier": "^8.0.1"
   },
   "devDependencies": {
     "@types/md5": "^2.1.33",
