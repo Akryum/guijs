@@ -9,7 +9,7 @@
     "build-assets": "cd ../frontend-tauri && yarn build",
     "dev": "tauri dev",
     "build": "tauri build",
-    "build-from-source": "node ../../../../tauri/cli/tauri.js/bin/tauri build"
+    "build-from-source": "node ../../../../tauri/tooling/cli.js/bin/tauri.js build"
   },
   "author": "Daniel Thompson-Yvetot",
   "license": "MIT",
