@@ -2679,25 +2679,24 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tauri-apps/api@1.0.0-beta-rc.3":
-  version "1.0.0-beta-rc.3"
-  resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.0-beta-rc.3.tgz#2a37d3e429829c45b34827e41cedba727a1713d0"
-  integrity sha512-oDwHfUlUMQtT3f4g+fRx5nGtQKQQcWCEKa8v+1MEexaS3Q51GALWKgwucFt92BaTGElYNKYoqbcdBs5xwOiuBw==
+"@tauri-apps/api@1.0.0-beta.0":
+  version "1.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.0-beta.0.tgz#da6c4da32b9c1e42c1272656d36816fbcc2b65a6"
+  integrity sha512-7JQMWyaBhB/9fwlq36CcdK6fdUvPL4OXyTVjp2hodWKSEnU2cwCbo5nxCvBl0IA/hYY8fbbVhEL3cOAmDFqcUw==
 
-"@tauri-apps/cli@1.0.0-beta-rc.4":
-  version "1.0.0-beta-rc.4"
-  resolved "https://registry.yarnpkg.com/@tauri-apps/cli/-/cli-1.0.0-beta-rc.4.tgz#0d17692cf90332c93d98f0cc97a91e51beec264a"
-  integrity sha512-g61lp5Khb3PchKHY7iZeiHwC59dqC4fpZLwZg78AmWwF2eOwvAG4QfvCZse63AJouxqinCwlbc2Zej6obX34PQ==
+"@tauri-apps/cli@1.0.0-beta.0":
+  version "1.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/cli/-/cli-1.0.0-beta.0.tgz#19171642d4ee3ecf80e8a68d620d90d0b37e8848"
+  integrity sha512-l/iCGNGbCG+43Jdcch5cfG/flAamUz2Y12WhWjD1vkOtr5cKZk98v2BPL9s45tt2hVUtk0wgl1s/ol2K+SbO5g==
   dependencies:
     "@tauri-apps/toml" "2.2.4"
     chalk "4.1.1"
     cross-env "7.0.3"
     cross-spawn "7.0.3"
-    fs-extra "9.1.0"
+    fs-extra "10.0.0"
     got "11.8.2"
     imagemin "8.0.0"
     imagemin-optipng "8.0.0"
-    imagemin-pngquant "9.0.2"
     imagemin-zopfli "7.0.0"
     inquirer "8.0.0"
     is-png "3.0.0"
@@ -4403,11 +4402,6 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
-
-at-least-node@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
-  integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
 atob-lite@^2.0.0:
   version "2.0.0"
@@ -8191,12 +8185,11 @@ fs-constants@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs-constants/-/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
   integrity sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==
 
-fs-extra@9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.1.0.tgz#5954460c764a8da2094ba3554bf839e6b9a7c86d"
-  integrity sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==
+fs-extra@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.0.0.tgz#9ff61b655dde53fb34a82df84bb214ce802e17c1"
+  integrity sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==
   dependencies:
-    at-least-node "^1.0.0"
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
     universalify "^2.0.0"
@@ -9282,17 +9275,6 @@ imagemin-optipng@8.0.0:
     exec-buffer "^3.0.0"
     is-png "^2.0.0"
     optipng-bin "^7.0.0"
-
-imagemin-pngquant@9.0.2:
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/imagemin-pngquant/-/imagemin-pngquant-9.0.2.tgz#38155702b0cc4f60f671ba7c2b086ea3805d9567"
-  integrity sha512-cj//bKo8+Frd/DM8l6Pg9pws1pnDUjgb7ae++sUX1kUVdv2nrngPykhiUOgFeE0LGY/LmUbCf4egCHC4YUcZSg==
-  dependencies:
-    execa "^4.0.0"
-    is-png "^2.0.0"
-    is-stream "^2.0.0"
-    ow "^0.17.0"
-    pngquant-bin "^6.0.0"
 
 imagemin-zopfli@7.0.0:
   version "7.0.0"
@@ -12212,13 +12194,6 @@ osenv@^0.1.4, osenv@^0.1.5:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-ow@^0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/ow/-/ow-0.17.0.tgz#4f938999fed6264c9048cd6254356e0f1e7f688c"
-  integrity sha512-i3keDzDQP5lWIe4oODyDFey1qVrq2hXKTuTH2VpqwpYtzPiKZt2ziRI4NBQmgW40AnV5Euz17OyWweCb+bNEQA==
-  dependencies:
-    type-fest "^0.11.0"
-
 p-cancelable@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-0.3.0.tgz#b9e123800bcebb7ac13a479be195b507b98d30fa"
@@ -12710,16 +12685,6 @@ png2icons@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/png2icons/-/png2icons-2.0.1.tgz#09d8f10b71302e98ca178d3324bc4deff9b90124"
   integrity sha512-GDEQJr8OG4e6JMp7mABtXFSEpgJa1CCpbQiAR+EjhkHJHnUL9zPPtbOrjsMD8gUbikgv3j7x404b0YJsV3aVFA==
-
-pngquant-bin@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/pngquant-bin/-/pngquant-bin-6.0.0.tgz#aff0d7e61095feb96ced379ad8c7294ad3dd1712"
-  integrity sha512-oXWAS9MQ9iiDAJRdAZ9KO1mC5UwhzKkJsmetiu0iqIjJuW7JsuLhmc4JdRm7uJkIWRzIAou/Vq2VcjfJwz30Ow==
-  dependencies:
-    bin-build "^3.0.0"
-    bin-wrapper "^4.0.1"
-    execa "^4.0.0"
-    logalot "^2.0.0"
 
 pnp-webpack-plugin@^1.6.0:
   version "1.6.4"

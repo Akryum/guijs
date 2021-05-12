@@ -13,9 +13,9 @@
   "author": "Daniel Thompson-Yvetot",
   "license": "MIT",
   "dependencies": {
-    "@tauri-apps/api": "1.0.0-beta-rc.3"
+    "@tauri-apps/api": "1.0.0-beta.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "1.0.0-beta-rc.4"
+    "@tauri-apps/cli": "1.0.0-beta.0"
   }
 }
