@@ -14,7 +14,7 @@ extern crate serde_json;
 use std::{thread, time::Duration};
 use tauri::{
   api::process::{Command, CommandEvent},
-  Manager, Params, Window,
+  Manager, Runtime, Window,
 };
 
 use std::sync::{Arc, Mutex};
@@ -161,11 +161,11 @@ fn cached_request(url: &str, file_name: &str) -> String {
   return file_system::read_cache(file_name).expect("failed to read from cache");
 }
 
-fn notify_state<P: Params>(window: &Window<P>, name: &str) {
+fn notify_state<P: Runtime>(window: &Window<P>, name: &str) {
   notify_state_with_payload(window, name, String::from(""))
 }
 
-fn notify_state_with_payload<P: Params>(window: &Window<P>, name: &str, payload: String) {
+fn notify_state_with_payload<P: Runtime>(window: &Window<P>, name: &str, payload: String) {
   let reply = State {
     name: name.to_string(),
     payload,
@@ -180,7 +180,7 @@ fn notify_state_with_payload<P: Params>(window: &Window<P>, name: &str, payload:
     .expect("failed to emit event");
 }
 
-fn spawn_guijs_server<P: Params>(window: &Window<P>) {
+fn spawn_guijs_server<P: Runtime>(window: &Window<P>) {
   let guijs_server_path = which::which("guijs-server").unwrap();
 
   let (mut rx, _child) = Command::new_sidecar("guijs-orchestrator")
@@ -217,7 +217,7 @@ fn spawn_guijs_server<P: Params>(window: &Window<P>) {
   });
 }
 
-fn startup_eval<P: Params>(window: &Window<P>) {
+fn startup_eval<P: Runtime>(window: &Window<P>) {
   window
     .eval(
       "
