@@ -1,5 +1,5 @@
 <script>
-import { ref, watch, onMounted } from '@vue/composition-api'
+import { ref, watch, onMounted } from 'vue'
 
 export default {
   inheritAttrs: false,

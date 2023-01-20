@@ -1,6 +1,6 @@
 <script>
 import { bindScope, onKey } from '../util/keybinding'
-import { onUnmounted } from '@vue/composition-api'
+import { onUnmounted } from 'vue'
 
 let openModals = 0
 

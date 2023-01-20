@@ -1,6 +1,7 @@
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { useRoute } from '@/util/router'
+import { useRoute } from 'vue-router/composables'
+import { computed } from 'vue'
 import { scriptFragment } from './fragments'
 import { terminalFragment } from '../terminal/fragments'
 
@@ -8,11 +9,11 @@ export function useScriptQuery (query) {
   const route = useRoute()
 
   const { result, loading } = useQuery(query, () => ({
-    scriptId: route.value.params.scriptId,
+    scriptId: route.params.scriptId,
   }), () => ({
-    enabled: !!route.value.params.scriptId,
+    enabled: !!route.params.scriptId,
   }))
-  const script = useResult(result)
+  const script = computed(() => result.value?.script)
 
   return {
     script,

@@ -1,9 +1,9 @@
 <script>
-import { useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useRoute } from 'vue-router/composables'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
-import { ref, computed } from '@vue/composition-api'
+import { ref, computed } from 'vue'
 import { bindScope } from '@/util/keybinding'
 import { useKeyboardNavigation } from '@guijs/frontend-ui/util/navigation'
 import ProjectTypeLogo from '../project/ProjectTypeLogo.vue'
@@ -27,12 +27,12 @@ export default {
       }
       ${projectWorkspaceFragment}
     `, () => ({
-      projectId: route.value.params.projectId,
+      projectId: route.params.projectId,
     }), {
       fetchPolicy: 'cache-and-network',
     })
 
-    const workspaces = useResult(result, [], data => data.project.workspaces)
+    const workspaces = computed(() => result.value?.project.workspaces ?? [])
 
     // Search
     const searchText = ref('')

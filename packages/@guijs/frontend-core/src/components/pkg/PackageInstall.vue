@@ -1,12 +1,12 @@
 <script>
 import gql from 'graphql-tag'
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import { packageMetadataFragment } from './fragments'
-import { computed, ref, watch } from '@vue/composition-api'
+import { computed, ref, watch } from 'vue'
 import { compare } from 'semver'
+import { useRoute } from 'vue-router/composables'
 import { useTask } from '../task/useTask'
 import { taskFragment } from '../task/fragments'
-import { useRoute } from '@/util/router'
 import PackageLogo from './PackageLogo.vue'
 
 export default {
@@ -46,7 +46,7 @@ export default {
       id: props.packageName,
     }))
 
-    const metadata = useResult(result)
+    const metadata = computed(() => result.value?.packageMetadata)
 
     // Dep type
 
@@ -56,16 +56,18 @@ export default {
 
     const selectedVersion = ref()
 
-    const versions = computed(() => metadata.value ? metadata.value.versionTags.map(tag => ({
-      value: `#${tag.tag}`,
-      searchText: `${tag.tag} ${tag.version}`,
-      type: 'tag',
-      ...tag,
-    })).concat(metadata.value.versions.sort((a, b) => -compare(a, b)).map(version => ({
-      value: version,
-      searchText: version,
-      type: 'version',
-    }))) : [])
+    const versions = computed(() => metadata.value
+      ? metadata.value.versionTags.map(tag => ({
+        value: `#${tag.tag}`,
+        searchText: `${tag.tag} ${tag.version}`,
+        type: 'tag',
+        ...tag,
+      })).concat(metadata.value.versions.sort((a, b) => -compare(a, b)).map(version => ({
+        value: version,
+        searchText: version,
+        type: 'version',
+      })))
+      : [])
 
     const isVersionTag = computed(() => selectedVersion.value && selectedVersion.value.startsWith('#'))
     const actualVersion = computed(() => {
@@ -148,7 +150,7 @@ export default {
       const { data } = await mutate({
         input: {
           packageName: props.packageName,
-          workspaceId: route.value.params.workspaceId,
+          workspaceId: route.params.workspaceId,
           dev: devDep.value,
           versionSelector,
         },

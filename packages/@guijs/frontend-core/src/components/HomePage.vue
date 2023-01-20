@@ -22,7 +22,7 @@ export default {
     <div class="flex flex-col">
       <div class="flex items-center mb-16">
         <img
-          src="~@/assets/guijs.svg"
+          src="@/assets/guijs.svg"
           alt="guijs logo"
           class="flex-none w-12 h-12 bg-gray-300 rounded-full text-transparent mr-8"
         >

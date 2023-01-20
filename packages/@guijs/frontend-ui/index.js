@@ -39,12 +39,12 @@ export default {
 
     Vue.use(VueResize)
 
-    // Require all the components
-    const requireComponents = require.context('./components', true, /[a-z0-9]+\.(jsx?|vue)$/i)
-    requireComponents.keys().forEach(fileName => {
-      const component = requireComponents(fileName)
-      const name = fileName.match(/([a-z0-9]+)\./i)[1]
+    // Import all the components
+    const components = import.meta.globEager('./components/*.vue')
+    for (const path in components) {
+      const component = components[path]
+      const name = path.match(/([a-z0-9]+)\./i)[1]
       Vue.component(`${options.componentsPrefix}${name}`, component.default || component)
-    })
+    }
   },
 }

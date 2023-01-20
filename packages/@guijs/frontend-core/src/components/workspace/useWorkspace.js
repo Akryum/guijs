@@ -1,6 +1,7 @@
-import { useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useRoute } from 'vue-router/composables'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { computed } from 'vue'
 import { projectWorkspaceFragment } from './fragments'
 
 export function useCurrentWorkspace () {
@@ -17,13 +18,13 @@ export function useCurrentWorkspace () {
     }
     ${projectWorkspaceFragment}
   `, () => ({
-    projectId: route.value.params.projectId,
-    workspaceId: route.value.params.workspaceId,
+    projectId: route.params.projectId,
+    workspaceId: route.params.workspaceId,
   }), () => ({
-    enabled: !!(route.value.params.projectId && route.value.params.workspaceId),
+    enabled: !!(route.params.projectId && route.params.workspaceId),
   }))
 
-  const workspace = useResult(result, null, data => data.project.workspace)
+  const workspace = computed(() => result.value?.project.workspace)
 
   return {
     workspace,

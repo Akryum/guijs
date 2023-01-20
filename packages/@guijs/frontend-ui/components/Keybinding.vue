@@ -1,5 +1,5 @@
 <script>
-import { computed } from '@vue/composition-api'
+import { computed } from 'vue'
 
 const command = navigator.platform === 'MacIntel' ? '⌘' : 'ctrl'
 

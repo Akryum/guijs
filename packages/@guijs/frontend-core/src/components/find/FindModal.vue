@@ -1,6 +1,6 @@
 <script>
-import { ref, computed, watch } from '@vue/composition-api'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { ref, computed, watch } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { onCommand, onAnyCommand, runCommand } from '@/util/command'
 import { useKeyboardNavigation } from '@guijs/frontend-ui/util/navigation'
@@ -64,7 +64,7 @@ export default {
       fetchPolicy: 'no-cache',
       enabled: isOpen.value,
     }))
-    const commands = useResult(result, [])
+    const commands = computed(() => result.value?.searchCommands ?? [])
 
     async function selectCommand (id) {
       await runCommand(id)

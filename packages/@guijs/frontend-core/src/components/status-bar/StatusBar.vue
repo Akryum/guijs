@@ -1,8 +1,8 @@
 <script>
-import { ref, watch, computed } from '@vue/composition-api'
+import { ref, watch, computed } from 'vue'
 import { onDrag } from '@guijs/frontend-ui/util/drag'
 import { onCommand, runCommand } from '@/util/command'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { commandWithKeybindingFragment } from '../command/fragments'
 const Terminals = () => import(
@@ -64,7 +64,7 @@ export default {
       }
       ${commandWithKeybindingFragment}
     `)
-    const commandShortcuts = useResult(shortcutsQuery.result, [])
+    const commandShortcuts = computed(() => shortcutsQuery.result.value?.commandShortcuts ?? [])
 
     // Commands
     onCommand('toggle-terminals', () => {
@@ -128,7 +128,7 @@ export default {
           :key="pane.id"
           v-tooltip="$t(pane.tooltip)"
           :iconLeft="pane.icon"
-          class="h-full px-2 text-gray-600 hover:bg-gray-300 dark-hover:bg-gray-800"
+          class="h-full px-2 text-gray-600 hover:bg-gray-300 dark:hover:bg-gray-800"
           :class="{
             'text-primary-500': openPaneId === pane.id,
           }"
@@ -145,7 +145,7 @@ export default {
         :key="command.id"
         v-tooltip="$t(command.description || command.label)"
         :iconLeft="command.icon"
-        class="h-full px-2 text-gray-600 hover:bg-gray-300 dark-hover:bg-gray-800"
+        class="h-full px-2 text-gray-600 hover:bg-gray-300 dark:hover:bg-gray-800"
         square
         @click="runCommand(command.id)"
       />

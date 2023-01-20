@@ -1,4 +1,4 @@
-import { onUnmounted, onActivated } from '@vue/composition-api'
+import { onUnmounted, onActivated } from 'vue'
 import { apolloClient } from '@/apollo'
 import gql from 'graphql-tag'
 

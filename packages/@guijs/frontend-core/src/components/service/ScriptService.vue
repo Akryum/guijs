@@ -1,6 +1,6 @@
 <script>
 import { onCommand } from '@/util/command'
-import { useRouter } from '@/util/router'
+import { useRouter } from 'vue-router/composables'
 import { useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from '../script/fragments'

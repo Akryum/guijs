@@ -1,6 +1,7 @@
 <script>
-import { ref, watch, computed } from '@vue/composition-api'
+import { ref, watch, computed } from 'vue'
 import { proxy } from '@/util/proxy'
+import UnknownProjectTypeLogo from '@/assets/box.svg'
 
 export default {
   props: {
@@ -47,7 +48,7 @@ export default {
 <template>
   <img
     :key="projectType.logo"
-    :src="error ? require('@/assets/box.svg') : url"
+    :src="error ? UnknownProjectTypeLogo : url"
     :class="{
       'bg-gray-200 dark:bg-gray-950 rounded text-transparent': !loaded,
     }"

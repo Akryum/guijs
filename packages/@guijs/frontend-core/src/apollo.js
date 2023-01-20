@@ -1,11 +1,14 @@
-import { ApolloClient } from 'apollo-client'
-import { split, from } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { onError } from 'apollo-link-error'
+import {
+  ApolloClient,
+  split,
+  from,
+  createHttpLink,
+} from '@apollo/client/core'
+import { onError } from '@apollo/client/link/error'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { setContext } from '@apollo/client/link/context'
 import { logErrorMessages } from '@vue/apollo-util'
-import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
-import { setContext } from 'apollo-link-context'
 import { cache } from './cache'
 import router from './router'
 
@@ -29,13 +32,13 @@ let httpLink = setContext((req, context) => ({
 // HTTP connection to the API
 httpLink = httpLink.concat(createHttpLink({
   // @TODO better endpoint handling (dynamic ports)
-  uri: process.env.VUE_APP_GRAPHQL_BASE_URL,
+  uri: import.meta.env.VITE_GRAPHQL_BASE_URL,
 }))
 
 // Create the subscription websocket link
 const wsLink = new WebSocketLink({
   // @TODO better endpoint handling (dynamic ports)
-  uri: process.env.VUE_APP_GRAPHQL_WS_URL,
+  uri: import.meta.env.VITE_GRAPHQL_WS_URL,
   options: {
     reconnect: true,
     lazy: true,
@@ -63,7 +66,7 @@ const link = from([
         operation === 'subscription'
     },
     wsLink,
-    httpLink
+    httpLink,
   ),
 ])
 

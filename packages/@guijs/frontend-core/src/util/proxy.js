@@ -1,3 +1,3 @@
 export function proxy (url) {
-  return `${process.env.VUE_APP_PROXY}/${encodeURIComponent(url)}`
+  return `${import.meta.env.VITE_PROXY}/${encodeURIComponent(url)}`
 }

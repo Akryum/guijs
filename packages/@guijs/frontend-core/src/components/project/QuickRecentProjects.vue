@@ -1,7 +1,8 @@
 <script>
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import { runCommand } from '@/util/command'
 import gql from 'graphql-tag'
+import { computed } from 'vue'
 
 export default {
   setup () {
@@ -16,7 +17,7 @@ export default {
     `, null, {
       fetchPolicy: 'cache-and-network',
     })
-    const recentProjectCommands = useResult(result, [])
+    const recentProjectCommands = computed(() => result.value?.recentProjectCommands ?? [])
 
     return {
       recentProjectCommands,

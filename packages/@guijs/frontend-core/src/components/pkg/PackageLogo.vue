@@ -1,5 +1,5 @@
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from 'vue'
 import genericLogo from '@/assets/package.png'
 import { proxy } from '@/util/proxy'
 

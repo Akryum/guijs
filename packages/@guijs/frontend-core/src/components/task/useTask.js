@@ -1,7 +1,7 @@
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { watch, computed, isRef, ref } from 'vue'
 import { taskFragment } from './fragments'
-import { watch, computed, isRef, ref } from '@vue/composition-api'
 
 export function useTask (id = null) {
   if (typeof id === 'function') {
@@ -23,7 +23,7 @@ export function useTask (id = null) {
     enabled: !!id.value,
   }))
 
-  const task = useResult(result, null)
+  const task = computed(() => result.value?.task)
 
   // Status
 

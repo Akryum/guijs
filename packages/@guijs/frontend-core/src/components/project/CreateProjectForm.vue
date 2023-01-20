@@ -1,5 +1,5 @@
 <script>
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 import FileInput from '../form/FileInput.vue'
 import ProjectGeneratorSelect from './ProjectGeneratorSelect.vue'
 import { useMutation } from '@vue/apollo-composable'
@@ -43,9 +43,11 @@ export default {
           monorepo: monorepo.value,
           name: name.value,
           baseFolder: baseFolder.value,
-          simpleProject: monorepo.value ? null : {
-            projectGeneratorId: projectGeneratorId.value,
-          },
+          simpleProject: monorepo.value
+            ? null
+            : {
+                projectGeneratorId: projectGeneratorId.value,
+              },
         },
       })
 
@@ -89,7 +91,7 @@ export default {
       @click="monorepo = false"
     >
       <img
-        src="~@/assets/folder.png"
+        src="@/assets/folder.png"
         alt="Folder icon"
         class="w-10 h-10 mr-6"
       >
@@ -110,7 +112,7 @@ export default {
       @click="monorepo = true"
     >
       <img
-        src="~@/assets/folder-tree.png"
+        src="@/assets/folder-tree.png"
         alt="Folder icon"
         class="w-10 h-10 mr-6"
       >

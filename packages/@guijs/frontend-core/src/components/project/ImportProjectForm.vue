@@ -1,5 +1,5 @@
 <script>
-import { watch, reactive, ref } from '@vue/composition-api'
+import { watch, reactive, ref } from 'vue'
 import FileInput from '../form/FileInput.vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'

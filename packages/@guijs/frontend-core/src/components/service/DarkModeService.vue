@@ -1,7 +1,7 @@
 <script>
+import { watch } from 'vue'
 import { onCommand } from '@/util/command'
 import { useSetting } from '@/util/setting'
-import { watch } from '@vue/composition-api'
 
 const STORAGE_DARK_MODE = 'dev.guijs.darkMode'
 

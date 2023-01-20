@@ -2,7 +2,7 @@
 import { useScriptQuery } from './useScript'
 import gql from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from 'vue'
 import { runCommand } from '@/util/command'
 import shellQuote from 'shell-quote'
 import minimist from 'minimist'

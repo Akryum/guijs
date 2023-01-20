@@ -125,7 +125,7 @@ export default {
         :href="`https://awesomejs.dev/for/${pkg.metadata.projectTypes[0].slug}/pkg/${pkg.metadata.awesomejsId}`"
         iconLeft="info"
         target="_blank"
-        class="p-2 text-gray-600 dark:text-gray-400 hover:bg-primary-100 dark-hover:bg-primary-900"
+        class="p-2 text-gray-600 dark:text-gray-400 hover:bg-primary-100 dark:hover:bg-primary-900"
       />
       <VButton
         v-else
@@ -133,7 +133,7 @@ export default {
         :href="`https://awesomejs.dev/pkg/add?packageName=${encodeURIComponent(pkg.id)}`"
         iconLeft="add_circle_outline"
         target="_blank"
-        class="p-2 text-gray-600 dark:text-gray-400 hover:bg-primary-100 dark-hover:bg-primary-900"
+        class="p-2 text-gray-600 dark:text-gray-400 hover:bg-primary-100 dark:hover:bg-primary-900"
       />
     </div>
   </div>

@@ -1,6 +1,6 @@
 <script>
-import { useResult } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { computed } from 'vue'
 import { useScriptQuery } from './useScript'
 import { scriptFragment } from './fragments'
 import { terminalFragment } from '../terminal/fragments'
@@ -24,7 +24,7 @@ export default {
       ${scriptFragment}
       ${terminalFragment}
     `)
-    const terminal = useResult(script, null, data => data.terminal)
+    const terminal = computed(() => script.value?.terminal)
 
     return {
       terminal,

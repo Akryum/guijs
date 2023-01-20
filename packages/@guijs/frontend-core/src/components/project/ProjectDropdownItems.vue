@@ -1,9 +1,10 @@
 <script>
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useKeyboardNavigation } from '@guijs/frontend-ui/util/navigation'
 import { bindScope } from '@/util/keybinding'
 import { runCommand } from '@/util/command'
+import { computed } from 'vue'
 
 export default {
   setup () {
@@ -23,7 +24,7 @@ export default {
       }
     `)
 
-    const projects = useResult(result, [], data => data.bookmarkedProjects.concat(data.recentProjects))
+    const projects = computed(() => result.value ? result.value.bookmarkedProjects.concat(result.value.recentProjects) : [])
 
     function selectProject (project) {
       runCommand('open-project', {

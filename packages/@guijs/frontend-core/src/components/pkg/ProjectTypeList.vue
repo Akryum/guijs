@@ -30,7 +30,7 @@ export default {
       align="left"
       square
       extend
-      class="btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
+      class="btn-md hover:bg-primary-100 dark:hover:bg-primary-900"
       :class="{
         active: $route.params.projectTypeId === pt.id,
       }"

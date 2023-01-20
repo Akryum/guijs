@@ -1,6 +1,7 @@
 <script>
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { computed } from 'vue'
 
 export default {
   props: {
@@ -23,7 +24,7 @@ export default {
       }
     `, props)
 
-    const sequences = useResult(result, [], data => data.command.keybinding.sequences)
+    const sequences = computed(() => result.value?.command.keybinding.sequences ?? [])
 
     return {
       sequences,

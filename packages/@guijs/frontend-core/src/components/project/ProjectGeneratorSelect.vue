@@ -1,6 +1,7 @@
 <script>
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { computed } from 'vue'
 import ProjectTypeLogo from './ProjectTypeLogo.vue'
 
 export default {
@@ -31,7 +32,7 @@ export default {
       }
     `)
 
-    const generators = useResult(result, [])
+    const generators = computed(() => result.value?.projectGenerators ?? [])
 
     return {
       generators,

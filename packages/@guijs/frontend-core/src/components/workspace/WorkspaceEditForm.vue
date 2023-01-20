@@ -1,10 +1,10 @@
 <script>
 import { useCurrentWorkspace } from './useWorkspace'
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { useRoute } from 'vue-router/composables'
 import { projectWorkspaceFragment } from './fragments'
-import { useRoute } from '@/util/router'
 import ProjectTypeSelect from '../project/ProjectTypeSelect.vue'
 
 export default {
@@ -44,7 +44,7 @@ export default {
       if (!formData.value.name) return
       await mutate({
         input: {
-          projectId: route.value.params.projectId,
+          projectId: route.params.projectId,
           workspaceId: workspace.value.id,
           name: formData.value.name,
           typeId: formData.value.typeId,

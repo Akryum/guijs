@@ -1,6 +1,6 @@
 <script>
 import { runCommand, onCommand } from '@/util/command'
-import { useRouter } from '@/util/router'
+import { useRouter } from 'vue-router/composables'
 import CommandKeybinding from '../command/CommandKeybinding.vue'
 import Keybindings from '../keybinding/Keybindings.vue'
 
@@ -42,7 +42,7 @@ export default {
   <div class="flex flex-col">
     <VButton
       iconLeft="search"
-      class="flex-none btn-md hover:bg-primary-100 dark-hover:bg-primary-900"
+      class="flex-none btn-md hover:bg-primary-100 dark:hover:bg-primary-900"
       square
       align="left"
       @click="runCommand('find')"
@@ -70,7 +70,7 @@ export default {
           active: $route.fullPath.includes('/packages/'),
         }"
         iconLeft="extension"
-        class="btn-md w-full hover:bg-primary-100 dark-hover:bg-primary-900 leading-normal"
+        class="btn-md w-full hover:bg-primary-100 dark:hover:bg-primary-900 leading-normal"
         square
         align="left"
       >
@@ -102,7 +102,7 @@ export default {
           active: $route.fullPath.includes('/scripts/'),
         }"
         iconLeft="assignment"
-        class="btn-md w-full hover:bg-primary-100 dark-hover:bg-primary-900 leading-normal"
+        class="btn-md w-full hover:bg-primary-100 dark:hover:bg-primary-900 leading-normal"
         square
         align="left"
       >

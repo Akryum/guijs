@@ -26,7 +26,7 @@ export default {
       <VButton
         :iconLeft="project.bookmarked ? 'bookmark' : 'bookmark_border'"
         iconRight="keyboard_arrow_down"
-        class="flex-1 w-full btn-md h-72p hover:bg-primary-100 dark-hover:bg-primary-900
+        class="flex-1 w-full btn-md h-72p hover:bg-primary-100 dark:hover:bg-primary-900
         border-gray-200 dark:border-gray-950 border-b"
         square
         align="left"

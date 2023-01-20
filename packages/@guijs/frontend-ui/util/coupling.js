@@ -1,4 +1,4 @@
-import { inject, computed, onMounted, onUnmounted, reactive, provide, getCurrentInstance } from '@vue/composition-api'
+import { inject, computed, onMounted, onUnmounted, reactive, provide, getCurrentInstance } from 'vue'
 
 export function useCoupledParent (injectionName) {
   const vm = getCurrentInstance()

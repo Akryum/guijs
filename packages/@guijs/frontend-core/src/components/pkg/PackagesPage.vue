@@ -1,10 +1,11 @@
 <script>
-import { useRoute, useRouter } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useRoute, useRouter } from 'vue-router/composables'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectPackageFragment } from './fragments'
-import { computed, ref, watch } from '@vue/composition-api'
+import { computed, ref, watch } from 'vue'
 import { runCommand } from '@/util/command'
+import UnknownProjectTypeLogo from '@/assets/box.svg'
 import ProjectTypeList from './ProjectTypeList.vue'
 
 const allProjectType = {
@@ -16,7 +17,7 @@ const allProjectType = {
 const unknownProjectType = {
   id: '__unknown',
   name: 'guijs.package.unknown',
-  logo: require('@/assets/box.svg'),
+  logo: UnknownProjectTypeLogo,
 }
 
 export default {
@@ -42,13 +43,13 @@ export default {
       }
       ${projectPackageFragment}
     `, () => ({
-      projectId: route.value.params.projectId,
-      workspaceId: route.value.params.workspaceId,
+      projectId: route.params.projectId,
+      workspaceId: route.params.workspaceId,
     }), () => ({
       fetchPolicy: 'cache-and-network',
-      enabled: !!route.value.params.projectId && !!route.value.params.workspaceId,
+      enabled: !!route.params.projectId && !!route.params.workspaceId,
     }))
-    const packages = useResult(result, [], data => data.project.workspace.packages)
+    const packages = computed(() => result.value?.project.workspace.packages ?? [])
 
     // @TODO remove when apollo client 3 is used
     setTimeout(() => {
@@ -65,8 +66,8 @@ export default {
         ${projectPackageFragment}
       `,
       variables: {
-        projectId: route.value.params.projectId,
-        workspaceId: route.value.params.workspaceId,
+        projectId: route.params.projectId,
+        workspaceId: route.params.workspaceId,
       },
       updateQuery: (previousResult, { subscriptionData: { data } }) => {
         previousResult.project.workspace.packages.push(data.projectPackageAdded)
@@ -113,7 +114,7 @@ export default {
     const scroller = ref(null)
 
     // Scroll to top
-    watch(() => route.value.params.projectTypeId, (value) => {
+    watch(() => route.params.projectTypeId, (value) => {
       if (scroller.value) {
         scroller.value.scrollTop = 0
       }
@@ -122,12 +123,12 @@ export default {
     // Unselect project type if it doesn't exist
     onResult(result => {
       if (!result.loading &&
-        route.value.params.projectTypeId &&
-        !projectTypes.value.some(pt => pt.id === route.value.params.projectTypeId)) {
+        route.params.projectTypeId &&
+        !projectTypes.value.some(pt => pt.id === route.params.projectTypeId)) {
         router.push({
           name: 'project-packages',
           params: {
-            workspaceId: route.value.params.workspaceId,
+            workspaceId: route.params.workspaceId,
           },
         })
       }
@@ -156,7 +157,7 @@ export default {
         align="left"
         square
         extend
-        class="btn-md w-full hover:bg-primary-100 dark-hover:bg-primary-900"
+        class="btn-md w-full hover:bg-primary-100 dark:hover:bg-primary-900"
         @click="installPackage()"
       >
         <i class="material-icons mr-4 text-gray-600 dark:text-gray-400">add</i>

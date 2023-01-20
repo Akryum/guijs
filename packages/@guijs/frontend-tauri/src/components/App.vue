@@ -73,8 +73,6 @@ export default {
 </script>
 
 <style lang="postcss">
-@import '~@guijs/frontend-ui/styles/tailwind-light.postcss';
-
 a {
   @apply text-purple-500 underline;
 }

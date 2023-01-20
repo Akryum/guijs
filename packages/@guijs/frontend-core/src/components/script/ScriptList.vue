@@ -1,9 +1,10 @@
 <script>
-import { useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useRoute } from 'vue-router/composables'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from './fragments'
 import ScriptListItem from './ScriptListItem.vue'
+import { computed } from 'vue'
 
 export default {
   components: {
@@ -27,13 +28,13 @@ export default {
       }
       ${scriptFragment}
     `, () => ({
-      projectId: route.value.params.projectId,
-      workspaceId: route.value.params.workspaceId,
+      projectId: route.params.projectId,
+      workspaceId: route.params.workspaceId,
     }), {
       fetchPolicy: 'cache-and-network',
     })
 
-    const scripts = useResult(result, [], data => data.project.workspace.scripts)
+    const scripts = computed(() => result.value?.project.workspace.scripts ?? [])
 
     return {
       scripts,
