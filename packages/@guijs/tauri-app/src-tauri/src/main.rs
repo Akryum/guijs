@@ -19,7 +19,7 @@ use tauri::{
 
 use std::sync::{Arc, Mutex};
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct State {
   pub name: String,
   pub payload: String,
@@ -170,14 +170,7 @@ fn notify_state_with_payload<P: Runtime>(window: &Window<P>, name: &str, payload
     name: name.to_string(),
     payload,
   };
-  window
-    .emit(
-      &"state"
-        .parse()
-        .unwrap_or_else(|_| panic!("failed to emit state event: parse error")),
-      Some(reply),
-    )
-    .expect("failed to emit event");
+  window.emit("state", reply).expect("failed to emit event");
 }
 
 fn spawn_guijs_server<P: Runtime>(window: &Window<P>) {

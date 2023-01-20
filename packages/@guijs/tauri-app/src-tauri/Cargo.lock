@@ -1090,7 +1090,6 @@ name = "guijs"
 version = "0.1.0"
 dependencies = [
  "dirs-next",
- "openssl-sys",
  "reqwest",
  "serde",
  "serde_derive",
