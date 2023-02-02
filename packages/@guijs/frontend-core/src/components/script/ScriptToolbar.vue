@@ -61,7 +61,7 @@ export default {
       <VButton
         v-if="script.status !== 'running'"
         iconLeft="play_arrow"
-        class="btn-lg btn-primary"
+        class="btn-md btn-primary"
         @click="runScript(script.id)"
       >
         {{ $t('guijs.script.run-script') }}
@@ -69,7 +69,7 @@ export default {
       <VButton
         v-else
         iconLeft="stop"
-        class="btn-lg btn-primary"
+        class="btn-md btn-primary"
         @click="stopScript(script.id)"
       >
         {{ $t('guijs.script.stop-script') }}
@@ -89,7 +89,7 @@ export default {
     <VButton
       v-tooltip="$t('guijs.script.edit-script')"
       iconLeft="edit"
-      class="p-4 btn-dim ml-4"
+      class="p-3 btn-dim ml-4"
       @click="editScript()"
     />
 
@@ -98,7 +98,7 @@ export default {
       <!-- @TODO ButtonGroup -->
       <VButton
         iconLeft="dvr"
-        class="btn-lg btn-dim"
+        class="btn-md btn-dim"
       >
         {{ $t('guijs.script.output') }}
       </VButton>

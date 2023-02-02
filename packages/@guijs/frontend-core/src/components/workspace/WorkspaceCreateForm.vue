@@ -1,5 +1,5 @@
 <script>
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { taskFragment } from '../task/fragments'

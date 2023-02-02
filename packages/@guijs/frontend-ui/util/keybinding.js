@@ -2,7 +2,7 @@ import MouseTrap from 'mousetrap'
 import 'mousetrap/plugins/global-bind/mousetrap-global-bind'
 import 'mousetrap/plugins/pause/mousetrap-pause'
 import 'mousetrap/plugins/record/mousetrap-record'
-import { onUnmounted, onMounted, onActivated, watch } from '@vue/composition-api'
+import { onUnmounted, onMounted, onActivated, watch } from 'vue'
 
 /** @type {{ [key: string]: InstanceType<MouseTrap> }} */
 let scopes = {}

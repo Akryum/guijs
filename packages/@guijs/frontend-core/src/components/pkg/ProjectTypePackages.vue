@@ -1,6 +1,6 @@
 <script>
-import { computed, watch, ref } from '@vue/composition-api'
-import { useRoute, useRouter } from '@/util/router'
+import { computed, watchEffect, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router/composables'
 import PackageItem from './PackageItem.vue'
 
 export default {
@@ -21,7 +21,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
 
-    const projectTypeId = computed(() => route.value.params.projectTypeId)
+    const projectTypeId = computed(() => route.params.projectTypeId)
 
     const list = computed(() => {
       if (projectTypeId.value && projectTypeId.value !== '__all') {
@@ -35,7 +35,7 @@ export default {
       return props.packages
     })
 
-    const sortedList = computed(() => list.value.sort((a, b) => a.id.localeCompare(b.id))
+    const sortedList = computed(() => list.value.slice().sort((a, b) => a.id.localeCompare(b.id))
       .sort((a, b) => {
         if (a.metadata.official && !b.metadata.official) return -1
         if (!a.metadata.official && b.metadata.official) return 1
@@ -46,11 +46,11 @@ export default {
 
     const highlightedId = ref(null)
 
-    watch(() => {
-      if (el.value && list.value.length && route.value.query.packageId) {
-        const item = el.value.querySelector(`[data-id="${route.value.query.packageId}"]`)
+    watchEffect(() => {
+      if (el.value && list.value.length && route.query.packageId) {
+        const item = el.value.querySelector(`[data-id="${route.query.packageId}"]`)
         if (item) {
-          highlightedId.value = route.value.query.packageId
+          highlightedId.value = route.query.packageId
           router.push({
             query: {
               packageId: undefined,

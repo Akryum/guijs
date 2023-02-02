@@ -1,6 +1,7 @@
 import { apolloClient } from '@/apollo'
 import gql from 'graphql-tag'
-import { useSubscription, useQuery, useResult } from '@vue/apollo-composable'
+import { useSubscription, useQuery } from '@vue/apollo-composable'
+import { computed } from 'vue'
 
 export async function updateSetting (id, value) {
   await apolloClient.mutate({
@@ -32,7 +33,7 @@ export function useSetting (id) {
   `, {
     id,
   })
-  const setting = useResult(result, null, data => data.setting.value)
+  const setting = computed(() => result.value?.setting.value)
 
   useSubscription(gql`
     subscription darkModeSettingUpdated ($id: ID!) {

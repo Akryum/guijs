@@ -1,9 +1,10 @@
 <script>
-import { useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useRoute } from 'vue-router/composables'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { scriptFragment } from './fragments'
 import ScriptStatusIndicator from './ScriptStatusIndicator.vue'
+import { computed } from 'vue'
 
 export default {
   components: {
@@ -21,11 +22,11 @@ export default {
       }
       ${scriptFragment}
     `, () => ({
-      id: route.value.params.scriptId,
+      id: route.params.scriptId,
     }), () => ({
-      enabled: !!route.value.params.scriptId,
+      enabled: !!route.params.scriptId,
     }))
-    const script = useResult(result)
+    const script = computed(() => result.value?.script)
 
     return {
       script,

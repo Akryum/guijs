@@ -1,5 +1,5 @@
 <script>
-import { computed, ref, getCurrentInstance, watch } from '@vue/composition-api'
+import { computed, ref, getCurrentInstance, watch } from 'vue'
 import { useKeyboardNavigation } from '../util/navigation'
 import { bindScope } from '../util/keybinding'
 

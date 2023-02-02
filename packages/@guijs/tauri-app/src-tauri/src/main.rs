@@ -3,91 +3,92 @@
   windows_subsystem = "windows"
 )]
 
-mod cmd;
 mod command;
-mod npm;
 mod file_system;
+mod npm;
 
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
 
-use std::io::{BufRead, BufReader};
-use tauri::Handle;
+use std::{thread, time::Duration};
+use tauri::{
+  api::process::{Command, CommandEvent},
+  Manager, Runtime, Window,
+};
 
 use std::sync::{Arc, Mutex};
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct State {
   pub name: String,
   pub payload: String,
 }
 
 fn main() {
-  let mut setup = false;
-  tauri::AppBuilder::new()
-    .setup(move |webview, _| {
-      if !setup {
-        setup = true;
-        let handle = webview.handle();
+  tauri::Builder::default()
+    .setup(move |app| {
+      let window = app.get_window("main").unwrap();
 
-        let reload_handle = webview.handle();
-        tauri::event::listen("reload".to_string(), move |_| {
-          let reload_handle_clone = reload_handle.clone();
-          std::thread::spawn(move || {
-            let ten_millis = std::time::Duration::from_millis(100);
-            std::thread::sleep(ten_millis);
-            startup_eval(&reload_handle_clone);
-          });
+      let window_ = window.clone();
+      window.listen("reload", move |_| {
+        let window_ = window_.clone();
+        thread::spawn(move || {
+          let ten_millis = Duration::from_millis(100);
+          thread::sleep(ten_millis);
+          startup_eval(&window_);
         });
+      });
 
-        let update_deps: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
-        let update_deps_clone = update_deps.clone();
+      let update_deps: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
+      let update_deps_ = update_deps.clone();
 
-        let handle2 = webview.handle();
-        let handle3 = webview.handle();
-        tauri::event::listen(String::from("skip-update"), move |_| {
-          let handle_clone = handle2.clone();
-          notify_state(&handle_clone, String::from("splashscreen"));
-          std::thread::spawn(move || {
-            spawn_guijs_server(&handle_clone);
-          });
+      let window_ = window.clone();
+      window.listen("skip-update", move |_| {
+        let window_ = window_.clone();
+        notify_state(&window_, "splashscreen");
+        thread::spawn(move || {
+          spawn_guijs_server(&window_);
         });
+      });
 
-        tauri::event::listen(String::from("update"), move |_| {
-          notify_state(&handle3, String::from("downloading-update"));
-          let handle_clone = handle3.clone();
-          let deps_do_update = update_deps_clone.clone();
-          std::thread::spawn(move || {
-            for dep in deps_do_update
-              .lock()
-              .expect("Failed to lock update_deps")
-              .iter()
-            {
-              npm::update_dependency(dep.to_string());
-            }
-            spawn_guijs_server(&handle_clone);
-          });
+      let window_ = window.clone();
+      window.listen("update", move |_| {
+        notify_state(&window_, "downloading-update");
+        let window_ = window_.clone();
+        let deps_do_update = update_deps_.clone();
+        thread::spawn(move || {
+          for dep in deps_do_update
+            .lock()
+            .expect("Failed to lock update_deps")
+            .iter()
+          {
+            npm::update_dependency(dep.to_string());
+          }
+          spawn_guijs_server(&window_);
         });
+      });
 
+      thread::spawn(move || {
         if let Ok(node_path) = which::which("node") {
           // check if node exists
-          if let Ok(node_version_output) = command::command_output(node_path, vec!["--version"]) {
+          if let Ok(node_version_output) = command::get_output(node_path, vec!["--version"]) {
             // check if node version matches the minimum version
             let node_version =
               String::from_utf8_lossy(&node_version_output.stdout).replace("v", "");
 
-            let server_package_json: npm::PackageJson =
-              serde_json::from_str(
-                &cached_request("https://registry.npmjs.org/guijs-version-marker/latest", "marker-package.json")
-              ).expect("failed to get marker package.json");
+            let server_package_json: npm::PackageJson = serde_json::from_str(&cached_request(
+              "https://registry.npmjs.org/guijs-version-marker/latest",
+              "marker-package.json",
+            ))
+            .expect("failed to get marker package.json");
             if let Ok(node_version_compare) = tauri::api::version::compare(
               &node_version,
               &server_package_json.custom.min_node_version,
             ) {
               if node_version_compare <= 0 {
-                notify_state(&handle, String::from("splashscreen"));
-                std::thread::spawn(move || {
+                notify_state(&window, "splashscreen");
+                thread::spawn(move || {
                   let mut install_deps = Vec::new();
                   for (dependency, latest_version) in server_package_json.dev_dependencies.iter() {
                     let current_version = npm::get_current_version(dependency.to_string());
@@ -113,7 +114,7 @@ fn main() {
                   }
 
                   if install_deps.len() > 0 {
-                    notify_state(&handle, String::from("first-download"));
+                    notify_state(&window, "first-download");
                     for dep in install_deps {
                       npm::install_dependency(dep.to_string());
                     }
@@ -124,15 +125,15 @@ fn main() {
                     .len()
                     > 0
                   {
-                    notify_state(&handle, String::from("update-available"));
+                    notify_state(&window, "update-available");
                   } else {
-                    spawn_guijs_server(&handle);
+                    spawn_guijs_server(&window);
                   }
                 });
               } else {
                 notify_state_with_payload(
-                  &handle,
-                  String::from("node-wrong-version"),
+                  &window,
+                  "node-wrong-version",
                   format!(
                     "{}|{}",
                     node_version, server_package_json.custom.min_node_version
@@ -142,12 +143,13 @@ fn main() {
             }
           }
         } else {
-          notify_state(&handle, String::from("node-not-found"));
+          notify_state(&window, "node-not-found");
         }
-      }
+      });
+      Ok(())
     })
-    .build()
-    .run();
+    .run(tauri::generate_context!())
+    .expect("error while running tauri application");
 }
 
 fn cached_request(url: &str, file_name: &str) -> String {
@@ -159,85 +161,64 @@ fn cached_request(url: &str, file_name: &str) -> String {
   return file_system::read_cache(file_name).expect("failed to read from cache");
 }
 
-fn notify_state<T: 'static>(handle: &Handle<T>, name: String) {
-  notify_state_with_payload(handle, name, String::from(""))
+fn notify_state<P: Runtime>(window: &Window<P>, name: &str) {
+  notify_state_with_payload(window, name, String::from(""))
 }
 
-fn notify_state_with_payload<T: 'static>(handle: &Handle<T>, name: String, payload: String) {
+fn notify_state_with_payload<P: Runtime>(window: &Window<P>, name: &str, payload: String) {
   let reply = State {
-    name: name,
-    payload: payload,
+    name: name.to_string(),
+    payload,
   };
-
-  tauri::event::emit(
-    handle,
-    String::from("state"),
-    serde_json::to_string(&reply).unwrap(),
-  );
+  window.emit("state", reply).expect("failed to emit event");
 }
 
-fn orchestrator_command() -> String {
-  tauri::api::command::relative_command(
-    tauri::api::command::binary_command("guijs-orchestrator".to_string())
-      .expect("failed to get binary command"),
-  )
-  .expect("failed to get relative command")
-}
-
-fn spawn_guijs_server<T: 'static>(handle: &Handle<T>) {
+fn spawn_guijs_server<P: Runtime>(window: &Window<P>) {
   let guijs_server_path = which::which("guijs-server").unwrap();
-  let stdout = command::spawn_command(
-    orchestrator_command(),
-    vec![
+
+  let (mut rx, _child) = Command::new_sidecar("guijs-orchestrator")
+    .unwrap()
+    .args(vec![
       "run",
       guijs_server_path
         .to_str()
         .expect("guijs server path is not utf-8"),
-    ],
-  )
-  .expect("Failed to start guijs server")
-  .stdout
-  .expect("Failed to get guijs server stdout");
-  let reader = BufReader::new(stdout);
+    ])
+    .spawn()
+    .expect("Failed to start guijs server");
 
-  let mut webview_started = false;
-  reader
-    .lines()
-    .filter_map(|line| line.ok())
-    .for_each(|line| {
-      println!("{}", line);
-      if !webview_started {
-        webview_started = true;
-        handle
-          .dispatch(move |webview| {
-            webview.eval(&format!(
+  let mut guijs_started = false;
+
+  tauri::async_runtime::block_on(async move {
+    while let Some(event) = rx.recv().await {
+      if let CommandEvent::Stdout(line) = event {
+        if !guijs_started {
+          guijs_started = true;
+          window
+            .eval(&format!(
               "window.location.replace('http://localhost:{}')",
               line
             ))
-          })
-          .expect("failed to initialize app");
-        // wait for location to be replaced
-        let ten_millis = std::time::Duration::from_millis(300);
-        std::thread::sleep(ten_millis);
-        startup_eval(handle);
+            .expect("failed to change URL");
+          // wait for location to be replaced
+          let ten_millis = std::time::Duration::from_millis(300);
+          thread::sleep(ten_millis);
+          startup_eval(window);
+        }
       }
-    });
+    }
+  });
 }
 
-fn startup_eval<T: 'static>(handle: &Handle<T>) {
-  handle
-    .dispatch(|webview| {
-      webview
-        .eval(
-          "
+fn startup_eval<P: Runtime>(window: &Window<P>) {
+  window
+    .eval(
+      "
       window.__GUIJS_RELOAD = function () {
         window.tauri.emit('reload')
         window.location.reload()
       }
     ",
-        )
-        .expect("failed to eval location.replace rewrite");
-      webview.eval(include_str!(concat!(env!("TAURI_DIR"), "/tauri.js")))
-    })
-    .expect("failed to eval tauri entry point");
+    )
+    .expect("failed to eval location.replace rewrite");
 }

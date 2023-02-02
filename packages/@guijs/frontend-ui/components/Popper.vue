@@ -1,5 +1,5 @@
 <script>
-import { ref, watch, getCurrentInstance, onUnmounted } from '@vue/composition-api'
+import { ref, watch, getCurrentInstance, onUnmounted } from 'vue'
 
 const shownUids = new Set()
 

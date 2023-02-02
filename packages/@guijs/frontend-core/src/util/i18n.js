@@ -2,8 +2,10 @@ import VueI18n from 'vue-i18n'
 
 // @TODO load locales from server
 
+import en from '../assets/locales/en.json'
+
 const messages = {
-  en: require('@/assets/en.json'),
+  en,
 }
 
 export const i18n = new VueI18n({
@@ -13,8 +15,8 @@ export const i18n = new VueI18n({
 })
 
 // Hot updates
-if (module.hot) {
-  module.hot.accept(['@/assets/en.json'], function () {
-    i18n.setLocaleMessage('en', require('@/assets/en.json'))
+if (import.meta.hot) {
+  import.meta.hot.accept(['../assets/locales/en.json'], ([en]) => {
+    i18n.setLocaleMessage('en', en.default)
   })
 }

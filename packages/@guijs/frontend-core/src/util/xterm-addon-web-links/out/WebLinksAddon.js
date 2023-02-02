@@ -2,7 +2,7 @@
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var WebLinkProvider_1 = require("./WebLinkProvider");
+import WebLinkProvider_1 from "./WebLinkProvider";
 var protocolClause = '(https?:\\/\\/)';
 var domainCharacterSet = '[\\da-z\\.-]+';
 var negatedDomainCharacterSet = '[^\\da-z\\.-]+';

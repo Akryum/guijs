@@ -1,9 +1,9 @@
 <script>
-import { ref, onMounted, watch, onUnmounted, onActivated, computed } from '@vue/composition-api'
+import { ref, onMounted, watch, onUnmounted, onActivated, computed } from 'vue'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { SearchAddon } from 'xterm-addon-search'
-import { WebLinksAddon } from '@/util/xterm-addon-web-links/lib/xterm-addon-web-links'
+import { WebLinksAddon } from 'xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
 import { useMutation } from '@vue/apollo-composable'
 import { pushScope, popScope, onKeybind } from '@/util/keybinding'
@@ -130,7 +130,7 @@ export default {
 
     if (!ws) {
       // @TODO better endpoint handling (dynamic ports)
-      ws = cached.ws = new WebSocket(process.env.VUE_APP_TERMINAL_WS_URL)
+      ws = cached.ws = new WebSocket(import.meta.env.VITE_TERMINAL_WS_URL)
 
       // Attach to terminal
 
@@ -386,5 +386,5 @@ export default {
 </template>
 
 <style lang="postcss">
-@import "~xterm/css/xterm.css";
+@import "xterm/css/xterm.css";
 </style>

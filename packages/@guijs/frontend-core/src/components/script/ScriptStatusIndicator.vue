@@ -1,7 +1,9 @@
 <script>
-/* eslint-disable */
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import { computed } from 'vue'
+
+const statusIcons = import.meta.globEager('@/assets/script-*.svg')
 
 export default {
   props: {
@@ -20,10 +22,13 @@ export default {
         }
       }
     `, props)
-    const status = useResult(result, 'idle', data => data.script.status)
+    const status = computed(() => result.value?.script.status ?? 'idle')
+
+    const icon = computed(() => statusIcons[`/src/assets/script-${status.value}.svg`]?.default)
 
     return {
       status,
+      icon,
     }
   },
 }
@@ -51,14 +56,14 @@ export default {
     </div>
 
     <img
-      v-if="status === 'success' || status === 'error'"
-      :src="require(`@/assets/script-${status}.svg`)"
+      v-if="icon"
+      :src="icon"
       class="icon"
     >
 
     <transition duration="150">
       <div
-        v-if="status === 'success' || status === 'error'"
+        v-if="icon"
         key="icon-bg z-10"
         class="icon-bg absolute"
       >

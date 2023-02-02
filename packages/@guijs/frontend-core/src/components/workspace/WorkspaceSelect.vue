@@ -1,7 +1,7 @@
 <script>
-import { ref, watch } from '@vue/composition-api'
-import { useRouter, useRoute } from '@/util/router'
-import { useQuery, useResult, useSubscription } from '@vue/apollo-composable'
+import { computed, ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router/composables'
+import { useQuery, useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { projectWorkspaceFragment } from './fragments'
 import { onKeybind } from '@/util/keybinding'
@@ -40,7 +40,7 @@ export default {
 
     // Auto select __root
     watch(route, value => {
-      if (!route.value.params.workspaceId) {
+      if (!route.params.workspaceId) {
         resetWorkspaceSelection()
       }
     })
@@ -57,13 +57,13 @@ export default {
       }
       ${projectWorkspaceFragment}
     `, () => ({
-      projectId: route.value.params.projectId,
-      workspaceId: route.value.params.workspaceId,
+      projectId: route.params.projectId,
+      workspaceId: route.params.workspaceId,
     }), () => ({
-      enabled: !!route.value.params.workspaceId,
+      enabled: !!route.params.workspaceId,
       fetchPolicy: 'network-only',
     }))
-    const currentWorkspace = useResult(result, null, data => data.project.workspace)
+    const currentWorkspace = computed(() => result.value?.project.workspace)
 
     // Reset selection if workspace doesn't exist
     onResult(result => {
@@ -82,7 +82,7 @@ export default {
       }
       ${projectWorkspaceFragment}
     `, () => ({
-      projectId: route.value.params.projectId,
+      projectId: route.params.projectId,
     }))
 
     onNewWorkspace(result => {
@@ -112,7 +112,7 @@ export default {
       <VTooltip>
         <VButton
           iconRight="keyboard_arrow_down"
-          class="w-full btn-md h-72p hover:bg-primary-100 dark-hover:bg-primary-900"
+          class="w-full btn-md h-72p hover:bg-primary-100 dark:hover:bg-primary-900"
           square
           align="left"
           extend

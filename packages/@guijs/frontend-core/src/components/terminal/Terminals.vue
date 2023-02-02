@@ -1,6 +1,6 @@
 <script>
-import { ref, watch } from '@vue/composition-api'
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { computed, ref, watch } from 'vue'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { onKeybind, bindScope } from '@/util/keybinding'
 import { onCommand, runCommand } from '@/util/command'
@@ -28,7 +28,7 @@ export default {
     const el = ref(null)
 
     const { result, loading } = useQuery(TERMINALS)
-    const terminals = useResult(result, [])
+    const terminals = computed(() => result.value?.terminals ?? [])
 
     const currentTerminalId = ref(localStorage.getItem(STORAGE_CURRENT_TERMINAL_ID))
     watch(currentTerminalId, value => {
@@ -46,8 +46,14 @@ export default {
       ${terminalFragment}
     `, {
       update: (cache, { data: { createTerminal } }) => {
-        const data = cache.readQuery({ query: TERMINALS })
-        data.terminals.push(createTerminal)
+        let data = cache.readQuery({ query: TERMINALS })
+        data = {
+          ...data,
+          terminals: [
+            ...data.terminals,
+            createTerminal,
+          ],
+        }
         cache.writeQuery({ query: TERMINALS, data })
       },
     })
@@ -85,10 +91,17 @@ export default {
     `, {
       update: (cache, { data: { removeTerminal } }) => {
         if (!removeTerminal) return
-        const data = cache.readQuery({ query: TERMINALS })
+        let data = cache.readQuery({ query: TERMINALS })
         const index = data.terminals.findIndex(t => t.id === removeTerminal.id)
-        if (index !== -1) data.terminals.splice(index, 1)
-        cache.writeQuery({ query: TERMINALS, data })
+        if (index !== -1) {
+          const terminals = data.terminals.slice()
+          terminals.splice(index, 1)
+          data = {
+            ...data,
+            terminals,
+          }
+          cache.writeQuery({ query: TERMINALS, data })
+        }
       },
     })
 
@@ -140,7 +153,7 @@ export default {
           v-for="terminal of terminals"
           :key="terminal.id"
           square
-          class="tab group flex items-center relative px-4 py-2 text-sm max-w-48 border-gray-200 border-r hover:bg-primary-100 dark:border-gray-950 dark-hover:bg-primary-800 dark-hover:text-primary-300"
+          class="tab group flex items-center relative px-4 py-2 text-sm max-w-48 border-gray-200 border-r hover:bg-primary-100 dark:border-gray-950 dark:hover:bg-primary-800 dark:hover:text-primary-300"
           :class="{
             'text-primary-500': currentTerminalId === terminal.id,
           }"
@@ -161,7 +174,7 @@ export default {
               <VButton
                 v-tooltip="$t('guijs.terminals.close-terminal')"
                 iconLeft="close"
-                class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200 dark-hover:text-primary-400 dark-hover:bg-primary-900"
+                class="ml-1 invisible group-hover:visible text-primary-300 hover:text-primary-600 hover:bg-primary-200 dark:hover:text-primary-400 dark:hover:bg-primary-900"
                 stop
                 @click="removeTerminal({ id: terminal.id })"
               />
@@ -180,7 +193,7 @@ export default {
         v-tooltip="$t('guijs.terminals.new-terminal')"
         iconLeft="add"
         square
-        class="px-3 py-3 hover:bg-primary-100 dark-hover:bg-primary-800"
+        class="px-3 py-3 hover:bg-primary-100 dark:hover:bg-primary-800"
         @click="newTerminal()"
       />
 
@@ -188,7 +201,7 @@ export default {
         v-tooltip="$t('guijs.terminals.close-terminal-pane')"
         iconLeft="close"
         square
-        class="px-3 py-3 hover:bg-primary-100 dark-hover:bg-primary-800"
+        class="px-3 py-3 hover:bg-primary-100 dark:hover:bg-primary-800"
         @click="closeTerminals()"
       />
     </div>

@@ -1,6 +1,6 @@
 <script>
 import { onCommand, runCommand } from '@/util/command'
-import { useRouter } from '@/util/router'
+import { useRouter } from 'vue-router/composables'
 import { useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { packageMetadataFragment } from '../pkg/fragments'
@@ -34,7 +34,7 @@ export default {
     // Installation
 
     window.addEventListener('message', event => {
-      if (event.origin === process.env.VUE_APP_AWESOME_URL && event.data) {
+      if (event.origin === import.meta.env.VITE_AWESOME_URL && event.data) {
         if (event.data.awesomeInstall) {
           runCommand('install-package', {
             packageName: event.data.awesomeInstall,

@@ -34,7 +34,3 @@ export default {
     <AllModals />
   </div>
 </template>
-
-<style>
-@import '~@guijs/frontend-ui/styles/tailwind.postcss';
-</style>

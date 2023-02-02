@@ -1,5 +1,5 @@
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from 'vue'
 import { onCommand } from '@/util/command'
 import { useGlobalMutationLoading } from '@vue/apollo-composable'
 

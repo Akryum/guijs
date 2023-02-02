@@ -1,14 +1,14 @@
 <script>
-import tauri from 'tauri/api'
+import { emit } from '@tauri-apps/api/event'
 
 export default {
   methods: {
     update () {
-      tauri.emit('update')
+      emit('update')
     },
 
     skip () {
-      tauri.emit('skip-update')
+      emit('skip-update')
     },
   },
 }
@@ -27,14 +27,14 @@ export default {
 
     <div class="mt-8">
       <button
-        class="w-32 h-12 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark-hover:bg-gray-400 rounded"
+        class="w-32 h-12 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-400 rounded"
         @click="skip()"
       >
         Skip
       </button>
 
       <button
-        class="w-32 h-12 ml-8 text-white bg-blue-600 hover:bg-blue-500 dark:text-black dark:bg-blue-400 dark-hover:bg-blue-300 rounded"
+        class="w-32 h-12 ml-8 text-white bg-blue-600 hover:bg-blue-500 dark:text-black dark:bg-blue-400 dark:hover:bg-blue-300 rounded"
         @click="update()"
       >
         Update

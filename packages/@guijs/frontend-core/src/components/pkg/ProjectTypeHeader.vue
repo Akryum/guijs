@@ -1,8 +1,8 @@
 <script>
-import { useRoute } from '@/util/router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useRoute } from 'vue-router/composables'
+import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { computed } from '@vue/composition-api'
+import { computed } from 'vue'
 import { runCommand } from '@/util/command'
 import ProjectTypeLogo from '../project/ProjectTypeLogo.vue'
 
@@ -14,7 +14,7 @@ export default {
   setup () {
     const route = useRoute()
 
-    const projectTypeId = computed(() => route.value.params.projectTypeId)
+    const projectTypeId = computed(() => route.params.projectTypeId)
     const isSpecial = computed(() => projectTypeId.value && projectTypeId.value.startsWith('__'))
 
     const { result } = useQuery(gql`
@@ -32,7 +32,7 @@ export default {
       enabled: !!projectTypeId.value && !isSpecial.value,
     }))
 
-    const projectType = useResult(result)
+    const projectType = computed(() => result.value?.projectType)
 
     function installPackage () {
       runCommand('install-package-popup', {

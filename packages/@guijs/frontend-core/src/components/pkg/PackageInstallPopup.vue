@@ -1,5 +1,5 @@
 <script>
-import { ref } from '@vue/composition-api'
+import { ref } from 'vue'
 import { onCommand } from '../../util/command'
 export default {
   props: {
@@ -16,7 +16,7 @@ export default {
 
     // Src
 
-    let src = `${process.env.VUE_APP_AWESOME_URL}/`
+    let src = `${import.meta.env.VITE_AWESOME_URL}/`
     if (props.projectTypeSlug) {
       src += `for/${props.projectTypeSlug}`
     }

@@ -4,7 +4,7 @@ export const TYPE_WORDS = {
   '<': 'project',
   '&': 'package',
   '~': 'config',
-  '$': 'script',
+  $: 'script',
 }
 
 const typeWordReg = new RegExp(`^(${Object.keys(TYPE_WORDS).map(w => `\\${w}`).join('|')})`)

@@ -2,7 +2,7 @@
 import { useScriptQuery } from './useScript'
 import gql from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from 'vue'
 
 export default {
   setup (props, { emit }) {

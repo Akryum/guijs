@@ -39,7 +39,7 @@
     "ms": "^2.1.2",
     "nedb": "^1.8.0",
     "nedb-promise": "^2.0.1",
-    "node-pty-prebuilt-multiarch": "^0.9.0",
+    "node-pty-prebuilt-multiarch": "^0.10.1-pre.5",
     "npm-registry-fetch": "^6.0.0",
     "os-locale": "^4.0.0",
     "portfinder": "^1.0.25",

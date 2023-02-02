@@ -1,12 +1,12 @@
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { useRoute } from '@/util/router'
-import { computed } from '@vue/composition-api'
+import { useRoute } from 'vue-router/composables'
+import { computed } from 'vue'
 
 export function useCurrentProject (fragment = '') {
   const route = useRoute()
 
-  const projectId = computed(() => route.value.params.projectId)
+  const projectId = computed(() => route.params.projectId)
 
   const { result, loading } = useQuery(gql`
     query currentProject ($id: ID!) {

@@ -1,12 +1,12 @@
 <script>
-const services = require.context('./service', true, /Service\.vue$/)
+const services = import.meta.globEager('./service/*.vue')
 
 export default {
   functional: true,
   render (h) {
-    const keys = services.keys()
+    const keys = Object.keys(services)
     return keys.map(key => {
-      let component = services(key)
+      let component = services[key]
       component = component.default || component
       if (!component.render) {
         component.render = () => null

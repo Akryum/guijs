@@ -1,6 +1,6 @@
 <script>
 import SubmitAnimation from './SubmitAnimation.vue'
-import { computed } from '@vue/composition-api'
+import { computed } from 'vue'
 
 export default {
   components: {

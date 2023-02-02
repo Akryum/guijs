@@ -38,8 +38,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var chai_1 = require("chai");
-var TestUtils_1 = require("../../../out-test/api/TestUtils");
+import chai_1 from "chai";
+import TestUtils_1 from "../../../out-test/api/TestUtils";
 var APP = 'http://127.0.0.1:3000/test';
 var browser;
 var page;

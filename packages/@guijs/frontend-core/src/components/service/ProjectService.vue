@@ -1,7 +1,7 @@
 <script>
 import { onCommand, runCommand } from '@/util/command'
-import { useRouter, useRoute } from '@/util/router'
-import { watch, computed } from '@vue/composition-api'
+import { useRouter, useRoute } from 'vue-router/composables'
+import { watch, computed } from 'vue'
 
 export default {
   setup () {
@@ -25,7 +25,7 @@ export default {
       }
     })
 
-    const projectId = computed(() => route.value.params.projectId)
+    const projectId = computed(() => route.params.projectId)
 
     let isOpening = false
 

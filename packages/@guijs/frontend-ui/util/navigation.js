@@ -1,5 +1,5 @@
 import { onKey } from './keybinding'
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch } from 'vue'
 
 const keys = {
   vertical: {

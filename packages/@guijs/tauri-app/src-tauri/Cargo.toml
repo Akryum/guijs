@@ -5,43 +5,22 @@ description = "A Tauri App"
 authors = [ "guijs" ]
 license = "MIT"
 repository = "https://github.com/Akryum/guijs"
-default-run = "guijs"
 edition = "2018"
-build = "src/build.rs"
-
-[package.metadata.bundle]
-identifier = "guijs"
-icon = [
-  "icons/32x32.png",
-  "icons/128x128.png",
-  "icons/128x128@2x.png",
-  "icons/icon.icns",
-  "icons/icon.ico"
-]
-exception_domain = "localhost"
-external_bin = [ "bin/guijs-orchestrator" ]
-deb_depends = [ "zenity" ]
 
 [dependencies]
-serde_json = "1.0.44"
-serde = "1.0.104"
-serde_derive = "1.0.104"
-tauri = { version = "0.4.2", features = [ "event", "open", "edge" ] }
-reqwest = { version = "0.10", features = [ "blocking", "json" ] }
-which = "3.1"
-dirs = "2.0"
+serde_json = "1.0.91"
+serde = "1.0"
+serde_derive = "1.0"
+tauri = { version = "1.2.4", features = ["notification-all", "process-command-api", "shell-open"] }
+reqwest = { version = "0.11", features = [ "blocking", "json", "native-tls-vendored" ] }
+which = "4.1"
+dirs-next = "2.0"
 
-[target."cfg(windows)".build-dependencies]
-winres = "0.1"
+[build-dependencies]
+tauri-build = { version = "1.2.1", features = [] }
 
 [features]
-dev-server = [ "tauri/dev-server" ]
-embedded-server = [ "tauri/embedded-server" ]
-no-server = [ "tauri/no-server" ]
-
-[[bin]]
-name = "guijs"
-path = "src/main.rs"
+custom-protocol = [ "tauri/custom-protocol" ]
 
 [profile.release]
 panic = "abort"
@@ -49,4 +28,3 @@ codegen-units = 1
 lto = true
 incremental = false
 opt-level = "z"
-
